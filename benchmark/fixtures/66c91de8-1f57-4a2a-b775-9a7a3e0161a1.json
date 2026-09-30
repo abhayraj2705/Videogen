@@ -1,0 +1,487 @@
+{
+  "url": "https://asana.com",
+  "category": "saas",
+  "domain": "asana.com",
+  "pages": [
+    {
+      "url": "https://asana.com",
+      "screenshotKey": "jobs/66c91de8-1f57-4a2a-b775-9a7a3e0161a1/crawl/home.png"
+    },
+    {
+      "url": "https://asana.com/pricing",
+      "screenshotKey": "jobs/66c91de8-1f57-4a2a-b775-9a7a3e0161a1/crawl/page-1.png"
+    },
+    {
+      "url": "https://asana.com/product/ai",
+      "screenshotKey": "jobs/66c91de8-1f57-4a2a-b775-9a7a3e0161a1/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(100, 111, 121)",
+    "accent": "rgb(39, 50, 64)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://assets.asana.biz/transform/08201954-5379-4f38-af03-d82ba84d859a/SD040-web-nav-CheckNavIcon-en-US"
+  },
+  "facts": [
+    {
+      "id": "vSoVYneMB9",
+      "kind": "hero",
+      "text": "Supercharge your teams with AI",
+      "sourceUrl": "https://asana.com",
+      "selector": "div > div.content > section.css-eunw1j > div.css-vw62w1 > h1.css-1ld1n2u"
+    },
+    {
+      "id": "p3cvhL_wHi",
+      "kind": "hero",
+      "text": "AI that understands your work, keeps projects moving, and gets smarter over time",
+      "sourceUrl": "https://asana.com",
+      "selector": "div.content > section.css-eunw1j > div.css-vw62w1 > div.ejkf9f21 > p"
+    },
+    {
+      "id": "22FuhxMPXM",
+      "kind": "heading",
+      "text": "AI that works the way your team works",
+      "sourceUrl": "https://asana.com",
+      "selector": "div.css-196d74x > div.css-3yhmi > div.css-1g7gzos > div.evkak7z1 > h2.css-372fkx-h2"
+    },
+    {
+      "id": "Phn4OcQxhA",
+      "kind": "heading",
+      "text": "Your team just got bigger",
+      "sourceUrl": "https://asana.com",
+      "selector": "section.css-1g6rru7 > div.css-4fyk2c > div.css-mapoc4 > div.elk89h81 > h2.css-372fkx-h2"
+    },
+    {
+      "id": "sOsm1Ptw0g",
+      "kind": "heading",
+      "text": "Deliver real productivity for every team",
+      "sourceUrl": "https://asana.com",
+      "selector": "div.css-3yhmi > div.css-o5lw9m > div.css-1o7xtps > div.css-11k1bbc > h2.css-372fkx-h2"
+    },
+    {
+      "id": "kbgxIXOt_B",
+      "kind": "heading",
+      "text": "Agentic Work Management",
+      "sourceUrl": "https://asana.com",
+      "selector": "div.css-8ciiol > div.css-1bsr76n > div.css-vu3w4s > div.css-zrluam > h3.css-13z8p0d-link-2-link-1"
+    },
+    {
+      "id": "2nhyyIcQ_S",
+      "kind": "heading",
+      "text": "Asana Service Management",
+      "sourceUrl": "https://asana.com",
+      "selector": "div.css-8ciiol > div.css-1bsr76n > div.css-vu3w4s > div.css-zrluam > h3.css-13z8p0d-link-2-link-1"
+    },
+    {
+      "id": "Z1rEw0pm06",
+      "kind": "heading",
+      "text": "Asana Client Management",
+      "sourceUrl": "https://asana.com",
+      "selector": "div.css-8ciiol > div.css-1bsr76n > div.css-vu3w4s > div.css-zrluam > h3.css-13z8p0d-link-2-link-1"
+    },
+    {
+      "id": "YOMuCrRZmp",
+      "kind": "heading",
+      "text": "Command by Asana",
+      "sourceUrl": "https://asana.com",
+      "selector": "div.css-8ciiol > div.css-1bsr76n > div.css-vu3w4s > div.css-zrluam > h3.css-13z8p0d-link-2-link-1"
+    },
+    {
+      "id": "HXU4ibRvhU",
+      "kind": "heading",
+      "text": "StackAI by Asana",
+      "sourceUrl": "https://asana.com",
+      "selector": "div.css-8ciiol > div.css-1bsr76n > div.css-vu3w4s > div.css-zrluam > h3.css-13z8p0d-link-2-link-1"
+    },
+    {
+      "id": "qy1ND8YBwR",
+      "kind": "heading",
+      "text": "Get started easily",
+      "sourceUrl": "https://asana.com",
+      "selector": "div.css-mapoc4 > div.css-98a0ll > div.css-zqcvpa > div.css-11k1bbc > h2.css-372fkx-h2"
+    },
+    {
+      "id": "wOL8NoTDnd",
+      "kind": "heading",
+      "text": "Recognized as a leader",
+      "sourceUrl": "https://asana.com",
+      "selector": "section.css-1g6arla > div.css-4fyk2c > div.css-mapoc4 > div.css-11k1bbc > h2.css-372fkx-h2"
+    },
+    {
+      "id": "0bc8tkBnqy",
+      "kind": "heading",
+      "text": "The only platform that can support your company at any scale",
+      "sourceUrl": "https://asana.com",
+      "selector": "section.css-pb8rhz > div.css-5qqlym > div.css-lp2et2 > div.css-19rrvii > h2.css-372fkx-h2"
+    },
+    {
+      "id": "hPcQenOibT",
+      "kind": "heading",
+      "text": "Privacy Preference Center",
+      "sourceUrl": "https://asana.com",
+      "selector": "#ot-pc-title"
+    },
+    {
+      "id": "3f8WPAoGnX",
+      "kind": "heading",
+      "text": "Manage Consent Preferences",
+      "sourceUrl": "https://asana.com",
+      "selector": "#ot-category-title"
+    },
+    {
+      "id": "R97K4uQErA",
+      "kind": "heading",
+      "text": "Cookie List",
+      "sourceUrl": "https://asana.com",
+      "selector": "div > section.ot-hide > div > div > h3"
+    },
+    {
+      "id": "NORghxfYIY",
+      "kind": "cta",
+      "text": "Contact sales",
+      "sourceUrl": "https://asana.com",
+      "selector": "header.styles_header__ksTYs > nav.styles_main-navigation__U3pgX > div.styles_main-navigation__content__QHEA_ > div.styles_right-nav-group__DrAWO > a.styles_button-cta__K_nHI"
+    },
+    {
+      "id": "674XpIstYc",
+      "kind": "cta",
+      "text": "Get started",
+      "sourceUrl": "https://asana.com",
+      "selector": "header.styles_header__ksTYs > nav.styles_main-navigation__U3pgX > div.styles_main-navigation__content__QHEA_ > div.styles_right-nav-group__DrAWO > a.styles_button-cta__K_nHI"
+    },
+    {
+      "id": "f5Tu_JeDIn",
+      "kind": "cta",
+      "text": "Download app",
+      "sourceUrl": "https://asana.com",
+      "selector": "div.styles_flyout-wrapper__DlmdZ > div.styles_flyout-footer__6tXNk > ul.styles_flyout-footer__buttons__fRjZh > li > a.styles_flyout-footer__button__cBTTF"
+    },
+    {
+      "id": "50_xLnNkew",
+      "kind": "cta",
+      "text": "Learn more",
+      "sourceUrl": "https://asana.com",
+      "selector": "div.elk89h81 > div.css-12wdbud > div.css-1b2b9eu > div.css-1dx1iyc > a.css-6lxnn6-link-3-link-2-link-1"
+    },
+    {
+      "id": "_AGQVrJIhx",
+      "kind": "cta",
+      "text": "Facebook",
+      "sourceUrl": "https://asana.com",
+      "selector": "div.container > div.siteFooter__row > div.siteFooter__secondary__col-wrapper > div.siteFooter__secondary__col > a.css-1ubdndg"
+    },
+    {
+      "id": "lPhZi9Uocc",
+      "kind": "hero",
+      "text": "Agentic Work Management",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-196d74x > div.css-3yhmi > div.css-1qmowps > div.css-mnnev0 > h1.css-1i1wc4c-caps-large"
+    },
+    {
+      "id": "5piTM-jvEx",
+      "kind": "heading",
+      "text": "Power every team with AI",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "section.css-yplllf > div.css-196d74x > div.css-3yhmi > div.css-1qmowps > h2.css-1vd5tri-h1"
+    },
+    {
+      "id": "T0RqBjccEY",
+      "kind": "heading",
+      "text": "Personal",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-cpppx6 > div.css-1raomyp > div.css-cs6pme > div.css-0 > h3.css-1sy34zr"
+    },
+    {
+      "id": "5DB_R5kx_n",
+      "kind": "heading",
+      "text": "Starter",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-cpppx6 > div.css-1raomyp > div.css-cs6pme > div.css-0 > h3.css-1sy34zr"
+    },
+    {
+      "id": "64g4Q756sh",
+      "kind": "heading",
+      "text": "Advanced",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-cpppx6 > div.css-1raomyp > div.css-cs6pme > div.css-0 > h3.css-1sy34zr"
+    },
+    {
+      "id": "08K3I2bq84",
+      "kind": "heading",
+      "text": "Enterprise",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-cpppx6 > div.css-1raomyp > div.css-cs6pme > div.css-0 > h3.css-1sy34zr"
+    },
+    {
+      "id": "pnm3Jfe8q9",
+      "kind": "heading",
+      "text": "AI for every workflow",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "section.css-1uvlx7o > div.css-4fyk2c > div.css-mapoc4 > div.css-11k1bbc > h2.css-372fkx-h2"
+    },
+    {
+      "id": "_rJZd3evTO",
+      "kind": "heading",
+      "text": "Ready-to-go AI Teammates supercharge your team",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-16e6i3h > div.css-1lahg7k > div.css-wi454h > div.css-13rv5y1 > h3.css-1970u4c"
+    },
+    {
+      "id": "dxiyWPQjik",
+      "kind": "heading",
+      "text": "Stay a step ahead with Asana Dash",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-16e6i3h > div.css-1lahg7k > div.css-wi454h > div.css-13rv5y1 > h3.css-1970u4c"
+    },
+    {
+      "id": "PgaaUmaEek",
+      "kind": "heading",
+      "text": "One flat rate for every AI request",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-4fyk2c > div.css-mapoc4 > div > div.e1v9md372 > h3.css-9pxykg-h3"
+    },
+    {
+      "id": "sWKEo6Ui9x",
+      "kind": "heading",
+      "text": "Buy AI usage packs or pay as you go",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "section.css-1g6arla > div.css-1ik4zij > div.css-1eebgoq > div.css-1qmowps > h3.css-9pxykg-h3"
+    },
+    {
+      "id": "GX4rmlf2XR",
+      "kind": "heading",
+      "text": "Usage packs",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-1eebgoq > div.css-v4cftr > div.css-20n8tr > div.css-1gp6yel > h3.css-1jhmtyn"
+    },
+    {
+      "id": "S5Ps2EgbB6",
+      "kind": "heading",
+      "text": "Pay as you go",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-1eebgoq > div.css-v4cftr > div.css-20n8tr > div.css-1gp6yel > h3.css-1jhmtyn"
+    },
+    {
+      "id": "Wz6KeWyymw",
+      "kind": "heading",
+      "text": "Extend Asana with optional modules",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "section.css-1g6arla > div.css-1ik4zij > div.css-1eebgoq > div.css-1qmowps > h3.css-9pxykg-h3"
+    },
+    {
+      "id": "Ri5_T-mPUY",
+      "kind": "heading",
+      "text": "Timesheets and Budgets",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-1eebgoq > div.css-1i0z5az > div.css-20n8tr > div.css-1gp6yel > h3.css-1jhmtyn"
+    },
+    {
+      "id": "QID_gqbXAn",
+      "kind": "heading",
+      "text": "Compliance management",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-1eebgoq > div.css-1i0z5az > div.css-20n8tr > div.css-1gp6yel > h3.css-1jhmtyn"
+    },
+    {
+      "id": "E1b-P5cfd0",
+      "kind": "heading",
+      "text": "Permissions management",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-1eebgoq > div.css-1i0z5az > div.css-20n8tr > div.css-1gp6yel > h3.css-1jhmtyn"
+    },
+    {
+      "id": "KF28P20cOE",
+      "kind": "heading",
+      "text": "Frequently asked questions",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-3yhmi > div.css-1bpvgsu > div.css-oczoll > div.css-11k1bbc > h2.css-372fkx-h2"
+    },
+    {
+      "id": "JwWOk_AUYQ",
+      "kind": "heading",
+      "text": "Get your team and your agents working together",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "section.css-q65zdr > div.css-34gq8l > div.css-1eebgoq > div.css-19rrvii > h2.css-372fkx-h2"
+    },
+    {
+      "id": "4e-UxlRWiV",
+      "kind": "stat",
+      "text": "Between 2 and 5 total users:",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.rebrand-styles_accordionItemAnswerText__5fYRZ > ul > li > p > b"
+    },
+    {
+      "id": "FRPUVZ9YXZ",
+      "kind": "stat",
+      "text": "Up to 30 total users:",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.rebrand-styles_accordionItemAnswerText__5fYRZ > ul > li > p > b"
+    },
+    {
+      "id": "5vDZY0rJ-V",
+      "kind": "stat",
+      "text": "Up to 100 total users:",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.rebrand-styles_accordionItemAnswerText__5fYRZ > ul > li > p > b"
+    },
+    {
+      "id": "ptEaLdB4vK",
+      "kind": "stat",
+      "text": "Up to 500 total users:",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.rebrand-styles_accordionItemAnswerText__5fYRZ > ul > li > p > b"
+    },
+    {
+      "id": "2VgCwbj9LP",
+      "kind": "stat",
+      "text": "More than 500 users:",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.rebrand-styles_accordionItemAnswerText__5fYRZ > ul > li > p > b"
+    },
+    {
+      "id": "n7EgE3wAkj",
+      "kind": "cta",
+      "text": "Sign up",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.css-cpppx6 > div.css-1raomyp > div.css-cs6pme > div.css-3om8j2 > a.css-6lxnn6-link-3-link-2-link-1"
+    },
+    {
+      "id": "Y47iTEV5dq",
+      "kind": "cta",
+      "text": "What is an AI request?",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "#base-ui-_R_6lctcdl6mH2_"
+    },
+    {
+      "id": "03R6RUPnip",
+      "kind": "cta",
+      "text": "Learn more here",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.rebrand-styles_accordionItem__MUyE_ > div.rebrand-styles_accordionItemAnswer__HdcmK > div.rebrand-styles_accordionItemAnswerText__5fYRZ > p > a"
+    },
+    {
+      "id": "8LxNimQC4M",
+      "kind": "cta",
+      "text": "Contact us",
+      "sourceUrl": "https://asana.com/pricing",
+      "selector": "div.rebrand-styles_accordionItem__MUyE_ > div.rebrand-styles_accordionItemAnswer__HdcmK > div.rebrand-styles_accordionItemAnswerText__5fYRZ > p > a"
+    },
+    {
+      "id": "Eth1dtt3bB",
+      "kind": "heading",
+      "text": "Your easy button for AI productivity across every team",
+      "sourceUrl": "https://asana.com/product/ai",
+      "selector": "div.css-3yhmi > div.css-16wpw1v > div.css-1wfcbv1-heading-1-p1-link-1 > div.css-1qmowps > h2.css-1vd5tri-h1"
+    },
+    {
+      "id": "epheid8qfZ",
+      "kind": "heading",
+      "text": "Supercharge your team with ready-to-go agents",
+      "sourceUrl": "https://asana.com/product/ai",
+      "selector": "div.css-yhsbyk > div.css-14ku2uo > div.css-1a7akhb > div.css-1lf2dbu > h2"
+    },
+    {
+      "id": "K5gVpb3qdQ",
+      "kind": "heading",
+      "text": "Always know your best next action",
+      "sourceUrl": "https://asana.com/product/ai",
+      "selector": "div.css-yhsbyk > div.css-14ku2uo > div.css-1a7akhb > div.css-1lf2dbu > h2"
+    },
+    {
+      "id": "NZRrArzi0q",
+      "kind": "heading",
+      "text": "Build automations for your daily work",
+      "sourceUrl": "https://asana.com/product/ai",
+      "selector": "div.css-yhsbyk > div.css-14ku2uo > div.css-1a7akhb > div.css-1lf2dbu > h2"
+    },
+    {
+      "id": "Kg8kMX4o7Z",
+      "kind": "heading",
+      "text": "Work the way you want to work",
+      "sourceUrl": "https://asana.com/product/ai",
+      "selector": "div.css-yhsbyk > div.css-14ku2uo > div.css-1a7akhb > div.css-1lf2dbu > h2"
+    },
+    {
+      "id": "fgKC1tLpmz",
+      "kind": "heading",
+      "text": "AI you can actually trust",
+      "sourceUrl": "https://asana.com/product/ai",
+      "selector": "div.css-3yhmi > div.css-1dsthpc > div.css-1qfxdg3 > div.css-11k1bbc > h2.css-372fkx-h2"
+    },
+    {
+      "id": "PeBa9lCvGv",
+      "kind": "heading",
+      "text": "Explore resources",
+      "sourceUrl": "https://asana.com/product/ai",
+      "selector": "section.css-luikdd > div.css-196d74x > div.css-3yhmi > div.elk89h81 > h2.css-372fkx-h2"
+    }
+  ],
+  "siteBrief": {
+    "productName": "asana",
+    "summary": "Supercharge your teams with AI",
+    "audience": "general",
+    "differentiator": "Supercharge your teams with AI",
+    "strongestClaimFactId": "4e-UxlRWiV",
+    "factIds": [
+      "vSoVYneMB9",
+      "p3cvhL_wHi",
+      "22FuhxMPXM",
+      "Phn4OcQxhA",
+      "sOsm1Ptw0g",
+      "kbgxIXOt_B",
+      "2nhyyIcQ_S",
+      "Z1rEw0pm06",
+      "YOMuCrRZmp",
+      "HXU4ibRvhU",
+      "qy1ND8YBwR",
+      "wOL8NoTDnd",
+      "0bc8tkBnqy",
+      "hPcQenOibT",
+      "3f8WPAoGnX",
+      "R97K4uQErA",
+      "NORghxfYIY",
+      "674XpIstYc",
+      "f5Tu_JeDIn",
+      "50_xLnNkew",
+      "_AGQVrJIhx",
+      "lPhZi9Uocc",
+      "5piTM-jvEx",
+      "T0RqBjccEY",
+      "5DB_R5kx_n",
+      "64g4Q756sh",
+      "08K3I2bq84",
+      "pnm3Jfe8q9",
+      "_rJZd3evTO",
+      "dxiyWPQjik",
+      "PgaaUmaEek",
+      "sWKEo6Ui9x",
+      "GX4rmlf2XR",
+      "S5Ps2EgbB6",
+      "Wz6KeWyymw",
+      "Ri5_T-mPUY",
+      "QID_gqbXAn",
+      "E1b-P5cfd0",
+      "KF28P20cOE",
+      "JwWOk_AUYQ",
+      "4e-UxlRWiV",
+      "FRPUVZ9YXZ",
+      "5vDZY0rJ-V",
+      "ptEaLdB4vK",
+      "2VgCwbj9LP",
+      "n7EgE3wAkj",
+      "Y47iTEV5dq",
+      "03R6RUPnip",
+      "8LxNimQC4M",
+      "Eth1dtt3bB",
+      "epheid8qfZ",
+      "K5gVpb3qdQ",
+      "NZRrArzi0q",
+      "Kg8kMX4o7Z",
+      "fgKC1tLpmz",
+      "PeBa9lCvGv"
+    ],
+    "source": "fallback"
+  }
+}

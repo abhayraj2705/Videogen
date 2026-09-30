@@ -1,0 +1,519 @@
+{
+  "url": "https://www.mercadolibre.com.ar",
+  "category": "non_english",
+  "domain": "www.mercadolibre.com.ar",
+  "pages": [
+    {
+      "url": "https://www.mercadolibre.com.ar",
+      "screenshotKey": "jobs/987f74e2-c3fd-484e-8971-8bf747581e42/crawl/home.png"
+    },
+    {
+      "url": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "screenshotKey": "jobs/987f74e2-c3fd-484e-8971-8bf747581e42/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.mercadolibre.com.ar/accesibilidad/feedback",
+      "screenshotKey": "jobs/987f74e2-c3fd-484e-8971-8bf747581e42/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "rgba(65, 137, 230, 0.15)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://http2.mlstatic.com/D_NQ_634635-MLA115749900052_092026-OO.webp"
+  },
+  "facts": [
+    {
+      "id": "XdDfO6Nm3c",
+      "kind": "hero",
+      "text": "Mercado Libre",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "html > body > main > div.home > h1.clipped"
+    },
+    {
+      "id": "yaCoiARtfj",
+      "kind": "hero",
+      "text": "Envíos gratis en productos desde $ 15.000Envíos gratis en productos desde 15000 pesos",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > section.loyalty-widget-v2 > section.loyalty-widget-v2__body > div.loyalty-widget-v2__benefit > p.loyalty-widget-v2__benefit-text"
+    },
+    {
+      "id": "Ifht_do59k",
+      "kind": "heading",
+      "text": "Ingresá a tu cuenta",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > div.andes-card > div.dynamic-access-card-ecosistemic > div.dynamic-access-card-ecosistemic-header > h2.dynamic-access-card-ecosistemic__title"
+    },
+    {
+      "id": "Q5gwUL1vQy",
+      "kind": "heading",
+      "text": "Ingresá tu ubicación",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > div.andes-card > div.dynamic-access-card-ecosistemic > div.dynamic-access-card-ecosistemic-header > h2.dynamic-access-card-ecosistemic__title"
+    },
+    {
+      "id": "mCTIvD4l_t",
+      "kind": "heading",
+      "text": "Medios de pago",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > div.andes-card > div.dynamic-access-card-ecosistemic > div.dynamic-access-card-ecosistemic-header > h2.dynamic-access-card-ecosistemic__title"
+    },
+    {
+      "id": "y0b_EU00sq",
+      "kind": "heading",
+      "text": "Menos de $20.000",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > div.andes-card > div.dynamic-access-card-ecosistemic > div.dynamic-access-card-ecosistemic-header > h2.dynamic-access-card-ecosistemic__title"
+    },
+    {
+      "id": "LyEAbU8wNe",
+      "kind": "heading",
+      "text": "Más vendidos",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > div.andes-card > div.dynamic-access-card-ecosistemic > div.dynamic-access-card-ecosistemic-header > h2.dynamic-access-card-ecosistemic__title"
+    },
+    {
+      "id": "cVIzdTH2vI",
+      "kind": "heading",
+      "text": "Compra protegida",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > div.andes-card > div.dynamic-access-card-ecosistemic > div.dynamic-access-card-ecosistemic-header > h2.dynamic-access-card-ecosistemic__title"
+    },
+    {
+      "id": "dAwMMVcpBu",
+      "kind": "heading",
+      "text": "Tiendas oficiales",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > div.andes-card > div.dynamic-access-card-ecosistemic > div.dynamic-access-card-ecosistemic-header > h2.dynamic-access-card-ecosistemic__title"
+    },
+    {
+      "id": "4KJ0fJIOmX",
+      "kind": "heading",
+      "text": "Nuestras categorías",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > div.andes-card > div.dynamic-access-card-ecosistemic > div.dynamic-access-card-ecosistemic-header > h2.dynamic-access-card-ecosistemic__title"
+    },
+    {
+      "id": "-gS-iJKINK",
+      "kind": "heading",
+      "text": "¡HASTA 45% OFF!",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.thb-double-left-side > div.thb-double-left-container > div.thb-double-texts-container > div.thb-double-titles-container > h2.thb-double-text"
+    },
+    {
+      "id": "S9fC2XRV13",
+      "kind": "heading",
+      "text": "EN ZAPATILLAS",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.thb-double-left-side > div.thb-double-left-container > div.thb-double-texts-container > div.thb-double-titles-container > h2.thb-double-text"
+    },
+    {
+      "id": "S9oUGosWk9",
+      "kind": "heading",
+      "text": "EN LIBRERÍA",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.thb-double-left-side > div.thb-double-left-container > div.thb-double-texts-container > div.thb-double-titles-container > h2.thb-double-text"
+    },
+    {
+      "id": "DegFDipTz1",
+      "kind": "heading",
+      "text": "BENEFICIOS QUE SE PAGAN SOLOSBeneficios exclusivos desde 5490 pesos por mes.",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "section.loyalty-widget-v2 > section.loyalty-widget-v2__header > div.loyalty-widget-v2__header--left-section > div.loyalty-widget-v2__header--title-container > h2.loyalty-widget-v2__title"
+    },
+    {
+      "id": "6ZzLXzm1GG",
+      "kind": "heading",
+      "text": "Beneficios en entretenimiento",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "section.andes-carousel-snapped__container > div.andes-carousel-snapped__header > span.andes-carousel-snapped__title > div.section-header > h2.section-header__title"
+    },
+    {
+      "id": "NqGe7L6dLF",
+      "kind": "heading",
+      "text": "Categorías",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "section.categories-new-design > div.row > div.wrapper > div.section-header > h2"
+    },
+    {
+      "id": "6B2YDDUBRT",
+      "kind": "heading",
+      "text": "Elegí cómo pagar",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > section.site-shopping-info > div.container > div.info-slide > h2"
+    },
+    {
+      "id": "Wmlrf31HDr",
+      "kind": "heading",
+      "text": "Envío gratis desde $ 33.000",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > section.site-shopping-info > div.container > div.info-slide > h2"
+    },
+    {
+      "id": "kOM5PPd72E",
+      "kind": "heading",
+      "text": "Seguridad, de principio a fin",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > section.site-shopping-info > div.container > div.info-slide > h2"
+    },
+    {
+      "id": "_It7UdF754",
+      "kind": "heading",
+      "text": "Productos más buscados",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "body > nav.nav-footer-seo > div.nav-bounds > div.nav-footer-seo__wrapper > h3.nav-footer-seo__title"
+    },
+    {
+      "id": "jQFL-osqDt",
+      "kind": "heading",
+      "text": "Buscar productos por letra inicial",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "#nav-footer-access-title"
+    },
+    {
+      "id": "oPcf3TB5HX",
+      "kind": "heading",
+      "text": "Más información",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "html > body > div.nav-footer-access > h2"
+    },
+    {
+      "id": "3XqF3-9w_q",
+      "kind": "heading",
+      "text": "Acerca de",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.nav-footer-access > div.nav-footer-access-content > div.nav-bounds > div.nav-footer-access-col > h3.nav-footer-access-title"
+    },
+    {
+      "id": "CadQ9QQ0WS",
+      "kind": "heading",
+      "text": "Otros sitios",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.nav-footer-access > div.nav-footer-access-content > div.nav-bounds > div.nav-footer-access-col > h3.nav-footer-access-title"
+    },
+    {
+      "id": "DlicHU24jd",
+      "kind": "heading",
+      "text": "Ayuda",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.nav-footer-access > div.nav-footer-access-content > div.nav-bounds > div.nav-footer-access-col > h3.nav-footer-access-title"
+    },
+    {
+      "id": "ElBs63pLkr",
+      "kind": "heading",
+      "text": "Redes sociales",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.nav-footer-access > div.nav-footer-access-content > div.nav-bounds > div.nav-footer-access-col > h3.nav-footer-access-title"
+    },
+    {
+      "id": "87wB8P1Xah",
+      "kind": "heading",
+      "text": "Mi cuenta",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.nav-footer-access > div.nav-footer-access-content > div.nav-bounds > div.nav-footer-access-col > h3.nav-footer-access-title"
+    },
+    {
+      "id": "N_r1rVmuew",
+      "kind": "heading",
+      "text": "Suscripciones",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.nav-footer-access > div.nav-footer-access-content > div.nav-bounds > div.nav-footer-access-col > h3.nav-footer-access-title"
+    },
+    {
+      "id": "PvYZQRnLaA",
+      "kind": "heading",
+      "text": "Temporadas",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.nav-footer-access > div.nav-footer-access-content > div.nav-bounds > div.nav-footer-access-col > h3.nav-footer-access-title"
+    },
+    {
+      "id": "C24bVWtnNJ",
+      "kind": "feature",
+      "text": "Envíos gratis en productos desde $ 15.000Envíos gratis en productos desde 15000 pesos",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > section.loyalty-widget-v2 > section.loyalty-widget-v2__body > div.loyalty-widget-v2__benefit > p.loyalty-widget-v2__benefit-text"
+    },
+    {
+      "id": "XHSwp96cib",
+      "kind": "feature",
+      "text": "Las mejores plataformas de entretenimientoLas mejores plataformas de entretenimiento",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > section.loyalty-widget-v2 > section.loyalty-widget-v2__body > div.loyalty-widget-v2__benefit > p.loyalty-widget-v2__benefit-text"
+    },
+    {
+      "id": "PBRifq_O1p",
+      "kind": "feature",
+      "text": "Envíos gratis en pedidos de “Restaurantes”Envíos gratis en pedidos de “Restaurantes”",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > section.loyalty-widget-v2 > section.loyalty-widget-v2__body > div.loyalty-widget-v2__benefit > p.loyalty-widget-v2__benefit-text"
+    },
+    {
+      "id": "x_1hy7n4P_",
+      "kind": "stat",
+      "text": "Menos de $20.000",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > div.andes-card > div.dynamic-access-card-ecosistemic > div.dynamic-access-card-ecosistemic-header > h2.dynamic-access-card-ecosistemic__title"
+    },
+    {
+      "id": "0ZABe3TgA_",
+      "kind": "stat",
+      "text": "¡HASTA 45% OFF!",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.thb-double-left-side > div.thb-double-left-container > div.thb-double-texts-container > div.thb-double-titles-container > h2.thb-double-text"
+    },
+    {
+      "id": "AKfDYw9fS8",
+      "kind": "stat",
+      "text": "Envío gratis desde $ 33.000",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div > section.site-shopping-info > div.container > div.info-slide > h2"
+    },
+    {
+      "id": "Xw5atjZOBG",
+      "kind": "cta",
+      "text": "notebook",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.nav-bounds > div.nav-footer-seo__wrapper > ul.nav-footer-seo__menu > li.nav-footer-seo__item > a.nav-footer-seo__link"
+    },
+    {
+      "id": "tHcBklp48i",
+      "kind": "cta",
+      "text": "Facebook, Redes sociales",
+      "sourceUrl": "https://www.mercadolibre.com.ar",
+      "selector": "div.nav-bounds > div.nav-footer-access-col > ul > li > a"
+    },
+    {
+      "id": "LBKZGWOnXM",
+      "kind": "heading",
+      "text": "¿Qué son los productos con impacto positivo?",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-landings-spacer > section.andes-landings-container > div.andes-landings-grid-item > div.andes-landings-title > h2.andes-landings-typography"
+    },
+    {
+      "id": "YLN84yYTQ1",
+      "kind": "heading",
+      "text": "LO MÁS VENDIDO 🌟",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-landings-spacer > div.andes-landings-container > div.sbc-products-carousel > div.sbc-products-carousel__header > h2.andes-landings-typography"
+    },
+    {
+      "id": "hRr2WhYr85",
+      "kind": "heading",
+      "text": "Kérastase Génesis Sérum Fortalecedor Anti Caída Cure Activate 365 | 90ml |",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "kVuajf-d38",
+      "kind": "heading",
+      "text": "Perfume Homem Cor.agio Masculino Edp 100 Ml Natura",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "AAuFLyAJ5u",
+      "kind": "heading",
+      "text": "Barra Integra Proteica Mani Con Chocolate X 10u",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "_fTjPw0RRq",
+      "kind": "heading",
+      "text": "Sérum Rostro Revitalift Ácido Hialurónico L'Oréal Paris 30ml",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "S8FLiyHR4I",
+      "kind": "heading",
+      "text": "Sérum de Noche Mágica Nutritivo Kérastase Nutritive 8H Sérum de Nutrición para Cabello Seco, 90ml",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "oZJmhEUPJB",
+      "kind": "heading",
+      "text": "Kaiak Urbe Natura Tradicional Hombre Eau De Toilette Spray",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "Pj3r7OT0EL",
+      "kind": "heading",
+      "text": "Crema Facial Día L' Oréal Revitalift Ácido Hialurónico 50 Ml",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "eTVIQliNYE",
+      "kind": "heading",
+      "text": "Juego Mesa Y Sillas Infantil Montessori Con Respaldo Niño Blanco",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "jeS9rNHDBU",
+      "kind": "heading",
+      "text": "Notebook HP 15-fd0331la Intel Core 3 8GB RAM 512GB SSD 15,6\" FHD Windows 11 Home",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "vHlerjHvQ_",
+      "kind": "heading",
+      "text": "Kaiak Clásico Femenino 100 Ml. Eau De Toilette. Natura",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "lhZvVCs5SL",
+      "kind": "heading",
+      "text": "Botella Térmica Deportiva Ozz Negro Pico Doble Acero 1000ml",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "9UiyJlRKx6",
+      "kind": "heading",
+      "text": "Serum Anti Manchas Vitamina C Garnier 30ml",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "yRloCSG5Xh",
+      "kind": "heading",
+      "text": "Repuesto Psa Fipor N°3 X 8 Unidades Blanco",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "8zclZoAVBy",
+      "kind": "heading",
+      "text": "Garnier Protector Solar Super Uv Fluido Invisible Fps50+ 40 ML",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "lbaFE7nMf7",
+      "kind": "heading",
+      "text": "Perfume Meu Primeiro Humor Femenino Edt 75 Ml Natura Original",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "w99Jl42YPH",
+      "kind": "heading",
+      "text": "Yerba Mate Orgánica Tucanguá 1 Kg. Bien Estacionada Sin gluten",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "NpXZm8DVev",
+      "kind": "heading",
+      "text": "Crema Hidratante facial Neutrogena Hydro Boost water gel 50 GR",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "YZnxpFOh8M",
+      "kind": "heading",
+      "text": "Celular Samsung Galaxy A32 128gb + 4gb Super Amoled 90hz Color Azul - Bueno (Reacondicionado)",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "nUxmXcrWK8",
+      "kind": "heading",
+      "text": "Laptop HP Elitebook 840 G8, Intel Core i7-1185G7, 16GB RAM, 256GB SSD, 1080p Full HD, Windows 11, teclado retroiluminado, lector de huella e Intel Iris Xe. - Excelente (Reacondicionado)",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "1DEXEGyLEZ",
+      "kind": "heading",
+      "text": "Fotoultra100 Isdin Fs50 Fusion Fluido Spot Prevent X 50 Ml",
+      "sourceUrl": "https://www.mercadolibre.com.ar/l/productos-sustentables",
+      "selector": "div.andes-carousel-snapped__slide > div.sbc-products-carousel__card-wrapper > div.andes-card > div.poly-card__content > h3.poly-component__title-wrapper"
+    },
+    {
+      "id": "SZFJx6nZJQ",
+      "kind": "hero",
+      "text": "Ingresa tu e‑mail o teléfono para iniciar sesión",
+      "sourceUrl": "https://www.mercadolibre.com.ar/accesibilidad/feedback",
+      "selector": "div.identification > div.grid-view__container > div.grid-view__main > div.grid-view__section--headers > h1.andes-ui-typography"
+    }
+  ],
+  "siteBrief": {
+    "productName": "mercadolibre",
+    "summary": "Mercado Libre",
+    "audience": "general",
+    "differentiator": "Envíos gratis en productos desde $ 15.000Envíos gratis en productos desde 15000 pesos",
+    "strongestClaimFactId": "x_1hy7n4P_",
+    "factIds": [
+      "XdDfO6Nm3c",
+      "yaCoiARtfj",
+      "Ifht_do59k",
+      "Q5gwUL1vQy",
+      "mCTIvD4l_t",
+      "y0b_EU00sq",
+      "LyEAbU8wNe",
+      "cVIzdTH2vI",
+      "dAwMMVcpBu",
+      "4KJ0fJIOmX",
+      "-gS-iJKINK",
+      "S9fC2XRV13",
+      "S9oUGosWk9",
+      "DegFDipTz1",
+      "6ZzLXzm1GG",
+      "NqGe7L6dLF",
+      "6B2YDDUBRT",
+      "Wmlrf31HDr",
+      "kOM5PPd72E",
+      "_It7UdF754",
+      "jQFL-osqDt",
+      "oPcf3TB5HX",
+      "3XqF3-9w_q",
+      "CadQ9QQ0WS",
+      "DlicHU24jd",
+      "ElBs63pLkr",
+      "87wB8P1Xah",
+      "N_r1rVmuew",
+      "PvYZQRnLaA",
+      "C24bVWtnNJ",
+      "XHSwp96cib",
+      "PBRifq_O1p",
+      "x_1hy7n4P_",
+      "0ZABe3TgA_",
+      "AKfDYw9fS8",
+      "Xw5atjZOBG",
+      "tHcBklp48i",
+      "LBKZGWOnXM",
+      "YLN84yYTQ1",
+      "hRr2WhYr85",
+      "kVuajf-d38",
+      "AAuFLyAJ5u",
+      "_fTjPw0RRq",
+      "S8FLiyHR4I",
+      "oZJmhEUPJB",
+      "Pj3r7OT0EL",
+      "eTVIQliNYE",
+      "jeS9rNHDBU",
+      "vHlerjHvQ_",
+      "lhZvVCs5SL",
+      "9UiyJlRKx6",
+      "yRloCSG5Xh",
+      "8zclZoAVBy",
+      "lbaFE7nMf7",
+      "w99Jl42YPH",
+      "NpXZm8DVev",
+      "YZnxpFOh8M",
+      "nUxmXcrWK8",
+      "1DEXEGyLEZ",
+      "SZFJx6nZJQ"
+    ],
+    "source": "fallback"
+  }
+}

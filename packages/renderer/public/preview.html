@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>SiteReel preview</title>
+    <style>
+      html, body { margin: 0; padding: 0; background: #0a0a0c; color: #eee; font-family: system-ui, sans-serif; }
+      #wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px; }
+      #stage { position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+      #controls { display: flex; align-items: center; gap: 10px; width: 100%; max-width: 900px; }
+      #scrub { flex: 1; }
+      #time { font-variant-numeric: tabular-nums; font-size: 13px; color: #999; min-width: 90px; }
+      button { background: #7c5cff; border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <div id="stage"></div>
+      <div id="controls">
+        <button id="playBtn">Play</button>
+        <input id="scrub" type="range" min="0" max="1000" value="0" />
+        <span id="time">0.00 / 0.00s</span>
+      </div>
+    </div>
+    <script src="film-bundle.js"></script>
+    <script>
+      window.addEventListener("film:ready", () => {
+        const film = window.__film;
+        const scrub = document.getElementById("scrub");
+        const time = document.getElementById("time");
+        const playBtn = document.getElementById("playBtn");
+        let playing = false;
+        let t = 0;
+        const fmt = (n) => n.toFixed(2);
+
+        function render() {
+          time.textContent = `${fmt(t)} / ${fmt(film.duration)}s`;
+          scrub.value = String(Math.round((t / film.duration) * 1000));
+        }
+        film.seek(0);
+        render();
+
+        scrub.addEventListener("input", () => {
+          playing = false;
+          playBtn.textContent = "Play";
+          t = (Number(scrub.value) / 1000) * film.duration;
+          film.seek(t);
+          render();
+        });
+
+        playBtn.addEventListener("click", () => {
+          playing = !playing;
+          playBtn.textContent = playing ? "Pause" : "Play";
+        });
+
+        let last = performance.now();
+        function loop(now) {
+          const dt = (now - last) / 1000;
+          last = now;
+          if (playing) {
+            t = Math.min(film.duration, t + dt);
+            if (t >= film.duration) playing = false;
+            film.seek(t);
+            render();
+          }
+          requestAnimationFrame(loop);
+        }
+        requestAnimationFrame((n) => { last = n; requestAnimationFrame(loop); });
+      });
+    </script>
+  </body>
+</html>

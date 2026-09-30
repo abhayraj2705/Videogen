@@ -1,0 +1,247 @@
+{
+  "url": "https://mamaearth.in",
+  "category": "indian_smb",
+  "domain": "mamaearth.in",
+  "pages": [
+    {
+      "url": "https://mamaearth.in",
+      "screenshotKey": "jobs/42e936f8-ecbe-498d-9d65-e74428316786/crawl/home.png"
+    },
+    {
+      "url": "https://mamaearth.in/collections/all-products",
+      "screenshotKey": "jobs/42e936f8-ecbe-498d-9d65-e74428316786/crawl/page-1.png"
+    },
+    {
+      "url": "https://mamaearth.in/collections/rice-range-products",
+      "screenshotKey": "jobs/42e936f8-ecbe-498d-9d65-e74428316786/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(29, 29, 29)",
+    "accent": "rgb(0, 174, 239)",
+    "fontDisplay": "Open Sans",
+    "fontBody": "Open Sans",
+    "logoUrl": "https://mamaearth.in/cdn/shop/files/Logo.png?v=1772919457&width=328"
+  },
+  "facts": [
+    {
+      "id": "gHHO42Jh8j",
+      "kind": "hero",
+      "text": "Get your hands on Nature-Inspired Mamaearth Products",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.home-p > div.container-g > div > div.metafield-rich_text_field > h1"
+    },
+    {
+      "id": "97pCUMSxC6",
+      "kind": "heading",
+      "text": "Item added to your cart",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "header.shopify-section > div.cart-notification-wrapper > div.cart-notification > div.cart-notification__header > h2.cart-notification__heading"
+    },
+    {
+      "id": "lzQdEtzx7B",
+      "kind": "heading",
+      "text": "Download App",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "hdt-drawer.hdt-drawer > div.app-widget > a.app-widget-inner > div.app-widget-header > h2"
+    },
+    {
+      "id": "Vcvv8YuTDx",
+      "kind": "heading",
+      "text": "All Categories",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "section.shopify-section > hdt-drawer.hdt-drawer > div.hdt-categories-drawer__chrome > div.hdt-categories-drawer__header > h2.hdt-categories-drawer__heading"
+    },
+    {
+      "id": "cvGwbnC8XL",
+      "kind": "heading",
+      "text": "Monsoon is here",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.hdt-section-spacing > div.hdt-container > div.hdt-section-head > div.hdt-section-main-heading > h3.hdt-sec-heading"
+    },
+    {
+      "id": "mDvuXprfIx",
+      "kind": "heading",
+      "text": "Download Mamaearth App for iOS and Android today!",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.home-p > div.container-g > div > div.metafield-rich_text_field > h2"
+    },
+    {
+      "id": "sCmne7SBrx",
+      "kind": "heading",
+      "text": "About Mamaearth Skincare Range",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.home-p > div.container-g > div > div.metafield-rich_text_field > h2"
+    },
+    {
+      "id": "8tydjlsNCV",
+      "kind": "heading",
+      "text": "About Mamaearth Hair Care Range",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.home-p > div.container-g > div > div.metafield-rich_text_field > h2"
+    },
+    {
+      "id": "EPUooGQ0jM",
+      "kind": "heading",
+      "text": "About Mamaearth Body Care Range",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.home-p > div.container-g > div > div.metafield-rich_text_field > h2"
+    },
+    {
+      "id": "jnimXiPeUO",
+      "kind": "heading",
+      "text": "About Mamaearth Baby Care Range",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.home-p > div.container-g > div > div.metafield-rich_text_field > h2"
+    },
+    {
+      "id": "g7iNX2CLKO",
+      "kind": "heading",
+      "text": "Our Bestsellers",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.home-p > div.container-g > div > div.metafield-rich_text_field > h3"
+    },
+    {
+      "id": "VxK_FxyO5b",
+      "kind": "heading",
+      "text": "Most Searched Natural Ingredients for Skin Care and Hair Care:",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.home-p > div.container-g > div > div.metafield-rich_text_field > h3"
+    },
+    {
+      "id": "9iXM5Raj26",
+      "kind": "heading",
+      "text": "Mamaearth Products Price List in India",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.home-p > div.container-g > div > div.metafield-rich_text_field > h2"
+    },
+    {
+      "id": "7kvwQXsEHL",
+      "kind": "heading",
+      "text": "Your cart",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "html.js > body.hdt-page-type-index > div.shopify-section > hdt-cart-drawer.hdt-drawer > h3.hdt-mini-cart__header-title"
+    },
+    {
+      "id": "It5w2BoZhY",
+      "kind": "heading",
+      "text": "Your cart is empty",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.hdt-mini-cart__wrap > div.hdt-mini-cart__main > div.hdt-mini-cart__sroll > div.hdt-mini-cart__emty > h3.hdt-mini-cart__emty-heading"
+    },
+    {
+      "id": "BIcMGnGql0",
+      "kind": "feature",
+      "text": "Monsoon is here",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.hdt-section-spacing > div.hdt-container > div.hdt-section-head > div.hdt-section-main-heading > h3.hdt-sec-heading"
+    },
+    {
+      "id": "jvm15KLTBK",
+      "kind": "cta",
+      "text": "Download App",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.lg:hdt-custom-col-auto > div.hdt-site-top_nav > div.app-widget > span.m_header_app_box > a.app-widget-inner"
+    },
+    {
+      "id": "ObO1rmISgM",
+      "kind": "cta",
+      "text": "Facebook",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "hdt-drawer.hdt-drawer > div.hdt-mobile-other-content-new > ul.hdt-socials__list > li.hdt-socials__item > a.hdt-social-facebook"
+    },
+    {
+      "id": "WbQMq_vF_L",
+      "kind": "cta",
+      "text": "Track Order",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.hdt-row-flex > div.hdt-footer-menu > ul.footer-grid-2col > li.category-item > a.hdt-footer-menu_item"
+    },
+    {
+      "id": "QdMp6e3bZl",
+      "kind": "cta",
+      "text": "Contact Us",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.hdt-row-flex > div.hdt-footer-menu > ul.footer-grid-2col > li.category-item > a.hdt-footer-menu_item"
+    },
+    {
+      "id": "9MRhRVAk8L",
+      "kind": "cta",
+      "text": "Request Replacement/Returns",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.hdt-row-flex > div.hdt-footer-menu > ul.footer-grid-2col > li.category-item > a.hdt-footer-menu_item"
+    },
+    {
+      "id": "A1BzmAp_um",
+      "kind": "cta",
+      "text": "Orders",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.hdt-row-flex > div.hdt-footer-menu > ul.footer-grid-2col > li.category-item > a.hdt-footer-menu_item"
+    },
+    {
+      "id": "zIyt295CKT",
+      "kind": "cta",
+      "text": "Return to shop",
+      "sourceUrl": "https://mamaearth.in",
+      "selector": "div.hdt-mini-cart__wrap > div.hdt-mini-cart__main > div.hdt-mini-cart__sroll > div.hdt-mini-cart__emty > a.hdt-mini-cart__emty-button"
+    },
+    {
+      "id": "ro_nFmtNl7",
+      "kind": "hero",
+      "text": "All products",
+      "sourceUrl": "https://mamaearth.in/collections/all-products",
+      "selector": "section.shopify-section > div.hdt-main-collection-content > div.hdt-container > div.hdt-shop-control > h1.collection-heading"
+    },
+    {
+      "id": "y80USan78b",
+      "kind": "heading",
+      "text": "Filter",
+      "sourceUrl": "https://mamaearth.in/collections/all-products",
+      "selector": "div.hdt-shop-control > div.hdt-col > hdt-drawer.hdt-drawer > div.hdt-filter-header-new > h2.hdt-filter-title-new"
+    },
+    {
+      "id": "-7L_dWsiWT",
+      "kind": "hero",
+      "text": "Rice Range Products",
+      "sourceUrl": "https://mamaearth.in/collections/rice-range-products",
+      "selector": "a.hdt-inline-flex > div.hdt-brand-box > div.hdt-brand-dynamic-text-box > div.hdt-brand-dynamic-text > h1.header-back-collection-name"
+    }
+  ],
+  "siteBrief": {
+    "productName": "mamaearth",
+    "summary": "Get your hands on Nature-Inspired Mamaearth Products",
+    "audience": "general",
+    "differentiator": "Monsoon is here",
+    "strongestClaimFactId": "BIcMGnGql0",
+    "factIds": [
+      "gHHO42Jh8j",
+      "97pCUMSxC6",
+      "lzQdEtzx7B",
+      "Vcvv8YuTDx",
+      "cvGwbnC8XL",
+      "mDvuXprfIx",
+      "sCmne7SBrx",
+      "8tydjlsNCV",
+      "EPUooGQ0jM",
+      "jnimXiPeUO",
+      "g7iNX2CLKO",
+      "VxK_FxyO5b",
+      "9iXM5Raj26",
+      "7kvwQXsEHL",
+      "It5w2BoZhY",
+      "BIcMGnGql0",
+      "jvm15KLTBK",
+      "ObO1rmISgM",
+      "WbQMq_vF_L",
+      "QdMp6e3bZl",
+      "9MRhRVAk8L",
+      "A1BzmAp_um",
+      "zIyt295CKT",
+      "ro_nFmtNl7",
+      "y80USan78b",
+      "-7L_dWsiWT"
+    ],
+    "source": "fallback"
+  }
+}

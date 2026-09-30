@@ -1,0 +1,63 @@
+{
+  "url": "https://rauno.me",
+  "category": "portfolio",
+  "domain": "rauno.me",
+  "pages": [
+    {
+      "url": "https://rauno.me",
+      "screenshotKey": "jobs/a6549fe3-6d1b-4b0c-91a5-11bd4b11b1d3/crawl/home.png"
+    },
+    {
+      "url": "https://rauno.me/craft",
+      "screenshotKey": "jobs/a6549fe3-6d1b-4b0c-91a5-11bd4b11b1d3/crawl/page-1.png"
+    },
+    {
+      "url": "https://rauno.me/projects",
+      "screenshotKey": "jobs/a6549fe3-6d1b-4b0c-91a5-11bd4b11b1d3/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(237, 237, 237)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "rgb(0, 0, 0)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://rauno.me/favicon.svg"
+  },
+  "facts": [
+    {
+      "id": "dfSNl87oph",
+      "kind": "hero",
+      "text": "Rauno Freibergis an Estonianinteractiondesignerworking with Verceland Devouring Details",
+      "sourceUrl": "https://rauno.me",
+      "selector": "div.index_frames__d9hw4 > div.index_mainContainer__XY5Vr > div.index_frame__XKrH1 > div.c-lesPJm > h1.c-lesPJm"
+    },
+    {
+      "id": "k_m735qOOz",
+      "kind": "heading",
+      "text": "Craft",
+      "sourceUrl": "https://rauno.me",
+      "selector": "div.index_frames__d9hw4 > a.index_frame__XKrH1 > div.c-lesPJm > div.index_contents__YVkKY > h3"
+    },
+    {
+      "id": "qBjmt5E5RK",
+      "kind": "heading",
+      "text": "Projects",
+      "sourceUrl": "https://rauno.me",
+      "selector": "a.index_frame__XKrH1 > div.c-lesPJm > div.index_contents__YVkKY > div.index_contents__YVkKY > h3"
+    }
+  ],
+  "siteBrief": {
+    "productName": "rauno",
+    "summary": "Rauno Freibergis an Estonianinteractiondesignerworking with Verceland Devouring Details",
+    "audience": "general",
+    "differentiator": "Rauno Freibergis an Estonianinteractiondesignerworking with Verceland Devouring Details",
+    "strongestClaimFactId": "dfSNl87oph",
+    "factIds": [
+      "dfSNl87oph",
+      "k_m735qOOz",
+      "qBjmt5E5RK"
+    ],
+    "source": "fallback"
+  }
+}

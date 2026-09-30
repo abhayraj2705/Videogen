@@ -1,0 +1,607 @@
+{
+  "url": "https://www.canva.com",
+  "category": "saas",
+  "domain": "www.canva.com",
+  "pages": [
+    {
+      "url": "https://www.canva.com",
+      "screenshotKey": "jobs/fca040fb-678d-4395-9eb4-17d6c3725dba/crawl/home.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "rgba(19, 22, 32, 0.6)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://static.canva.com/web/images/8439b51bb7a19f6e65ce1064bc37c197.svg"
+  },
+  "facts": [
+    {
+      "id": "yvr2GzoGWG",
+      "kind": "hero",
+      "text": "What will you design today?",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.cUPK7A > div.x1ghz6dp > div.x1ghz6dp > div.h8M4_g > h1.xlh3980"
+    },
+    {
+      "id": "nciFwS40OQ",
+      "kind": "heading",
+      "text": "Digital design",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "ki1E_y5y-W",
+      "kind": "heading",
+      "text": "Print design",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "pLQR0n3hO8",
+      "kind": "heading",
+      "text": "Images and photos",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "c0IzT6G1HV",
+      "kind": "heading",
+      "text": "Videos and audio",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "siMtqvgcFU",
+      "kind": "heading",
+      "text": "Product",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "0COAk2quHn",
+      "kind": "heading",
+      "text": "Canva AI",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "RK-wr1FUYY",
+      "kind": "heading",
+      "text": "All Canva AI",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1ghz6dp > div > div > a > h2"
+    },
+    {
+      "id": "Y3AV_Sj6_-",
+      "kind": "heading",
+      "text": "Plans",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "kVE110nwae",
+      "kind": "heading",
+      "text": "Canva for business",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "pfNhA0SxAs",
+      "kind": "heading",
+      "text": "Business plans",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h3"
+    },
+    {
+      "id": "DU1n1oyJ_Z",
+      "kind": "heading",
+      "text": "All Canva for business",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1ghz6dp > div > div > a > h2"
+    },
+    {
+      "id": "UXFNi-SIv3",
+      "kind": "heading",
+      "text": "Solutions",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "7Bp00OBcBl",
+      "kind": "heading",
+      "text": "All solutions",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1ghz6dp > div > div > a > h2"
+    },
+    {
+      "id": "2ijrW1GFai",
+      "kind": "heading",
+      "text": "Features",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "o5ZVJjIwVp",
+      "kind": "heading",
+      "text": "All features",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1ghz6dp > div > div > a > h2"
+    },
+    {
+      "id": "vuAFDYdfGz",
+      "kind": "heading",
+      "text": "Resources",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "KCWN3nwB7f",
+      "kind": "heading",
+      "text": "Reports",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h3"
+    },
+    {
+      "id": "3cXXLJt3U_",
+      "kind": "heading",
+      "text": "All resources",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1ghz6dp > div > div > a > h2"
+    },
+    {
+      "id": "aHqd5GbnhA",
+      "kind": "heading",
+      "text": "Canva for education",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "BrgDxkyF-B",
+      "kind": "heading",
+      "text": "K-12 education",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "M3LJHxxGvO",
+      "kind": "heading",
+      "text": "K-12 teachers",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "H0Xw5cxcKW",
+      "kind": "heading",
+      "text": "Higher education",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "o7JVMe2C2b",
+      "kind": "heading",
+      "text": "Campus solutions",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h3"
+    },
+    {
+      "id": "yYRk7b3l6N",
+      "kind": "heading",
+      "text": "Help",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "7xp1kAawZE",
+      "kind": "heading",
+      "text": "Create guides",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "M7Ta-yeqWK",
+      "kind": "heading",
+      "text": "All create guides",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1ghz6dp > div > div > a > h2"
+    },
+    {
+      "id": "SUoyUz7ilL",
+      "kind": "heading",
+      "text": "Tools to power your best work",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.ac0DBw > div.bM_22w > div.x1ghz6dp > div.x1ghz6dp > h2.xlh3980"
+    },
+    {
+      "id": "wxqLAYoLK0",
+      "kind": "heading",
+      "text": "Turn your image into an editable layout with Magic Layers",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "hufWZEqhmJ",
+      "kind": "heading",
+      "text": "Clean up photos with Magic Eraser",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "ErjkPyyA2Z",
+      "kind": "heading",
+      "text": "Remove image and video backgrounds in one click",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "Gb8X4f6qKk",
+      "kind": "heading",
+      "text": "Elevate your writing with Magic Write",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "q0Q2IgFbF9",
+      "kind": "heading",
+      "text": "Create presentations that engage and inspire",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "da_J66C_5w",
+      "kind": "heading",
+      "text": "Find your perfect presentation template",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "AOC5k7tHdr",
+      "kind": "heading",
+      "text": "Stay on-brand with Brand Kit",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "1rmttGw6yF",
+      "kind": "heading",
+      "text": "Bring your presentations to life with animations",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "br557m4ikx",
+      "kind": "heading",
+      "text": "Effortlessly create your next video with trending templates",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "VXtbEJn6bF",
+      "kind": "heading",
+      "text": "Sharpen any photo with Image Upscaler",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "YwfspvbIFm",
+      "kind": "heading",
+      "text": "Resize designs instantly for any channel",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "aMuvTo6QOx",
+      "kind": "heading",
+      "text": "Effortlessly turn clips to content with our video editor",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "xrO0QP2Pdr",
+      "kind": "heading",
+      "text": "All your video templates in one place",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "QbTLqu6nRK",
+      "kind": "heading",
+      "text": "Studio quality stock videos for every project",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "AeSs6HnONW",
+      "kind": "heading",
+      "text": "Boost engagement with AI-powered captions",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "Uhj1AF6ddP",
+      "kind": "heading",
+      "text": "Turn ideas into high-quality prints with Print Shop",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "109soNofhE",
+      "kind": "heading",
+      "text": "Instantly resize designs for any print",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "iEox3zJCRN",
+      "kind": "heading",
+      "text": "Design and print invitations for any occasion",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "G_iU5t2_K6",
+      "kind": "heading",
+      "text": "Generate stunning, high-quality images for your prints",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "LVxGeJaGVp",
+      "kind": "heading",
+      "text": "All the tools. All in one place.",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.TMg_1g > div > div > div.x1ghz6dp > h2.xlh3980"
+    },
+    {
+      "id": "hpdR4FhFUr",
+      "kind": "heading",
+      "text": "Meet the Visual Suite",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "KPil-6BMWl",
+      "kind": "heading",
+      "text": "Present with impact",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "4fqNwBoM-k",
+      "kind": "heading",
+      "text": "Templates for absolutely anything",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div > div > div > div.cB0xtw > h2.xlh3980"
+    },
+    {
+      "id": "c2eCg7DNwK",
+      "kind": "heading",
+      "text": "Unlock Canva’s creative ecosystem",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.TMg_1g > div > div > div.x1ghz6dp > h2.xlh3980"
+    },
+    {
+      "id": "o2tZ5JtN0f",
+      "kind": "heading",
+      "text": "Get inspired, build skills and discover what you can create",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "h11_6wxvYY",
+      "kind": "heading",
+      "text": "Create magic with M‍y‍ ‍L‍i‍t‍t‍l‍e‍ ‍P‍o‍n‍y‍ Designs",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "18KSq40XvZ",
+      "kind": "heading",
+      "text": "End-to-end platform for large organizations",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "_zIVfNOUfL",
+      "kind": "heading",
+      "text": "Built for small businesses with big aspirations",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > div.x1ghz6dp > h3.xlh3980"
+    },
+    {
+      "id": "abju2wLnPl",
+      "kind": "heading",
+      "text": "Start designing with",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.TMg_1g > div > div > div.x1ghz6dp > h2.xlh3980"
+    },
+    {
+      "id": "4ov7mLjQgw",
+      "kind": "heading",
+      "text": "Download Canva for free",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x9f619 > div.x1ghz6dp > div.x1ghz6dp > div.x1ghz6dp > h2.xlh3980"
+    },
+    {
+      "id": "kvOBMxQGk1",
+      "kind": "heading",
+      "text": "About",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.xp9qt2t > ul.x1ghz6dp > li.x1ghz6dp > div.x1ghz6dp > h2.xlh3980"
+    },
+    {
+      "id": "ErQ4Ax5Svz",
+      "kind": "heading",
+      "text": "Community",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.xp9qt2t > ul.x1ghz6dp > li.x1ghz6dp > div.x1ghz6dp > h2.xlh3980"
+    },
+    {
+      "id": "uQkbwI6e-E",
+      "kind": "heading",
+      "text": "Inspiration",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.xp9qt2t > ul.x1ghz6dp > li.x1ghz6dp > div.x1ghz6dp > h2.xlh3980"
+    },
+    {
+      "id": "cSJpgAgsZg",
+      "kind": "heading",
+      "text": "Tools",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.xp9qt2t > ul.x1ghz6dp > li.x1ghz6dp > div.x1ghz6dp > h2.xlh3980"
+    },
+    {
+      "id": "PrzIuu8CxP",
+      "kind": "stat",
+      "text": "K-12 education",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "Kjb9Eb9R6a",
+      "kind": "stat",
+      "text": "K-12 teachers",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > h2"
+    },
+    {
+      "id": "ZJ9Km1gkgr",
+      "kind": "cta",
+      "text": "Online video recorder",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > a"
+    },
+    {
+      "id": "MN7-aKUXmz",
+      "kind": "cta",
+      "text": "Contact Sales",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > a"
+    },
+    {
+      "id": "k0TAGWKWR3",
+      "kind": "cta",
+      "text": "Contact us",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > a"
+    },
+    {
+      "id": "MAKtMUT8dK",
+      "kind": "cta",
+      "text": "Contact Campus Sales",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "nav.x1ghz6dp > div.x1ghz6dp > div > div > a"
+    },
+    {
+      "id": "XSL3uZJf3j",
+      "kind": "cta",
+      "text": "Sign up",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1ghz6dp > div.x1ghz6dp > div.x1ghz6dp > div.xp9qt2t > a.x1lfrg59"
+    },
+    {
+      "id": "otSorx04rh",
+      "kind": "cta",
+      "text": "Print Shop",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "#_R_354b_-tab-_R_154b_4"
+    },
+    {
+      "id": "aStnAIjoHk",
+      "kind": "cta",
+      "text": "Try Presentations",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1tyjfk7 > div._3tJw4g > div.x1ghz6dp > span > button.x1lfrg59"
+    },
+    {
+      "id": "mNQVtfD6I6",
+      "kind": "cta",
+      "text": "Get started for free",
+      "sourceUrl": "https://www.canva.com",
+      "selector": "div.x1ghz6dp > div.x1ghz6dp > div.x1ghz6dp > div.x1ghz6dp > button.x1lfrg59"
+    }
+  ],
+  "siteBrief": {
+    "productName": "canva",
+    "summary": "What will you design today?",
+    "audience": "general",
+    "differentiator": "What will you design today?",
+    "strongestClaimFactId": "PrzIuu8CxP",
+    "factIds": [
+      "yvr2GzoGWG",
+      "nciFwS40OQ",
+      "ki1E_y5y-W",
+      "pLQR0n3hO8",
+      "c0IzT6G1HV",
+      "siMtqvgcFU",
+      "0COAk2quHn",
+      "RK-wr1FUYY",
+      "Y3AV_Sj6_-",
+      "kVE110nwae",
+      "pfNhA0SxAs",
+      "DU1n1oyJ_Z",
+      "UXFNi-SIv3",
+      "7Bp00OBcBl",
+      "2ijrW1GFai",
+      "o5ZVJjIwVp",
+      "vuAFDYdfGz",
+      "KCWN3nwB7f",
+      "3cXXLJt3U_",
+      "aHqd5GbnhA",
+      "BrgDxkyF-B",
+      "M3LJHxxGvO",
+      "H0Xw5cxcKW",
+      "o7JVMe2C2b",
+      "yYRk7b3l6N",
+      "7xp1kAawZE",
+      "M7Ta-yeqWK",
+      "SUoyUz7ilL",
+      "wxqLAYoLK0",
+      "hufWZEqhmJ",
+      "ErjkPyyA2Z",
+      "Gb8X4f6qKk",
+      "q0Q2IgFbF9",
+      "da_J66C_5w",
+      "AOC5k7tHdr",
+      "1rmttGw6yF",
+      "br557m4ikx",
+      "VXtbEJn6bF",
+      "YwfspvbIFm",
+      "aMuvTo6QOx",
+      "xrO0QP2Pdr",
+      "QbTLqu6nRK",
+      "AeSs6HnONW",
+      "Uhj1AF6ddP",
+      "109soNofhE",
+      "iEox3zJCRN",
+      "G_iU5t2_K6",
+      "LVxGeJaGVp",
+      "hpdR4FhFUr",
+      "KPil-6BMWl",
+      "4fqNwBoM-k",
+      "c2eCg7DNwK",
+      "o2tZ5JtN0f",
+      "h11_6wxvYY",
+      "18KSq40XvZ",
+      "_zIVfNOUfL",
+      "abju2wLnPl",
+      "4ov7mLjQgw",
+      "kvOBMxQGk1",
+      "ErQ4Ax5Svz",
+      "uQkbwI6e-E",
+      "cSJpgAgsZg",
+      "PrzIuu8CxP",
+      "Kjb9Eb9R6a",
+      "ZJ9Km1gkgr",
+      "MN7-aKUXmz",
+      "k0TAGWKWR3",
+      "MAKtMUT8dK",
+      "XSL3uZJf3j",
+      "otSorx04rh",
+      "aStnAIjoHk",
+      "mNQVtfD6I6"
+    ],
+    "source": "fallback"
+  }
+}

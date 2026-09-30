@@ -1,0 +1,407 @@
+{
+  "url": "https://tailwindcss.com",
+  "category": "one_pager",
+  "domain": "tailwindcss.com",
+  "pages": [
+    {
+      "url": "https://tailwindcss.com",
+      "screenshotKey": "jobs/ed4f2555-c210-4eba-8d8a-b35c62ebd3ed/crawl/home.png"
+    },
+    {
+      "url": "https://tailwindcss.com/docs",
+      "screenshotKey": "jobs/ed4f2555-c210-4eba-8d8a-b35c62ebd3ed/crawl/page-1.png"
+    },
+    {
+      "url": "https://tailwindcss.com/docs/installation",
+      "screenshotKey": "jobs/ed4f2555-c210-4eba-8d8a-b35c62ebd3ed/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "oklab(0.129999 -0.00404751 -0.027702 / 0.05)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://tailwindcss.com/favicons/favicon-32x32.png?v=4"
+  },
+  "facts": [
+    {
+      "id": "qLLKfvIwTI",
+      "kind": "hero",
+      "text": "Rapidly build modern websites without ever leaving your HTML.",
+      "sourceUrl": "https://tailwindcss.com",
+      "selector": "div.grid > div.grid > div > div.relative > h1.px-2"
+    },
+    {
+      "id": "2yyWg85RAk",
+      "kind": "heading",
+      "text": "Supported by the best.",
+      "sourceUrl": "https://tailwindcss.com",
+      "selector": "div.grid > div.grid > div.relative > div.relative > h2.max-w-lg"
+    },
+    {
+      "id": "UCy4ffY4HP",
+      "kind": "heading",
+      "text": "Built for the modern web.",
+      "sourceUrl": "https://tailwindcss.com",
+      "selector": "div.grid > div.grid > div.relative > div.relative > h2.max-w-lg"
+    },
+    {
+      "id": "lr6t2Qpwsk",
+      "kind": "heading",
+      "text": "Browse properties",
+      "sourceUrl": "https://tailwindcss.com",
+      "selector": "div.h-112 > div.-mr-16 > div.-mt-18 > div.bg-white > h3.text-base/6"
+    },
+    {
+      "id": "4anSmVV_2S",
+      "kind": "heading",
+      "text": "Redefining real-time performance",
+      "sourceUrl": "https://tailwindcss.com",
+      "selector": "div.@container > div.h-112 > div.-mt-27 > div.flex > h3.text-4xl/12"
+    },
+    {
+      "id": "Pz4YIKR_8X",
+      "kind": "heading",
+      "text": "Ship faster and smaller.",
+      "sourceUrl": "https://tailwindcss.com",
+      "selector": "div.grid > div.grid > div.relative > div.relative > h2.mt-4"
+    },
+    {
+      "id": "h35o7j9u3U",
+      "kind": "heading",
+      "text": "Build whatever you want, without touching your CSS file.",
+      "sourceUrl": "https://tailwindcss.com",
+      "selector": "div.grid > div.grid > div.relative > div.relative > h2.max-w-lg"
+    },
+    {
+      "id": "C0Ppch_k02",
+      "kind": "heading",
+      "text": "Tailwind CSS",
+      "sourceUrl": "https://tailwindcss.com",
+      "selector": "footer.bg-white > div.flex > div.flex > div > h3.font-semibold"
+    },
+    {
+      "id": "1JBfPRf1pU",
+      "kind": "heading",
+      "text": "Resources",
+      "sourceUrl": "https://tailwindcss.com",
+      "selector": "footer.bg-white > div.flex > div.flex > div > h3.font-semibold"
+    },
+    {
+      "id": "ToJHrmpyIi",
+      "kind": "heading",
+      "text": "Community",
+      "sourceUrl": "https://tailwindcss.com",
+      "selector": "footer.bg-white > div.flex > div.flex > div > h3.font-semibold"
+    },
+    {
+      "id": "1rtf1kg17d",
+      "kind": "cta",
+      "text": "Get started",
+      "sourceUrl": "https://tailwindcss.com",
+      "selector": "div.grid > div.grid > div > div.mt-10 > a.z-1"
+    },
+    {
+      "id": "eTRtzQCpdN",
+      "kind": "cta",
+      "text": "shopify.com",
+      "sourceUrl": "https://tailwindcss.com",
+      "selector": "div.mt-18 > div.h-auto > div.@container > div.hidden > a.group"
+    },
+    {
+      "id": "OuBby-4xIy",
+      "kind": "hero",
+      "text": "Get started with Tailwind CSS",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.grid > div.relative > div.isolate > div.px-4 > h1.mt-2"
+    },
+    {
+      "id": "oUA1dAOs5H",
+      "kind": "hero",
+      "text": "Installation",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.grid > div.relative > div.isolate > div.px-4 > p.font-mono"
+    },
+    {
+      "id": "gGvTyZ1bqk",
+      "kind": "heading",
+      "text": "Getting started",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "uXE-t1A_n1",
+      "kind": "heading",
+      "text": "Core concepts",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "H80BaIcyu5",
+      "kind": "heading",
+      "text": "Base styles",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "6WXEf47cBV",
+      "kind": "heading",
+      "text": "Layout",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "7Kizjvp_7Z",
+      "kind": "heading",
+      "text": "Flexbox & Grid",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "Uw8ePjoMhq",
+      "kind": "heading",
+      "text": "Spacing",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "_ouHcFu_UN",
+      "kind": "heading",
+      "text": "Sizing",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "el_GllAbkm",
+      "kind": "heading",
+      "text": "Typography",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "MkGW_I4SF8",
+      "kind": "heading",
+      "text": "Backgrounds",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "J88Ev72LVJ",
+      "kind": "heading",
+      "text": "Borders",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "K-hD-n4bKb",
+      "kind": "heading",
+      "text": "Effects",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "G7JgpsDV_q",
+      "kind": "heading",
+      "text": "Filters",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "IqRjtdsRND",
+      "kind": "heading",
+      "text": "Tables",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "BgIyF66Ud2",
+      "kind": "heading",
+      "text": "Transitions & Animation",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "9QF9aU0aqq",
+      "kind": "heading",
+      "text": "Transforms",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "AmHYNLDwLl",
+      "kind": "heading",
+      "text": "Interactivity",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "Q-lPenXRmq",
+      "kind": "heading",
+      "text": "SVG",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "02UIqgkbBC",
+      "kind": "heading",
+      "text": "Accessibility",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.sticky > div > nav.flex > div.flex > h3.font-mono"
+    },
+    {
+      "id": "AF8Vx9JGTO",
+      "kind": "heading",
+      "text": "Installation",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.px-4 > div.mt-10 > section.relative > div.relative > h2.mb-6"
+    },
+    {
+      "id": "2rrQT1Un-N",
+      "kind": "heading",
+      "text": "Using Vite",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.-mx-4 > div.min-w-full > ul.mb-px > li > h2"
+    },
+    {
+      "id": "ijbtH79ABi",
+      "kind": "heading",
+      "text": "Using PostCSS",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.-mx-4 > div.min-w-full > ul.mb-px > li > h2"
+    },
+    {
+      "id": "xO5DNZGYwD",
+      "kind": "heading",
+      "text": "Tailwind CLI",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.-mx-4 > div.min-w-full > ul.mb-px > li > h2"
+    },
+    {
+      "id": "jpp9l8oJMJ",
+      "kind": "heading",
+      "text": "Framework Guides",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.-mx-4 > div.min-w-full > ul.mb-px > li > h2"
+    },
+    {
+      "id": "k2P4Cj-XRN",
+      "kind": "heading",
+      "text": "Play CDN",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.-mx-4 > div.min-w-full > ul.mb-px > li > h2"
+    },
+    {
+      "id": "DIwyqGXudw",
+      "kind": "heading",
+      "text": "Installing Tailwind CSS as a Vite plugin",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "div.px-4 > div.mt-10 > section.relative > div.prose > h3.sr-only"
+    },
+    {
+      "id": "5Qilt0OisQ",
+      "kind": "cta",
+      "text": "order",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "nav.flex > div.flex > ul.flex > li.-ml-px > a.inline-block"
+    },
+    {
+      "id": "jEZBhi60I6",
+      "kind": "cta",
+      "text": "border-radius",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "nav.flex > div.flex > ul.flex > li.-ml-px > a.inline-block"
+    },
+    {
+      "id": "q2RUOAu1Sr",
+      "kind": "cta",
+      "text": "border-width",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "nav.flex > div.flex > ul.flex > li.-ml-px > a.inline-block"
+    },
+    {
+      "id": "AQMI6VMk96",
+      "kind": "cta",
+      "text": "border-color",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "nav.flex > div.flex > ul.flex > li.-ml-px > a.inline-block"
+    },
+    {
+      "id": "ZVdiiQbblj",
+      "kind": "cta",
+      "text": "border-style",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "nav.flex > div.flex > ul.flex > li.-ml-px > a.inline-block"
+    },
+    {
+      "id": "AfP4lUsQXE",
+      "kind": "cta",
+      "text": "border-collapse",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "nav.flex > div.flex > ul.flex > li.-ml-px > a.inline-block"
+    },
+    {
+      "id": "xisf-03Vwd",
+      "kind": "cta",
+      "text": "border-spacing",
+      "sourceUrl": "https://tailwindcss.com/docs",
+      "selector": "nav.flex > div.flex > ul.flex > li.-ml-px > a.inline-block"
+    }
+  ],
+  "siteBrief": {
+    "productName": "tailwindcss",
+    "summary": "Rapidly build modern websites without ever leaving your HTML.",
+    "audience": "general",
+    "differentiator": "Rapidly build modern websites without ever leaving your HTML.",
+    "strongestClaimFactId": "qLLKfvIwTI",
+    "factIds": [
+      "qLLKfvIwTI",
+      "2yyWg85RAk",
+      "UCy4ffY4HP",
+      "lr6t2Qpwsk",
+      "4anSmVV_2S",
+      "Pz4YIKR_8X",
+      "h35o7j9u3U",
+      "C0Ppch_k02",
+      "1JBfPRf1pU",
+      "ToJHrmpyIi",
+      "1rtf1kg17d",
+      "eTRtzQCpdN",
+      "OuBby-4xIy",
+      "oUA1dAOs5H",
+      "gGvTyZ1bqk",
+      "uXE-t1A_n1",
+      "H80BaIcyu5",
+      "6WXEf47cBV",
+      "7Kizjvp_7Z",
+      "Uw8ePjoMhq",
+      "_ouHcFu_UN",
+      "el_GllAbkm",
+      "MkGW_I4SF8",
+      "J88Ev72LVJ",
+      "K-hD-n4bKb",
+      "G7JgpsDV_q",
+      "IqRjtdsRND",
+      "BgIyF66Ud2",
+      "9QF9aU0aqq",
+      "AmHYNLDwLl",
+      "Q-lPenXRmq",
+      "02UIqgkbBC",
+      "AF8Vx9JGTO",
+      "2rrQT1Un-N",
+      "ijbtH79ABi",
+      "xO5DNZGYwD",
+      "jpp9l8oJMJ",
+      "k2P4Cj-XRN",
+      "DIwyqGXudw",
+      "5Qilt0OisQ",
+      "jEZBhi60I6",
+      "q2RUOAu1Sr",
+      "AQMI6VMk96",
+      "ZVdiiQbblj",
+      "AfP4lUsQXE",
+      "xisf-03Vwd"
+    ],
+    "source": "fallback"
+  }
+}

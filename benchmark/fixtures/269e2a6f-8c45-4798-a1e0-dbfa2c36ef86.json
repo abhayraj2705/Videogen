@@ -1,0 +1,2559 @@
+{
+  "url": "https://www.lemonde.fr",
+  "category": "non_english",
+  "domain": "www.lemonde.fr",
+  "pages": [
+    {
+      "url": "https://www.lemonde.fr",
+      "screenshotKey": "jobs/269e2a6f-8c45-4798-a1e0-dbfa2c36ef86/crawl/home.png"
+    },
+    {
+      "url": "https://www.lemonde.fr/pixels/article/2026/09/16/on-a-teste-fire-emblem-fortune-s-weave-le-jeu-le-plus-abouti-de-la-serie_6775211_4408996.html",
+      "screenshotKey": "jobs/269e2a6f-8c45-4798-a1e0-dbfa2c36ef86/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.lemonde.fr/international/article/2026/09/25/volodymyr-zelensky-dit-avoir-obtenu-l-aval-de-donald-trump-pour-la-production-de-missiles-patriot-en-ukraine_6782422_3210.html",
+      "screenshotKey": "jobs/269e2a6f-8c45-4798-a1e0-dbfa2c36ef86/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(42, 48, 60)",
+    "accent": "rgb(255, 199, 0)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://img.lemde.fr/2026/09/16/8be3e12_upload-1-41flaqzamqfq-switzerland-tourism-logo-new.png"
+  },
+  "facts": [
+    {
+      "id": "fk5fDdjg3W",
+      "kind": "hero",
+      "text": "Actualités et info du jour avec Le Monde",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "html > body.home-default > main.main > div.ds-home > h1.ds-seo-main-title"
+    },
+    {
+      "id": "9oK7hqlvtq",
+      "kind": "heading",
+      "text": "Emmanuel Macron juge les propos antisémites imputés à Jordan Bardella « gravissimes et inacceptables » ; le président du RN lui répond",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "O5VvNmg7o0",
+      "kind": "heading",
+      "text": "Jordan Bardella, une jeunesse au FN sous l’influence idéologique d’Alain Soral",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-card__linked__list > li.ds-card__linked__post > div.ds-card__linked__post__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "rl5aYMKHta",
+      "kind": "heading",
+      "text": "« La violence verbale du RN ne nous impressionne pas », réagit Fabrice Arfi, coresponsable du pôle « enquêtes » de Mediapart",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-card__linked__list > li.ds-card__linked__post > div.ds-card__linked__post__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "a5ixHauIGw",
+      "kind": "heading",
+      "text": "Le point après une nouvelle journée d’actions de lycéens : le ministre de l’intérieur reconnaît une « extension du mouvement » et annonce 625 interpellations",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "dkLW6NeBqO",
+      "kind": "heading",
+      "text": "La justice saisie contre Bally Bagayoko, maire LFI de Saint-Denis, pour « provocation à commettre un délit »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-card__linked__list > li.ds-card__linked__post > div.ds-card__linked__post__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "Kd-Z5LpR4F",
+      "kind": "heading",
+      "text": "L’IGPN saisie après l’hospitalisation d’un jeune homme à Tours, ses lésions « compatibles » avec un tir de LBD",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-card__linked__list > li.ds-card__linked__post > div.ds-card__linked__post__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "-IZnqs8-7a",
+      "kind": "heading",
+      "text": "Une nouvelle demande d’aide financière pour l’Ukraine qui passe mal à Bruxelles",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "UKu0AE2Bh-",
+      "kind": "heading",
+      "text": "La Russie rappelle qu’elle considère les usines en Europe qui produisent des armes pour l’Ukraine comme des « potentielles cibles militaires »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-card__linked__list > li.ds-card__linked__post > div.ds-card__linked__post__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "29ASftPglm",
+      "kind": "heading",
+      "text": "Après la tentative de détournement d’un avion de Flydubai volant vers Tel-Aviv, des témoignages et des zones d’ombre",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "-Jn-l2C_o-",
+      "kind": "heading",
+      "text": "Ce que l’on sait de l’avion reliant Dubaï à Tel-Aviv qui a été dérouté en Arabie saoudite",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-card__linked__list > li.ds-card__linked__post > div.ds-card__linked__post__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "BSezb9qifo",
+      "kind": "heading",
+      "text": "Une vidéo montre un passager à bord du vol : « Tous les passagers sont sains et saufs, sauf le pilote »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-card__linked__list > li.ds-card__linked__post > div.ds-card__linked__post__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "7W01z0fZd9",
+      "kind": "heading",
+      "text": "Les conséquences redoutées si le budget de la Sécurité sociale n’était pas adopté d’ici à la fin de l’automne",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "wh-Ln5Ldzp",
+      "kind": "heading",
+      "text": "Sébastien Lecornu alerte sur les risques d’une crise financière en France à la veille de présenter son budget de « redressement »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-card__linked__list > li.ds-card__linked__post > div.ds-card__linked__post__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "NJ13ct5Yvv",
+      "kind": "heading",
+      "text": "L’inflation sur un an atteint 3 % soit son plus haut niveau depuis 2024",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-card__linked__list > li.ds-card__linked__post > div.ds-card__linked__post__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "hZcDzsLWro",
+      "kind": "heading",
+      "text": "Stellantis arrête momentanément quatre usines en France et place plus de 8 000 salariés en chômage partiel",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "pIESpMmZ6y",
+      "kind": "heading",
+      "text": "Emmanuel Macron au pouvoir, de la promesse originelle à la dislocation d’un idéal : dix années racontées par ses proches",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-card > div.ds-card__clickarea > div.ds-card__moment-content > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "9mWgfoAOS_",
+      "kind": "heading",
+      "text": "Météo du climat",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "#teasercard-title"
+    },
+    {
+      "id": "Fah18YSXuW",
+      "kind": "heading",
+      "text": "Cristiano Ronaldo quitte la sélection portugaise à la veille d’un match contre le Danemark, après avoir été laissé sur le banc lors de la dernière rencontre",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "rOtadj98LC",
+      "kind": "heading",
+      "text": "La communauté française de Barcelone raconte une « déliquescence » du rayonnement culturel, au moment où Emmanuel Macron vante la vitalité culturelle de la France en Espagne",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "W02K20Iz-L",
+      "kind": "heading",
+      "text": "Entre la France et l’Espagne, des relations « extraordinaires », mais toujours sans traité d’amitié",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-card__linked__list > li.ds-card__linked__post > div.ds-card__linked__post__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "8nwNUpuBRI",
+      "kind": "heading",
+      "text": "Traquer les fuites de méthane pour freiner le réchauffement climatique : le projet de règlement européen fragilisé par le revirement de la France",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "uXnSbuOtBv",
+      "kind": "heading",
+      "text": "De « fortes indications » que l’Iran est impliqué dans le projet d’attaque contre une base militaire en Angleterre, selon le premier ministre britannique",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "fvVFigDVUR",
+      "kind": "heading",
+      "text": "« Le danger des épisodes méditerranéens », comme celui qui touche le Sud-Est actuellement, « ce sont les crues éclair : tout déborde très vite »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "h8gYLr0Peo",
+      "kind": "heading",
+      "text": "Un épisode méditerranéen « exceptionnel » cette après-midi dans le Gard et l’Hérault, avec de très fortes pluies et un risque d’inondations",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-card__linked__list > li.ds-card__linked__post > div.ds-card__linked__post__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "EbbernV6sc",
+      "kind": "heading",
+      "text": "Retrouvez « La Météo du Climat » dans votre ville",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-card__linked__list > li.ds-card__linked__post > div.ds-card__linked__post__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "yYqBCuwNPb",
+      "kind": "heading",
+      "text": "« Ce n’était pas la DZ, c’était moi » : un homme de 20 ans reconnaît être derrière les menaces contre le maire d’Alès",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "4iukGPwRb6",
+      "kind": "heading",
+      "text": "Affaire Epstein : la diplomatie norvégienne sur le gril",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "Y3xU_xpITl",
+      "kind": "heading",
+      "text": "« T24 », l’un des derniers médias indépendants de Turquie, contraint de fermer par les autorités",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "KuBkfBqrSW",
+      "kind": "heading",
+      "text": "Ce que risque Manchester City après avoir enfreint les règles financières de la Premier League",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "ii9Fs3uWkf",
+      "kind": "heading",
+      "text": "Les députés absents participent de plus en plus aux scrutins publics à l’Assemblée nationale",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h2.ds-card__title__text"
+    },
+    {
+      "id": "o8UMfodF4_",
+      "kind": "heading",
+      "text": "Le Monde Mémorable",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "#carouselBizdevTop"
+    },
+    {
+      "id": "nQzahv8NZk",
+      "kind": "heading",
+      "text": "Le génie Chaplin",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "P6IRmE9lTx",
+      "kind": "heading",
+      "text": "La fabrique de la loi",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "NtjLsxci_G",
+      "kind": "heading",
+      "text": "Offrir Mémorable",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "7AqrjQArO7",
+      "kind": "heading",
+      "text": "Culture générale",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "xS8OL0Wks5",
+      "kind": "heading",
+      "text": "Mémorisation",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "w8VqOdlaaC",
+      "kind": "heading",
+      "text": "Sélection de la rédaction",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "main.main > div.ds-home > div.ds-area > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "hA5U1-Z9WA",
+      "kind": "heading",
+      "text": "« Nous entrons peut-être dans une période où la littérature sera produite en grande partie par des machines, pour des machines »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "slUl05H_Ke",
+      "kind": "heading",
+      "text": "La France traverse une crise du pouvoir d’achat historique : depuis 2024, les familles ont perdu 1 200 euros en moyenne",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "DG1CSS05xo",
+      "kind": "heading",
+      "text": "« Comment a-t-on pu sérieusement croire qu’on pourrait arrêter le réchauffement climatique ? »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "2xcsmuXDRX",
+      "kind": "heading",
+      "text": "Idées et tribunes Idées et tribunes",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "main.main > div.ds-home > div.ds-area > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "fMWZwbFQhp",
+      "kind": "heading",
+      "text": "Présidentielle 2027 : sortir du déni sur la dette",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "6J8Db4u-d_",
+      "kind": "heading",
+      "text": "Le « climat incestuel », cette violence sans passage à l’acte qui doit alerter",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "AzE7-Etvak",
+      "kind": "heading",
+      "text": "Chaussures André : « Quitter le “Titanic” sur un radeau de fortune n’aura pas suffi à sauver les anciennes gloires de l’empire Vivarte »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "YRBuuuW9FV",
+      "kind": "heading",
+      "text": "« Les Etats-Unis et la Chine construisent des arsenaux juridiques symétriques qui prennent en étau la chaîne de valeur européenne »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "G5OCjCBy9c",
+      "kind": "heading",
+      "text": "Mimi Sheller, sociologue : « L’administration Trump a préféré la mort par les combustibles fossiles à la transition verte »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "00gqTxSkzM",
+      "kind": "heading",
+      "text": "Découvrir",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "main.main > div.ds-home > div.ds-area > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "8ulsECoPWn",
+      "kind": "heading",
+      "text": "« Les collègues toxiques restent en place » : quand les politiques de bien-être au travail occultent une organisation défaillante",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-card > div.ds-card__clickarea > div.ds-card__lifestyle-content > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "lpr6Tcfp88",
+      "kind": "heading",
+      "text": "Paul Mirabel se dévoile et ne se donne pas le beau rôle dans sa série « Paul »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-card > div.ds-card__clickarea > div.ds-card__lifestyle-content > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "RpxMypeSrB",
+      "kind": "heading",
+      "text": "Dix pistes pour sortir du « tout-voiture »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-card > div.ds-card__clickarea > div.ds-card__lifestyle-content > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "_Mg5QS7I4t",
+      "kind": "heading",
+      "text": "A la fashion week de Paris, le jour léger de Dior, la nuit dorée de Saint Laurent",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-card > div.ds-card__clickarea > div.ds-card__lifestyle-content > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "DerQWpHszf",
+      "kind": "heading",
+      "text": "« Le dilemme » : faut-il taper ses symptômes dans Google ou ChatGPT, au risque d’alimenter nos peurs ?",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-card > div.ds-card__clickarea > div.ds-card__lifestyle-content > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "r66v9SZ2Px",
+      "kind": "heading",
+      "text": "Epictète, ou l’art de rester serein : « Les Petites Méditations » d’Abdennour Bidar",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-card > div.ds-card__clickarea > div.ds-card__lifestyle-content > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "bhc5QxmOLK",
+      "kind": "heading",
+      "text": "Critiques",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "#ds-area__title--reviews"
+    },
+    {
+      "id": "OuKABDiQji",
+      "kind": "heading",
+      "text": "Nos séries",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "#ds-area__title--series"
+    },
+    {
+      "id": "QEsmKg5jFQ",
+      "kind": "heading",
+      "text": "La bonne paye",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "WZWT32-8_j",
+      "kind": "heading",
+      "text": "Sur la piste saoudienne des attentats du 11-Septembre",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "AOF80chMZr",
+      "kind": "heading",
+      "text": "Lettres de",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "XjNZYUFowb",
+      "kind": "heading",
+      "text": "Écran total",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "WgI0iwUnMx",
+      "kind": "heading",
+      "text": "On avance",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "PjPAmVqqnM",
+      "kind": "heading",
+      "text": "Les 15 ans de M",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "2M7vX9Ofae",
+      "kind": "heading",
+      "text": "Dans la peau",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "I9jTZ4TvJq",
+      "kind": "heading",
+      "text": "Ma vie d'ado",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "fsmgS1yiem",
+      "kind": "heading",
+      "text": "Work in progress",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "sDhFphQZjZ",
+      "kind": "heading",
+      "text": "La Relève",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "Vd7WXvfQwW",
+      "kind": "heading",
+      "text": "Remue-ménages",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "Gh9dyEGAOe",
+      "kind": "heading",
+      "text": "Vie de parents",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "KR6K5jt2_7",
+      "kind": "heading",
+      "text": "La France buissonnière",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "NYqvASMH6j",
+      "kind": "heading",
+      "text": "Mon boss et moi",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "Rux-HAM8R3",
+      "kind": "heading",
+      "text": "Je ne serais pas arrivé là si",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "gSipLkSb1S",
+      "kind": "heading",
+      "text": "Extrême droite : l’ancrage européen",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "sMm4waPJGC",
+      "kind": "heading",
+      "text": "Et toi, t’habites où ?",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "7RUHBdBFzi",
+      "kind": "heading",
+      "text": "Dans ma bulle",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "WuCvWGlvvd",
+      "kind": "heading",
+      "text": "Le prénom",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "y2rDm7eSR3",
+      "kind": "heading",
+      "text": "Un apéro avec...",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "ydawfQayhE",
+      "kind": "heading",
+      "text": "La vie cachée des plantes",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "yukVdchy29",
+      "kind": "heading",
+      "text": "Les plus lus",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "main.main > div.ds-home > div.ds-area > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "2TqeQAlQ5O",
+      "kind": "heading",
+      "text": "Les médias Bolloré chassent la « taupe » d’un RN paranoïaque",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "PCSB3Y1q1d",
+      "kind": "heading",
+      "text": "Menacé d’une contribution exceptionnelle sur ses profits, CMA CGM renonce à son engagement d’enregistrer 40 navires sous pavillon français",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "_wcETQ7Q_k",
+      "kind": "heading",
+      "text": "Enquête de « Mediapart » sur Jordan Bardella : « La violence verbale du RN ne nous impressionne pas », réagit Fabrice Arfi",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "6AR3H_xVSg",
+      "kind": "heading",
+      "text": "Aux Etats-Unis, des villes interdisent les fast-foods drives, symboles de la culture américaine",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "3x12xLIFPp",
+      "kind": "heading",
+      "text": "Élection présidentielle 2027",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "4gBsP3rH8u",
+      "kind": "heading",
+      "text": "Présidentielle 2027 : les Jeunes socialistes veulent peser dans la primaire à gauche",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "YHs3w46KYA",
+      "kind": "heading",
+      "text": "Baisser la TVA sur les carburants : la proposition de Marine Le Pen est-elle réaliste ?",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "yM1o2ZDklq",
+      "kind": "heading",
+      "text": "Présidentielle 2027 : Gabriel Attal critique le projet de réforme des retraites d’Edouard Philippe, jugeant qu’il s’agit de « mesures de soins palliatifs »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "oHYu6Dbrjw",
+      "kind": "heading",
+      "text": "Bruno Retailleau : « Le problème de l’Europe, c’est qu’elle a donné le sentiment aux peuples de contourner la démocratie »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "dmWtK2XzKT",
+      "kind": "heading",
+      "text": "Présidentielle 2027 : Edouard Philippe dévoile son projet de retraite à 65 ans et 45 annuités",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "LMDFeP4hbY",
+      "kind": "heading",
+      "text": "« La gauche sociale-démocrate s’accroche à l’idée de la primaire, mais reste floue quant à son objectif réel »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "zpgFGPYoh1",
+      "kind": "heading",
+      "text": "Présidentielle 2027 : Xavier Bertrand, candidat en embuscade",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "WG5eAPBh8W",
+      "kind": "heading",
+      "text": "Présidentielle 2027 : « Comme les sondages sont instrumentalisés, cela appelle d’autant plus notre vigilance »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "OVburHnoSi",
+      "kind": "heading",
+      "text": "Réforme des retraites : Edouard Philippe forcé de prendre des risques pour éviter l’écueil du favori fragile pour 2027",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "HunmJ-kib0",
+      "kind": "heading",
+      "text": "Marine Le Pen, Gabriel Attal et Jean-Luc Mélenchon détaillent leurs propositions pour le logement",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "MdpuZo8aaC",
+      "kind": "heading",
+      "text": "Participer ou rester en retrait des mobilisations sociales, le dilemme de la gauche face à la rue",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "WkdHUfPyhk",
+      "kind": "heading",
+      "text": "Présidentielle 2027 : les candidats disent-ils la vérité sur le climat ?",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "UbnOqR2JHn",
+      "kind": "heading",
+      "text": "Guerre en Ukraine",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "ODp5h54owY",
+      "kind": "heading",
+      "text": "L’Estonie accuse la Russie d’avoir commandité un « acte de sabotage » sur l’une de ses entreprises de drones",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "Q0wC5aN4fc",
+      "kind": "heading",
+      "text": "La Corée du Sud exige des excuses de l’Ukraine pour avoir dévoilé le transfert de deux prisonniers nord-coréens",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "OUH_oE1AKY",
+      "kind": "heading",
+      "text": "Kiev : les images des dégâts à la suite de la frappe contre une clinique dans le centre de la capitale ukrainienne",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "lOxpOgLX6-",
+      "kind": "heading",
+      "text": "Olechky, ville ukrainienne occupée et confrontée au spectre de la famine",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "j6OE4D3lct",
+      "kind": "heading",
+      "text": "L’Europe « fait tout » pour contrecarrer les négociations sur l’Ukraine, accuse Sergueï Lavrov à l’ONU",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "jLlJVywDl2",
+      "kind": "heading",
+      "text": "« Penser la guerre en dehors des sociétés qui la font est une illusion mortifère »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "utWjYpE87B",
+      "kind": "heading",
+      "text": "Présidentielle 2027 : le chemin de crête de Jean-Luc Mélenchon sur l’Ukraine",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "4x-9IU_p-2",
+      "kind": "heading",
+      "text": "A Thil, en Lorraine, l’hommage à 37 travailleuses forcées soviétiques victimes des nazis annulé à cause du conflit russo-ukrainien",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "CusFnLw5Kh",
+      "kind": "heading",
+      "text": "L’un en Russie, l’autre en Ukraine : Xavier et Thomas Moreau, deux frères en guerre froide",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "sgeur4N0lX",
+      "kind": "heading",
+      "text": "Donald Trump accueille Xi Jinping en majesté à la Maison Blanche",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "hebBAkHMQw",
+      "kind": "heading",
+      "text": "Comment la Géorgie s’est détournée de ses partenaires occidentaux au profit de la Russie",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "TwLvEHYSdf",
+      "kind": "heading",
+      "text": "Volodymyr Zelensky dit avoir obtenu l’aval de Donald Trump pour la production de missiles Patriot en Ukraine",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "iI4QcJrwgi",
+      "kind": "heading",
+      "text": "Pouvoir d'achat",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "9Ugo5w2dYt",
+      "kind": "heading",
+      "text": "En Alsace, un garagiste indépendant voit les factures s’envoler pour lui et ses clients : « Un sur deux paie en quatre fois »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "uyR0OmpUOO",
+      "kind": "heading",
+      "text": "Pouvoir d’achat : la fonction publique dans la rue pour « réclamer autre chose que des remerciements »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "bqIghHBxN3",
+      "kind": "heading",
+      "text": "Pouvoir d’achat : « Le ticket de caisse ne raconte jamais toute l’histoire »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "bB8rzPJH7F",
+      "kind": "heading",
+      "text": "Partenaires",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "zqGtwD00cS",
+      "kind": "heading",
+      "text": "Guerres au Proche-Orient",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "5jQxtu_VFx",
+      "kind": "heading",
+      "text": "A Gaza, sept personnes tuées par des tirs israéliens, dont un responsable du Hamas, annonce la défense civile",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "flV0gyyV1Q",
+      "kind": "heading",
+      "text": "Guerre au Liban : une plainte déposée en France contre l’armée israélienne liée à des destructions environnementales dans la zone qu’elle occupe",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "0ieoDFqx1e",
+      "kind": "heading",
+      "text": "A Gaza, « usines à cibles » et « dommages collatéraux » : les méthodes de l’armée israélienne racontées par les militaires",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "w30qAG8hJO",
+      "kind": "heading",
+      "text": "Plus de 100 colons israéliens attaquent un village en Cisjordanie occupée pour empêcher le retour d’une famille palestinienne",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "YGu-uJJIgd",
+      "kind": "heading",
+      "text": "Les armées africaines, improbables recrues de la Force internationale censée stabiliser la bande de Gaza",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "FPIFb1-qer",
+      "kind": "heading",
+      "text": "La population iranienne de plus en plus isolée après des sanctions américaines contre les compagnies aériennes du pays",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "M8mmN_pbux",
+      "kind": "heading",
+      "text": "Israël affirme avoir tué, dans la bande de Gaza, le ravisseur d’un couple d’otages du 7-Octobre",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "WBHnPhr0Gc",
+      "kind": "heading",
+      "text": "Israël : la justice reporte un appel d’offres pour un projet de colonisation en Cisjordanie, pour ne pas perturber les élections législatives",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "PJ4t7ITEP4",
+      "kind": "heading",
+      "text": "Dans la Drôme, l’opération de sauvetage d’une poétesse gazaouie",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "hhlnK28wkP",
+      "kind": "heading",
+      "text": "Entre l’Irlande et Israël, un double face-à-face sous tension en Ligue des nations en raison de la situation à Gaza",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "9_dpHnJhtp",
+      "kind": "heading",
+      "text": "« Nous n’avons rien, ni endroit sûr ni nourriture » : au Yémen, la situation humanitaire s’aggrave",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "xDvu99MBQO",
+      "kind": "heading",
+      "text": "Intelligence artificielle",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "6vkDZvR0Su",
+      "kind": "heading",
+      "text": "« Nous devons essayer d’être un canal entre les industriels de l’IA et le monde mathématique universitaire »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "oSG_c3qvX5",
+      "kind": "heading",
+      "text": "L’IA émettra six fois plus de CO₂ en 2030 qu’en 2025, selon l’étude d’un collectif d’experts",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "je0Tsn6F12",
+      "kind": "heading",
+      "text": "Les géants de l’IA ne s’intéressent aux résultats mathématiques que pour afficher leur puissance",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "Qiu35GW9KP",
+      "kind": "heading",
+      "text": "Vidéos",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "o1ai2vacok",
+      "kind": "heading",
+      "text": "Interpellation violente à Corbeil-Essonnes : la nouvelle vidéo qui contredit la version des policiers",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "GsjpFLoRLz",
+      "kind": "heading",
+      "text": "Emmanuel Macron s’exprime sur les blocages des lycées : « Aucun de ces débats ou de ces craintes ne légitime la violence »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "-L0oXU8zk6",
+      "kind": "heading",
+      "text": "Emmanuel Macron réagit à l’enquête de « Mediapart » sur Jordan Bardella : des révélations « gravissimes et inacceptables »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "CAl-aunYaF",
+      "kind": "heading",
+      "text": "International",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "qbLt_y2U_J",
+      "kind": "heading",
+      "text": "Le président argentin Javier Milei à la recherche d’investisseurs pour soutenir une économie à la peine",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "JPqcpmEsfw",
+      "kind": "heading",
+      "text": "Les passeurs du pire naufrage de migrants dans la Manche condamnés à des peines allant jusqu’à dix ans de prison",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "LjBhWHqJOc",
+      "kind": "heading",
+      "text": "Dans le nord du Nigeria, des enlèvements en série",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "DbHfR_Yoqa",
+      "kind": "heading",
+      "text": "La justice américaine suspend l’exécution de Christa Pike, quelques minutes avant l’injection létale prévue",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "w4vLHCYenw",
+      "kind": "heading",
+      "text": "En Espagne, le gouvernement de Pedro Sanchez tente de contenir la colère sociale sur le logement",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "zJoxZ6R9Uo",
+      "kind": "heading",
+      "text": "Songmont, la marque chinoise de sacs à main qui aiguillonne LVMH, fait sa promotion à Paris",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "-6ZVutMjoT",
+      "kind": "heading",
+      "text": "Au Brésil, « les Etats-Unis cherchent à peser sur l’élection présidentielle, avec la complicité de l’un des candidats, Flavio Bolsonaro »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "Nsj8VMfIqQ",
+      "kind": "heading",
+      "text": "« L’accord sur le Groenland constitue le parfait contre-pied à la “diplomatie de la famille et des amis” de Donald Trump »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "6NETZOOs0m",
+      "kind": "heading",
+      "text": "En Birmanie, l’armée multiplie les atrocités contre les civils dans sa guerre contre l’Armée de l’Arakan, l’un des plus puissants groupes armés ethniques",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "sX3lMppGht",
+      "kind": "heading",
+      "text": "L’Egypte hausse le ton face à l’Ethiopie sur le partage des eaux du Nil",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "CVg4DZujl-",
+      "kind": "heading",
+      "text": "Giorgia Meloni à la veille d’une réforme électorale déterminante pour son futur parcours politique",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "b7x2oBkprx",
+      "kind": "heading",
+      "text": "Le Monde Afrique Le Monde Afrique",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__logo-title"
+    },
+    {
+      "id": "zkxg0V2_sZ",
+      "kind": "heading",
+      "text": "L’Algérie, principal pays de départ de migrants vers l’Espagne",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "X9kZjFUpKH",
+      "kind": "heading",
+      "text": "Au Maroc, l’arrestation du maire de Tanger, suspecté de fraude électorale lors des législatives, plonge son parti, vainqueur du scrutin, dans la polémique",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "86vlFwbopz",
+      "kind": "heading",
+      "text": "Quelques œuvres d’Hervé Yamguen",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "ITWlWHXalW",
+      "kind": "heading",
+      "text": "L’Ethiopie accuse l’Erythrée, le Soudan et l’Egypte de soutenir les rebelles",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "ubE00cNr62",
+      "kind": "heading",
+      "text": "Au Maroc, le roi nomme pour la première fois une femme, Fatima Ezzahra El-Mansouri, à la tête du gouvernement",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "twuG9hITve",
+      "kind": "heading",
+      "text": "Au Maroc, l’attente anormalement longue de la nomination d’un nouveau premier ministre",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "VOtkoTrzKY",
+      "kind": "heading",
+      "text": "Mali : Amnesty International accuse l’armée et le Groupe Wagner de « crimes de guerre »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "KuMkGQTxCZ",
+      "kind": "heading",
+      "text": "« En Afrique, il est encore temps d’éviter le modèle du tout-voiture »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "82Bt_y6ZYx",
+      "kind": "heading",
+      "text": "Le recul de l’aide internationale menace plus de huit millions de réfugiés et de déplacés, alerte l’ONU",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "ZHP4e_1vZ2",
+      "kind": "heading",
+      "text": "Guerre au Soudan : « Les mêmes crimes se répètent, mais à une échelle plus grande encore que lors du génocide de 2003 »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "WGkjCN919P",
+      "kind": "heading",
+      "text": "Planète",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "TpS77ZVJyz",
+      "kind": "heading",
+      "text": "Pompes à chaleur : le gouvernement lance un leasing pour les ménages modestes",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "UgZw93jdZ6",
+      "kind": "heading",
+      "text": "Le plan d’adaptation du ministère de la transition écologique soumis à l’arbitrage budgétaire de Matignon",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "Z1jURp53Q7",
+      "kind": "heading",
+      "text": "Le réchauffement de l’océan se poursuit « à un rythme alarmant »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "vzJxu-yB7l",
+      "kind": "heading",
+      "text": "« A l’hôpital, le retour à la normale n’existe plus : les tensions hivernales commencent à apparaître alors que l’été n’est pas digéré »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "9roPiuQclG",
+      "kind": "heading",
+      "text": "En 2026, la moitié de la population mondiale a été exposée à des niveaux dangereux de pollution à l’ozone",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "cIO9ylEK-a",
+      "kind": "heading",
+      "text": "Les Etats européens se préparent à un « hiver difficile » avec des réserves d’énergie limitées et des prix élevés",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "5DaO6qx44V",
+      "kind": "heading",
+      "text": "La Ville de Paris concrétise le « bricolage » d’urgence proposé par Emmanuel Grégoire pour adapter les écoles après un été de canicules",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "9VXgBUrf4f",
+      "kind": "heading",
+      "text": "Le blocage des prix des carburants provoquerait-il des pénuries ? Les arguments de la gauche passés au crible",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "siV3GGkspV",
+      "kind": "heading",
+      "text": "A Paris, dans le cortège des pompiers : « Pourquoi on demande plus d’hommes et de camions ? C’est pour protéger nos concitoyens »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "Hy-S8PBjI8",
+      "kind": "heading",
+      "text": "Carburants : l’Union européenne approuve l’aide de 25 millions d’euros de l’Etat français aux pêcheurs",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "7yNbrO2JD3",
+      "kind": "heading",
+      "text": "« Comment peut-on nous coller un site Seveso ? » : des riverains de la forêt de Montargis opposés à ce projet d’envergure, après les incendies de l’été",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "Kf6LXQ4gkh",
+      "kind": "heading",
+      "text": "Politique",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "iwIaI4-Wze",
+      "kind": "heading",
+      "text": "La rafle du Vieux-Port de Marseille reconnue comme crime contre l’humanité par la justice française : « C’est la fin de l’indifférence collective »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "mlbXA745Hb",
+      "kind": "heading",
+      "text": "Les réductions et crédits d’impôts « procurent à un nombre limité de foyers à revenus élevés des avantages très conséquents »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "ZymrHQ1Ce6",
+      "kind": "heading",
+      "text": "Les élections municipales Noisy-le-Sec annulées par le tribunal administratif à cause de déclarations de candidatures non conformes",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "NUMO7N03FB",
+      "kind": "heading",
+      "text": "Assurance-maladie : « Statistiques et coups de rabot ne font pas une politique de santé »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "N-q19sobV1",
+      "kind": "heading",
+      "text": "Patrick Kanner reste président du groupe socialiste au Sénat, Mathieu Darnaud reconduit chez LR",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "wEupHrB0N0",
+      "kind": "heading",
+      "text": "Carcassonne : 34 sociétés de journalistes s’inquiètent du comportement du maire (RN), Christophe Barthès, à l’égard des médias",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "cZq9UYFyEK",
+      "kind": "heading",
+      "text": "Corse : le vote sur l’autonomie suspendu à la lecture des nouveaux sénateurs",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "cpCrOobagc",
+      "kind": "heading",
+      "text": "Si l’Etat continue à ponctionner les villes moyennes, « cela aura des conséquences » en 2027, selon Gil Avérous",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "_-gZF0p1xf",
+      "kind": "heading",
+      "text": "Présidentielle 2027 : Bruno Retailleau gêne la droite européenne avec sa remise en cause de la primauté du droit de l’UE",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "G7235UI6rZ",
+      "kind": "heading",
+      "text": "Municipales à Vaulx-en-Velin : la justice annule les élections, remportées par LFI, pour des irrégularités sur une liste divers centre",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "r3bKD5OjNM",
+      "kind": "heading",
+      "text": "Enquête sur Jordan Bardella : après la réaction du président du RN, « Mediapart » dénonce la « violence sidérante » du parti d’extrême droite",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "FdmCpZ-GfQ",
+      "kind": "heading",
+      "text": "Société",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "55V8LkBVCo",
+      "kind": "heading",
+      "text": "Concours enseignants : des lauréats sur liste d’attente, non recrutés en dépit des besoins",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "IETWwUPjpd",
+      "kind": "heading",
+      "text": "Le dispositif du médecin traitant ne bénéficie pas encore à tous les patients, plus de vingt ans après sa création",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "D3umL_AfZ5",
+      "kind": "heading",
+      "text": "Les rafles du Vieux-Port de Marseille de 1943 reconnues comme un « crime contre l’humanité » par la justice française",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "j2becC1mWx",
+      "kind": "heading",
+      "text": "Piratage de Hugging Face : une ONG assigne OpenAI devant la justice pour infraction à la loi sur les cyberattaques",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "Dw82Xwdtgx",
+      "kind": "heading",
+      "text": "En Pologne, une historienne sur les traces de la famille de Georges Perec",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "Ipdryi6BTt",
+      "kind": "heading",
+      "text": "Au collège Georges-Politzer de Bagnolet, de l’eau non potable depuis plusieurs mois",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "pkZP9Vh8ed",
+      "kind": "heading",
+      "text": "Alerte près d’une base militaire en Angleterre : aucun engin explosif n’a été retrouvé dans les véhicules des suspects",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "dlmL6vJZwr",
+      "kind": "heading",
+      "text": "Au procès en appel des assistants parlementaires européens du MoDem, la défense plaide la relaxe",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "UT3NzUkbX8",
+      "kind": "heading",
+      "text": "Menaces contre le maire d’Alès : un jeune homme mis en examen et écroué à Paris",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "aDQNlSLoyx",
+      "kind": "heading",
+      "text": "Grève du 29 septembre : les images de la mobilisation partout en France",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "P0GV2Sq4TP",
+      "kind": "heading",
+      "text": "Violences sexistes et sexuelles : « Une loi qui protège les victimes sans jamais s’attaquer à la prise en charge des auteurs n’est pas une loi intégrale »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "QT_JIvSekz",
+      "kind": "heading",
+      "text": "Les Décodeurs Les Décodeurs",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__logo-title"
+    },
+    {
+      "id": "HkLiy5nYlI",
+      "kind": "heading",
+      "text": "Quel est vraiment le niveau de vie des retraités en France ?",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "SPBPZzrQqy",
+      "kind": "heading",
+      "text": "Économie",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "VDqjdZkpvr",
+      "kind": "heading",
+      "text": "« Toute l’industrie retient son souffle » : la sortie de « GTA VI » bouscule le calendrier de sortie des jeux vidéo",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "6k7bZ2jnu9",
+      "kind": "heading",
+      "text": "BFM-TV renonce à vendre ses chaînes locales",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "l5yAkidEcg",
+      "kind": "heading",
+      "text": "Comment fonctionne Pangram, le logiciel qui détecte les textes générés par IA ?",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "0ux3VhPVDk",
+      "kind": "heading",
+      "text": "« Les inscriptions au chômage finiront par coûter plus cher que les nouvelles économies imposées à France Télévisions »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "sqbb3cTYl2",
+      "kind": "heading",
+      "text": "Investissement locatif : pourquoi le dispositif Jeanbrun ne tient pas ses promesses",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "34nSQh-PQP",
+      "kind": "heading",
+      "text": "Le site de vente en ligne Rakuten France cessera son activité à partir du 1ᵉʳ octobre",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "qlQj-lp1tS",
+      "kind": "heading",
+      "text": "Cuba sous le coup de nouvelles sanctions américaines",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "etW5K1FZbF",
+      "kind": "heading",
+      "text": "Boeing choisi pour fabriquer le futur avion de combat de la marine américaine",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "hf9tyHZRvA",
+      "kind": "heading",
+      "text": "Refusant de brider l’IA, Donald Trump met en scène l’autorégulation de ses acteurs",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "n0AoaEYuO1",
+      "kind": "heading",
+      "text": "OpenAI pousse la logique des agents IA en proposant un genre de collaborateur virtuel actif « vingt-quatre heures sur vingt-quatre »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "RhifM_Oqu3",
+      "kind": "heading",
+      "text": "Vie au travail",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "Yt6YTRwkej",
+      "kind": "heading",
+      "text": "« Les travailleurs ont besoin d’un cap clair et de marges de manœuvre pour envisager leur travail dans la transition écologique »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "-rawyCnDZz",
+      "kind": "heading",
+      "text": "Les agents de France Travail manifestent contre les réductions budgétaires : « Toujours plus avec toujours moins »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "h88VS5mJhi",
+      "kind": "heading",
+      "text": "Argent & Placements",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "kLYJnVidJt",
+      "kind": "heading",
+      "text": "Pour préparer son introduction en Bourse, Anthropic publie des chiffres vertigineux sur sa croissance et ses investissements",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "BqftkeuRiV",
+      "kind": "heading",
+      "text": "Piratage du site des impôts : un rapport officiel détaille les failles qui ont permis le vol des données de centaines de milliers de Français",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "X6ANB5y_XA",
+      "kind": "heading",
+      "text": "M Campus M Campus",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__logo-title"
+    },
+    {
+      "id": "_sRAHplLX6",
+      "kind": "heading",
+      "text": "Blocage des lycées : en banlieue parisienne, les élèves veulent se faire entendre sur leur quotidien et « contre l’injustice »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "INIVdmhuEn",
+      "kind": "heading",
+      "text": "Parcoursup : des universités franciliennes rémunérées si elles acceptent des candidats restés sans proposition",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "M0NT6WUZyR",
+      "kind": "heading",
+      "text": "Plus de 330 lycées affectés par les manifestations et les blocages mardi, selon le ministère de l’éducation nationale",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "VQ_2vw4GKb",
+      "kind": "heading",
+      "text": "Pixels Pixels",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__logo-title"
+    },
+    {
+      "id": "vHvJZVtBjo",
+      "kind": "heading",
+      "text": "Affaire Thélyson Orélien : qui est Samuel Fitoussi, l’essayiste à l’origine des accusations d’utilisation de l’IA visant l’écrivain ?",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "8jIHNBSRnU",
+      "kind": "heading",
+      "text": "Sport",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "sgKIONZxvw",
+      "kind": "heading",
+      "text": "« Des dommages incommensurables » : pour la presse britannique, les malversations de Manchester City vont ternir l’image de la Premier League",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "iY0vr4gmPX",
+      "kind": "heading",
+      "text": "Le club des Girondins de Bordeaux racheté par le fonds d’investissement Park Bench",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "M9w4ntYCNs",
+      "kind": "heading",
+      "text": "Manchester City reconnu coupable de « graves violations des règles financières » du championnat anglais de football",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "Duolfq5_46",
+      "kind": "heading",
+      "text": "Victor Wembanyama, une reprise en NBA dans tous les viseurs",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "hWR7Qpqfd4",
+      "kind": "heading",
+      "text": "« L’empereur est nu » : le président de l’UEFA, Aleksander Ceferin, tacle à nouveau Gianni Infantino",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "iACKuH8L8Q",
+      "kind": "heading",
+      "text": "Belgique-France : les belles promesses des nouveaux visages des Bleus sous la direction de Zinédine Zidane",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "70osPikt2v",
+      "kind": "heading",
+      "text": "Belgique-France : le résumé de la victoire convaincante des Bleus face aux Diables rouges",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "NvuLNStkzu",
+      "kind": "heading",
+      "text": "Belgique-France : revivez la victoire des Bleus sur le fil, grâce à un but de Michael Olise au terme d’une partie emballante",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "8tH5DBZXCb",
+      "kind": "heading",
+      "text": "« Dans la gueule du loup » le livre-enquête sur l’univers des jeunes footballeurs, parfois victimes de violences dans les centres de formation",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "rVwXgBTl5_",
+      "kind": "heading",
+      "text": "Rayan Cherki renaît au sein de l’équipe de France version Zinédine Zidane",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "6seL99QnNY",
+      "kind": "heading",
+      "text": "Sur Marseille-Napoli, les adeptes de l’ultra-cyclisme entre défi physique et goût de l’aventure : « Le principe, c’est pédaler, manger, dormir le moins possible »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "9FeLKMNt_p",
+      "kind": "heading",
+      "text": "Quand la FIFA oublie une voiture mise à la disposition de l’ancien président de la FFF",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "IOH3JofyJN",
+      "kind": "heading",
+      "text": "Sciences",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "dmhZUj29mb",
+      "kind": "heading",
+      "text": "Cocaïne : quand les enfants paient aussi le prix",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "YRIaYw_mJ1",
+      "kind": "heading",
+      "text": "Périnatalité : un rapport préconise de réduire le nombre de maternités en France, jugées trop nombreuses au vu de leur activité",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "R7qoM5Hj32",
+      "kind": "heading",
+      "text": "Pilule contraceptive : après l’alerte sanitaire sur le désogestrel, des patientes inquiètes et des soignants en alerte sur les risques d’interruption de traitement",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "j-EgC208iB",
+      "kind": "heading",
+      "text": "Culture",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "QZJJRCxytL",
+      "kind": "heading",
+      "text": "Avec son album « Cinéma permanent », Jean Felzine se met en scène en folkeur sarcastique",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "jhus9hZgKe",
+      "kind": "heading",
+      "text": "Mighty Sparrow, légende du calypso, est mort à l’âge de 91 ans",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "l6CSIAOMHt",
+      "kind": "heading",
+      "text": "A voir au cinéma cette semaine : « Notre salut », « Digger », « Mémoire de fille », « Un hiver russe »…",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "AIKSNPFerw",
+      "kind": "heading",
+      "text": "Livres Livres",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__logo-title"
+    },
+    {
+      "id": "VAUy9XzzSj",
+      "kind": "heading",
+      "text": "« Etudier les pratiques économiques de ceux et celles qui n’ont plus confiance dans l’avenir révèle que le marché est aussi un lieu de liberté »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "NkNs2L6gl8",
+      "kind": "heading",
+      "text": "Lovecraft, l’auteur qui chuchotait dans les ténèbres des salles obscures",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "jXrP3--JdC",
+      "kind": "heading",
+      "text": "Les envies du Monde",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "4r3ZWL214o",
+      "kind": "heading",
+      "text": "Les séries de la semaine : « War », « Trigonometry », « A l’est d’Eden », « Paul, la série »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "_PaamGF5RD",
+      "kind": "heading",
+      "text": "A la semaine de la mode de Milan, une saison de variations",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "xB1HKi85pT",
+      "kind": "heading",
+      "text": "Notre sélection afrobeats : Prettyboy D-O, Yemi Alade, Seyi Vibez, Asake",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "_6GLk5VqGU",
+      "kind": "heading",
+      "text": "M le mag M le mag",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__logo-title"
+    },
+    {
+      "id": "fXSb83CSog",
+      "kind": "heading",
+      "text": "Pascale Bernheim et sa longue traque des instruments spoliés par les nazis",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "UrmIRRRasK",
+      "kind": "heading",
+      "text": "Comment, grâce à l’IA, le producteur Edward Saatchi veut recréer la fin perdue d’un chef-d’œuvre d’Orson Welles",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "d6ByF15yhR",
+      "kind": "heading",
+      "text": "L'époque L'époque",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__logo-title"
+    },
+    {
+      "id": "2NXikbn55-",
+      "kind": "heading",
+      "text": "« Exit les verres et les soirées au débotté, maintenant il faut tout programmer » : quand l’amitié perd toute spontanéité",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "Qfv84AtUjq",
+      "kind": "heading",
+      "text": "Papy Hours, quand l’esprit bistrot souffle sur les maisons de retraite",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "HzBv4dxh7H",
+      "kind": "heading",
+      "text": "Géraldine Molina, chercheuse au CNRS : « Les déménagements liés à la chaleur pourraient déplacer les problèmes et accentuer l’injustice climatique »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "mxyNxhI7Sy",
+      "kind": "heading",
+      "text": "Intimités Intimités",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__logo-title"
+    },
+    {
+      "id": "iMjZOwqwwr",
+      "kind": "heading",
+      "text": "Vous avez renoncé à l’éducation positive, témoignez",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "Uw5ov7qOso",
+      "kind": "heading",
+      "text": "Eva Illouz, sociologue : « Les grandes idées sont presque toujours portées par des émotions fortes »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "PJpDkOuHaV",
+      "kind": "heading",
+      "text": "Dis-moi de quoi tu as peur, je te dirai pour qui tu votes",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "zXUDDzx2ws",
+      "kind": "heading",
+      "text": "Le Goût du Monde",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "v2NAO_WIxv",
+      "kind": "heading",
+      "text": "Aussi adulé que controversé, le couturier John Galliano s’apprête à lancer sa première collection pour Zara",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "d03l1Y-OrV",
+      "kind": "heading",
+      "text": "Dans « Une histoire de la pâtisserie », plusieurs siècles de desserts aux ambitions sculpturales",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "nJD2p0RAVu",
+      "kind": "heading",
+      "text": "Chez Dries Van Noten, le directeur artistique Julian Klausner poursuit sans heurt le travail du fondateur",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "BhDD0ZRk29",
+      "kind": "heading",
+      "text": "Le Monde des religions Le Monde des religions",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__logo-title"
+    },
+    {
+      "id": "X4JLZavI9n",
+      "kind": "heading",
+      "text": "Visite du pape en France : « Si les causes présidant aux violences dans l’Eglise ne sont pas traitées, les mêmes réalités aboutiront aux mêmes résultats »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "uP25t5BSZl",
+      "kind": "heading",
+      "text": "Après deux jours intenses à Paris, Léon XIV est à Lourdes pour une fin de week-end qui sera marquée par la question des violences sexuelles dans l’Eglise catholique",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "vOufC1h9Xa",
+      "kind": "heading",
+      "text": "Des femmes réclament de pouvoir servir à l’autel aux côtés des hommes lors des messes",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "fwb53FQEz0",
+      "kind": "heading",
+      "text": "Podcasts",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "NjjQvczq6_",
+      "kind": "heading",
+      "text": "Peut-on enrayer les conséquences d’El Niño ?",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "PF2RQHzC3Z",
+      "kind": "heading",
+      "text": "Montée de l’AfD en Allemagne : les ressorts d’un séisme politique",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "MYvTXqwq04",
+      "kind": "heading",
+      "text": "El Niño, anatomie d’un monstre climatique",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "IHWL23ystR",
+      "kind": "heading",
+      "text": "Le fil Good",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "y7WkWgs5az",
+      "kind": "heading",
+      "text": "Art du recyclage et vestiaire déroutant à la fashion week de Paris",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "zqo9P2RQmg",
+      "kind": "heading",
+      "text": "Bouchra Ouizguen, danseuse et chorégraphe : « Il est passionnant de sortir de son domaine de prédilection »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "3x4iz5yJj-",
+      "kind": "heading",
+      "text": "Quiz : savez-vous comment Céline Dion est devenue Céline Dion ?",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "n6NswTazh6",
+      "kind": "heading",
+      "text": "Dessins",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "60zu1IVMpB",
+      "kind": "heading",
+      "text": "Vu par… Rodrigo",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "YCtvGuCCqH",
+      "kind": "heading",
+      "text": "Irréprochablement humain",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "3dyU6EjCGU",
+      "kind": "heading",
+      "text": "Lutte de classes",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "DBXHnYrEuI",
+      "kind": "heading",
+      "text": "Le Monde & Vous",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "E3yJdr28KF",
+      "kind": "heading",
+      "text": "Franziska Meinherz, géographe : « Un système de mobilité fondé sur les besoins des femmes prioriserait les trajets courts, la marche et les transports en commun »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "7EXk-_ORqX",
+      "kind": "heading",
+      "text": "« C’est qui Lindsey ? Je la connais pas » : sur le terrain, les enquêteurs de l’Insee font face à la méfiance des ménages",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "wdSkqbgw2s",
+      "kind": "heading",
+      "text": "Le Monde événements",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "F3xrhmH7P3",
+      "kind": "heading",
+      "text": "« Faire du matrimoine un levier d’émancipation, c’est permettre à plus de femmes de prendre toute leur place dans les décisions sur leur avenir »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "PuqXZ6mSP6",
+      "kind": "heading",
+      "text": "Titiou Lecoq, autrice du « Couple et l’argent » : « Longtemps, le féminisme français a eu un problème avec l’économie »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "D5I9WYpEMC",
+      "kind": "heading",
+      "text": "Monica Gomes, cheffe : « Au Portugal, j’ai grandi avec l’idée que la nourriture, la table, était une source d’immense plaisir »",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "BONahVR4-6",
+      "kind": "heading",
+      "text": "Le Monde en Facile à Lire et à Comprendre",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "1te6Q50m-M",
+      "kind": "heading",
+      "text": "Les femmes et les hommes politiques ne réfléchissent pas assez à l’avenir de la France",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "g9iwhumSA1",
+      "kind": "heading",
+      "text": "Elections régionales en Allemagne : la défaite historique du chancelier Merz et de son parti",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "tpt4U6TUlx",
+      "kind": "heading",
+      "text": "Comment le karaoké a conquis la population ?",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "DlEeW_tN7b",
+      "kind": "heading",
+      "text": "Guides d'achat",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "TLlGtWedGT",
+      "kind": "heading",
+      "text": "Huit recettes nature et énergisantes pour sportifs en herbe",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "HjULFxl0S8",
+      "kind": "heading",
+      "text": "Ces montres connectées pour enfants qui retardent l’achat d’un smartphone",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "SKUm1eng2B",
+      "kind": "heading",
+      "text": "Les meilleurs micro-casques avec ou sans fil",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "li.ds-area__item > div.ds-card > div.ds-card__clickarea > div.ds-card__title > h3.ds-card__title__text"
+    },
+    {
+      "id": "oSfNWHFKM9",
+      "kind": "heading",
+      "text": "Le Monde Guides d’achat",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "#carouselBizdevBottom"
+    },
+    {
+      "id": "DJKkQUM_ZY",
+      "kind": "heading",
+      "text": "Les meilleures webcams",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "D1qrbFqT5K",
+      "kind": "heading",
+      "text": "Les meilleurs casques pour enfants",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "KMIzzji2bH",
+      "kind": "heading",
+      "text": "Les meilleures liseuses",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "fkiSTyaAGF",
+      "kind": "heading",
+      "text": "Les meilleurs micro-casques",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "HPF9EZkD9z",
+      "kind": "heading",
+      "text": "Centrales vapeur",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "1tpP57k97F",
+      "kind": "heading",
+      "text": "Les meilleurs couteaux de chef",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "aMSr7ItfLt",
+      "kind": "heading",
+      "text": "Les meilleurs jeux de société",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "d8g1Jj1SHF",
+      "kind": "heading",
+      "text": "Antivols",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "QsJcuELt3U",
+      "kind": "heading",
+      "text": "Blenders",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.ds-slideshow-web__list > li.ds-slideshow-web__item > a.ds-service-card > div > h3.ds-service-card__title"
+    },
+    {
+      "id": "4VonR6p65M",
+      "kind": "stat",
+      "text": "Les 15 ans de M",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-slideshow > div.ds-slideshow__viewport > ul.ds-slideshow__list > li.ds-slideshow__list__item > h3.ds-slideshow__section-title"
+    },
+    {
+      "id": "etTQcKlQ_9",
+      "kind": "stat",
+      "text": "Élection présidentielle 2027",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-area > ul.ds-area > li.ds-area--roll__item > div.ds-area > h2.ds-area__title"
+    },
+    {
+      "id": "Ij6OiHAA9I",
+      "kind": "testimonial",
+      "text": "Cinéma Scènes Livres Jeux vidéo Séries Musiques Le Monde cuisine À voir ou à écouter ce soir Arts",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "main.main > div.ds-home > div.ds-area > div.ds-area > ul.ds-area--reviews__nav"
+    },
+    {
+      "id": "JUHJIyb8Oc",
+      "kind": "testimonial",
+      "text": "Cinéma",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-home > div.ds-area > div.ds-area > ul.ds-area--reviews__nav > li.ds-area--reviews__nav__item"
+    },
+    {
+      "id": "iLIMhvRDlE",
+      "kind": "testimonial",
+      "text": "Scènes",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-home > div.ds-area > div.ds-area > ul.ds-area--reviews__nav > li.ds-area--reviews__nav__item"
+    },
+    {
+      "id": "jry9iROJqB",
+      "kind": "testimonial",
+      "text": "Livres",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-home > div.ds-area > div.ds-area > ul.ds-area--reviews__nav > li.ds-area--reviews__nav__item"
+    },
+    {
+      "id": "qKEpkmN22r",
+      "kind": "testimonial",
+      "text": "Jeux vidéo",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-home > div.ds-area > div.ds-area > ul.ds-area--reviews__nav > li.ds-area--reviews__nav__item"
+    },
+    {
+      "id": "rz_D3KAIp3",
+      "kind": "testimonial",
+      "text": "Séries",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-home > div.ds-area > div.ds-area > ul.ds-area--reviews__nav > li.ds-area--reviews__nav__item"
+    },
+    {
+      "id": "dlyf6eu-Wm",
+      "kind": "testimonial",
+      "text": "Musiques",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-home > div.ds-area > div.ds-area > ul.ds-area--reviews__nav > li.ds-area--reviews__nav__item"
+    },
+    {
+      "id": "dgFddAVSfE",
+      "kind": "testimonial",
+      "text": "Le Monde cuisine",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-home > div.ds-area > div.ds-area > ul.ds-area--reviews__nav > li.ds-area--reviews__nav__item"
+    },
+    {
+      "id": "x7h4ooz6bl",
+      "kind": "testimonial",
+      "text": "À voir ou à écouter ce soir",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-home > div.ds-area > div.ds-area > ul.ds-area--reviews__nav > li.ds-area--reviews__nav__item"
+    },
+    {
+      "id": "dMtUXeT1Wn",
+      "kind": "testimonial",
+      "text": "Arts",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.ds-home > div.ds-area > div.ds-area > ul.ds-area--reviews__nav > li.ds-area--reviews__nav__item"
+    },
+    {
+      "id": "qdO5TIpJev",
+      "kind": "cta",
+      "text": "Contacter Le Monde",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "ul.footer__navs > li.footer__category > ul.footer__sub-nav > li.footer__sub-nav__item > a.ds-link"
+    },
+    {
+      "id": "RneGV1PPV2",
+      "kind": "cta",
+      "text": "Facebook",
+      "sourceUrl": "https://www.lemonde.fr",
+      "selector": "div.footer__container > div.footer__social > ul.footer__sub-nav > li.footer__sub-nav__item > a.ds-link"
+    }
+  ],
+  "siteBrief": {
+    "productName": "lemonde",
+    "summary": "Actualités et info du jour avec Le Monde",
+    "audience": "general",
+    "differentiator": "Actualités et info du jour avec Le Monde",
+    "strongestClaimFactId": "4VonR6p65M",
+    "factIds": [
+      "fk5fDdjg3W",
+      "9oK7hqlvtq",
+      "O5VvNmg7o0",
+      "rl5aYMKHta",
+      "a5ixHauIGw",
+      "dkLW6NeBqO",
+      "Kd-Z5LpR4F",
+      "-IZnqs8-7a",
+      "UKu0AE2Bh-",
+      "29ASftPglm",
+      "-Jn-l2C_o-",
+      "BSezb9qifo",
+      "7W01z0fZd9",
+      "wh-Ln5Ldzp",
+      "NJ13ct5Yvv",
+      "hZcDzsLWro",
+      "pIESpMmZ6y",
+      "9mWgfoAOS_",
+      "Fah18YSXuW",
+      "rOtadj98LC",
+      "W02K20Iz-L",
+      "8nwNUpuBRI",
+      "uXnSbuOtBv",
+      "fvVFigDVUR",
+      "h8gYLr0Peo",
+      "EbbernV6sc",
+      "yYqBCuwNPb",
+      "4iukGPwRb6",
+      "Y3xU_xpITl",
+      "KuBkfBqrSW",
+      "ii9Fs3uWkf",
+      "o8UMfodF4_",
+      "nQzahv8NZk",
+      "P6IRmE9lTx",
+      "NtjLsxci_G",
+      "7AqrjQArO7",
+      "xS8OL0Wks5",
+      "w8VqOdlaaC",
+      "hA5U1-Z9WA",
+      "slUl05H_Ke",
+      "DG1CSS05xo",
+      "2xcsmuXDRX",
+      "fMWZwbFQhp",
+      "6J8Db4u-d_",
+      "AzE7-Etvak",
+      "YRBuuuW9FV",
+      "G5OCjCBy9c",
+      "00gqTxSkzM",
+      "8ulsECoPWn",
+      "lpr6Tcfp88",
+      "RpxMypeSrB",
+      "_Mg5QS7I4t",
+      "DerQWpHszf",
+      "r66v9SZ2Px",
+      "bhc5QxmOLK",
+      "OuKABDiQji",
+      "QEsmKg5jFQ",
+      "WZWT32-8_j",
+      "AOF80chMZr",
+      "XjNZYUFowb",
+      "WgI0iwUnMx",
+      "PjPAmVqqnM",
+      "2M7vX9Ofae",
+      "I9jTZ4TvJq",
+      "fsmgS1yiem",
+      "sDhFphQZjZ",
+      "Vd7WXvfQwW",
+      "Gh9dyEGAOe",
+      "KR6K5jt2_7",
+      "NYqvASMH6j",
+      "Rux-HAM8R3",
+      "gSipLkSb1S",
+      "sMm4waPJGC",
+      "7RUHBdBFzi",
+      "WuCvWGlvvd",
+      "y2rDm7eSR3",
+      "ydawfQayhE",
+      "yukVdchy29",
+      "2TqeQAlQ5O",
+      "PCSB3Y1q1d",
+      "_wcETQ7Q_k",
+      "6AR3H_xVSg",
+      "3x12xLIFPp",
+      "4gBsP3rH8u",
+      "YHs3w46KYA",
+      "yM1o2ZDklq",
+      "oHYu6Dbrjw",
+      "dmWtK2XzKT",
+      "LMDFeP4hbY",
+      "zpgFGPYoh1",
+      "WG5eAPBh8W",
+      "OVburHnoSi",
+      "HunmJ-kib0",
+      "MdpuZo8aaC",
+      "WkdHUfPyhk",
+      "UbnOqR2JHn",
+      "ODp5h54owY",
+      "Q0wC5aN4fc",
+      "OUH_oE1AKY",
+      "lOxpOgLX6-",
+      "j6OE4D3lct",
+      "jLlJVywDl2",
+      "utWjYpE87B",
+      "4x-9IU_p-2",
+      "CusFnLw5Kh",
+      "sgeur4N0lX",
+      "hebBAkHMQw",
+      "TwLvEHYSdf",
+      "iI4QcJrwgi",
+      "9Ugo5w2dYt",
+      "uyR0OmpUOO",
+      "bqIghHBxN3",
+      "bB8rzPJH7F",
+      "zqGtwD00cS",
+      "5jQxtu_VFx",
+      "flV0gyyV1Q",
+      "0ieoDFqx1e",
+      "w30qAG8hJO",
+      "YGu-uJJIgd",
+      "FPIFb1-qer",
+      "M8mmN_pbux",
+      "WBHnPhr0Gc",
+      "PJ4t7ITEP4",
+      "hhlnK28wkP",
+      "9_dpHnJhtp",
+      "xDvu99MBQO",
+      "6vkDZvR0Su",
+      "oSG_c3qvX5",
+      "je0Tsn6F12",
+      "Qiu35GW9KP",
+      "o1ai2vacok",
+      "GsjpFLoRLz",
+      "-L0oXU8zk6",
+      "CAl-aunYaF",
+      "qbLt_y2U_J",
+      "JPqcpmEsfw",
+      "LjBhWHqJOc",
+      "DbHfR_Yoqa",
+      "w4vLHCYenw",
+      "zJoxZ6R9Uo",
+      "-6ZVutMjoT",
+      "Nsj8VMfIqQ",
+      "6NETZOOs0m",
+      "sX3lMppGht",
+      "CVg4DZujl-",
+      "b7x2oBkprx",
+      "zkxg0V2_sZ",
+      "X9kZjFUpKH",
+      "86vlFwbopz",
+      "ITWlWHXalW",
+      "ubE00cNr62",
+      "twuG9hITve",
+      "VOtkoTrzKY",
+      "KuMkGQTxCZ",
+      "82Bt_y6ZYx",
+      "ZHP4e_1vZ2",
+      "WGkjCN919P",
+      "TpS77ZVJyz",
+      "UgZw93jdZ6",
+      "Z1jURp53Q7",
+      "vzJxu-yB7l",
+      "9roPiuQclG",
+      "cIO9ylEK-a",
+      "5DaO6qx44V",
+      "9VXgBUrf4f",
+      "siV3GGkspV",
+      "Hy-S8PBjI8",
+      "7yNbrO2JD3",
+      "Kf6LXQ4gkh",
+      "iwIaI4-Wze",
+      "mlbXA745Hb",
+      "ZymrHQ1Ce6",
+      "NUMO7N03FB",
+      "N-q19sobV1",
+      "wEupHrB0N0",
+      "cZq9UYFyEK",
+      "cpCrOobagc",
+      "_-gZF0p1xf",
+      "G7235UI6rZ",
+      "r3bKD5OjNM",
+      "FdmCpZ-GfQ",
+      "55V8LkBVCo",
+      "IETWwUPjpd",
+      "D3umL_AfZ5",
+      "j2becC1mWx",
+      "Dw82Xwdtgx",
+      "Ipdryi6BTt",
+      "pkZP9Vh8ed",
+      "dlmL6vJZwr",
+      "UT3NzUkbX8",
+      "aDQNlSLoyx",
+      "P0GV2Sq4TP",
+      "QT_JIvSekz",
+      "HkLiy5nYlI",
+      "SPBPZzrQqy",
+      "VDqjdZkpvr",
+      "6k7bZ2jnu9",
+      "l5yAkidEcg",
+      "0ux3VhPVDk",
+      "sqbb3cTYl2",
+      "34nSQh-PQP",
+      "qlQj-lp1tS",
+      "etW5K1FZbF",
+      "hf9tyHZRvA",
+      "n0AoaEYuO1",
+      "RhifM_Oqu3",
+      "Yt6YTRwkej",
+      "-rawyCnDZz",
+      "h88VS5mJhi",
+      "kLYJnVidJt",
+      "BqftkeuRiV",
+      "X6ANB5y_XA",
+      "_sRAHplLX6",
+      "INIVdmhuEn",
+      "M0NT6WUZyR",
+      "VQ_2vw4GKb",
+      "vHvJZVtBjo",
+      "8jIHNBSRnU",
+      "sgKIONZxvw",
+      "iY0vr4gmPX",
+      "M9w4ntYCNs",
+      "Duolfq5_46",
+      "hWR7Qpqfd4",
+      "iACKuH8L8Q",
+      "70osPikt2v",
+      "NvuLNStkzu",
+      "8tH5DBZXCb",
+      "rVwXgBTl5_",
+      "6seL99QnNY",
+      "9FeLKMNt_p",
+      "IOH3JofyJN",
+      "dmhZUj29mb",
+      "YRIaYw_mJ1",
+      "R7qoM5Hj32",
+      "j-EgC208iB",
+      "QZJJRCxytL",
+      "jhus9hZgKe",
+      "l6CSIAOMHt",
+      "AIKSNPFerw",
+      "VAUy9XzzSj",
+      "NkNs2L6gl8",
+      "jXrP3--JdC",
+      "4r3ZWL214o",
+      "_PaamGF5RD",
+      "xB1HKi85pT",
+      "_6GLk5VqGU",
+      "fXSb83CSog",
+      "UrmIRRRasK",
+      "d6ByF15yhR",
+      "2NXikbn55-",
+      "Qfv84AtUjq",
+      "HzBv4dxh7H",
+      "mxyNxhI7Sy",
+      "iMjZOwqwwr",
+      "Uw5ov7qOso",
+      "PJpDkOuHaV",
+      "zXUDDzx2ws",
+      "v2NAO_WIxv",
+      "d03l1Y-OrV",
+      "nJD2p0RAVu",
+      "BhDD0ZRk29",
+      "X4JLZavI9n",
+      "uP25t5BSZl",
+      "vOufC1h9Xa",
+      "fwb53FQEz0",
+      "NjjQvczq6_",
+      "PF2RQHzC3Z",
+      "MYvTXqwq04",
+      "IHWL23ystR",
+      "y7WkWgs5az",
+      "zqo9P2RQmg",
+      "3x4iz5yJj-",
+      "n6NswTazh6",
+      "60zu1IVMpB",
+      "YCtvGuCCqH",
+      "3dyU6EjCGU",
+      "DBXHnYrEuI",
+      "E3yJdr28KF",
+      "7EXk-_ORqX",
+      "wdSkqbgw2s",
+      "F3xrhmH7P3",
+      "PuqXZ6mSP6",
+      "D5I9WYpEMC",
+      "BONahVR4-6",
+      "1te6Q50m-M",
+      "g9iwhumSA1",
+      "tpt4U6TUlx",
+      "DlEeW_tN7b",
+      "TLlGtWedGT",
+      "HjULFxl0S8",
+      "SKUm1eng2B",
+      "oSfNWHFKM9",
+      "DJKkQUM_ZY",
+      "D1qrbFqT5K",
+      "KMIzzji2bH",
+      "fkiSTyaAGF",
+      "HPF9EZkD9z",
+      "1tpP57k97F",
+      "aMSr7ItfLt",
+      "d8g1Jj1SHF",
+      "QsJcuELt3U",
+      "4VonR6p65M",
+      "etTQcKlQ_9",
+      "Ij6OiHAA9I",
+      "JUHJIyb8Oc",
+      "iLIMhvRDlE",
+      "jry9iROJqB",
+      "qKEpkmN22r",
+      "rz_D3KAIp3",
+      "dlyf6eu-Wm",
+      "dgFddAVSfE",
+      "x7h4ooz6bl",
+      "dMtUXeT1Wn",
+      "qdO5TIpJev",
+      "RneGV1PPV2"
+    ],
+    "source": "fallback"
+  }
+}

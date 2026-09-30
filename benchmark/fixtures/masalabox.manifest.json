@@ -1,0 +1,60 @@
+{
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "duration": 16,
+  "palette": { "bg": "#1a1410", "fg": "#f2e6d3", "accent": "#e3a23a" },
+  "fonts": { "display": "system-ui, -apple-system, Segoe UI, sans-serif", "body": "system-ui, -apple-system, Segoe UI, sans-serif" },
+  "scenes": [
+    {
+      "id": "hook",
+      "templateId": "KineticHook",
+      "start": 0,
+      "end": 3,
+      "props": {
+        "productName": "MasalaBox",
+        "headline": "Fresh-ground spices from Indian farms"
+      }
+    },
+    {
+      "id": "features",
+      "templateId": "FeatureTriplet",
+      "start": 3,
+      "end": 8,
+      "props": {
+        "features": [
+          { "icon": "🌾", "label": "Sourced direct from farmers" },
+          { "icon": "🌀", "label": "Ground fresh every week" },
+          { "icon": "🇦🇳", "label": "Ships across India" }
+        ]
+      }
+    },
+    {
+      "id": "showcase",
+      "templateId": "SectionShowcase",
+      "start": 8,
+      "end": 12.5,
+      "props": {
+        "screenshotUrl": "masalabox.screenshot.svg",
+        "caption": "Our bestselling spice blends"
+      }
+    },
+    {
+      "id": "cta",
+      "templateId": "CTAEndCard",
+      "start": 12.5,
+      "end": 16,
+      "props": {
+        "productName": "MasalaBox",
+        "ctaText": "Order this week's box",
+        "domain": "masalabox.in"
+      }
+    }
+  ],
+  "captions": [
+    { "t0": 0, "t1": 3, "text": "Fresh-ground spices from Indian farms." },
+    { "t0": 3, "t1": 8, "text": "Direct from farmers. Ground fresh weekly. Ships across India." },
+    { "t0": 8, "t1": 12.5, "text": "Our bestselling spice blends." },
+    { "t0": 12.5, "t1": 16, "text": "MasalaBox — order this week's box at masalabox.in" }
+  ]
+}

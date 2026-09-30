@@ -1,0 +1,89 @@
+import type { Job as BullJob } from "bullmq";
+import { eq, desc } from "drizzle-orm";
+import { jobs, stageRuns, crawls, storyboards } from "@sitereel/db";
+import { PlanJobData, type CrawlOutput, type JobStatus } from "@sitereel/shared";
+import { runPlanStage } from "../stages/plan.js";
+import type { WorkerDeps } from "./types.js";
+
+async function setJobStatus(deps: WorkerDeps, jobId: string, status: JobStatus, errorCode?: string): Promise<void> {
+  await deps.db
+    .update(jobs)
+    .set({ status, errorCode: errorCode ?? null, updatedAt: new Date() })
+    .where(eq(jobs.id, jobId));
+}
+
+export function createPlanProcessor(deps: WorkerDeps) {
+  return async function processPlan(job: BullJob): Promise<void> {
+    const { jobId } = PlanJobData.parse(job.data);
+    const log = deps.logger.child({ jobId, stage: "plan" });
+
+    await setJobStatus(deps, jobId, "planning");
+    await deps.publish({ jobId, stage: "plan", status: "planning", pct: 10, message: "Writing the script", at: new Date().toISOString() });
+
+    const [jobRow] = await deps.db.select().from(jobs).where(eq(jobs.id, jobId)).limit(1);
+    const [crawlRow] = await deps.db.select().from(crawls).where(eq(crawls.jobId, jobId)).orderBy(desc(crawls.createdAt)).limit(1);
+
+    if (!jobRow || !crawlRow) {
+      throw new Error(`plan stage: missing job or crawl row for jobId=${jobId}`);
+    }
+
+    const crawlOutput: CrawlOutput = {
+      domain: crawlRow.domain,
+      pages: crawlRow.pages,
+      brand: crawlRow.brand,
+      facts: crawlRow.facts,
+      siteBrief: crawlRow.siteBrief,
+    };
+
+    const inputsHash = `v1:${crawlRow.id}:${jobRow.options.tone}:${jobRow.options.lengthSec}`;
+    const [planRun] = await deps.db
+      .insert(stageRuns)
+      .values({ jobId, stage: "plan", attempt: job.attemptsMade + 1, inputsHash, status: "running", startedAt: new Date() })
+      .returning();
+
+    const result = await runPlanStage(crawlOutput, jobRow.options, {
+      primaryProvider: deps.llm.primary,
+      escalationProvider: deps.llm.escalation,
+    });
+
+    await deps.db
+      .update(stageRuns)
+      .set({
+        status: "ok",
+        endedAt: new Date(),
+        costUsd: String(result.costUsd),
+        outputs: { source: result.storyboard.source, attempts: result.attempts, valid: result.validation.valid, sceneCount: result.storyboard.scenes.length },
+      })
+      .where(eq(stageRuns.id, planRun!.id));
+
+    const [storyboardRow] = await deps.db
+      .insert(storyboards)
+      .values({
+        jobId,
+        version: 1,
+        json: result.storyboard,
+        validation: result.validation,
+        source: result.storyboard.source,
+      })
+      .returning();
+
+    await deps.db.update(jobs).set({ currentStoryboardId: storyboardRow!.id, updatedAt: new Date() }).where(eq(jobs.id, jobId));
+
+    log.info({ source: result.storyboard.source, attempts: result.attempts, valid: result.validation.valid, costUsd: result.costUsd }, "plan completed");
+
+    // Resting state until Phase 4 adds voice/build workers. reviewBeforeRender
+    // decides which resting state — both are dead ends today either way.
+    const nextStatus: JobStatus = jobRow.options.reviewBeforeRender ? "review" : "voicing";
+    await setJobStatus(deps, jobId, nextStatus);
+
+    await deps.publish({
+      jobId,
+      stage: "plan",
+      status: nextStatus,
+      pct: 100,
+      message: `Storyboard ready (${result.storyboard.source}, ${result.storyboard.scenes.length} scenes)`,
+      payload: { storyboardId: storyboardRow!.id, source: result.storyboard.source, valid: result.validation.valid },
+      at: new Date().toISOString(),
+    });
+  };
+}

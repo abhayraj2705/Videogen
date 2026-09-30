@@ -1,0 +1,903 @@
+{
+  "url": "https://basecamp.com",
+  "category": "agency",
+  "domain": "basecamp.com",
+  "pages": [
+    {
+      "url": "https://basecamp.com",
+      "screenshotKey": "jobs/79e13fed-8752-4d76-9c75-a043484286b8/crawl/home.png"
+    },
+    {
+      "url": "https://basecamp.com/pricing",
+      "screenshotKey": "jobs/79e13fed-8752-4d76-9c75-a043484286b8/crawl/page-1.png"
+    },
+    {
+      "url": "https://basecamp.com/features",
+      "screenshotKey": "jobs/79e13fed-8752-4d76-9c75-a043484286b8/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "oklch(1 0 0)",
+    "fg": "oklch(0.3209 0.0204 233.83)",
+    "accent": "oklch(0.5957 0.2005 256.64)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://basecamp.com/assets/images/project/logo-card-1.webp"
+  },
+  "facts": [
+    {
+      "id": "NRP71j1V5w",
+      "kind": "hero",
+      "text": "Basecamp is project management without all the nonsense. Rock solid and famously easy to use.",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.site > div.hero > div.hero__content > div.hero__headline > h1"
+    },
+    {
+      "id": "VJpj6dbbJG",
+      "kind": "heading",
+      "text": "Take a minute to meet some of our customers",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.watch__cards > div.watch__card > div.headline > div.headline__header > h2"
+    },
+    {
+      "id": "iQqFhnpM_u",
+      "kind": "heading",
+      "text": "We asked our customers: “What changed for the better since you switched to Basecamp?”",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.testimonials > div.testimonials__card > div.headline > div.headline__header > h2"
+    },
+    {
+      "id": "7OqQcF1CZW",
+      "kind": "heading",
+      "text": "How about a quick demonstration?",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.watch__cards > div.watch__card > div.headline > div.headline__header > h2"
+    },
+    {
+      "id": "GdOdmYjCFJ",
+      "kind": "heading",
+      "text": "Big numbers. Highly-trusted. Rugged, reliable, ready.",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.live > a.live__card > div.headline > div.headline__header > h2"
+    },
+    {
+      "id": "A07GS_Rjzr",
+      "kind": "heading",
+      "text": "Remember when companies cared about service?",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "main.main > div.site > div.headline > div.headline__header > h2"
+    },
+    {
+      "id": "_gHKQz2Uup",
+      "kind": "heading",
+      "text": "Durable infrastructure",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.site > div.cards > div.cards__card > div.cards__header > h3"
+    },
+    {
+      "id": "UvnZJDXDw5",
+      "kind": "heading",
+      "text": "Dependable customer service",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.site > div.cards > div.cards__card > div.cards__header > h3"
+    },
+    {
+      "id": "xEOavaegYi",
+      "kind": "heading",
+      "text": "Want to see a live demo and ask some questions first?",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.data-classes > div.data-classes__card > div.headline > div.headline__header > h2"
+    },
+    {
+      "id": "sJUEcKRcOC",
+      "kind": "heading",
+      "text": "Have a top-notch day!",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "html.theme-2 > body > footer.footer > div.footer__header > h2"
+    },
+    {
+      "id": "qm3La2bRci",
+      "kind": "feature",
+      "text": "Welcome to Basecamp!",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.project__tools > section.project__tool > div.project__card > div.project__featured > strong"
+    },
+    {
+      "id": "25STQE9yeY",
+      "kind": "feature",
+      "text": "At Enormicom, we like to work with our clientsdirectly and we do that in Basecamp. We're so happyyou're here! ✨ The project that we're working on ...",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.project__tools > section.project__tool > div.project__card > div.project__featured > p"
+    },
+    {
+      "id": "2T2OEr-d7l",
+      "kind": "feature",
+      "text": "Check your passports",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.project__tools > section.project__tool > div.project__card > div.project__featured > strong"
+    },
+    {
+      "id": "bs-v8mthAj",
+      "kind": "feature",
+      "text": "Hey international folks 👋 Quick PSA as we get closerto the Austin meetup: please triple-check that yourpassport is valid — and remember that many...",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.project__tools > section.project__tool > div.project__card > div.project__featured > p"
+    },
+    {
+      "id": "p95woEOGME",
+      "kind": "stat",
+      "text": "Take a 3-minute tour",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.hero__top > div.hero__tour > button.hero__tour-button > div > strong"
+    },
+    {
+      "id": "ExiBQR-zU7",
+      "kind": "stat",
+      "text": "Next 6 Weeks",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.project > div.project__views > div.project__view > div.project__cal-nav > strong"
+    },
+    {
+      "id": "-7dzZ9eP6V",
+      "kind": "stat",
+      "text": "Today, Jul 21",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.project__views > div.project__view > div.project__cal > div.project__cal-day > b"
+    },
+    {
+      "id": "TQjllab7s8",
+      "kind": "stat",
+      "text": "Aug 1, 2026",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.project__views > div.project__view > div.project__cal > div.project__cal-day > b"
+    },
+    {
+      "id": "56m1uxjdgN",
+      "kind": "stat",
+      "text": "Sep 1, 2026",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.project__views > div.project__view > div.project__cal > div.project__cal-day > b"
+    },
+    {
+      "id": "hR_tWhmEGJ",
+      "kind": "stat",
+      "text": "84 million",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "7Pd-9RUBee",
+      "kind": "stat",
+      "text": "60 million",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "3EmzZsSa_N",
+      "kind": "stat",
+      "text": "72 million",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "HnTgiP1V9G",
+      "kind": "stat",
+      "text": "350 million",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "8Qr9JRIMX8",
+      "kind": "stat",
+      "text": "1.7 billion",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "Pj6w8hpaFW",
+      "kind": "stat",
+      "text": "2.7 billion",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "MytMAPp4p1",
+      "kind": "stat",
+      "text": "2.2 billion",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "arDHdzVkXh",
+      "kind": "stat",
+      "text": "2.3 billion",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "Xs006wq6n-",
+      "kind": "stat",
+      "text": "675 million",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "_zfy1TqZ2R",
+      "kind": "stat",
+      "text": "5 petabytes",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "j_NWJRx9GF",
+      "kind": "stat",
+      "text": "200 million",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "DfXZSTQfxU",
+      "kind": "stat",
+      "text": "180 million",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "Y8J3FTYtEP",
+      "kind": "stat",
+      "text": "1 billion",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "YJ4LYSJhjm",
+      "kind": "stat",
+      "text": "545 million",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "OfVjuXUD6-",
+      "kind": "stat",
+      "text": "15 billion",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "n663K3Gidw",
+      "kind": "stat",
+      "text": "233",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "1_d4Zc1QQ-",
+      "kind": "stat",
+      "text": "52,000",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > span > strong"
+    },
+    {
+      "id": "yQc6nxQfgi",
+      "kind": "stat",
+      "text": "99.99%",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "article > ul > li > a > strong"
+    },
+    {
+      "id": "js3RcvW3du",
+      "kind": "testimonial",
+      "text": "Simply put, we get more work done, quicker, and better. Productivity is up. Errors are down. Clients are happier. Patrick Sheffield, Moore Communications Group",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.site > div.testimonials > div.testimonials__card > div.reviews > blockquote"
+    },
+    {
+      "id": "aB5P5YwFGm",
+      "kind": "testimonial",
+      "text": "Since using Basecamp, our communication is drastically better and deadlines are met without drama. Shannon Kropf, Full Sail University",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.site > div.testimonials > div.testimonials__card > div.reviews > blockquote"
+    },
+    {
+      "id": "HmBMmjUdND",
+      "kind": "testimonial",
+      "text": "Info is flowing like water. A lot more transparency. Everyone is on the same page. No more secrets and blindspots. Aaron Bingaman, Penn State OEM",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.site > div.testimonials > div.testimonials__card > div.reviews > blockquote"
+    },
+    {
+      "id": "g8RO_O0K2L",
+      "kind": "testimonial",
+      "text": "I no longer have to wonder whether I’ve asked for something… Every member of my team is more accountable. John Drover, Roebothan McKay Marshall",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.site > div.testimonials > div.testimonials__card > div.reviews > blockquote"
+    },
+    {
+      "id": "0vRBqJGQqp",
+      "kind": "testimonial",
+      "text": "Basecamp makes us tighter as a group. Basecamp makes it easy to create shared understanding in our company. Teddy Zetterlund, Lägenhetsbyte",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.site > div.testimonials > div.testimonials__card > div.reviews > blockquote"
+    },
+    {
+      "id": "QlcEA66R6A",
+      "kind": "testimonial",
+      "text": "We don’t have to contact each other about every little thing. When we need to know something, it’s right there. Kelly Hunter, Chamber Nation",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.site > div.testimonials > div.testimonials__card > div.reviews > blockquote"
+    },
+    {
+      "id": "xQyRac1oiT",
+      "kind": "testimonial",
+      "text": "Our church is loving Basecamp. It’s so easy to use even the 80-year-olds on our committee are using it! Blake Rider, St. Stephen’s Episcopal Church",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.site > div.testimonials > div.testimonials__card > div.reviews > blockquote"
+    },
+    {
+      "id": "G7K_eL89XG",
+      "kind": "testimonial",
+      "text": "It eliminated the need for extra communication and reduced a lot of miscommunication between my team. Anthony Clark, Clark Partners Realty Group",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.site > div.testimonials > div.testimonials__card > div.reviews > blockquote"
+    },
+    {
+      "id": "ma-6hFwmeS",
+      "kind": "cta",
+      "text": "Want an account? Sign up free",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "nav.nav > div.nav__container > div.nav__content > div.nav__actions > a.button"
+    },
+    {
+      "id": "GD5bVGv9Xc",
+      "kind": "cta",
+      "text": "Pricing & sign up",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "body > nav.menu > ul.menu__items > li > a"
+    },
+    {
+      "id": "342z2NqFXi",
+      "kind": "cta",
+      "text": "Try Basecamp Free",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "div.hero > div.hero__content > div.hero__top > div.hero__tour > a.button"
+    },
+    {
+      "id": "B73lLWP-xf",
+      "kind": "cta",
+      "text": "Subscribe",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "body > footer.footer > div.footer__newsletter > form.field > button.button"
+    },
+    {
+      "id": "hVAcA-UTxa",
+      "kind": "cta",
+      "text": "Books we’ve written",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "footer.footer > div.footer__links > ul > li > a"
+    },
+    {
+      "id": "cUGTeqsjQr",
+      "kind": "cta",
+      "text": "Manager Playbook",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "footer.footer > div.footer__links > ul > li > a"
+    },
+    {
+      "id": "tGCXDeuZ_z",
+      "kind": "cta",
+      "text": "Employee Handbook",
+      "sourceUrl": "https://basecamp.com",
+      "selector": "footer.footer > div.footer__links > ul > li > a"
+    },
+    {
+      "id": "2OLDjVf4up",
+      "kind": "hero",
+      "text": "No per-user fees, everyone’s included. Just clear, fixed prices.",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "main.main > div.site > div.intro > header > h1"
+    },
+    {
+      "id": "bPAiTHeI6S",
+      "kind": "heading",
+      "text": "Free",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__chooser > div.pricing__packages > div.pricing__package > header > h2"
+    },
+    {
+      "id": "gLdgEtgEw2",
+      "kind": "heading",
+      "text": "Freelancer, $25/mo",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__chooser > div.pricing__packages > div.pricing__package > header > h2"
+    },
+    {
+      "id": "gmt_fbpI0_",
+      "kind": "heading",
+      "text": "Studio, $59/mo",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__chooser > div.pricing__packages > div.pricing__package > header > h2"
+    },
+    {
+      "id": "HlnvjF1UwW",
+      "kind": "heading",
+      "text": "Pro, $99/mo",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__chooser > div.pricing__packages > div.pricing__package > header > h2"
+    },
+    {
+      "id": "8ScDTGNOd8",
+      "kind": "heading",
+      "text": "Unlimited, $299/mo, billed annually",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__chooser > div.pricing__packages > div.pricing__package > header > h2"
+    },
+    {
+      "id": "DgmvEsXnE-",
+      "kind": "heading",
+      "text": "The same core features are included with every package",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "main.main > div.site > div.headline > div.headline__header > h2"
+    },
+    {
+      "id": "Nsomfp-rrn",
+      "kind": "heading",
+      "text": "A stable, well-run company is part of the deal, too",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "main.main > div.site > div.headline > div.headline__header > h2"
+    },
+    {
+      "id": "jSn1ZoZFGS",
+      "kind": "heading",
+      "text": "Risk-free, cancel anytime, no long-term lock-in",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "main.main > div.site > div.text > article > h3.text__heading--large"
+    },
+    {
+      "id": "QUeuuI9b9Y",
+      "kind": "heading",
+      "text": "A big boost for bootstrappers & small businesses",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "main.main > div.site > div.text > article > h3.text__heading--large"
+    },
+    {
+      "id": "2oBWZG70aP",
+      "kind": "heading",
+      "text": "Basecamp eliminates the Hassle Tax",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "main.main > div.site > div.text > article > h3.text__heading--large"
+    },
+    {
+      "id": "yr_qmMAZ16",
+      "kind": "heading",
+      "text": "I have pricing questions…",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "main.main > div.site > div.headline > div.headline__header > h2"
+    },
+    {
+      "id": "JG8A78BL6D",
+      "kind": "heading",
+      "text": "Can we upgrade, downgrade, switch packages, or cancel whenever we want?",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.faqs__section > article > details > summary > h3"
+    },
+    {
+      "id": "iCssR16Pl2",
+      "kind": "heading",
+      "text": "Do you offer non-profit or educational discounts?",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.faqs__section > article > details > summary > h3"
+    },
+    {
+      "id": "iKHUfH0_gR",
+      "kind": "heading",
+      "text": "Could we really add 500 users and run unlimited projects and still just pay $300/month total on the Unlimited Edition?",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.faqs__section > article > details > summary > h3"
+    },
+    {
+      "id": "VFy45ouuCB",
+      "kind": "heading",
+      "text": "Are clients or contractors or guests included in the user count?",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.faqs__section > article > details > summary > h3"
+    },
+    {
+      "id": "mHHIr0Ie2t",
+      "kind": "heading",
+      "text": "Do I need a credit card to try Basecamp?",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.faqs__section > article > details > summary > h3"
+    },
+    {
+      "id": "wWv4cAJD71",
+      "kind": "heading",
+      "text": "Will I automatically be charged when my free trial is up?",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.faqs__section > article > details > summary > h3"
+    },
+    {
+      "id": "iKUryWzWlA",
+      "kind": "heading",
+      "text": "Can we buy more storage if we need it? How much is it?",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.faqs__section > article > details > summary > h3"
+    },
+    {
+      "id": "EBLhJvB-Bg",
+      "kind": "heading",
+      "text": "On the free one project package, can I delete the project and start another one?",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.faqs__section > article > details > summary > h3"
+    },
+    {
+      "id": "ld3PK9kYHP",
+      "kind": "heading",
+      "text": "Have an awesome day!",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "html.theme-1 > body > footer.footer > div.footer__header > h2"
+    },
+    {
+      "id": "0PP3j1yrBS",
+      "kind": "stat",
+      "text": "Freelancer, $25/mo",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__chooser > div.pricing__packages > div.pricing__package > header > h2"
+    },
+    {
+      "id": "VnxNRM0Oww",
+      "kind": "stat",
+      "text": "Up to 3 active projects",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__packages > div.pricing__package > ul > li > strong"
+    },
+    {
+      "id": "lqCUQwJcPR",
+      "kind": "stat",
+      "text": "5 GB",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__packages > div.pricing__package > ul > li > strong"
+    },
+    {
+      "id": "QGW-fEsBU0",
+      "kind": "stat",
+      "text": "Studio, $59/mo",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__chooser > div.pricing__packages > div.pricing__package > header > h2"
+    },
+    {
+      "id": "gY91bKtTBA",
+      "kind": "stat",
+      "text": "Up to 10 active projects",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__packages > div.pricing__package > ul > li > strong"
+    },
+    {
+      "id": "JAiVoNf7vb",
+      "kind": "stat",
+      "text": "25 GB",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__packages > div.pricing__package > ul > li > strong"
+    },
+    {
+      "id": "fYvhUuk_RD",
+      "kind": "stat",
+      "text": "Pro, $99/mo",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__chooser > div.pricing__packages > div.pricing__package > header > h2"
+    },
+    {
+      "id": "8xDnpEz8XA",
+      "kind": "stat",
+      "text": "Up to 25 active projects",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__packages > div.pricing__package > ul > li > strong"
+    },
+    {
+      "id": "XkXRHdci87",
+      "kind": "stat",
+      "text": "100 GB",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__packages > div.pricing__package > ul > li > strong"
+    },
+    {
+      "id": "d-vVjVDAdI",
+      "kind": "stat",
+      "text": "Unlimited, $299/mo, billed annually",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__chooser > div.pricing__packages > div.pricing__package > header > h2"
+    },
+    {
+      "id": "sFf3AixY3L",
+      "kind": "stat",
+      "text": "1000 GB",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__packages > div.pricing__package > ul > li > strong"
+    },
+    {
+      "id": "0YkdmQES2R",
+      "kind": "stat",
+      "text": "Priority 24/7/365 support",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__packages > div.pricing__package > ul > li > strong"
+    },
+    {
+      "id": "g2sbH3FEll",
+      "kind": "stat",
+      "text": "Extended 45-day free trial",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.pricing__packages > div.pricing__package > ul > li > strong"
+    },
+    {
+      "id": "zMaSiLEz81",
+      "kind": "testimonial",
+      "text": "Basecamp is beautiful software that has resisted every wrong trend and stayed true to the things that mattered most. Highly recommended. Tobi Lutke Shopify Co-Founder & CEO",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "main.main > div.site > div.pricing > div.pricing__footer > blockquote.pricing__quote"
+    },
+    {
+      "id": "kt5B2m9w6K",
+      "kind": "cta",
+      "text": "Sign up free",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "#package-free"
+    },
+    {
+      "id": "b_yho_y_e1",
+      "kind": "cta",
+      "text": "Book a personal demo",
+      "sourceUrl": "https://basecamp.com/pricing",
+      "selector": "div.site > div.pricing > div.pricing__demo > p > a"
+    },
+    {
+      "id": "U2C5_xXW2d",
+      "kind": "hero",
+      "text": "Where there’s work, there’s Basecamp",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "main.main > div.site > div.intro > header > h1"
+    },
+    {
+      "id": "sSblOidCYD",
+      "kind": "heading",
+      "text": "The Project page keeps it all together",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "FvtRg5jQ0P",
+      "kind": "heading",
+      "text": "Message Boards for announcements and discussions",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "mqDLH0kW5n",
+      "kind": "heading",
+      "text": "To-do Lists for tracking all the little things",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "ZCLG4-PuOp",
+      "kind": "heading",
+      "text": "Hill Charts show you where things really stand",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "nBcv9SYeVB",
+      "kind": "heading",
+      "text": "Card Tables for tracking work through stages",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "oWanvK1zlD",
+      "kind": "heading",
+      "text": "Campfire chats for quick, casual conversations",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "uYuAYjE-1l",
+      "kind": "heading",
+      "text": "The Basecamp Calendar for big dates",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "1CKVgKYzPP",
+      "kind": "heading",
+      "text": "Automatic Check-ins for recurring questions",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "7skQCX7e_s",
+      "kind": "heading",
+      "text": "Docs & Files for reference materials, assets, and links",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "wIuDwph1HG",
+      "kind": "heading",
+      "text": "My Tasks, Events, Today, Bookmarks, and Notes",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "RdPaBdMfRH",
+      "kind": "heading",
+      "text": "Reports for high-level overviews",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "PxMchSjwoF",
+      "kind": "heading",
+      "text": "Everything Views are like having x-ray vision",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "q4jxs9liNm",
+      "kind": "heading",
+      "text": "The Lineup is your bird’s eye view",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "B5ruXuLFtW",
+      "kind": "heading",
+      "text": "API, CLI, SDK, Skills, and Integrations",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "XAALFgCqJ8",
+      "kind": "heading",
+      "text": "Keyboard shortcuts speed everything up",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "mrBK5M6VP6",
+      "kind": "heading",
+      "text": "Decide what clients get to see",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "Vt3n-xkDtL",
+      "kind": "heading",
+      "text": "Activity that’s easy to absorb",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "div.visual-cards > div.visual-card > div.visual-card__container > section > h2"
+    },
+    {
+      "id": "nNrYQe1Oyr",
+      "kind": "heading",
+      "text": "Have a delightful day!",
+      "sourceUrl": "https://basecamp.com/features",
+      "selector": "html.theme-5 > body > footer.footer > div.footer__header > h2"
+    }
+  ],
+  "siteBrief": {
+    "productName": "basecamp",
+    "summary": "Basecamp is project management without all the nonsense. Rock solid and famously easy to use.",
+    "audience": "general",
+    "differentiator": "Welcome to Basecamp!",
+    "strongestClaimFactId": "p95woEOGME",
+    "factIds": [
+      "NRP71j1V5w",
+      "VJpj6dbbJG",
+      "iQqFhnpM_u",
+      "7OqQcF1CZW",
+      "GdOdmYjCFJ",
+      "A07GS_Rjzr",
+      "_gHKQz2Uup",
+      "UvnZJDXDw5",
+      "xEOavaegYi",
+      "sJUEcKRcOC",
+      "qm3La2bRci",
+      "25STQE9yeY",
+      "2T2OEr-d7l",
+      "bs-v8mthAj",
+      "p95woEOGME",
+      "ExiBQR-zU7",
+      "-7dzZ9eP6V",
+      "TQjllab7s8",
+      "56m1uxjdgN",
+      "hR_tWhmEGJ",
+      "7Pd-9RUBee",
+      "3EmzZsSa_N",
+      "HnTgiP1V9G",
+      "8Qr9JRIMX8",
+      "Pj6w8hpaFW",
+      "MytMAPp4p1",
+      "arDHdzVkXh",
+      "Xs006wq6n-",
+      "_zfy1TqZ2R",
+      "j_NWJRx9GF",
+      "DfXZSTQfxU",
+      "Y8J3FTYtEP",
+      "YJ4LYSJhjm",
+      "OfVjuXUD6-",
+      "n663K3Gidw",
+      "1_d4Zc1QQ-",
+      "yQc6nxQfgi",
+      "js3RcvW3du",
+      "aB5P5YwFGm",
+      "HmBMmjUdND",
+      "g8RO_O0K2L",
+      "0vRBqJGQqp",
+      "QlcEA66R6A",
+      "xQyRac1oiT",
+      "G7K_eL89XG",
+      "ma-6hFwmeS",
+      "GD5bVGv9Xc",
+      "342z2NqFXi",
+      "B73lLWP-xf",
+      "hVAcA-UTxa",
+      "cUGTeqsjQr",
+      "tGCXDeuZ_z",
+      "2OLDjVf4up",
+      "bPAiTHeI6S",
+      "gLdgEtgEw2",
+      "gmt_fbpI0_",
+      "HlnvjF1UwW",
+      "8ScDTGNOd8",
+      "DgmvEsXnE-",
+      "Nsomfp-rrn",
+      "jSn1ZoZFGS",
+      "QUeuuI9b9Y",
+      "2oBWZG70aP",
+      "yr_qmMAZ16",
+      "JG8A78BL6D",
+      "iCssR16Pl2",
+      "iKHUfH0_gR",
+      "VFy45ouuCB",
+      "mHHIr0Ie2t",
+      "wWv4cAJD71",
+      "iKUryWzWlA",
+      "EBLhJvB-Bg",
+      "ld3PK9kYHP",
+      "0PP3j1yrBS",
+      "VnxNRM0Oww",
+      "lqCUQwJcPR",
+      "QGW-fEsBU0",
+      "gY91bKtTBA",
+      "JAiVoNf7vb",
+      "fYvhUuk_RD",
+      "8xDnpEz8XA",
+      "XkXRHdci87",
+      "d-vVjVDAdI",
+      "sFf3AixY3L",
+      "0YkdmQES2R",
+      "g2sbH3FEll",
+      "zMaSiLEz81",
+      "kt5B2m9w6K",
+      "b_yho_y_e1",
+      "U2C5_xXW2d",
+      "sSblOidCYD",
+      "FvtRg5jQ0P",
+      "mqDLH0kW5n",
+      "ZCLG4-PuOp",
+      "nBcv9SYeVB",
+      "oWanvK1zlD",
+      "uYuAYjE-1l",
+      "1CKVgKYzPP",
+      "7skQCX7e_s",
+      "wIuDwph1HG",
+      "RdPaBdMfRH",
+      "PxMchSjwoF",
+      "q4jxs9liNm",
+      "B5ruXuLFtW",
+      "XAALFgCqJ8",
+      "mrBK5M6VP6",
+      "Vt3n-xkDtL",
+      "nNrYQe1Oyr"
+    ],
+    "source": "fallback"
+  }
+}

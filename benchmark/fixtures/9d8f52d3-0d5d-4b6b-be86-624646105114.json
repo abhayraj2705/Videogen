@@ -1,0 +1,679 @@
+{
+  "url": "https://www.notion.so",
+  "category": "saas",
+  "domain": "www.notion.so",
+  "pages": [
+    {
+      "url": "https://www.notion.so",
+      "screenshotKey": "jobs/9d8f52d3-0d5d-4b6b-be86-624646105114/crawl/home.png"
+    },
+    {
+      "url": "https://www.notion.so/product",
+      "screenshotKey": "jobs/9d8f52d3-0d5d-4b6b-be86-624646105114/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.notion.so/product/features",
+      "screenshotKey": "jobs/9d8f52d3-0d5d-4b6b-be86-624646105114/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgba(0, 0, 0, 0.95)",
+    "accent": "rgb(0, 117, 222)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://www.notion.so/_next/image?url=%2Ffront-static%2Fnav%2FallFeaturesNav%2Fcapture.png&w=384&q=75"
+  },
+  "facts": [
+    {
+      "id": "FzSQTMhdRZ",
+      "kind": "hero",
+      "text": "Where teams and agents Think together.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "div.homepageHeroTeamsAndAgents-module-scss-module__KlQGRG__heroContainer > div.heroGrid-module-scss-module__Zc4oCG__heroGrid > div.heroGrid-module-scss-module__Zc4oCG__item > header.homepageHeroTeamsAndAgents-module-scss-module__KlQGRG__contentHeader > h1.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "kEHwKgVldd",
+      "kind": "hero",
+      "text": "Capture context, find answers, and automate tasks with AI built for your team.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "div.homepageHeroTeamsAndAgents-module-scss-module__KlQGRG__heroContainer > div.heroGrid-module-scss-module__Zc4oCG__heroGrid > div.heroGrid-module-scss-module__Zc4oCG__item > header.homepageHeroTeamsAndAgents-module-scss-module__KlQGRG__contentHeader > p.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "rDd33nZtcH",
+      "kind": "heading",
+      "text": "Capture",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "ul.productFeaturesDropdown-module-scss-module__qVhEtq__featureGrid > li > div.card-module-scss-module__uD7svG__card > div.productFeaturesDropdown-module-scss-module__qVhEtq__featureContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "hwfEqTPGjw",
+      "kind": "heading",
+      "text": "Find",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "ul.productFeaturesDropdown-module-scss-module__qVhEtq__featureGrid > li > div.card-module-scss-module__uD7svG__card > div.productFeaturesDropdown-module-scss-module__qVhEtq__featureContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "RqBy4dHUS4",
+      "kind": "heading",
+      "text": "Automate",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "ul.productFeaturesDropdown-module-scss-module__qVhEtq__featureGrid > li > div.card-module-scss-module__uD7svG__card > div.productFeaturesDropdown-module-scss-module__qVhEtq__featureContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "K1ELjMNiKZ",
+      "kind": "heading",
+      "text": "AI where your team works.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "div.homepage-module-scss-module__-Qs3Ha__main > div.homepage-module-scss-module__-Qs3Ha__section > div.sectionHeader-module-scss-module__FoZ42q__header > div.sectionHeader-module-scss-module__FoZ42q__content > h2.sectionHeader-module-scss-module__FoZ42q__heading"
+    },
+    {
+      "id": "wZrK-v1WEd",
+      "kind": "heading",
+      "text": "Bring everything into one system of record.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "article.bento-module-scss-module__xvimDq__bento > div.bento-module-scss-module__xvimDq__bentoInner > header.bento-module-scss-module__xvimDq__bentoHeader > div.bento-module-scss-module__xvimDq__bentoTitleWrapper > h2.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "4fHoqJhHrC",
+      "kind": "heading",
+      "text": "Get answers, instantly—with citations.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "article.bento-module-scss-module__xvimDq__bento > div.bento-module-scss-module__xvimDq__bentoInner > header.bento-module-scss-module__xvimDq__bentoHeader > div.bento-module-scss-module__xvimDq__bentoTitleWrapper > h2.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "Z7o4R8fCEe",
+      "kind": "heading",
+      "text": "Keep work moving 24/7 with agents.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "article.bento-module-scss-module__xvimDq__bento > div.bento-module-scss-module__xvimDq__bentoInner > header.bento-module-scss-module__xvimDq__bentoHeader > div.bento-module-scss-module__xvimDq__bentoTitleWrapper > h2.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "ptbZnDAJZS",
+      "kind": "heading",
+      "text": "See what Notion can do",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "div.homepage-module-scss-module__-Qs3Ha__section > div.homepage-module-scss-module__-Qs3Ha__customAgentsSection > section > div.flex > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "avojjiBuSo",
+      "kind": "heading",
+      "text": "Triage product feedback→",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "section > div.flex > div.flex > div.flex > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "_iVBFUL-9_",
+      "kind": "heading",
+      "text": "Resolve support tickets in Slack→",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "section > div.flex > div.flex > div.flex > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "TxLCbQ1-gM",
+      "kind": "heading",
+      "text": "Respond to security alerts faster→",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "section > div.flex > div.flex > div.flex > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "U1xP8FewDm",
+      "kind": "heading",
+      "text": "Automate weekly reporting→",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "section > div.flex > div.flex > div.flex > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "-FicYti8rz",
+      "kind": "heading",
+      "text": "Create your own developer tools→",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "section > div.flex > div.flex > div.flex > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "3ThlDCXifM",
+      "kind": "heading",
+      "text": "Trusted by teams that ship.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "#_R_bmH1_"
+    },
+    {
+      "id": "3d814hDWnJ",
+      "kind": "heading",
+      "text": "Get started today.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "#_R_bm_-heading"
+    },
+    {
+      "id": "g76bqrQFAn",
+      "kind": "feature",
+      "text": "Capture",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "ul.productFeaturesDropdown-module-scss-module__qVhEtq__featureGrid > li > div.card-module-scss-module__uD7svG__card > div.productFeaturesDropdown-module-scss-module__qVhEtq__featureContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "4P_ENXa_Po",
+      "kind": "feature",
+      "text": "Bring everything into one system of record.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "ul.productFeaturesDropdown-module-scss-module__qVhEtq__featureGrid > li > div.card-module-scss-module__uD7svG__card > div.productFeaturesDropdown-module-scss-module__qVhEtq__featureContent > p.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "4jjcSSKoQb",
+      "kind": "feature",
+      "text": "Find",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "ul.productFeaturesDropdown-module-scss-module__qVhEtq__featureGrid > li > div.card-module-scss-module__uD7svG__card > div.productFeaturesDropdown-module-scss-module__qVhEtq__featureContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "-xpJCbmaIw",
+      "kind": "feature",
+      "text": "Get answers, instantly—with citations.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "ul.productFeaturesDropdown-module-scss-module__qVhEtq__featureGrid > li > div.card-module-scss-module__uD7svG__card > div.productFeaturesDropdown-module-scss-module__qVhEtq__featureContent > p.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "zJXAV5CQPT",
+      "kind": "feature",
+      "text": "Automate",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "ul.productFeaturesDropdown-module-scss-module__qVhEtq__featureGrid > li > div.card-module-scss-module__uD7svG__card > div.productFeaturesDropdown-module-scss-module__qVhEtq__featureContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "EsX65bGhG_",
+      "kind": "feature",
+      "text": "Keep work moving 24/7 with agents.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "ul.productFeaturesDropdown-module-scss-module__qVhEtq__featureGrid > li > div.card-module-scss-module__uD7svG__card > div.productFeaturesDropdown-module-scss-module__qVhEtq__featureContent > p.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "TXns-Pf0Gd",
+      "kind": "stat",
+      "text": "Keep work moving 24/7 with agents.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "article.bento-module-scss-module__xvimDq__bento > div.bento-module-scss-module__xvimDq__bentoInner > header.bento-module-scss-module__xvimDq__bentoHeader > div.bento-module-scss-module__xvimDq__bentoTitleWrapper > h2.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "Op8pUBJU6o",
+      "kind": "stat",
+      "text": "100M users in over 50 countries",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "section > div.Marquee-module-scss-module__X75v-G__marqueeContainer > div.Marquee-module-scss-module__X75v-G__marqueeRow > div.Marquee-module-scss-module__X75v-G__marqueePlaceholder > p.typography-module-scss-module__s4Stoa__typography"
+    },
+    {
+      "id": "LAe--cTDmw",
+      "kind": "stat",
+      "text": "Over 50% of YC companies",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "section > div.Marquee-module-scss-module__X75v-G__marqueeContainer > div.Marquee-module-scss-module__X75v-G__marqueeRow > div.Marquee-module-scss-module__X75v-G__marqueePlaceholder > p.typography-module-scss-module__s4Stoa__typography"
+    },
+    {
+      "id": "3MTi8GNGVa",
+      "kind": "stat",
+      "text": "1.4M+ community members",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "section > div.Marquee-module-scss-module__X75v-G__marqueeContainer > div.Marquee-module-scss-module__X75v-G__marqueeRow > div.Marquee-module-scss-module__X75v-G__marqueePlaceholder > p.typography-module-scss-module__s4Stoa__typography"
+    },
+    {
+      "id": "M393ObomM_",
+      "kind": "stat",
+      "text": "62% of Fortune 100 use Notion",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "section > div.Marquee-module-scss-module__X75v-G__marqueeContainer > div.Marquee-module-scss-module__X75v-G__marqueeRow > div.Marquee-module-scss-module__X75v-G__marqueePlaceholder > p.typography-module-scss-module__s4Stoa__typography"
+    },
+    {
+      "id": "bcjVaHk9l9",
+      "kind": "testimonial",
+      "text": "Using the most AI-native tools like Notion is an important competitive advantage for us to stay small while doing a lot.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "div.socialProof-module-scss-module__XB4X_a__cards > a.socialProof-module-scss-module__XB4X_a__card > div.socialProof-module-scss-module__XB4X_a__cardContent > figure.quote-module-scss-module__2NYrkq__quote > blockquote.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "Wx9W9Xz9CY",
+      "kind": "testimonial",
+      "text": "Notion’s thoughtful design speeds up collaboration and decisions so we can deliver impact to our customers faster.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "div.socialProof-module-scss-module__XB4X_a__cards > a.socialProof-module-scss-module__XB4X_a__card > div.socialProof-module-scss-module__XB4X_a__cardContent > figure.quote-module-scss-module__2NYrkq__quote > blockquote.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "EB6vzlTUDQ",
+      "kind": "testimonial",
+      "text": "Notion Custom Agents help our team go beyond doing work with AI to building AI tools that do the work for them.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "div.socialProof-module-scss-module__XB4X_a__cards > a.socialProof-module-scss-module__XB4X_a__card > div.socialProof-module-scss-module__XB4X_a__cardContent > figure.quote-module-scss-module__2NYrkq__quote > blockquote.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "1aUED7ooG9",
+      "kind": "testimonial",
+      "text": "We shape our tools, and thereafter our tools shape us.",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "div.layout-module-scss-module__e_tYXa__layout > div.grid-module-scss-module__lgnKUW__grid > div.footer-module-scss-module__U-iC1W__brand > figure.quote-module-scss-module__2NYrkq__quote > blockquote.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "CkODR_Ioe6",
+      "kind": "cta",
+      "text": "Request a demo",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "div.base-module-scss-module__QPCBRq__theme > nav.globalNavigation-module-scss-module__HWB10a__globalNavigation > div.globalNavigation-module-scss-module__HWB10a__container > div.globalNavigation-module-scss-module__HWB10a__links > a.globalNavigation-module-scss-module__HWB10a__link"
+    },
+    {
+      "id": "19DQTKkDLB",
+      "kind": "cta",
+      "text": "Download",
+      "sourceUrl": "https://www.notion.so",
+      "selector": "div.grid-module-scss-module__lgnKUW__grid > nav.footer-module-scss-module__U-iC1W__nav > ul.flex > li.inline-fit > a.inline-full"
+    },
+    {
+      "id": "lmiYkFnM2y",
+      "kind": "hero",
+      "text": "So, what can Notion do?",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "#_R_2kkbm_"
+    },
+    {
+      "id": "qTup0xeGr6",
+      "kind": "hero",
+      "text": "Capture your team’s knowledge, find answers across all your apps, and automate your busywork.",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.hero-module-scss-module__A2VLeW__container > header.surface > div.heroGrid-module-scss-module__Zc4oCG__heroGrid > div.heroGrid-module-scss-module__Zc4oCG__item > p.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "xLv_vOTZ0I",
+      "kind": "heading",
+      "text": "Capture knowledge.",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "#_R_3kkbm_"
+    },
+    {
+      "id": "3pmR3_-bL3",
+      "kind": "heading",
+      "text": "Docs→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "OVPGoHQ5IT",
+      "kind": "heading",
+      "text": "Databases→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "4Jbsa5qDZG",
+      "kind": "heading",
+      "text": "AI Meeting Notes→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "ot0Xu4kyLi",
+      "kind": "heading",
+      "text": "Real-time collaboration→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "OizEAb7VH3",
+      "kind": "heading",
+      "text": "Data syncs→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "B5HBmv-Wam",
+      "kind": "heading",
+      "text": "Forms→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "qY5Q3uMaRV",
+      "kind": "heading",
+      "text": "Imports→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "sRN77gRm6J",
+      "kind": "heading",
+      "text": "Mobile apps→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "7F3K_XWwkX",
+      "kind": "heading",
+      "text": "Web Clipper→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "b7Er3rs_it",
+      "kind": "heading",
+      "text": "Find answers.",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "#_R_4kkbm_"
+    },
+    {
+      "id": "JFN3rNNtnh",
+      "kind": "heading",
+      "text": "Enterprise Search→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "NeCQuEZ0AB",
+      "kind": "heading",
+      "text": "Wikis→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "dIlHXeOver",
+      "kind": "heading",
+      "text": "Teamspaces→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "enlM66hfI3",
+      "kind": "heading",
+      "text": "Verified pages→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "uFauglb87T",
+      "kind": "heading",
+      "text": "Charts and dashboards→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "AVhRwWhY0k",
+      "kind": "heading",
+      "text": "Kanban and Gantt views→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "RKZmz02Rep",
+      "kind": "heading",
+      "text": "Version history→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "2K5udCv8Va",
+      "kind": "heading",
+      "text": "Backlinks→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "PKmaywfDZq",
+      "kind": "heading",
+      "text": "Link previews→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "lFGsSwgtL1",
+      "kind": "heading",
+      "text": "Automate busywork.",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "#_R_5kkbm_"
+    },
+    {
+      "id": "3Q6SV3iVfP",
+      "kind": "heading",
+      "text": "Notion Agent→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "aflL5VpJ41",
+      "kind": "heading",
+      "text": "Custom Agents→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "VURNfkyQqN",
+      "kind": "heading",
+      "text": "AI writing and editing→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "37iIz0Ayu6",
+      "kind": "heading",
+      "text": "Agent Skills→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "tNGOd3ZrS9",
+      "kind": "heading",
+      "text": "Dynamic triggers→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "oXhFu_HzoV",
+      "kind": "heading",
+      "text": "Agent Orchestration→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "EOoqpQSzSG",
+      "kind": "heading",
+      "text": "API→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "x5wFy1GwAJ",
+      "kind": "heading",
+      "text": "MCP→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "5WebOtjT64",
+      "kind": "heading",
+      "text": "Database automations→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "J6ViDNQu02",
+      "kind": "heading",
+      "text": "Built for teams.",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "#_R_6kkbm_"
+    },
+    {
+      "id": "IfMQXLqDwZ",
+      "kind": "heading",
+      "text": "SAML SSO→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "3JUr0wOBYj",
+      "kind": "heading",
+      "text": "SCIM API→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "IcjMTeVVxc",
+      "kind": "heading",
+      "text": "Audit log→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "OHHM9PrbU8",
+      "kind": "heading",
+      "text": "Granular user permissions→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "4HSav4B1bc",
+      "kind": "heading",
+      "text": "Granular agent permissions→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "XzXBO-g5bY",
+      "kind": "heading",
+      "text": "Agent governance→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "acEgwnkeMi",
+      "kind": "heading",
+      "text": "Global compliance standards→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "m6bSSkQ82G",
+      "kind": "heading",
+      "text": "Third-party security certifications→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "RK0x8OJytJ",
+      "kind": "heading",
+      "text": "Security and compliance partner integrations→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "fV8rO_KPsM",
+      "kind": "heading",
+      "text": "Robust data protection→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "nA7-lxZRtG",
+      "kind": "heading",
+      "text": "No training on your data→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "_TT-twxIDl",
+      "kind": "heading",
+      "text": "Data residency→",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "div.row-module-scss-module__e8A4vG__row > article.surface > div.block-module-scss-module__cFn49q__blockStack > div.block-module-scss-module__cFn49q__blockContent > h3.semanticTypography-module-scss-module__Db2fhq__semanticTypography"
+    },
+    {
+      "id": "em4hXtU8qE",
+      "kind": "cta",
+      "text": "Contact sales",
+      "sourceUrl": "https://www.notion.so/product/features",
+      "selector": "header.surface > div.heroGrid-module-scss-module__Zc4oCG__heroGrid > div.heroGrid-module-scss-module__Zc4oCG__item > div.flex > a.button-module-scss-module__pIQ4pG__button"
+    }
+  ],
+  "siteBrief": {
+    "productName": "notion",
+    "summary": "Where teams and agents Think together.",
+    "audience": "general",
+    "differentiator": "Capture",
+    "strongestClaimFactId": "TXns-Pf0Gd",
+    "factIds": [
+      "FzSQTMhdRZ",
+      "kEHwKgVldd",
+      "rDd33nZtcH",
+      "hwfEqTPGjw",
+      "RqBy4dHUS4",
+      "K1ELjMNiKZ",
+      "wZrK-v1WEd",
+      "4fHoqJhHrC",
+      "Z7o4R8fCEe",
+      "ptbZnDAJZS",
+      "avojjiBuSo",
+      "_iVBFUL-9_",
+      "TxLCbQ1-gM",
+      "U1xP8FewDm",
+      "-FicYti8rz",
+      "3ThlDCXifM",
+      "3d814hDWnJ",
+      "g76bqrQFAn",
+      "4P_ENXa_Po",
+      "4jjcSSKoQb",
+      "-xpJCbmaIw",
+      "zJXAV5CQPT",
+      "EsX65bGhG_",
+      "TXns-Pf0Gd",
+      "Op8pUBJU6o",
+      "LAe--cTDmw",
+      "3MTi8GNGVa",
+      "M393ObomM_",
+      "bcjVaHk9l9",
+      "Wx9W9Xz9CY",
+      "EB6vzlTUDQ",
+      "1aUED7ooG9",
+      "CkODR_Ioe6",
+      "19DQTKkDLB",
+      "lmiYkFnM2y",
+      "qTup0xeGr6",
+      "xLv_vOTZ0I",
+      "3pmR3_-bL3",
+      "OVPGoHQ5IT",
+      "4Jbsa5qDZG",
+      "ot0Xu4kyLi",
+      "OizEAb7VH3",
+      "B5HBmv-Wam",
+      "qY5Q3uMaRV",
+      "sRN77gRm6J",
+      "7F3K_XWwkX",
+      "b7Er3rs_it",
+      "JFN3rNNtnh",
+      "NeCQuEZ0AB",
+      "dIlHXeOver",
+      "enlM66hfI3",
+      "uFauglb87T",
+      "AVhRwWhY0k",
+      "RKZmz02Rep",
+      "2K5udCv8Va",
+      "PKmaywfDZq",
+      "lFGsSwgtL1",
+      "3Q6SV3iVfP",
+      "aflL5VpJ41",
+      "VURNfkyQqN",
+      "37iIz0Ayu6",
+      "tNGOd3ZrS9",
+      "oXhFu_HzoV",
+      "EOoqpQSzSG",
+      "x5wFy1GwAJ",
+      "5WebOtjT64",
+      "J6ViDNQu02",
+      "IfMQXLqDwZ",
+      "3JUr0wOBYj",
+      "IcjMTeVVxc",
+      "OHHM9PrbU8",
+      "4HSav4B1bc",
+      "XzXBO-g5bY",
+      "acEgwnkeMi",
+      "m6bSSkQ82G",
+      "RK0x8OJytJ",
+      "fV8rO_KPsM",
+      "nA7-lxZRtG",
+      "_TT-twxIDl",
+      "em4hXtU8qE"
+    ],
+    "source": "fallback"
+  }
+}

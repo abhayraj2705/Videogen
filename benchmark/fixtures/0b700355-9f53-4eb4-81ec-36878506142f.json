@@ -1,0 +1,335 @@
+{
+  "url": "https://www.chaayos.com",
+  "category": "indian_smb",
+  "domain": "www.chaayos.com",
+  "pages": [
+    {
+      "url": "https://www.chaayos.com",
+      "screenshotKey": "jobs/0b700355-9f53-4eb4-81ec-36878506142f/crawl/home.png"
+    },
+    {
+      "url": "https://www.chaayos.com/products/meri-wali-chai-patti",
+      "screenshotKey": "jobs/0b700355-9f53-4eb4-81ec-36878506142f/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.chaayos.com/pages/about-brand",
+      "screenshotKey": "jobs/0b700355-9f53-4eb4-81ec-36878506142f/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "rgb(1, 140, 58)",
+    "fontDisplay": "Nunito",
+    "fontBody": "Nunito",
+    "logoUrl": "https://chaayos.com/cdn/shop/files/Chaayos_Logo_a41a4981-896a-411b-b663-c500726a842c.jpg?v=1679058333&width=4000"
+  },
+  "facts": [
+    {
+      "id": "STDkOyvvRJ",
+      "kind": "hero",
+      "text": "Chaayos",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.site-header__element > div.page-width > div.header-layout > div.header-item > h1.site-header__logo"
+    },
+    {
+      "id": "L2mJe_Qd7u",
+      "kind": "heading",
+      "text": "Our Stores",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.custom-content > div.custom__item > div.custom__item-inner > div.rte > h2"
+    },
+    {
+      "id": "rgum-kwA0B",
+      "kind": "heading",
+      "text": "Every cafe is uniquely designed",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.custom-content > div.custom__item > div.custom__item-inner > div.rte > h3"
+    },
+    {
+      "id": "xvGv9c3SeY",
+      "kind": "heading",
+      "text": "Our Menu",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.custom-content > div.custom__item > div.custom__item-inner > div.rte > h2"
+    },
+    {
+      "id": "5Y5pVp9-WE",
+      "kind": "heading",
+      "text": "Relax with our wide range of Chai",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.custom-content > div.custom__item > div.custom__item-inner > div.rte > h3"
+    },
+    {
+      "id": "6Yp_qb4qYp",
+      "kind": "heading",
+      "text": "Chai Delivery",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.custom-content > div.custom__item > div.custom__item-inner > div.rte > h2"
+    },
+    {
+      "id": "GkBEv0oM_z",
+      "kind": "heading",
+      "text": "Premium Gifting",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.custom-content > div.custom__item > div.custom__item-inner > div.rte > h2"
+    },
+    {
+      "id": "CtOeEDHKyB",
+      "kind": "heading",
+      "text": "Perfect Chai time for your loved ones",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.custom-content > div.custom__item > div.custom__item-inner > div.rte > h3"
+    },
+    {
+      "id": "jk1mlfeevK",
+      "kind": "heading",
+      "text": "Shop now",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "main.main-content > div.shopify-section > div.page-width > div.section-header > h2.section-header__title"
+    },
+    {
+      "id": "yFvhgnpk2I",
+      "kind": "heading",
+      "text": "Bestsellers",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.shopify-section > div > div.page-width > div.section-header > h2.section-header__title"
+    },
+    {
+      "id": "Blx3r29WcK",
+      "kind": "heading",
+      "text": "New Arrivals",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.shopify-section > div > div.page-width > div.section-header > h2.section-header__title"
+    },
+    {
+      "id": "efxRkyYHlj",
+      "kind": "heading",
+      "text": "Contact Us",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.shopify-section > div.text-with-icons > div.page-width > div.text-with-icons__title > h2.text-center"
+    },
+    {
+      "id": "8CWLO70mAA",
+      "kind": "heading",
+      "text": "1800-120-2424",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.page-width > div.text-with-icons__blocks > div.text-with-icons__block > div.text-with-icons__block-title > h3"
+    },
+    {
+      "id": "NL67z6ph8O",
+      "kind": "heading",
+      "text": "Letstalk@chaayos.com",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.page-width > div.text-with-icons__blocks > div.text-with-icons__block > div.text-with-icons__block-title > h3"
+    },
+    {
+      "id": "dznMJOLJyl",
+      "kind": "heading",
+      "text": "What Our Customers are Saying",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.shopify-section > div.testimonials-section > div.page-width > div.section-header > h2"
+    },
+    {
+      "id": "uUAM10LuVx",
+      "kind": "heading",
+      "text": "Login with OTP",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.sotp-widget > div.olWrapper > div.ol > div.login-box > h3.login-header"
+    },
+    {
+      "id": "2XKSQkduF7",
+      "kind": "heading",
+      "text": "Enter OTP",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.sotp-widget > div.olWrapper > div.ol > div.verify-box > h3.login-header"
+    },
+    {
+      "id": "ZgxxzBqdTL",
+      "kind": "heading",
+      "text": "Enter Account Details",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.sotp-widget > div.olWrapper > div.ol > div.update-user-box > h3.login-header"
+    },
+    {
+      "id": "tdnnz7y9mg",
+      "kind": "stat",
+      "text": "1800-120-2424",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.page-width > div.text-with-icons__blocks > div.text-with-icons__block > div.text-with-icons__block-title > h3"
+    },
+    {
+      "id": "V8S-mBss6j",
+      "kind": "testimonial",
+      "text": "★★★★★",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.flickity-viewport > div.flickity-slider > div.testimonials-slide > blockquote.testimonials-slider__text > span.testimonial-stars"
+    },
+    {
+      "id": "hlttI4FOK9",
+      "kind": "testimonial",
+      "text": "Gurgaon, Haryana",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.flickity-viewport > div.flickity-slider > div.testimonials-slide > blockquote.testimonials-slider__text > div.testimonials__info"
+    },
+    {
+      "id": "8m2erybWqP",
+      "kind": "testimonial",
+      "text": "★★★★★I sent whole wheat cookies to my Mom!! She just loved it, now a big-time fan of the Chaayos whole wheat cookies. BrunoMumbai, Maharashtra",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.slideshow-wrapper > div.testimonials-slider > div.flickity-viewport > div.flickity-slider > div.testimonials-slide"
+    },
+    {
+      "id": "FdPGKIG-yl",
+      "kind": "testimonial",
+      "text": "Mumbai, Maharashtra",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.flickity-viewport > div.flickity-slider > div.testimonials-slide > blockquote.testimonials-slider__text > div.testimonials__info"
+    },
+    {
+      "id": "Rj3MQlZNq0",
+      "kind": "testimonial",
+      "text": "New Delhi",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.flickity-viewport > div.flickity-slider > div.testimonials-slide > blockquote.testimonials-slider__text > div.testimonials__info"
+    },
+    {
+      "id": "pTPEsB3AKs",
+      "kind": "cta",
+      "text": "Shop",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.header-layout > div.header-item > ul.site-nav > li.site-nav__item > a.site-nav__link"
+    },
+    {
+      "id": "x3IqGo09C6",
+      "kind": "cta",
+      "text": "Shop Expand submenu",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.site-header__drawer-animate > div.slide-nav__wrapper > ul.slide-nav > li.slide-nav__item > button.slide-nav__button"
+    },
+    {
+      "id": "W5O7dKc8LL",
+      "kind": "cta",
+      "text": "Track Your Order",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.footer__blocks > div.footer__block > ul.footer__menu > li > a"
+    },
+    {
+      "id": "5pnAre_VTn",
+      "kind": "cta",
+      "text": "Download App",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.footer__blocks > div.footer__block > ul.footer__menu > li > a"
+    },
+    {
+      "id": "wJDkSt2I9P",
+      "kind": "cta",
+      "text": "Facebook",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.footer__blocks--mobile > div.footer__block--mobile > ul.no-bullets > li > a.js-no-transition"
+    },
+    {
+      "id": "3I7TrnhO7u",
+      "kind": "cta",
+      "text": "Powered by Shopify",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "footer.site-footer > div.footer__section > div.page-width > div.footer__base-links > a.js-no-transition"
+    },
+    {
+      "id": "pEnUc6y4Yo",
+      "kind": "cta",
+      "text": "Request OTP",
+      "sourceUrl": "https://www.chaayos.com",
+      "selector": "div.sotp-widget > div.olWrapper > div.ol > div.login-box > button.send-btn"
+    },
+    {
+      "id": "vUIn6hOuPD",
+      "kind": "hero",
+      "text": "Make Your Own Chai - 400g Pack",
+      "sourceUrl": "https://www.chaayos.com/products/meri-wali-chai-patti",
+      "selector": "div.product-section > div.page-content > div.page-width > div.product-single__header--mobile > h1.h2"
+    },
+    {
+      "id": "gnGSTnkT-l",
+      "kind": "cta",
+      "text": "Buy on Amazon",
+      "sourceUrl": "https://www.chaayos.com/products/meri-wali-chai-patti",
+      "selector": "div.product-grid__content > div.product-single__meta > div > div.product-block > a.btn"
+    },
+    {
+      "id": "JN-NYIU8a5",
+      "kind": "cta",
+      "text": "Share Share on Facebook",
+      "sourceUrl": "https://www.chaayos.com/products/meri-wali-chai-patti",
+      "selector": "div.shopify-section > div.page-width > div.product-block > div.social-sharing > a.social-sharing__link"
+    },
+    {
+      "id": "F5CeCxlWO6",
+      "kind": "cta",
+      "text": "Shop on Amazon",
+      "sourceUrl": "https://www.chaayos.com/products/meri-wali-chai-patti",
+      "selector": "main.main-content > div.shopify-section > div.ai-amazon-button-container-avepvrfd3duwvr3rbcaigenblock40f8de7nmub4y > div.ai-amazon-button-wrapper-avepvrfd3duwvr3rbcaigenblock40f8de7nmub4y > a.ai-amazon-button-avepvrfd3duwvr3rbcaigenblock40f8de7nmub4y"
+    },
+    {
+      "id": "ZNTV2lNT9s",
+      "kind": "hero",
+      "text": "About Brand",
+      "sourceUrl": "https://www.chaayos.com/pages/about-brand",
+      "selector": "main.main-content > section.shopify-section > div.page-width > header.section-header > h1.section-header__title"
+    },
+    {
+      "id": "Am1KF5pAU0",
+      "kind": "heading",
+      "text": "Our Mission",
+      "sourceUrl": "https://www.chaayos.com/pages/about-brand",
+      "selector": "div.shopify-section > div.index-section > div.page-width > div.theme-block > h2.h2"
+    }
+  ],
+  "siteBrief": {
+    "productName": "chaayos",
+    "summary": "Chaayos",
+    "audience": "general",
+    "differentiator": "Chaayos",
+    "strongestClaimFactId": "tdnnz7y9mg",
+    "factIds": [
+      "STDkOyvvRJ",
+      "L2mJe_Qd7u",
+      "rgum-kwA0B",
+      "xvGv9c3SeY",
+      "5Y5pVp9-WE",
+      "6Yp_qb4qYp",
+      "GkBEv0oM_z",
+      "CtOeEDHKyB",
+      "jk1mlfeevK",
+      "yFvhgnpk2I",
+      "Blx3r29WcK",
+      "efxRkyYHlj",
+      "8CWLO70mAA",
+      "NL67z6ph8O",
+      "dznMJOLJyl",
+      "uUAM10LuVx",
+      "2XKSQkduF7",
+      "ZgxxzBqdTL",
+      "tdnnz7y9mg",
+      "V8S-mBss6j",
+      "hlttI4FOK9",
+      "8m2erybWqP",
+      "FdPGKIG-yl",
+      "Rj3MQlZNq0",
+      "pTPEsB3AKs",
+      "x3IqGo09C6",
+      "W5O7dKc8LL",
+      "5pnAre_VTn",
+      "wJDkSt2I9P",
+      "3I7TrnhO7u",
+      "pEnUc6y4Yo",
+      "vUIn6hOuPD",
+      "gnGSTnkT-l",
+      "JN-NYIU8a5",
+      "F5CeCxlWO6",
+      "ZNTV2lNT9s",
+      "Am1KF5pAU0"
+    ],
+    "source": "fallback"
+  }
+}

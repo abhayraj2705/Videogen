@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.turbo/
+*.log
+.env
+.env.local
+benchmark/out/
+benchmark/fixtures/crawls/
+packages/renderer/out/
+apps/worker/.data/
+.data/
+.DS_Store
+.tools/
+.next/
+supabase/.branches/
+supabase/.temp/
+*.tsbuildinfo

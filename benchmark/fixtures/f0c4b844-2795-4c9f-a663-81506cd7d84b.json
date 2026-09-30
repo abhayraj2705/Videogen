@@ -1,0 +1,871 @@
+{
+  "url": "https://www.figma.com",
+  "category": "saas",
+  "domain": "www.figma.com",
+  "pages": [
+    {
+      "url": "https://www.figma.com",
+      "screenshotKey": "jobs/f0c4b844-2795-4c9f-a663-81506cd7d84b/crawl/home.png"
+    },
+    {
+      "url": "https://www.figma.com/product-development/",
+      "screenshotKey": "jobs/f0c4b844-2795-4c9f-a663-81506cd7d84b/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.figma.com/solutions/",
+      "screenshotKey": "jobs/f0c4b844-2795-4c9f-a663-81506cd7d84b/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "rgb(0, 0, 0)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://cdn.sanity.io/images/599r6htc/regionalized/4b9ade839f38291c91b76608d22e7c7a9ad525fd-542x305.png?w=542&h=305&q=75&fit=max&auto=format"
+  },
+  "facts": [
+    {
+      "id": "5NFuu7jDuA",
+      "kind": "hero",
+      "text": "The full-stack creative canvas",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_clubsodqivb_"
+    },
+    {
+      "id": "m9OmRAke7Z",
+      "kind": "heading",
+      "text": "What you can do in figma",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#fa13aad03260"
+    },
+    {
+      "id": "F01Xg-MM9N",
+      "kind": "heading",
+      "text": "Explore all products",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#f63ca98318ef"
+    },
+    {
+      "id": "3HatigCMpS",
+      "kind": "heading",
+      "text": "Additional product resources",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#a7bffbcb4e92"
+    },
+    {
+      "id": "uv1IhysZ2e",
+      "kind": "heading",
+      "text": "Use cases",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#f3f16ac8e010"
+    },
+    {
+      "id": "ezpAZLxdc1",
+      "kind": "heading",
+      "text": "Roles",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#8239e1d04d3b"
+    },
+    {
+      "id": "H-tGdqvftc",
+      "kind": "heading",
+      "text": "Organizations",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#f73ea21792cb"
+    },
+    {
+      "id": "2J176Tyze-",
+      "kind": "heading",
+      "text": "Get started",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#181847403a8b"
+    },
+    {
+      "id": "pjrNd62lFI",
+      "kind": "heading",
+      "text": "Learn",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#9c73d8320639"
+    },
+    {
+      "id": "PgDiwSlOwp",
+      "kind": "heading",
+      "text": "One workspace for your entire product development process.",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_2klubsodqivb_"
+    },
+    {
+      "id": "BavZDwiR-I",
+      "kind": "heading",
+      "text": "Design anything you can imagine",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_qlaiklubsodqivb_"
+    },
+    {
+      "id": "kb5Tu2xafi",
+      "kind": "heading",
+      "text": "Build with intention",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_1alaiklubsodqivb_"
+    },
+    {
+      "id": "GK1JIuscpC",
+      "kind": "heading",
+      "text": "Move fast in the right direction on an AI-native canvas.",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_4klubsodqivb_"
+    },
+    {
+      "id": "wEmGuJH7VT",
+      "kind": "heading",
+      "text": "Powerfully expressive. Incredibly precise.",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_6klubsodqivb_"
+    },
+    {
+      "id": "ucegoc6twd",
+      "kind": "heading",
+      "text": "Start with design context. Build with consistency.",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_8klubsodqivb_"
+    },
+    {
+      "id": "-YhwrjNnyK",
+      "kind": "heading",
+      "text": "The products you love are designed in Figma",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_aklubsodqivb_"
+    },
+    {
+      "id": "ay6e1BZSLv",
+      "kind": "heading",
+      "text": "Ideas no longer have to wait their turn",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_r_1_"
+    },
+    {
+      "id": "OfrxZv1pOc",
+      "kind": "heading",
+      "text": "Explore what you can do in Figma.",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_34lubsodqivb_"
+    },
+    {
+      "id": "L0JWOqxzan",
+      "kind": "heading",
+      "text": "UI kits",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_11lban4lubsodqivb_"
+    },
+    {
+      "id": "98w9GNkzIN",
+      "kind": "heading",
+      "text": "Websites",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_12lban4lubsodqivb_"
+    },
+    {
+      "id": "QJwHnlYPaG",
+      "kind": "heading",
+      "text": "Social media",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_13lban4lubsodqivb_"
+    },
+    {
+      "id": "qfXs-TATKB",
+      "kind": "heading",
+      "text": "Mobile apps",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_14lban4lubsodqivb_"
+    },
+    {
+      "id": "NfH3ibQEcs",
+      "kind": "heading",
+      "text": "Presentations",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_15lban4lubsodqivb_"
+    },
+    {
+      "id": "g5q7VP07DT",
+      "kind": "heading",
+      "text": "Wireframes",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_16lban4lubsodqivb_"
+    },
+    {
+      "id": "QPJjFWeP3O",
+      "kind": "heading",
+      "text": "Illustrations",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_17lban4lubsodqivb_"
+    },
+    {
+      "id": "iv3T0Fgztq",
+      "kind": "heading",
+      "text": "Portfolios",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_18lban4lubsodqivb_"
+    },
+    {
+      "id": "wM5rVCRllx",
+      "kind": "heading",
+      "text": "Web ads",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_19lban4lubsodqivb_"
+    },
+    {
+      "id": "m9FojKXjOg",
+      "kind": "heading",
+      "text": "Icons",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#_R_1alban4lubsodqivb_"
+    },
+    {
+      "id": "lTr8SEJ2OU",
+      "kind": "heading",
+      "text": "Figma Socials",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "footer.fig-97erl1 > div.fig-1pkcdmt > div.fig-wfj69d > div > h2.fig-wzss7r"
+    },
+    {
+      "id": "tZ9rc61sHi",
+      "kind": "heading",
+      "text": "Product",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#5e8ddabf60eb"
+    },
+    {
+      "id": "DkCPW2sles",
+      "kind": "heading",
+      "text": "Plans",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#e0cfc0ae9d68"
+    },
+    {
+      "id": "tMc_1XnZ7R",
+      "kind": "heading",
+      "text": "Resources",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#3b28ea1b5f7f"
+    },
+    {
+      "id": "4RW3i5Nst6",
+      "kind": "heading",
+      "text": "Company",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "#f457ab08619e"
+    },
+    {
+      "id": "nuHsQU-WQk",
+      "kind": "testimonial",
+      "text": "Everyone is able to influence, inspire, and give input without ever leaving the design file. That creates a really transparent, open, and honest process throughout the whole project.",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "div.fig-j7qwjs > div.fig-9lflse > div.fig-kxgf8o > figure.fig-jjzheu > blockquote.fig-11kcihn"
+    },
+    {
+      "id": "WUnpeC0MXl",
+      "kind": "cta",
+      "text": "Downloads",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "div.fig-1yxsuq7 > div > ul.fig-18zgily > li.fig-nn3yzl > a.fig-p9vbup"
+    },
+    {
+      "id": "B8_cosuqmg",
+      "kind": "cta",
+      "text": "Contact sales",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "div.fig-1rmlagr > div.fig-o26arq > ul.fig-1i3xy0h > li.fig-0 > a.fig-42wdr4"
+    },
+    {
+      "id": "0z3-oyv00B",
+      "kind": "cta",
+      "text": "Get started",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "div.fig-1rmlagr > div.fig-o26arq > ul.fig-1i3xy0h > li > a.fig-13b0elo"
+    },
+    {
+      "id": "aCLpz00TaX",
+      "kind": "cta",
+      "text": "Get started for free",
+      "sourceUrl": "https://www.figma.com",
+      "selector": "div.fig-1rmlagr > div.fig-o26arq > ul.fig-1i3xy0h > li > a.fig-4rcs94"
+    },
+    {
+      "id": "pGfWrdEjZz",
+      "kind": "hero",
+      "text": "One place for full product development",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "div.fig-2aeyl2 > div.fig-1t4ugcp > div > div.fig-1xdhyk6 > h1.fig-zxd83u"
+    },
+    {
+      "id": "6rKcS33yaY",
+      "kind": "heading",
+      "text": "Build with full context",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "main > section.fig-vorkog > div.fig-2qv4k > div.fig-sfgymc > h2.fig-83qz77"
+    },
+    {
+      "id": "Alksj9Pte9",
+      "kind": "heading",
+      "text": "Explore every possibility",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "div.fig-2qv4k > div.fig-pccf7a > div.fig-hlwjoj > div.fig-1xdhyk6 > h3.fig-133u4ps"
+    },
+    {
+      "id": "0TKvA6Am_7",
+      "kind": "heading",
+      "text": "Design systems and tools",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_4elfiv63qivb_"
+    },
+    {
+      "id": "sgQ0mBEbwa",
+      "kind": "heading",
+      "text": "Pull in design systems",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_39qkelfiv63qivb_"
+    },
+    {
+      "id": "6-GxdF9sIc",
+      "kind": "heading",
+      "text": "Connect your tools via the MCP server",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_59qkelfiv63qivb_"
+    },
+    {
+      "id": "kkIFLX8Ju0",
+      "kind": "heading",
+      "text": "Collaborate and align",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "main > section.fig-1gnuoli > div.fig-2qv4k > div.fig-sfgymc > h2.fig-83qz77"
+    },
+    {
+      "id": "N8Lz98n0PG",
+      "kind": "heading",
+      "text": "Build as one team",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "div.fig-2qv4k > div.fig-1xqv2pk > div.fig-qz6bp > div.fig-1xdhyk6 > h3.fig-133u4ps"
+    },
+    {
+      "id": "u7tacZcxVD",
+      "kind": "heading",
+      "text": "Brainstorm and collaborate",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_6elfiv63qivb_"
+    },
+    {
+      "id": "Tx37j9XuNg",
+      "kind": "heading",
+      "text": "Brainstorm in a shared space",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_39qmelfiv63qivb_"
+    },
+    {
+      "id": "5ABwkjUBPe",
+      "kind": "heading",
+      "text": "Collaborate on the canvas",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_59qmelfiv63qivb_"
+    },
+    {
+      "id": "3qIzkW8kHI",
+      "kind": "heading",
+      "text": "Teammates and agents work together",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_79qmelfiv63qivb_"
+    },
+    {
+      "id": "kHgrCujqZa",
+      "kind": "heading",
+      "text": "Production-ready prototypes",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "main > section.fig-1gnuoli > div.fig-2qv4k > div.fig-sfgymc > h2.fig-83qz77"
+    },
+    {
+      "id": "MtfGo0uDLB",
+      "kind": "heading",
+      "text": "Move from prototype to product",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "div.fig-2qv4k > div.fig-1xqv2pk > div.fig-qz6bp > div.fig-1xdhyk6 > h3.fig-133u4ps"
+    },
+    {
+      "id": "dJoImR4OLx",
+      "kind": "heading",
+      "text": "Design and code",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_8elfiv63qivb_"
+    },
+    {
+      "id": "ia88r1Gjmm",
+      "kind": "heading",
+      "text": "Push your prototype to your codebase",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_39qoelfiv63qivb_"
+    },
+    {
+      "id": "L2o5koNJH9",
+      "kind": "heading",
+      "text": "Connect design and code",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_59qoelfiv63qivb_"
+    },
+    {
+      "id": "cI8_x3KT4s",
+      "kind": "heading",
+      "text": "Design and ship in one place",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_79qoelfiv63qivb_"
+    },
+    {
+      "id": "bZKXOhJcs-",
+      "kind": "heading",
+      "text": "Explore product development resources",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_aelfiv63qivb_"
+    },
+    {
+      "id": "lyD7CkVDmN",
+      "kind": "heading",
+      "text": "Product guide: Explore more directions, faster with AI",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_39qqelfiv63qivb_"
+    },
+    {
+      "id": "kqNmebweVi",
+      "kind": "heading",
+      "text": "What matters when anyone can build",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_59qqelfiv63qivb_"
+    },
+    {
+      "id": "h29h5wsk_3",
+      "kind": "heading",
+      "text": "3 ways product teams are building conviction faster with Figma Make",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_79qqelfiv63qivb_"
+    },
+    {
+      "id": "Y9c7fS291X",
+      "kind": "heading",
+      "text": "The Figma design agent is here",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_99qqelfiv63qivb_"
+    },
+    {
+      "id": "EnpXNwOjzi",
+      "kind": "heading",
+      "text": "4 new ways to go from idea to product with AI tools",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_b9qqelfiv63qivb_"
+    },
+    {
+      "id": "RtAocdoFJc",
+      "kind": "heading",
+      "text": "5 design skills to sharpen in the AI era",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_d9qqelfiv63qivb_"
+    },
+    {
+      "id": "-WoG3Ubrk3",
+      "kind": "heading",
+      "text": "FAQs",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "#_R_belfiv63qivb_"
+    },
+    {
+      "id": "BivAv7I4eK",
+      "kind": "heading",
+      "text": "What is Figma?",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "div.fig-1e7uo72 > div.fig-19krnp1 > div.fig-19wlktc > div.fig-79fp60 > h3.fig-1sj92if"
+    },
+    {
+      "id": "N-6klnJE7X",
+      "kind": "heading",
+      "text": "What is product development?",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "div.fig-1e7uo72 > div.fig-19krnp1 > div.fig-19wlktc > div.fig-79fp60 > h3.fig-1sj92if"
+    },
+    {
+      "id": "0b3Dl67IoB",
+      "kind": "heading",
+      "text": "How does Figma help with the product development process?",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "div.fig-1e7uo72 > div.fig-19krnp1 > div.fig-19wlktc > div.fig-79fp60 > h3.fig-1sj92if"
+    },
+    {
+      "id": "Q0moaFC-K2",
+      "kind": "heading",
+      "text": "How can product managers use Figma Make to better define product requirements?",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "div.fig-1e7uo72 > div.fig-19krnp1 > div.fig-19wlktc > div.fig-79fp60 > h3.fig-1sj92if"
+    },
+    {
+      "id": "xv-h_lR2vf",
+      "kind": "heading",
+      "text": "Can Figma Make complement existing documentation like PRDs?",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "div.fig-1e7uo72 > div.fig-19krnp1 > div.fig-19wlktc > div.fig-79fp60 > h3.fig-1sj92if"
+    },
+    {
+      "id": "kJSCK0cwHo",
+      "kind": "heading",
+      "text": "Explore what you can do with Figma",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "div.css-14r34si > main > section.fig-gvriq0 > div.fig-2qv4k > h2.fig-tga26j"
+    },
+    {
+      "id": "NTvFqNp1h1",
+      "kind": "testimonial",
+      "text": "Figma Make has shortened the path from idea to finished feature in a way I can't imagine replacing.",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "main > section.fig-wopfi1 > div.fig-2qv4k > figure.fig-1uk1gs8 > blockquote.fig-bv34ky"
+    },
+    {
+      "id": "GE0SX_eNCq",
+      "kind": "cta",
+      "text": "Try Figma's agent",
+      "sourceUrl": "https://www.figma.com/product-development/",
+      "selector": "div.fig-2qv4k > ul.fig-5cmiwk > li > article > a.fig-zhauru"
+    },
+    {
+      "id": "BwQb--Y8jq",
+      "kind": "hero",
+      "text": "Let Figma bring your next big idea to life",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "section.fig-vorkog > div.fig-1lkr1eu > div.fig-xuirbp > div.fig-zc223p > h1.fig-3d7oyo"
+    },
+    {
+      "id": "fsv4fp_k8V",
+      "kind": "hero",
+      "text": "Whether you start with AI, a wireframe, or a brainstorm, Figma was made for all your design use cases.",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "div.fig-1lkr1eu > div.fig-xuirbp > div.fig-zc223p > div.fig-10ynccc > p"
+    },
+    {
+      "id": "VW8BhYaqP1",
+      "kind": "heading",
+      "text": "Build faster with Figma AI",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_2elfiv63qivb_"
+    },
+    {
+      "id": "c09J5xDPes",
+      "kind": "heading",
+      "text": "Build websites with AI",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#ebed7a1d72a1"
+    },
+    {
+      "id": "Ly_T42sHGt",
+      "kind": "heading",
+      "text": "Build apps with AI",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#d8f46e495bac1c0b8b6a96d7fa0cc5f8"
+    },
+    {
+      "id": "H5wXZO0tOc",
+      "kind": "heading",
+      "text": "Design with AI",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#3d07347cac595845baef3529bfab12db"
+    },
+    {
+      "id": "-hCnVH4HX9",
+      "kind": "heading",
+      "text": "Create with AI",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#35c1e8953fbe"
+    },
+    {
+      "id": "StaQ8lEDyh",
+      "kind": "heading",
+      "text": "Explore Figma Buzz",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_3elfiv63qivb_"
+    },
+    {
+      "id": "Bc1KAjf8fK",
+      "kind": "heading",
+      "text": "Create gorgeous banners in minutes",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_1ktbelfiv63qivb_"
+    },
+    {
+      "id": "DWiDoNVps0",
+      "kind": "heading",
+      "text": "Create a LinkedIn banner for your profile",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_2ktbelfiv63qivb_"
+    },
+    {
+      "id": "xRTW--JyvG",
+      "kind": "heading",
+      "text": "Make engaging ads in minutes",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_3ktbelfiv63qivb_"
+    },
+    {
+      "id": "iY7t4-Xxi7",
+      "kind": "heading",
+      "text": "Create engaging Facebook ads in minutes",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_4ktbelfiv63qivb_"
+    },
+    {
+      "id": "Z995nKhc8G",
+      "kind": "heading",
+      "text": "Build faster with Figma's agent",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_4elfiv63qivb_"
+    },
+    {
+      "id": "upVWMY_Tvc",
+      "kind": "heading",
+      "text": "Image Editing & Transformation",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#7d438a4c48e3"
+    },
+    {
+      "id": "UUhwwvhwG-",
+      "kind": "heading",
+      "text": "Asset Generation",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#d033871bb2a6"
+    },
+    {
+      "id": "uN8EF11k85",
+      "kind": "heading",
+      "text": "Design Intelligence & Review",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#ea94bbf863c5"
+    },
+    {
+      "id": "nmFMXQUgmB",
+      "kind": "heading",
+      "text": "Workflow & Productivity",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#ce490171d27e"
+    },
+    {
+      "id": "LB5TbhYX0G",
+      "kind": "heading",
+      "text": "The end-to-end design tool",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_5elfiv63qivb_"
+    },
+    {
+      "id": "gfejmxj20S",
+      "kind": "heading",
+      "text": "Brainstorming",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_1ktdelfiv63qivb_"
+    },
+    {
+      "id": "I3TAExmqbV",
+      "kind": "heading",
+      "text": "UX design",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_2ktdelfiv63qivb_"
+    },
+    {
+      "id": "71kB5qYWUq",
+      "kind": "heading",
+      "text": "Design handoff",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_3ktdelfiv63qivb_"
+    },
+    {
+      "id": "BbRWvQcUgB",
+      "kind": "heading",
+      "text": "Even more ways to use Figma",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_6elfiv63qivb_"
+    },
+    {
+      "id": "ygtdAXs2SN",
+      "kind": "heading",
+      "text": "Whiteboarding",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#f403a30a485d"
+    },
+    {
+      "id": "V8gnm3hnQ6",
+      "kind": "heading",
+      "text": "Design",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#a424989677cc76d5acdd125b74edd30c"
+    },
+    {
+      "id": "4KwaWNDGje",
+      "kind": "heading",
+      "text": "Development",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#ffffa0bcbeefb3374a2aa53f1cc34914"
+    },
+    {
+      "id": "4nlCamtZiw",
+      "kind": "heading",
+      "text": "Build faster with Figma Weave",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#_R_7elfiv63qivb_"
+    },
+    {
+      "id": "W9i5EP3Vxa",
+      "kind": "heading",
+      "text": "3D & Product Visualization",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#3e272d6dfb1f"
+    },
+    {
+      "id": "IRmbTWw6Co",
+      "kind": "heading",
+      "text": "Photo & Image Editing",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#69b544e28939"
+    },
+    {
+      "id": "HuQCJGzEop",
+      "kind": "heading",
+      "text": "Video & Motion Production",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#a8cea4363d9c"
+    },
+    {
+      "id": "5wcbpNFOmM",
+      "kind": "heading",
+      "text": "Creative Content & Marketing",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "#5dc042974ca7"
+    },
+    {
+      "id": "xc1j-WXugK",
+      "kind": "heading",
+      "text": "Try Figma for free",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "div.css-14r34si > main > div.fig-lbxxk7 > div.fig-1dm8gon > h2.fig-1sj92if"
+    },
+    {
+      "id": "VJLLFHQl4W",
+      "kind": "cta",
+      "text": "Learn more",
+      "sourceUrl": "https://www.figma.com/solutions/",
+      "selector": "div.fig-2qv4k > ul.fig-5cmiwk > li > article > a.fig-zhauru"
+    }
+  ],
+  "siteBrief": {
+    "productName": "figma",
+    "summary": "The full-stack creative canvas",
+    "audience": "general",
+    "differentiator": "The full-stack creative canvas",
+    "strongestClaimFactId": "5NFuu7jDuA",
+    "factIds": [
+      "5NFuu7jDuA",
+      "m9OmRAke7Z",
+      "F01Xg-MM9N",
+      "3HatigCMpS",
+      "uv1IhysZ2e",
+      "ezpAZLxdc1",
+      "H-tGdqvftc",
+      "2J176Tyze-",
+      "pjrNd62lFI",
+      "PgDiwSlOwp",
+      "BavZDwiR-I",
+      "kb5Tu2xafi",
+      "GK1JIuscpC",
+      "wEmGuJH7VT",
+      "ucegoc6twd",
+      "-YhwrjNnyK",
+      "ay6e1BZSLv",
+      "OfrxZv1pOc",
+      "L0JWOqxzan",
+      "98w9GNkzIN",
+      "QJwHnlYPaG",
+      "qfXs-TATKB",
+      "NfH3ibQEcs",
+      "g5q7VP07DT",
+      "QPJjFWeP3O",
+      "iv3T0Fgztq",
+      "wM5rVCRllx",
+      "m9FojKXjOg",
+      "lTr8SEJ2OU",
+      "tZ9rc61sHi",
+      "DkCPW2sles",
+      "tMc_1XnZ7R",
+      "4RW3i5Nst6",
+      "nuHsQU-WQk",
+      "WUnpeC0MXl",
+      "B8_cosuqmg",
+      "0z3-oyv00B",
+      "aCLpz00TaX",
+      "pGfWrdEjZz",
+      "6rKcS33yaY",
+      "Alksj9Pte9",
+      "0TKvA6Am_7",
+      "sgQ0mBEbwa",
+      "6-GxdF9sIc",
+      "kkIFLX8Ju0",
+      "N8Lz98n0PG",
+      "u7tacZcxVD",
+      "Tx37j9XuNg",
+      "5ABwkjUBPe",
+      "3qIzkW8kHI",
+      "kHgrCujqZa",
+      "MtfGo0uDLB",
+      "dJoImR4OLx",
+      "ia88r1Gjmm",
+      "L2o5koNJH9",
+      "cI8_x3KT4s",
+      "bZKXOhJcs-",
+      "lyD7CkVDmN",
+      "kqNmebweVi",
+      "h29h5wsk_3",
+      "Y9c7fS291X",
+      "EnpXNwOjzi",
+      "RtAocdoFJc",
+      "-WoG3Ubrk3",
+      "BivAv7I4eK",
+      "N-6klnJE7X",
+      "0b3Dl67IoB",
+      "Q0moaFC-K2",
+      "xv-h_lR2vf",
+      "kJSCK0cwHo",
+      "NTvFqNp1h1",
+      "GE0SX_eNCq",
+      "BwQb--Y8jq",
+      "fsv4fp_k8V",
+      "VW8BhYaqP1",
+      "c09J5xDPes",
+      "Ly_T42sHGt",
+      "H5wXZO0tOc",
+      "-hCnVH4HX9",
+      "StaQ8lEDyh",
+      "Bc1KAjf8fK",
+      "DWiDoNVps0",
+      "xRTW--JyvG",
+      "iY7t4-Xxi7",
+      "Z995nKhc8G",
+      "upVWMY_Tvc",
+      "UUhwwvhwG-",
+      "uN8EF11k85",
+      "nmFMXQUgmB",
+      "LB5TbhYX0G",
+      "gfejmxj20S",
+      "I3TAExmqbV",
+      "71kB5qYWUq",
+      "BbRWvQcUgB",
+      "ygtdAXs2SN",
+      "V8gnm3hnQ6",
+      "4KwaWNDGje",
+      "4nlCamtZiw",
+      "W9i5EP3Vxa",
+      "IRmbTWw6Co",
+      "HuQCJGzEop",
+      "5wcbpNFOmM",
+      "xc1j-WXugK",
+      "VJLLFHQl4W"
+    ],
+    "source": "fallback"
+  }
+}

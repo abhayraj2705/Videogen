@@ -1,0 +1,38 @@
+name: sitereel-dev
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  minio:
+    image: quay.io/minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # S3 API — stands in for R2 locally (§7.1)
+      - "9001:9001" # Console
+    environment:
+      MINIO_ROOT_USER: sitereel
+      MINIO_ROOT_PASSWORD: sitereel-dev-secret
+    volumes:
+      - minio-data:/data
+
+  minio-init:
+    image: quay.io/minio/mc:latest
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      until mc alias set local http://minio:9000 sitereel sitereel-dev-secret; do sleep 1; done;
+      mc mb -p local/sitereel-assets;
+      mc mb -p local/sitereel-renders;
+      mc anonymous set download local/sitereel-renders;
+      exit 0;
+      "
+
+volumes:
+  redis-data:
+  minio-data:

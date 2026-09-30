@@ -1,0 +1,479 @@
+{
+  "url": "https://linear.app",
+  "category": "saas",
+  "domain": "linear.app",
+  "pages": [
+    {
+      "url": "https://linear.app",
+      "screenshotKey": "jobs/c3f4258d-165d-4e8c-a284-268891b3fb65/crawl/home.png"
+    },
+    {
+      "url": "https://linear.app/pricing",
+      "screenshotKey": "jobs/c3f4258d-165d-4e8c-a284-268891b3fb65/crawl/page-1.png"
+    },
+    {
+      "url": "https://linear.app/docs",
+      "screenshotKey": "jobs/c3f4258d-165d-4e8c-a284-268891b3fb65/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(8, 9, 10)",
+    "fg": "rgb(247, 248, 248)",
+    "accent": "rgb(229, 229, 230)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://linear.app/cdn-cgi/imagedelivery/fO02fVwohEs9s9UHFwon6A/4552f8d7-6f37-4319-68b4-12654bef4e00/f=auto,fit=scale-down,metadata=none,width=64"
+  },
+  "facts": [
+    {
+      "id": "Cwsf_lK3tA",
+      "kind": "hero",
+      "text": "The product development system for teams and agentsThe product developmentsystem for teams and agentsThe product development system for teams and agents",
+      "sourceUrl": "https://linear.app",
+      "selector": "main._5l06ia_content > div._7bwwmq_root > div > div.QI8oKG_container > h1.sc-KOGVz"
+    },
+    {
+      "id": "PMkEtHckav",
+      "kind": "hero",
+      "text": "Purpose-built for planning and building products. Designed for the AI era.",
+      "sourceUrl": "https://linear.app",
+      "selector": "div._7bwwmq_root > div > div.QI8oKG_container > div.QI8oKG_descriptionContainer > p.sc-KOGVz"
+    },
+    {
+      "id": "aCdODPquvi",
+      "kind": "heading",
+      "text": "Faster app launch",
+      "sourceUrl": "https://linear.app",
+      "selector": "div.KFZpfa_panel > div.KFZpfa_viewBody > div.KFZpfa_body > div.KFZpfa_title > h3.sc-KOGVz"
+    },
+    {
+      "id": "jBjr6pFb3j",
+      "kind": "heading",
+      "text": "A new species of product tool. Purpose-built for modern teams with AI workflows at its core, Linear sets a new standard for planning and building products.",
+      "sourceUrl": "https://linear.app",
+      "selector": "div > div._5l06ia_container > main._5l06ia_content > div._7bwwmq_root > h2.sc-KOGVz"
+    },
+    {
+      "id": "wNWAdknyKR",
+      "kind": "heading",
+      "text": "Intakeand integrations",
+      "sourceUrl": "https://linear.app",
+      "selector": "div._7bwwmq_root > section.b-30Va_root > div.b-30Va_header > div.Fzcv4W_inset > h2.sc-KOGVz"
+    },
+    {
+      "id": "wUoGjEzxAe",
+      "kind": "heading",
+      "text": "Planningand monitoring",
+      "sourceUrl": "https://linear.app",
+      "selector": "div._7bwwmq_root > section.b-30Va_root > div.b-30Va_header > div.Fzcv4W_inset > h2.sc-KOGVz"
+    },
+    {
+      "id": "_pJCxnfvHl",
+      "kind": "heading",
+      "text": "AI andautomations",
+      "sourceUrl": "https://linear.app",
+      "selector": "div._7bwwmq_root > section.b-30Va_root > div.b-30Va_header > div.Fzcv4W_inset > h2.sc-KOGVz"
+    },
+    {
+      "id": "_3_EQnzu2W",
+      "kind": "heading",
+      "text": "Build, review,and ship",
+      "sourceUrl": "https://linear.app",
+      "selector": "div._7bwwmq_root > section.b-30Va_root > div.b-30Va_header > div.Fzcv4W_inset > h2.sc-KOGVz"
+    },
+    {
+      "id": "wtdBkyxM-k",
+      "kind": "heading",
+      "text": "Changelog",
+      "sourceUrl": "https://linear.app",
+      "selector": "main._5l06ia_content > div._7bwwmq_root > div.hide-mobile > div.Fzcv4W_inset > h2.sc-KOGVz"
+    },
+    {
+      "id": "bVzp_S2LVm",
+      "kind": "heading",
+      "text": "Built for the future. Available today.",
+      "sourceUrl": "https://linear.app",
+      "selector": "div._5l06ia_container > main._5l06ia_content > div._7bwwmq_root > section.dYXc1G_homepagePrefooter > h2.sc-KOGVz"
+    },
+    {
+      "id": "q_F6jn1mT0",
+      "kind": "heading",
+      "text": "Product",
+      "sourceUrl": "https://linear.app",
+      "selector": "footer.Jmh1Wq_footer > div.Jmh1Wq_wrapper > div.Jmh1Wq_inner > div.Jmh1Wq_section > h3.Jmh1Wq_sectionTitle"
+    },
+    {
+      "id": "hzoAO7gOQ1",
+      "kind": "heading",
+      "text": "Features",
+      "sourceUrl": "https://linear.app",
+      "selector": "footer.Jmh1Wq_footer > div.Jmh1Wq_wrapper > div.Jmh1Wq_inner > div.Jmh1Wq_section > h3.Jmh1Wq_sectionTitle"
+    },
+    {
+      "id": "A1hT2Xb2SO",
+      "kind": "heading",
+      "text": "Company",
+      "sourceUrl": "https://linear.app",
+      "selector": "footer.Jmh1Wq_footer > div.Jmh1Wq_wrapper > div.Jmh1Wq_inner > div.Jmh1Wq_section > h3.Jmh1Wq_sectionTitle"
+    },
+    {
+      "id": "NIi7e7H523",
+      "kind": "heading",
+      "text": "Resources",
+      "sourceUrl": "https://linear.app",
+      "selector": "footer.Jmh1Wq_footer > div.Jmh1Wq_wrapper > div.Jmh1Wq_inner > div.Jmh1Wq_section > h3.Jmh1Wq_sectionTitle"
+    },
+    {
+      "id": "iQ-4sOXYol",
+      "kind": "heading",
+      "text": "Connect",
+      "sourceUrl": "https://linear.app",
+      "selector": "footer.Jmh1Wq_footer > div.Jmh1Wq_wrapper > div.Jmh1Wq_inner > div.Jmh1Wq_section > h3.Jmh1Wq_sectionTitle"
+    },
+    {
+      "id": "V4isYnqS1h",
+      "kind": "heading",
+      "text": "Legal",
+      "sourceUrl": "https://linear.app",
+      "selector": "footer.Jmh1Wq_footer > div.Jmh1Wq_wrapper > div.Jmh1Wq_inner > div.Jmh1Wq_section > h3.Jmh1Wq_sectionTitle"
+    },
+    {
+      "id": "FAR38T2mcS",
+      "kind": "feature",
+      "text": "Linear is shaped by the practices and principles of world-class product teams.",
+      "sourceUrl": "https://linear.app",
+      "selector": "div._7bwwmq_root > div.GJ9TEa_benefits > div.GJ9TEa_benefit > div.ImRUSq_root > p.sc-KOGVz"
+    },
+    {
+      "id": "226UMKbek4",
+      "kind": "feature",
+      "text": "Designed for workflows shared by humans and agents, from PRD to PR.",
+      "sourceUrl": "https://linear.app",
+      "selector": "div.GJ9TEa_benefits > div.GJ9TEa_benefit > div.ImRUSq_root > span > p.sc-KOGVz"
+    },
+    {
+      "id": "TON3iNz5Po",
+      "kind": "feature",
+      "text": "Reduces noise and restores momentum to help teams ship with high velocity and focus.",
+      "sourceUrl": "https://linear.app",
+      "selector": "div._7bwwmq_root > div.GJ9TEa_benefits > div.GJ9TEa_benefit > div.ImRUSq_root > p.sc-KOGVz"
+    },
+    {
+      "id": "hmuqKQ8p2U",
+      "kind": "stat",
+      "text": "40,000",
+      "sourceUrl": "https://linear.app",
+      "selector": "div._7bwwmq_root > section.Dc5tqa_container > div.Dc5tqa_footer > p.sc-KOGVz > strong.sc-KOGVz"
+    },
+    {
+      "id": "nToQv1TYSE",
+      "kind": "testimonial",
+      "text": "You’ll probably build a better product, just because of the craft that using Linear infuses on your brain.",
+      "sourceUrl": "https://linear.app",
+      "selector": "div.NAY0wa_content > div.NAY0wa_inner > a.I_mUeq_root > div.Dc5tqa_mobileCard > blockquote.Dc5tqa_quote"
+    },
+    {
+      "id": "qPOqJgyqJM",
+      "kind": "testimonial",
+      "text": "Our speed is intense and Linear helps us be action biased.",
+      "sourceUrl": "https://linear.app",
+      "selector": "div.NAY0wa_content > div.NAY0wa_inner > a.I_mUeq_root > div.Dc5tqa_mobileCard > blockquote.Dc5tqa_quote"
+    },
+    {
+      "id": "ZTsLJcdayd",
+      "kind": "testimonial",
+      "text": "Linear is excellent, just excellent. It has the right opinions for fast moving teams.",
+      "sourceUrl": "https://linear.app",
+      "selector": "div.NAY0wa_content > div.NAY0wa_inner > a.I_mUeq_root > div.Dc5tqa_mobileCard > blockquote.Dc5tqa_quote"
+    },
+    {
+      "id": "7Umukf5GPh",
+      "kind": "cta",
+      "text": "Contact",
+      "sourceUrl": "https://linear.app",
+      "selector": "ul.TZTsQG_list > li.TZTsQG_rightSideWrapper > ul.TZTsQG_navItems > li.hide-tablet > a.TZTsQG_anchor"
+    },
+    {
+      "id": "0cPZ4K58Ak",
+      "kind": "cta",
+      "text": "Sign up",
+      "sourceUrl": "https://linear.app",
+      "selector": "ul.TZTsQG_list > li.TZTsQG_rightSideWrapper > ul.TZTsQG_buttons > li.TZTsQG_buttonItem > a.S36ykG_root"
+    },
+    {
+      "id": "T3ImrDMGuq",
+      "kind": "cta",
+      "text": "Learn more→",
+      "sourceUrl": "https://linear.app",
+      "selector": "section.b-30Va_root > div.b-30Va_header > div.Fzcv4W_inset > div.b-30Va_actionWrapper > a.I_mUeq_root"
+    },
+    {
+      "id": "2lFntlBmyp",
+      "kind": "cta",
+      "text": "Customer Requests +",
+      "sourceUrl": "https://linear.app",
+      "selector": "div.b-30Va_footer > div.Fzcv4W_inset > div.M31rWW_ingredients > div.M31rWW_ingredient > button.M31rWW_ingredientButton"
+    },
+    {
+      "id": "6CamhZay7H",
+      "kind": "cta",
+      "text": "Get started",
+      "sourceUrl": "https://linear.app",
+      "selector": "main._5l06ia_content > div._7bwwmq_root > section.dYXc1G_homepagePrefooter > div.ImRUSq_root > a.S36ykG_root"
+    },
+    {
+      "id": "eYuTKalsvB",
+      "kind": "cta",
+      "text": "Contact sales",
+      "sourceUrl": "https://linear.app",
+      "selector": "main._5l06ia_content > div._7bwwmq_root > section.dYXc1G_homepagePrefooter > div.ImRUSq_root > a.S36ykG_root"
+    },
+    {
+      "id": "NylujVCHfg",
+      "kind": "cta",
+      "text": "Download",
+      "sourceUrl": "https://linear.app",
+      "selector": "main._5l06ia_content > div._7bwwmq_root > section.dYXc1G_homepagePrefooter > div.ImRUSq_root > a.S36ykG_root"
+    },
+    {
+      "id": "nAcTaw6PG5",
+      "kind": "cta",
+      "text": "Customer Requests",
+      "sourceUrl": "https://linear.app",
+      "selector": "div.Jmh1Wq_inner > div.Jmh1Wq_section > ul.Jmh1Wq_sectionList > li.Jmh1Wq_sectionItem > a.Jmh1Wq_sectionLink"
+    },
+    {
+      "id": "V4jaMzAmHN",
+      "kind": "cta",
+      "text": "Contact us",
+      "sourceUrl": "https://linear.app",
+      "selector": "div.Jmh1Wq_inner > div.Jmh1Wq_section > ul.Jmh1Wq_sectionList > li.Jmh1Wq_sectionItem > a.Jmh1Wq_sectionLink"
+    },
+    {
+      "id": "OAdF7kIv-6",
+      "kind": "hero",
+      "text": "Pricing",
+      "sourceUrl": "https://linear.app/pricing",
+      "selector": "div > div._5l06ia_container > main._5l06ia_content > div._7bwwmq_root > h1.sc-KOGVz"
+    },
+    {
+      "id": "ZFp3UZ5vhI",
+      "kind": "hero",
+      "text": "Trusted by more than 40,000 companies",
+      "sourceUrl": "https://linear.app/pricing",
+      "selector": "div > div._5l06ia_container > main._5l06ia_content > div._7bwwmq_root > p.sc-KOGVz"
+    },
+    {
+      "id": "RZWY2cfqry",
+      "kind": "heading",
+      "text": "Free",
+      "sourceUrl": "https://linear.app/pricing",
+      "selector": "div._7bwwmq_root > div.sItxrG_plans > section.sItxrG_card > hgroup > h3.sc-KOGVz"
+    },
+    {
+      "id": "R1La5oNuGm",
+      "kind": "heading",
+      "text": "Basic",
+      "sourceUrl": "https://linear.app/pricing",
+      "selector": "div._7bwwmq_root > div.sItxrG_plans > section.sItxrG_card > hgroup > h3.sc-KOGVz"
+    },
+    {
+      "id": "JGlOqUlAVK",
+      "kind": "heading",
+      "text": "Business",
+      "sourceUrl": "https://linear.app/pricing",
+      "selector": "div._7bwwmq_root > div.sItxrG_plans > section.sItxrG_card > hgroup > h3.sc-KOGVz"
+    },
+    {
+      "id": "TOpNSBpRpl",
+      "kind": "heading",
+      "text": "Enterprise",
+      "sourceUrl": "https://linear.app/pricing",
+      "selector": "div._7bwwmq_root > div.sItxrG_plans > section.sItxrG_card > hgroup > h3.sc-KOGVz"
+    },
+    {
+      "id": "FqdDuFIp8b",
+      "kind": "hero",
+      "text": "Linear Docs",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div._em0sW_root > div._em0sW_content > div.ImRUSq_root > header.ImRUSq_root > h1.sc-KOGVz"
+    },
+    {
+      "id": "le_g5YZJHO",
+      "kind": "hero",
+      "text": "Get an overview of Linear's features, integrations, and how to use them.",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div._em0sW_root > div._em0sW_content > div.ImRUSq_root > header.ImRUSq_root > p.sc-KOGVz"
+    },
+    {
+      "id": "QoIlqqjff_",
+      "kind": "heading",
+      "text": "Popular",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div._em0sW_content > div.ImRUSq_root > section > div.ImRUSq_root > h2.sc-KOGVz"
+    },
+    {
+      "id": "Sfy4EVw6vr",
+      "kind": "heading",
+      "text": "Start Guide",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.ImRUSq_root > div.DrJ0sW_grid > a.ArZWDa_anchor > div.ArZWDa_content > h3.sc-KOGVz"
+    },
+    {
+      "id": "UJCDxvH561",
+      "kind": "heading",
+      "text": "Import Issues",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.ImRUSq_root > div.DrJ0sW_grid > a.ArZWDa_anchor > div.ArZWDa_content > h3.sc-KOGVz"
+    },
+    {
+      "id": "ztR88FnuLe",
+      "kind": "heading",
+      "text": "Projects",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.ImRUSq_root > div.DrJ0sW_grid > a.ArZWDa_anchor > div.ArZWDa_content > h3.sc-KOGVz"
+    },
+    {
+      "id": "0eoNA5KOQf",
+      "kind": "heading",
+      "text": "GitHub Automations",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.ImRUSq_root > div.DrJ0sW_grid > a.ArZWDa_anchor > div.ArZWDa_content > h3.sc-KOGVz"
+    },
+    {
+      "id": "9bQPkYfqdp",
+      "kind": "heading",
+      "text": "Linear basics",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div._em0sW_content > div.ImRUSq_root > section > div.ImRUSq_root > h2.sc-KOGVz"
+    },
+    {
+      "id": "8FQCAEH1x4",
+      "kind": "heading",
+      "text": "Workflows",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.ImRUSq_root > div.DrJ0sW_grid > a.ArZWDa_anchor > div.ArZWDa_content > h3.sc-KOGVz"
+    },
+    {
+      "id": "oPKVKhfkZa",
+      "kind": "heading",
+      "text": "Select Issues",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.ImRUSq_root > div.DrJ0sW_grid > a.ArZWDa_anchor > div.ArZWDa_content > h3.sc-KOGVz"
+    },
+    {
+      "id": "rmojwJYetL",
+      "kind": "heading",
+      "text": "Issue Relations",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.ImRUSq_root > div.DrJ0sW_grid > a.ArZWDa_anchor > div.ArZWDa_content > h3.sc-KOGVz"
+    },
+    {
+      "id": "1nCn77Yt2Y",
+      "kind": "heading",
+      "text": "Display Options",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.ImRUSq_root > div.DrJ0sW_grid > a.ArZWDa_anchor > div.ArZWDa_content > h3.sc-KOGVz"
+    },
+    {
+      "id": "QC4nRuMwkO",
+      "kind": "heading",
+      "text": "Triage",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.ImRUSq_root > div.DrJ0sW_grid > a.ArZWDa_anchor > div.ArZWDa_content > h3.sc-KOGVz"
+    },
+    {
+      "id": "XemtUw17xZ",
+      "kind": "heading",
+      "text": "Parent and Sub-Issues",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.ImRUSq_root > div.DrJ0sW_grid > a.ArZWDa_anchor > div.ArZWDa_content > h3.sc-KOGVz"
+    },
+    {
+      "id": "F1cAyNgQ8n",
+      "kind": "heading",
+      "text": "Notifications",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.ImRUSq_root > div.DrJ0sW_grid > a.ArZWDa_anchor > div.ArZWDa_content > h3.sc-KOGVz"
+    },
+    {
+      "id": "ZxFCx2cyIb",
+      "kind": "heading",
+      "text": "Teams",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.ImRUSq_root > div.DrJ0sW_grid > a.ArZWDa_anchor > div.ArZWDa_content > h3.sc-KOGVz"
+    },
+    {
+      "id": "Gqwb2QduBN",
+      "kind": "cta",
+      "text": "Contact support",
+      "sourceUrl": "https://linear.app/docs",
+      "selector": "div.z14_UG_wrapper > nav.eKExYq_container > div.eKExYq_contentContainer > footer.eKExYq_footer > a.eKExYq_footerAnchor"
+    }
+  ],
+  "siteBrief": {
+    "productName": "linear",
+    "summary": "The product development system for teams and agentsThe product developmentsystem for teams and agentsThe product development system for teams and agents",
+    "audience": "general",
+    "differentiator": "Linear is shaped by the practices and principles of world-class product teams.",
+    "strongestClaimFactId": "hmuqKQ8p2U",
+    "factIds": [
+      "Cwsf_lK3tA",
+      "PMkEtHckav",
+      "aCdODPquvi",
+      "jBjr6pFb3j",
+      "wNWAdknyKR",
+      "wUoGjEzxAe",
+      "_pJCxnfvHl",
+      "_3_EQnzu2W",
+      "wtdBkyxM-k",
+      "bVzp_S2LVm",
+      "q_F6jn1mT0",
+      "hzoAO7gOQ1",
+      "A1hT2Xb2SO",
+      "NIi7e7H523",
+      "iQ-4sOXYol",
+      "V4isYnqS1h",
+      "FAR38T2mcS",
+      "226UMKbek4",
+      "TON3iNz5Po",
+      "hmuqKQ8p2U",
+      "nToQv1TYSE",
+      "qPOqJgyqJM",
+      "ZTsLJcdayd",
+      "7Umukf5GPh",
+      "0cPZ4K58Ak",
+      "T3ImrDMGuq",
+      "2lFntlBmyp",
+      "6CamhZay7H",
+      "eYuTKalsvB",
+      "NylujVCHfg",
+      "nAcTaw6PG5",
+      "V4jaMzAmHN",
+      "OAdF7kIv-6",
+      "ZFp3UZ5vhI",
+      "RZWY2cfqry",
+      "R1La5oNuGm",
+      "JGlOqUlAVK",
+      "TOpNSBpRpl",
+      "FqdDuFIp8b",
+      "le_g5YZJHO",
+      "QoIlqqjff_",
+      "Sfy4EVw6vr",
+      "UJCDxvH561",
+      "ztR88FnuLe",
+      "0eoNA5KOQf",
+      "9bQPkYfqdp",
+      "8FQCAEH1x4",
+      "oPKVKhfkZa",
+      "rmojwJYetL",
+      "1nCn77Yt2Y",
+      "QC4nRuMwkO",
+      "XemtUw17xZ",
+      "F1cAyNgQ8n",
+      "ZxFCx2cyIb",
+      "Gqwb2QduBN"
+    ],
+    "source": "fallback"
+  }
+}

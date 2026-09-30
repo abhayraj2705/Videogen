@@ -1,0 +1,211 @@
+{
+  "url": "https://brittanychiang.com",
+  "category": "portfolio",
+  "domain": "brittanychiang.com",
+  "pages": [
+    {
+      "url": "https://brittanychiang.com",
+      "screenshotKey": "jobs/8df6dd25-fc6a-44c2-877a-0c2156f1f21c/crawl/home.png"
+    },
+    {
+      "url": "https://brittanychiang.com/archive",
+      "screenshotKey": "jobs/8df6dd25-fc6a-44c2-877a-0c2156f1f21c/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(15, 23, 42)",
+    "fg": "rgb(148, 163, 184)",
+    "accent": "rgb(0, 0, 0)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://brittanychiang.com/favicon/android-chrome-512x512.png"
+  },
+  "facts": [
+    {
+      "id": "NxRvMWXaFC",
+      "kind": "hero",
+      "text": "Brittany Chiang",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "div.mx-auto > div.lg:flex > header.lg:sticky > div > h1.text-4xl"
+    },
+    {
+      "id": "yIx6XQsT98",
+      "kind": "hero",
+      "text": "I build accessible, pixel-perfect experiences for the web.",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "div.mx-auto > div.lg:flex > header.lg:sticky > div > p.mt-4"
+    },
+    {
+      "id": "MnDulKTmZc",
+      "kind": "heading",
+      "text": "Frontend Engineer",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "div.mx-auto > div.lg:flex > header.lg:sticky > div > h2.mt-3"
+    },
+    {
+      "id": "51emldftUi",
+      "kind": "heading",
+      "text": "About",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "main.pt-24 > div > section.mb-16 > div.sticky > h2.text-sm"
+    },
+    {
+      "id": "9ZupDkLkeG",
+      "kind": "heading",
+      "text": "Experience",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "main.pt-24 > div > section.mb-16 > div.sticky > h2.text-sm"
+    },
+    {
+      "id": "0ySPLqPBKO",
+      "kind": "heading",
+      "text": "Senior Frontend Engineer, Accessibility · Klaviyo",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ol.group/list > li.mb-12 > div.group > div.z-10 > h3.font-medium"
+    },
+    {
+      "id": "1BEiSXvekT",
+      "kind": "heading",
+      "text": "Lead Engineer · UpstatementSenior EngineerEngineer",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ol.group/list > li.mb-12 > div.group > div.z-10 > h3.font-medium"
+    },
+    {
+      "id": "kjqdP99We2",
+      "kind": "heading",
+      "text": "UI Engineer Co-op · Apple",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ol.group/list > li.mb-12 > div.group > div.z-10 > h3.font-medium"
+    },
+    {
+      "id": "GBn83mHFSV",
+      "kind": "heading",
+      "text": "Developer · Scout Studio",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ol.group/list > li.mb-12 > div.group > div.z-10 > h3.font-medium"
+    },
+    {
+      "id": "qtiRVAf7Gt",
+      "kind": "heading",
+      "text": "Software Engineer Co-op · Starry",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ol.group/list > li.mb-12 > div.group > div.z-10 > h3.font-medium"
+    },
+    {
+      "id": "5ElyIIQJ-3",
+      "kind": "heading",
+      "text": "Creative Technologist Co-op · MullenLowe U.S.",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ol.group/list > li.mb-12 > div.group > div.z-10 > h3.font-medium"
+    },
+    {
+      "id": "oN5hJT4mZc",
+      "kind": "heading",
+      "text": "Projects",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "main.pt-24 > div > section.mb-16 > div.sticky > h2.text-sm"
+    },
+    {
+      "id": "waDLuDnUYY",
+      "kind": "heading",
+      "text": "Build a Spotify Connected App",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ul.group/list > li.mb-12 > div.group > div.z-10 > h3"
+    },
+    {
+      "id": "cNetOeX3JH",
+      "kind": "heading",
+      "text": "Spotify Profile",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ul.group/list > li.mb-12 > div.group > div.z-10 > h3"
+    },
+    {
+      "id": "tVVH_IFmrm",
+      "kind": "heading",
+      "text": "Halcyon Theme",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ul.group/list > li.mb-12 > div.group > div.z-10 > h3"
+    },
+    {
+      "id": "Fpql1j-KWq",
+      "kind": "heading",
+      "text": "brittanychiang.com (v4)",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ul.group/list > li.mb-12 > div.group > div.z-10 > h3"
+    },
+    {
+      "id": "A95wlFReO5",
+      "kind": "heading",
+      "text": "Writing",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "main.pt-24 > div > section.mb-16 > div.sticky > h2.text-sm"
+    },
+    {
+      "id": "s714fOr1I4",
+      "kind": "heading",
+      "text": "Welcome to the AI Parade",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ul.group/list > li.mb-12 > div.group > div.z-10 > h3.-mt-1"
+    },
+    {
+      "id": "iJ9fktDLvn",
+      "kind": "heading",
+      "text": "5 Common Accessibility Pitfalls and How to Avoid Them",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ul.group/list > li.mb-12 > div.group > div.z-10 > h3.-mt-1"
+    },
+    {
+      "id": "SJwCLo0es4",
+      "kind": "heading",
+      "text": "Integrating Algolia Search with WordPress Multisite",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ul.group/list > li.mb-12 > div.group > div.z-10 > h3.-mt-1"
+    },
+    {
+      "id": "P3Th2sRos0",
+      "kind": "heading",
+      "text": "Building a Headless Mobile App CMS From Scratch",
+      "sourceUrl": "https://brittanychiang.com",
+      "selector": "ul.group/list > li.mb-12 > div.group > div.z-10 > h3.-mt-1"
+    },
+    {
+      "id": "ex6HU_cGj5",
+      "kind": "hero",
+      "text": "All Projects",
+      "sourceUrl": "https://brittanychiang.com/archive",
+      "selector": "div > div.__variable_20b187 > div.mx-auto > div.lg:py-24 > h1.text-4xl"
+    }
+  ],
+  "siteBrief": {
+    "productName": "brittanychiang",
+    "summary": "Brittany Chiang",
+    "audience": "general",
+    "differentiator": "Brittany Chiang",
+    "strongestClaimFactId": "NxRvMWXaFC",
+    "factIds": [
+      "NxRvMWXaFC",
+      "yIx6XQsT98",
+      "MnDulKTmZc",
+      "51emldftUi",
+      "9ZupDkLkeG",
+      "0ySPLqPBKO",
+      "1BEiSXvekT",
+      "kjqdP99We2",
+      "GBn83mHFSV",
+      "qtiRVAf7Gt",
+      "5ElyIIQJ-3",
+      "oN5hJT4mZc",
+      "waDLuDnUYY",
+      "cNetOeX3JH",
+      "tVVH_IFmrm",
+      "Fpql1j-KWq",
+      "A95wlFReO5",
+      "s714fOr1I4",
+      "iJ9fktDLvn",
+      "SJwCLo0es4",
+      "P3Th2sRos0",
+      "ex6HU_cGj5"
+    ],
+    "source": "fallback"
+  }
+}

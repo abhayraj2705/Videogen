@@ -1,0 +1,1351 @@
+{
+  "url": "https://www.gymshark.com",
+  "category": "ecommerce",
+  "domain": "www.gymshark.com",
+  "pages": [
+    {
+      "url": "https://www.gymshark.com",
+      "screenshotKey": "jobs/b064069d-92cc-46d8-9e47-0b4e8eee38d4/crawl/home.png"
+    },
+    {
+      "url": "https://www.gymshark.com/collections/all-products/womens",
+      "screenshotKey": "jobs/b064069d-92cc-46d8-9e47-0b4e8eee38d4/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.gymshark.com/collections/all-products/mens",
+      "screenshotKey": "jobs/b064069d-92cc-46d8-9e47-0b4e8eee38d4/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "rgb(255, 255, 255)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://www.gymshark.com/_next/image?url=https%3A%2F%2Fcdn.gymshark.com%2Fimages%2Fbranding%2Fgs-logo-black-text-only-form.png&w=256&q=100"
+  },
+  "facts": [
+    {
+      "id": "d6v401h5Xb",
+      "kind": "hero",
+      "text": "Workout Clothes & Gym Clothes",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "main > div.page_page-container__cl4ss > section.seo-block_section__nzPbn > section.seo-block_seo__4o43B > h1"
+    },
+    {
+      "id": "KPOK3bZYax",
+      "kind": "hero",
+      "text": "Workout Clothes designed to help you become your personal best. Because when it comes to performing at your max, there should be no obstacles – least of all your workout clothes.",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "main > div.page_page-container__cl4ss > section.seo-block_section__nzPbn > section.seo-block_seo__4o43B > p"
+    },
+    {
+      "id": "jPO_jVJ_qp",
+      "kind": "heading",
+      "text": "ARE YOU IN THE RIGHT PLACE?",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "body.cms-page > div > div.geolocation-region-selector_box__JEk2Q > div.geolocation-region-selector_container__bN8AE > h3.geolocation-region-selector_heading__0z9C5"
+    },
+    {
+      "id": "pSrX-a0f3I",
+      "kind": "heading",
+      "text": "NEW IN",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > article.card_base-card__Z7gP8 > div.card_wrapper__7cilK > div > h3"
+    },
+    {
+      "id": "vB5rJjG01y",
+      "kind": "heading",
+      "text": "EVERYDAY SEAMLESS",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > article.card_base-card__Z7gP8 > div.card_wrapper__7cilK > div > h3"
+    },
+    {
+      "id": "EHYxnrY3wY",
+      "kind": "heading",
+      "text": "FOR THE HYBRIDS",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > article.card_base-card__Z7gP8 > div.card_wrapper__7cilK > div > h3"
+    },
+    {
+      "id": "FLJ2ncN633",
+      "kind": "heading",
+      "text": "THE BESTSELLERS",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > article.card_base-card__Z7gP8 > div.card_wrapper__7cilK > div > h3"
+    },
+    {
+      "id": "cHKtlKQl8O",
+      "kind": "heading",
+      "text": "NEW IN: GYMSHARK X WHITNEY",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div.banner_banner--overrides__9w7g1 > div.banner_hero__jy5Af > div.banner_content__eR5aj > div.banner_content-inner__DkD0k > h2"
+    },
+    {
+      "id": "lqPInhwEgW",
+      "kind": "heading",
+      "text": "NEW IN: GYMSHARK CONDITIONING CLUB",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div.banner_banner--overrides__9w7g1 > div.banner_hero__jy5Af > div.banner_content__eR5aj > div.banner_content-inner__DkD0k > h2"
+    },
+    {
+      "id": "8AsjP6S8fC",
+      "kind": "heading",
+      "text": "POPULAR RIGHT NOW",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div.tabbed-carousel_header__Zusme > div.tabbed-carousel_header__inner__rC_BI > div.tabbed-carousel_header__titles__Bt8Jk > div > h2"
+    },
+    {
+      "id": "xaVdDvBW-d",
+      "kind": "heading",
+      "text": "Tracksuits",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "Go5H1eYOUw",
+      "kind": "heading",
+      "text": "Flared Leggings",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "wPMVHwJ_P9",
+      "kind": "heading",
+      "text": "New in: CottonMove™",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "70wLQgYAEB",
+      "kind": "heading",
+      "text": "Brown Gym Sets",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "szBPkprD9Y",
+      "kind": "heading",
+      "text": "Power",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "P57XmzONCM",
+      "kind": "heading",
+      "text": "Train",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "Ujg2UVDrKf",
+      "kind": "heading",
+      "text": "Running",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "r47dF_YsDx",
+      "kind": "heading",
+      "text": "WAIT THERE’S MORE…",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div.tabbed-carousel_header__Zusme > div.tabbed-carousel_header__inner__rC_BI > div.tabbed-carousel_header__titles__Bt8Jk > div > h2"
+    },
+    {
+      "id": "_SVPQCZm5N",
+      "kind": "heading",
+      "text": "Leggings Guide",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "Q3NOLI_2kZ",
+      "kind": "heading",
+      "text": "Sports Bra Guide",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "-6jnHwcKMA",
+      "kind": "heading",
+      "text": "Men's Shorts Guide",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "FQWw-j2ZVH",
+      "kind": "heading",
+      "text": "The Gymshark Running Hub",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "eMRG48Ke03",
+      "kind": "heading",
+      "text": "Pumper Pants every time",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "wwUP9JEzmu",
+      "kind": "heading",
+      "text": "Treadmill Workouts 101: Run Smarter Indoors With Treadmill Plans, Motivation & Form Tips",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "SJ7qDLjAU1",
+      "kind": "heading",
+      "text": "The Best Women’s Tracksuits to Live In This Season",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "TOkzLumYNa",
+      "kind": "heading",
+      "text": "Somatic Exercises | Workouts for Releasing Tension & Easing Stress",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "M4uKpybJcS",
+      "kind": "heading",
+      "text": "The Ultimate Heavyweight T-Shirt Guide - Your Premium Wardrobe Staple",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "UktKH1i-nr",
+      "kind": "heading",
+      "text": "Calisthenics For Beginners: 8 Exercises To Get Started",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "loQ1rabMkd",
+      "kind": "heading",
+      "text": "Pull-Ups: How to Do Them and Get Your First Rep",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "aPp2QjvAW3",
+      "kind": "heading",
+      "text": "Progressive Overload: The Route To Results In Strength Training",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "sSxGhpdxT2",
+      "kind": "heading",
+      "text": "Strength Training For Runners",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "oGW7ktsSi_",
+      "kind": "heading",
+      "text": "Best of Gymshark Anytime, Anywhere",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > div.base_media-card__ywO07 > div > div.base_media-card-content__C5ZzE > h3.base_media-card-title___YdSN"
+    },
+    {
+      "id": "ata85fwUY3",
+      "kind": "heading",
+      "text": "Gym Clothes built in the weight room",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "main > div.page_page-container__cl4ss > section.seo-block_section__nzPbn > section.seo-block_seo__4o43B > h2"
+    },
+    {
+      "id": "2R9_9WDhKF",
+      "kind": "heading",
+      "text": "Activewear & Athleisure",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "main > div.page_page-container__cl4ss > section.seo-block_section__nzPbn > section.seo-block_seo__4o43B > h2"
+    },
+    {
+      "id": "pTDn3ydP-G",
+      "kind": "heading",
+      "text": "More than your best workout clothing",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "main > div.page_page-container__cl4ss > section.seo-block_section__nzPbn > section.seo-block_seo__4o43B > h2"
+    },
+    {
+      "id": "JJAsr_1k-t",
+      "kind": "heading",
+      "text": "Help",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div > footer.footer_container__HCpca > nav.navigation_container___2FIZ > div > h2.navigation_label__z2Vlc"
+    },
+    {
+      "id": "OlnH3GYYa_",
+      "kind": "heading",
+      "text": "My Account",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div > footer.footer_container__HCpca > nav.navigation_container___2FIZ > div > h2.navigation_label__z2Vlc"
+    },
+    {
+      "id": "j0MjndZ0nD",
+      "kind": "heading",
+      "text": "Pages",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div > footer.footer_container__HCpca > nav.navigation_container___2FIZ > div > h2.navigation_label__z2Vlc"
+    },
+    {
+      "id": "45cdEiGQOj",
+      "kind": "heading",
+      "text": "more about gymshark",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div > footer.footer_container__HCpca > div.footer_vertical-container__3VXrm > div.featured_container__OBOex > h2.featured_heading__vYBJn"
+    },
+    {
+      "id": "YvLnbfWAxq",
+      "kind": "heading",
+      "text": "Cookies and Tracking Pixels",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "#onetrust-policy-title"
+    },
+    {
+      "id": "mG4ZO7V--p",
+      "kind": "feature",
+      "text": "NEW IN",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > article.card_base-card__Z7gP8 > div.card_wrapper__7cilK > div > h3"
+    },
+    {
+      "id": "arCug0OseZ",
+      "kind": "feature",
+      "text": "EVERYDAY SEAMLESS",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > article.card_base-card__Z7gP8 > div.card_wrapper__7cilK > div > h3"
+    },
+    {
+      "id": "Z944mZYFEP",
+      "kind": "feature",
+      "text": "FOR THE HYBRIDS",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > article.card_base-card__Z7gP8 > div.card_wrapper__7cilK > div > h3"
+    },
+    {
+      "id": "JFldUDdJKv",
+      "kind": "feature",
+      "text": "THE BESTSELLERS",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "a > article.card_base-card__Z7gP8 > div.card_wrapper__7cilK > div > h3"
+    },
+    {
+      "id": "OyX64U_aCV",
+      "kind": "feature",
+      "text": "more about gymshark",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div > footer.footer_container__HCpca > div.footer_vertical-container__3VXrm > div.featured_container__OBOex > h2.featured_heading__vYBJn"
+    },
+    {
+      "id": "jVMSKKaMe5",
+      "kind": "testimonial",
+      "text": "3.8Track Pants",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "PxMlncv5ia",
+      "kind": "testimonial",
+      "text": "4.3Whitney Mid-Rise Leggings",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "xoVgEm9Ox-",
+      "kind": "testimonial",
+      "text": "5Track Jacket",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "comrXjBrbp",
+      "kind": "testimonial",
+      "text": "4.5Conditioning Club Oversized T-Shirt",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "37w4XlbVa8",
+      "kind": "testimonial",
+      "text": "4.4Conditioning Club Tank",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "0_cMP7NbBZ",
+      "kind": "testimonial",
+      "text": "4.2Conditioning Club Washed Tank",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "nKOxbhCsHn",
+      "kind": "testimonial",
+      "text": "3.6Conditioning Club Washed T-Shirt",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "FuEo8iO5Mv",
+      "kind": "cta",
+      "text": "Shop by Collection",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div.sub-categories-mobile_sub-categories-wrapper__mtmv2 > ul.sub-categories-mobile_sub-categories__QVIzv > li.subcategory-mobile_sub-category__6yvDG > h5 > button.subcategory-mobile_label-button__n_yh6"
+    },
+    {
+      "id": "w1Xi9MvqeE",
+      "kind": "cta",
+      "text": "Shop by Activity",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div.sub-categories-mobile_sub-categories-wrapper__mtmv2 > ul.sub-categories-mobile_sub-categories__QVIzv > li.subcategory-mobile_sub-category__6yvDG > h5 > button.subcategory-mobile_label-button__n_yh6"
+    },
+    {
+      "id": "qk-LVQ-LqW",
+      "kind": "cta",
+      "text": "Email Sign Up",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div.multi-tier_mobile__wpKy_ > div.secondary-links_links__437Sr > ul.secondary-links_list__2NL0K > li.secondary-links_anchor__iTXfF > a"
+    },
+    {
+      "id": "bT65wgsufM",
+      "kind": "cta",
+      "text": "Shop Whitney",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div.banner_banner--overrides__9w7g1 > div.banner_hero__jy5Af > div.banner_content__eR5aj > div.banner_cta-container__0fgki > a.button_button__GH8fH"
+    },
+    {
+      "id": "LORVx8kP7O",
+      "kind": "cta",
+      "text": "Shop new in",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div.banner_banner--overrides__9w7g1 > div.banner_hero__jy5Af > div.banner_content__eR5aj > div.banner_cta-container__0fgki > a.button_button__GH8fH"
+    },
+    {
+      "id": "DpjMZpd6ap",
+      "kind": "cta",
+      "text": "Shop hybrid",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "div.banner_banner--overrides__9w7g1 > div.banner_hero__jy5Af > div.banner_content__eR5aj > div.banner_cta-container__0fgki > a.button_button__GH8fH"
+    },
+    {
+      "id": "bfQScRcWrs",
+      "kind": "cta",
+      "text": "Track Your Order",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "nav.navigation_container___2FIZ > div > details.navigation_accordion___UvuD > section.navigation_link-block__9KIPi > a.navigation_link__fD9xJ"
+    },
+    {
+      "id": "wlPfu6l7GA",
+      "kind": "cta",
+      "text": "Orders",
+      "sourceUrl": "https://www.gymshark.com",
+      "selector": "nav.navigation_container___2FIZ > div > details.navigation_accordion___UvuD > section.navigation_link-block__9KIPi > a.navigation_link__fD9xJ"
+    },
+    {
+      "id": "bXYPXxls3M",
+      "kind": "hero",
+      "text": "All Products",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "main > section > div.header_header__0FbMD > div.header_header--headings__nPjM_ > h1.header_title__wfEtQ"
+    },
+    {
+      "id": "ofMvSAh9J5",
+      "kind": "heading",
+      "text": "womens",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "main > section > div.header_header__0FbMD > div.header_header--headings__nPjM_ > h2.header_gender__3L4NW"
+    },
+    {
+      "id": "KUB5_ou-32",
+      "kind": "heading",
+      "text": "1348 Products",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "main > section > div.header_header__0FbMD > div.header_header--headings__nPjM_ > h3.header_product-amount__JMjoi"
+    },
+    {
+      "id": "PcO1kH3OPa",
+      "kind": "heading",
+      "text": "View All New Product Drops",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "H0pmgnH6wD",
+      "kind": "heading",
+      "text": "Women's Leggings",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "mOjLIdFnd0",
+      "kind": "heading",
+      "text": "Women's Gym Jackets",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "Paz8aYqdGS",
+      "kind": "heading",
+      "text": "Womens Sweatpants",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "J_t9zBQ9kh",
+      "kind": "heading",
+      "text": "Womens Hoodies & Sweatshirts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "OpMe9VqUc8",
+      "kind": "heading",
+      "text": "Women's T-shirts & Tops",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "FlwrA0n6kR",
+      "kind": "heading",
+      "text": "Women's Outerwear",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "SbJ74iXDu7",
+      "kind": "heading",
+      "text": "Womens Sports Bras",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "ndaqqr-czJ",
+      "kind": "heading",
+      "text": "Women's Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "gDrEv_yRXu",
+      "kind": "heading",
+      "text": "filter & sort",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div.filtering-and-pagination_collection-page-container__xmmc6 > div.filtering-and-pagination_desktop-filtering-container__e6rGf > div > div.filter-groups_desktop-heading___fIl5 > h2.filter-groups_heading__tnwOe"
+    },
+    {
+      "id": "VRpg_p2tX9",
+      "kind": "heading",
+      "text": "Sort By",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div > div > div.filter-groups_filter-group__OApv8 > button.filter-groups_filter-group__button__SSAH8 > h3"
+    },
+    {
+      "id": "rDmbM5QT1U",
+      "kind": "heading",
+      "text": "Product Type",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div > div > div.filter-groups_filter-group__OApv8 > button.filter-groups_filter-group__button__SSAH8 > h3"
+    },
+    {
+      "id": "z_2gF4zURc",
+      "kind": "heading",
+      "text": "Size",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div > div > div.filter-groups_filter-group__OApv8 > button.filter-groups_filter-group__button__SSAH8 > h3"
+    },
+    {
+      "id": "kqCXFYJZMX",
+      "kind": "heading",
+      "text": "Features",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div > div > div.filter-groups_filter-group__OApv8 > button.filter-groups_filter-group__button__SSAH8 > h3"
+    },
+    {
+      "id": "pP2k93SrTq",
+      "kind": "heading",
+      "text": "Fit",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div > div > div.filter-groups_filter-group__OApv8 > button.filter-groups_filter-group__button__SSAH8 > h3"
+    },
+    {
+      "id": "myZM3S3xx4",
+      "kind": "heading",
+      "text": "Rise",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div > div > div.filter-groups_filter-group__OApv8 > button.filter-groups_filter-group__button__SSAH8 > h3"
+    },
+    {
+      "id": "pW4Ab22A8W",
+      "kind": "heading",
+      "text": "Activity",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div > div > div.filter-groups_filter-group__OApv8 > button.filter-groups_filter-group__button__SSAH8 > h3"
+    },
+    {
+      "id": "yClmqb2VXa",
+      "kind": "heading",
+      "text": "Collection",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div > div > div.filter-groups_filter-group__OApv8 > button.filter-groups_filter-group__button__SSAH8 > h3"
+    },
+    {
+      "id": "Yu-JfCY9Mu",
+      "kind": "heading",
+      "text": "Color",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div > div > div.filter-groups_filter-group__OApv8 > button.filter-groups_filter-group__button__SSAH8 > h3"
+    },
+    {
+      "id": "vw8zUSE57t",
+      "kind": "heading",
+      "text": "pattern",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div > div > div.filter-groups_filter-group__OApv8 > button.filter-groups_filter-group__button__SSAH8 > h3"
+    },
+    {
+      "id": "dkiswO5hA8",
+      "kind": "heading",
+      "text": "Discount",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div > div > div.filter-groups_filter-group__OApv8 > button.filter-groups_filter-group__button__SSAH8 > h3"
+    },
+    {
+      "id": "GpJ3QBXR5U",
+      "kind": "heading",
+      "text": "Price",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "div > div > div.filter-groups_filter-group__OApv8 > button.filter-groups_filter-group__button__SSAH8 > h3"
+    },
+    {
+      "id": "HYO2u4zaB1",
+      "kind": "stat",
+      "text": "1348 Products",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "main > section > div.header_header__0FbMD > div.header_header--headings__nPjM_ > h3.header_product-amount__JMjoi"
+    },
+    {
+      "id": "_Ynq75Tb14",
+      "kind": "testimonial",
+      "text": "Everyday Seamless Flared Leggings",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "bJAHoVBWZ5",
+      "kind": "testimonial",
+      "text": "Everyday Seamless Leggings",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "fsNqrodUBU",
+      "kind": "testimonial",
+      "text": "Woven Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "Jm_5mjSOOj",
+      "kind": "testimonial",
+      "text": "Everyday Seamless Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "Hn6FeA95nP",
+      "kind": "testimonial",
+      "text": "Whitney Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "jbTPs3J8UP",
+      "kind": "testimonial",
+      "text": "Training Straight Leg Regular Leggings",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "GsBeNlgYRb",
+      "kind": "testimonial",
+      "text": "Soft Sculpt Leggings",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "nEErSPRTAk",
+      "kind": "testimonial",
+      "text": "Shelf Cami Tank",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "3snmy3QSqZ",
+      "kind": "testimonial",
+      "text": "3Woven Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "dRiVOWTGPX",
+      "kind": "testimonial",
+      "text": "3.7Whitney Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "1GBKqvU3UW",
+      "kind": "testimonial",
+      "text": "4.2Training Straight Leg Regular Leggings",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "DoH1Bb-gsc",
+      "kind": "testimonial",
+      "text": "3.4Everyday Seamless Leggings",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "laxiSz2cHX",
+      "kind": "testimonial",
+      "text": "3.5Soft Sculpt Leggings",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "wADSm-4jdJ",
+      "kind": "testimonial",
+      "text": "3.4Adapt Animal Tank Top with Shelf",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "2L8QH28ZWw",
+      "kind": "testimonial",
+      "text": "3.8Cosy Luxe Straight Leg Regular Joggers",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "Ap0ruDYsY6",
+      "kind": "testimonial",
+      "text": "4.2Power Washed Joggers",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "AfYgcKjI7G",
+      "kind": "testimonial",
+      "text": "4.4Shelf Cami Tank",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "UA2r5kZvyf",
+      "kind": "testimonial",
+      "text": "4.3FeatherForm™ Short Sleeve T-Shirt",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "ayWVyVTcH_",
+      "kind": "testimonial",
+      "text": "4.2Crossover Back Tank",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "xDI0vGm2x8",
+      "kind": "testimonial",
+      "text": "3.6FeatherForm™ Tank",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "tEavr70YOI",
+      "kind": "testimonial",
+      "text": "4.5Training Oversized T-Shirt",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "KfwWqNRLvk",
+      "kind": "testimonial",
+      "text": "3.1Legacy Leggings",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "MKL3lguG49",
+      "kind": "testimonial",
+      "text": "4Track Pants",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "_33npR2iCR",
+      "kind": "testimonial",
+      "text": "4.1Training Shelf Cami Tank",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "AsI0UTTFWr",
+      "kind": "testimonial",
+      "text": "4.1Minimal Sports Bra 2.0",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "JQztN34Sqq",
+      "kind": "testimonial",
+      "text": "1Training 1/4 Zip Pullover",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "eMKFK6z-Gi",
+      "kind": "testimonial",
+      "text": "3.8Lift Seamless Sports Bra",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "aXeIioeR_c",
+      "kind": "testimonial",
+      "text": "3.8Flutter Woven Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "oGk_do37NO",
+      "kind": "testimonial",
+      "text": "4Hybrid Sports Bra",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "MTofEnXxfT",
+      "kind": "testimonial",
+      "text": "5Running Pocket Leggings",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "XrE9mQbJ_9",
+      "kind": "testimonial",
+      "text": "4.1Vital Regular Leggings",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/womens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "vQ1HzmuNRF",
+      "kind": "heading",
+      "text": "mens",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "main > section > div.header_header__0FbMD > div.header_header--headings__nPjM_ > h2.header_gender__3L4NW"
+    },
+    {
+      "id": "qQLyY1LfQf",
+      "kind": "heading",
+      "text": "1050 Products",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "main > section > div.header_header__0FbMD > div.header_header--headings__nPjM_ > h3.header_product-amount__JMjoi"
+    },
+    {
+      "id": "epJqftHA-u",
+      "kind": "heading",
+      "text": "Men's Hoodies & Sweatshirts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "Mhj3bnF3IB",
+      "kind": "heading",
+      "text": "Men's Joggers",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "0Fe9ED6aS_",
+      "kind": "heading",
+      "text": "Men's Gym Jackets",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "hsbpsepxjT",
+      "kind": "heading",
+      "text": "Men's Outerwear",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "TJzWxMZzgs",
+      "kind": "heading",
+      "text": "Men's T-shirts & Tops",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "NbISat7HSp",
+      "kind": "heading",
+      "text": "Men's Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "_h-kH3sJWd",
+      "kind": "heading",
+      "text": "Men's Base Layers",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "li > div.shopping-tile_container__d9W_B > a > div.shopping-tile_text-wrapper___U3sy > h2"
+    },
+    {
+      "id": "PbgqF_rSvW",
+      "kind": "stat",
+      "text": "1050 Products",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "main > section > div.header_header__0FbMD > div.header_header--headings__nPjM_ > h3.header_product-amount__JMjoi"
+    },
+    {
+      "id": "EafiXd28ru",
+      "kind": "testimonial",
+      "text": "Power T-Shirt",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "i0s5T7PUcI",
+      "kind": "testimonial",
+      "text": "Crest Oversized Hoodie",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "sf2V7QB24x",
+      "kind": "testimonial",
+      "text": "Crest Straight Leg Joggers",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "oQROnwp-AF",
+      "kind": "testimonial",
+      "text": "Arrival 5\" Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "CDr4M_b83n",
+      "kind": "testimonial",
+      "text": "Arrival 7\" Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "aIk3OBMvTB",
+      "kind": "testimonial",
+      "text": "Crest T-Shirt",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "WEPOwS5vxC",
+      "kind": "testimonial",
+      "text": "Crest Joggers",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "u4cpvifSA0",
+      "kind": "testimonial",
+      "text": "3.9Power T-Shirt",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "-DFnHO2KBQ",
+      "kind": "testimonial",
+      "text": "3.9Sport 7\" Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "sfp4BwxOpX",
+      "kind": "testimonial",
+      "text": "4.2Crest Straight Leg Joggers",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "xyiJ9uJJW2",
+      "kind": "testimonial",
+      "text": "4.2Crest Oversized Hoodie",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "bE3muImL2N",
+      "kind": "testimonial",
+      "text": "1Campus Crest Wide Leg Sweatpant",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "ahP67FG5M6",
+      "kind": "testimonial",
+      "text": "3.9Crest Oversized Jogger",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "77XsNUJBOd",
+      "kind": "testimonial",
+      "text": "3.5Sport 5\" 2-in-1 Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "yA3EjTCNZs",
+      "kind": "testimonial",
+      "text": "3.4Power Oversized Hoodie",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "7DxYkiqvZd",
+      "kind": "testimonial",
+      "text": "3.9Shadow Seamless T Shirt",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "erxUEXiSbH",
+      "kind": "testimonial",
+      "text": "4.5Vital Seamless 1/4 Zip",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "zBrAuCoH-3",
+      "kind": "testimonial",
+      "text": "4.2Arrival 7\" Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "DqTjK33RUB",
+      "kind": "testimonial",
+      "text": "4.3Cotton Seamless T-Shirt",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "Ay_h1SRT4y",
+      "kind": "testimonial",
+      "text": "4Train T-Shirt",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "oHy80yHJYt",
+      "kind": "testimonial",
+      "text": "3.7Global Lifting Wide Leg Pants",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "YBcHAVbkhC",
+      "kind": "testimonial",
+      "text": "4.1Crest Short",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "UAzkZWzG-a",
+      "kind": "testimonial",
+      "text": "2.8Movement Sport 5\" Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "CZ1Sdd5PBC",
+      "kind": "testimonial",
+      "text": "3.4Running 5\" Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "cGUHKsojNC",
+      "kind": "testimonial",
+      "text": "1Perforated Train Pants",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "dYRwqYOCzx",
+      "kind": "testimonial",
+      "text": "4.5Perforated Train 4\" Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "4OFu24Hmta",
+      "kind": "testimonial",
+      "text": "3.2Train 5\" Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "LydWOyaGTP",
+      "kind": "testimonial",
+      "text": "4.2Cotton Seamless T-Shirt",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "GBPZidNdFy",
+      "kind": "testimonial",
+      "text": "3.3Train Cut Off Tank",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "4My5JjnQj-",
+      "kind": "testimonial",
+      "text": "5Global Lifting Pants",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "O5HqFaF1hZ",
+      "kind": "testimonial",
+      "text": "3.8Arrival Contrast Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "7qcMv9HD8Y",
+      "kind": "testimonial",
+      "text": "4.8Cotton Seamless Sleeveless Top",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "G-F351ndCq",
+      "kind": "testimonial",
+      "text": "4.3Power Straight Leg Pant",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "Selrw5NiSX",
+      "kind": "testimonial",
+      "text": "4.7Lifting Mesh 5\" Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "yl81emgNvF",
+      "kind": "testimonial",
+      "text": "5Faded Collegiate Graphic T-Shirt",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "kbuts9k7hk",
+      "kind": "testimonial",
+      "text": "4.3Power Zip Up Hoodie",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    },
+    {
+      "id": "ZqkPn9GRv5",
+      "kind": "testimonial",
+      "text": "3.5Running 4\" 2-in-1 Shorts",
+      "sourceUrl": "https://www.gymshark.com/collections/all-products/mens",
+      "selector": "article.product-card_product-card__1T7k9 > div.product-card_card-wrapper__eXXBl > div.product-card_details-wrap__LCmCj > div.product-card_product-information__U467p > div.product-card_title-container__mLvh0"
+    }
+  ],
+  "siteBrief": {
+    "productName": "gymshark",
+    "summary": "Workout Clothes & Gym Clothes",
+    "audience": "general",
+    "differentiator": "NEW IN",
+    "strongestClaimFactId": "HYO2u4zaB1",
+    "factIds": [
+      "d6v401h5Xb",
+      "KPOK3bZYax",
+      "jPO_jVJ_qp",
+      "pSrX-a0f3I",
+      "vB5rJjG01y",
+      "EHYxnrY3wY",
+      "FLJ2ncN633",
+      "cHKtlKQl8O",
+      "lqPInhwEgW",
+      "8AsjP6S8fC",
+      "xaVdDvBW-d",
+      "Go5H1eYOUw",
+      "wPMVHwJ_P9",
+      "70wLQgYAEB",
+      "szBPkprD9Y",
+      "P57XmzONCM",
+      "Ujg2UVDrKf",
+      "r47dF_YsDx",
+      "_SVPQCZm5N",
+      "Q3NOLI_2kZ",
+      "-6jnHwcKMA",
+      "FQWw-j2ZVH",
+      "eMRG48Ke03",
+      "wwUP9JEzmu",
+      "SJ7qDLjAU1",
+      "TOkzLumYNa",
+      "M4uKpybJcS",
+      "UktKH1i-nr",
+      "loQ1rabMkd",
+      "aPp2QjvAW3",
+      "sSxGhpdxT2",
+      "oGW7ktsSi_",
+      "ata85fwUY3",
+      "2R9_9WDhKF",
+      "pTDn3ydP-G",
+      "JJAsr_1k-t",
+      "OlnH3GYYa_",
+      "j0MjndZ0nD",
+      "45cdEiGQOj",
+      "YvLnbfWAxq",
+      "mG4ZO7V--p",
+      "arCug0OseZ",
+      "Z944mZYFEP",
+      "JFldUDdJKv",
+      "OyX64U_aCV",
+      "jVMSKKaMe5",
+      "PxMlncv5ia",
+      "xoVgEm9Ox-",
+      "comrXjBrbp",
+      "37w4XlbVa8",
+      "0_cMP7NbBZ",
+      "nKOxbhCsHn",
+      "FuEo8iO5Mv",
+      "w1Xi9MvqeE",
+      "qk-LVQ-LqW",
+      "bT65wgsufM",
+      "LORVx8kP7O",
+      "DpjMZpd6ap",
+      "bfQScRcWrs",
+      "wlPfu6l7GA",
+      "bXYPXxls3M",
+      "ofMvSAh9J5",
+      "KUB5_ou-32",
+      "PcO1kH3OPa",
+      "H0pmgnH6wD",
+      "mOjLIdFnd0",
+      "Paz8aYqdGS",
+      "J_t9zBQ9kh",
+      "OpMe9VqUc8",
+      "FlwrA0n6kR",
+      "SbJ74iXDu7",
+      "ndaqqr-czJ",
+      "gDrEv_yRXu",
+      "VRpg_p2tX9",
+      "rDmbM5QT1U",
+      "z_2gF4zURc",
+      "kqCXFYJZMX",
+      "pP2k93SrTq",
+      "myZM3S3xx4",
+      "pW4Ab22A8W",
+      "yClmqb2VXa",
+      "Yu-JfCY9Mu",
+      "vw8zUSE57t",
+      "dkiswO5hA8",
+      "GpJ3QBXR5U",
+      "HYO2u4zaB1",
+      "_Ynq75Tb14",
+      "bJAHoVBWZ5",
+      "fsNqrodUBU",
+      "Jm_5mjSOOj",
+      "Hn6FeA95nP",
+      "jbTPs3J8UP",
+      "GsBeNlgYRb",
+      "nEErSPRTAk",
+      "3snmy3QSqZ",
+      "dRiVOWTGPX",
+      "1GBKqvU3UW",
+      "DoH1Bb-gsc",
+      "laxiSz2cHX",
+      "wADSm-4jdJ",
+      "2L8QH28ZWw",
+      "Ap0ruDYsY6",
+      "AfYgcKjI7G",
+      "UA2r5kZvyf",
+      "ayWVyVTcH_",
+      "xDI0vGm2x8",
+      "tEavr70YOI",
+      "KfwWqNRLvk",
+      "MKL3lguG49",
+      "_33npR2iCR",
+      "AsI0UTTFWr",
+      "JQztN34Sqq",
+      "eMKFK6z-Gi",
+      "aXeIioeR_c",
+      "oGk_do37NO",
+      "MTofEnXxfT",
+      "XrE9mQbJ_9",
+      "vQ1HzmuNRF",
+      "qQLyY1LfQf",
+      "epJqftHA-u",
+      "Mhj3bnF3IB",
+      "0Fe9ED6aS_",
+      "hsbpsepxjT",
+      "TJzWxMZzgs",
+      "NbISat7HSp",
+      "_h-kH3sJWd",
+      "PbgqF_rSvW",
+      "EafiXd28ru",
+      "i0s5T7PUcI",
+      "sf2V7QB24x",
+      "oQROnwp-AF",
+      "CDr4M_b83n",
+      "aIk3OBMvTB",
+      "WEPOwS5vxC",
+      "u4cpvifSA0",
+      "-DFnHO2KBQ",
+      "sfp4BwxOpX",
+      "xyiJ9uJJW2",
+      "bE3muImL2N",
+      "ahP67FG5M6",
+      "77XsNUJBOd",
+      "yA3EjTCNZs",
+      "7DxYkiqvZd",
+      "erxUEXiSbH",
+      "zBrAuCoH-3",
+      "DqTjK33RUB",
+      "Ay_h1SRT4y",
+      "oHy80yHJYt",
+      "YBcHAVbkhC",
+      "UAzkZWzG-a",
+      "CZ1Sdd5PBC",
+      "cGUHKsojNC",
+      "dYRwqYOCzx",
+      "4OFu24Hmta",
+      "LydWOyaGTP",
+      "GBPZidNdFy",
+      "4My5JjnQj-",
+      "O5HqFaF1hZ",
+      "7qcMv9HD8Y",
+      "G-F351ndCq",
+      "Selrw5NiSX",
+      "yl81emgNvF",
+      "kbuts9k7hk",
+      "ZqkPn9GRv5"
+    ],
+    "source": "fallback"
+  }
+}

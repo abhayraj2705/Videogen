@@ -1,0 +1,60 @@
+{
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "duration": 20,
+  "palette": { "bg": "#171314", "fg": "#f5efe9", "accent": "#ff7a45" },
+  "fonts": { "display": "system-ui, -apple-system, Segoe UI, sans-serif", "body": "system-ui, -apple-system, Segoe UI, sans-serif" },
+  "scenes": [
+    {
+      "id": "hook",
+      "templateId": "KineticHook",
+      "start": 0,
+      "end": 3.4,
+      "props": {
+        "productName": "Shopkart",
+        "headline": "Everything for your home, delivered today"
+      }
+    },
+    {
+      "id": "features",
+      "templateId": "FeatureTriplet",
+      "start": 3.4,
+      "end": 9,
+      "props": {
+        "features": [
+          { "icon": "🚚", "label": "Free delivery over ₹499" },
+          { "icon": "↩️", "label": "7-day easy returns" },
+          { "icon": "💳", "label": "Pay on delivery available" }
+        ]
+      }
+    },
+    {
+      "id": "showcase",
+      "templateId": "SectionShowcase",
+      "start": 9,
+      "end": 15.6,
+      "props": {
+        "screenshotUrl": "shopkart.screenshot.svg",
+        "caption": "Browse thousands of products by category"
+      }
+    },
+    {
+      "id": "cta",
+      "templateId": "CTAEndCard",
+      "start": 15.6,
+      "end": 20,
+      "props": {
+        "productName": "Shopkart",
+        "ctaText": "Shop the sale",
+        "domain": "shopkart.in"
+      }
+    }
+  ],
+  "captions": [
+    { "t0": 0, "t1": 3.4, "text": "Everything for your home, delivered today." },
+    { "t0": 3.4, "t1": 9, "text": "Free delivery, easy returns, pay on delivery." },
+    { "t0": 9, "t1": 15.6, "text": "Browse thousands of products by category." },
+    { "t0": 15.6, "t1": 20, "text": "Shopkart — shop the sale at shopkart.in" }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "url": "https://www.airbnb.com",
+  "category": "js_spa",
+  "domain": "www.airbnb.com",
+  "pages": [
+    {
+      "url": "https://www.airbnb.com",
+      "screenshotKey": "jobs/c675a674-f3af-4775-8343-2782b01992d0/crawl/home.png"
+    },
+    {
+      "url": "https://www.airbnb.com/homes",
+      "screenshotKey": "jobs/c675a674-f3af-4775-8343-2782b01992d0/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.airbnb.com/experiences",
+      "screenshotKey": "jobs/c675a674-f3af-4775-8343-2782b01992d0/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(34, 34, 34)",
+    "accent": "rgb(0, 0, 0)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://a0.muscache.com/im/pictures/airbnb-platform-assets/AirbnbPlatformAssets-search-bar-icons/original/4aae4ed7-5939-4e76-b100-e69440ebeae4.png?im_w=240"
+  },
+  "facts": [
+    {
+      "id": "2feC_yMtNm",
+      "kind": "hero",
+      "text": "Airbnb homepage",
+      "sourceUrl": "https://www.airbnb.com",
+      "selector": "div > div.r9m3m4o > div > div.m1kmt3qi > h1.vsvqdle"
+    },
+    {
+      "id": "NMQpDBFdNB",
+      "kind": "heading",
+      "text": "Inspiration for future getaways",
+      "sourceUrl": "https://www.airbnb.com",
+      "selector": "div > div.c1dbtjd2 > div.cff48sj > div > h2.hifxi0b"
+    },
+    {
+      "id": "aGyaNJZbFE",
+      "kind": "heading",
+      "text": "Site Footer",
+      "sourceUrl": "https://www.airbnb.com",
+      "selector": "div.c1yo0219 > footer.f1ydt0t3 > div.c1xu7472 > span.vkhxe59 > h2"
+    },
+    {
+      "id": "UUL1EVuSGU",
+      "kind": "heading",
+      "text": "Support",
+      "sourceUrl": "https://www.airbnb.com",
+      "selector": "footer.f1ydt0t3 > div.c1xu7472 > div.w1pndi7o > section.se5ui3x > h3.trsc28b"
+    },
+    {
+      "id": "TRizD7R-eJ",
+      "kind": "heading",
+      "text": "Hosting",
+      "sourceUrl": "https://www.airbnb.com",
+      "selector": "footer.f1ydt0t3 > div.c1xu7472 > div.w1pndi7o > section.se5ui3x > h3.trsc28b"
+    },
+    {
+      "id": "_OCfAJQS57",
+      "kind": "heading",
+      "text": "Airbnb",
+      "sourceUrl": "https://www.airbnb.com",
+      "selector": "footer.f1ydt0t3 > div.c1xu7472 > div.w1pndi7o > section.se5ui3x > h3.trsc28b"
+    },
+    {
+      "id": "fGtde4Zu80",
+      "kind": "cta",
+      "text": "Orderville Cabin rentals",
+      "sourceUrl": "https://www.airbnb.com",
+      "selector": "div > div.t1l7kq0f > ul.gjo09wt > li > a.i1feiwj2"
+    },
+    {
+      "id": "SEajKsGH9Z",
+      "kind": "cta",
+      "text": "Shibuya Cultural tours",
+      "sourceUrl": "https://www.airbnb.com",
+      "selector": "div > div.t1l7kq0f > ul.gjo09wt > li > a.i1feiwj2"
+    },
+    {
+      "id": "TKak83RrQN",
+      "kind": "cta",
+      "text": "Athens Art workshops",
+      "sourceUrl": "https://www.airbnb.com",
+      "selector": "div > div.t1l7kq0f > ul.gjo09wt > li > a.i1feiwj2"
+    },
+    {
+      "id": "QrYerG9Rhv",
+      "kind": "cta",
+      "text": "Istanbul Art workshops",
+      "sourceUrl": "https://www.airbnb.com",
+      "selector": "div > div.t1l7kq0f > ul.gjo09wt > li > a.i1feiwj2"
+    },
+    {
+      "id": "K8FMieSpBe",
+      "kind": "cta",
+      "text": "Join a free hosting class",
+      "sourceUrl": "https://www.airbnb.com",
+      "selector": "div.w1pndi7o > section.se5ui3x > ul.l1qzr284 > li > a.l1lx1n3h"
+    },
+    {
+      "id": "tMMnpBieMl",
+      "kind": "cta",
+      "text": "Log in or sign up",
+      "sourceUrl": "https://www.airbnb.com/homes",
+      "selector": "div > div.cqdorda > div.chrgozo > div > a.c17v7wto"
+    }
+  ],
+  "siteBrief": {
+    "productName": "airbnb",
+    "summary": "Airbnb homepage",
+    "audience": "general",
+    "differentiator": "Airbnb homepage",
+    "strongestClaimFactId": "2feC_yMtNm",
+    "factIds": [
+      "2feC_yMtNm",
+      "NMQpDBFdNB",
+      "aGyaNJZbFE",
+      "UUL1EVuSGU",
+      "TRizD7R-eJ",
+      "_OCfAJQS57",
+      "fGtde4Zu80",
+      "SEajKsGH9Z",
+      "TKak83RrQN",
+      "QrYerG9Rhv",
+      "K8FMieSpBe",
+      "tMMnpBieMl"
+    ],
+    "source": "fallback"
+  }
+}

@@ -1,0 +1,847 @@
+{
+  "url": "https://resend.com",
+  "category": "one_pager",
+  "domain": "resend.com",
+  "pages": [
+    {
+      "url": "https://resend.com",
+      "screenshotKey": "jobs/51101a59-7b47-431b-89f9-80ffd0b02e89/crawl/home.png"
+    },
+    {
+      "url": "https://resend.com/pricing",
+      "screenshotKey": "jobs/51101a59-7b47-431b-89f9-80ffd0b02e89/crawl/page-1.png"
+    },
+    {
+      "url": "https://resend.com/docs",
+      "screenshotKey": "jobs/51101a59-7b47-431b-89f9-80ffd0b02e89/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(0, 0, 0)",
+    "fg": "rgb(240, 240, 240)",
+    "accent": "rgba(214, 235, 253, 0.19)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://resend.com/_next/image?url=%2Fstatic%2Fexample-logo.png&w=256&q=75&dpl=dpl_68Jnp7jgkAVeUwJTCwDC5w8cFCjm"
+  },
+  "facts": [
+    {
+      "id": "WAFu2rm0-w",
+      "kind": "hero",
+      "text": "Email fordevelopers",
+      "sourceUrl": "https://resend.com",
+      "selector": "div.relative > section.mx-auto > div.flex > div.origin-center-left > h1.effect-font-styling"
+    },
+    {
+      "id": "wrSmbW53ct",
+      "kind": "hero",
+      "text": "The best way to reach humans instead of spam folders. Deliver transactional and marketing emails at scale.",
+      "sourceUrl": "https://resend.com",
+      "selector": "div.relative > section.mx-auto > div.flex > div.origin-center-left > p.text-base"
+    },
+    {
+      "id": "MPY5xIsVxz",
+      "kind": "heading",
+      "text": "Integrate this morning",
+      "sourceUrl": "https://resend.com",
+      "selector": "body.bg-background > div.bg-black > div > section.mx-auto > h2.font-display"
+    },
+    {
+      "id": "t4ilUJzcuN",
+      "kind": "heading",
+      "text": "First-class developer experience",
+      "sourceUrl": "https://resend.com",
+      "selector": "body.bg-background > div.bg-black > div > section.mx-auto > h2.font-display"
+    },
+    {
+      "id": "FbaqwGto1G",
+      "kind": "heading",
+      "text": "Test mode",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.grid > div.relative > div.z-10 > h2.font-display"
+    },
+    {
+      "id": "K6aNpS_ztD",
+      "kind": "heading",
+      "text": "Modular webhooks",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.grid > div.relative > div.z-10 > h2.font-display"
+    },
+    {
+      "id": "zzQYVAIr-y",
+      "kind": "heading",
+      "text": "Write using a delightful editor",
+      "sourceUrl": "https://resend.com",
+      "selector": "body.bg-background > div.bg-black > div > section.mx-auto > h2.font-display"
+    },
+    {
+      "id": "FNn9tB4sIq",
+      "kind": "heading",
+      "text": "Go beyond editing",
+      "sourceUrl": "https://resend.com",
+      "selector": "body.bg-background > div.bg-black > div > section.mx-auto > h2.font-display"
+    },
+    {
+      "id": "_oSCKUHX_5",
+      "kind": "heading",
+      "text": "Contact management",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.grid > div.relative > div.z-10 > h2.font-display"
+    },
+    {
+      "id": "o9cfoEw_6o",
+      "kind": "heading",
+      "text": "Broadcast analytics",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.grid > div.relative > div.z-10 > h2.font-display"
+    },
+    {
+      "id": "OoNKdUlKJv",
+      "kind": "heading",
+      "text": "Develop emails using React",
+      "sourceUrl": "https://resend.com",
+      "selector": "body.bg-background > div.bg-black > div > section.mx-auto > h2.font-display"
+    },
+    {
+      "id": "m3QQAWHpFT",
+      "kind": "heading",
+      "text": "Welcome to ACME, user!",
+      "sourceUrl": "https://resend.com",
+      "selector": "table > tbody > tr > td > h2"
+    },
+    {
+      "id": "LfFX_Iu6PF",
+      "kind": "heading",
+      "text": "Reach humans, not spam folders",
+      "sourceUrl": "https://resend.com",
+      "selector": "body.bg-background > div.bg-black > div > section.mx-auto > h2.font-display"
+    },
+    {
+      "id": "nr_-FRKglU",
+      "kind": "heading",
+      "text": "Proactive blocklist tracking",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.relative > div.flex > div.item-center > h3.font-display"
+    },
+    {
+      "id": "FkClKwC_R7",
+      "kind": "heading",
+      "text": "Faster time to inbox",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.relative > div.flex > div.item-center > h3.font-display"
+    },
+    {
+      "id": "gs-cS-883s",
+      "kind": "heading",
+      "text": "Build confidence with BIMI",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.relative > div.flex > div.item-center > h3.font-display"
+    },
+    {
+      "id": "Lm1oU7iib7",
+      "kind": "heading",
+      "text": "Managed dedicated IPs",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.relative > div.flex > div.item-center > h3.font-display"
+    },
+    {
+      "id": "PlVPyuECcW",
+      "kind": "heading",
+      "text": "Dynamic suppression list",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.relative > div.flex > div.item-center > h3.font-display"
+    },
+    {
+      "id": "dEWzGAKLoB",
+      "kind": "heading",
+      "text": "IP and domain monitoring",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.relative > div.flex > div.item-center > h3.font-display"
+    },
+    {
+      "id": "bS3YAN7u4Z",
+      "kind": "heading",
+      "text": "Verify DNS records",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.relative > div.flex > div.item-center > h3.font-display"
+    },
+    {
+      "id": "Y1unDfJ4Ar",
+      "kind": "heading",
+      "text": "Battle-tested infrastructure",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.relative > div.flex > div.item-center > h3.font-display"
+    },
+    {
+      "id": "uGKd_8ud4D",
+      "kind": "heading",
+      "text": "Prevent spoofing with DMARC",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.relative > div.flex > div.item-center > h3.font-display"
+    },
+    {
+      "id": "Uha91PLUtb",
+      "kind": "heading",
+      "text": "Everything in your control",
+      "sourceUrl": "https://resend.com",
+      "selector": "body.bg-background > div.bg-black > div > section.mx-auto > h2.font-display"
+    },
+    {
+      "id": "HvUTualAWv",
+      "kind": "heading",
+      "text": "Intuitive analytics",
+      "sourceUrl": "https://resend.com",
+      "selector": "div > div.mb-3 > button.group > div.relative > h3.font-display"
+    },
+    {
+      "id": "y6DDH5C4vA",
+      "kind": "heading",
+      "text": "Full visibility",
+      "sourceUrl": "https://resend.com",
+      "selector": "div > div.mb-3 > button.group > div.relative > h3.font-display"
+    },
+    {
+      "id": "yFkaHK1nlP",
+      "kind": "heading",
+      "text": "Domain authentication",
+      "sourceUrl": "https://resend.com",
+      "selector": "div > div.mb-3 > button.group > div.relative > h3.font-display"
+    },
+    {
+      "id": "ZfCXwQVPxR",
+      "kind": "heading",
+      "text": "Beyond expectations",
+      "sourceUrl": "https://resend.com",
+      "selector": "body.bg-background > div.bg-black > div > section.mx-auto > h2.font-display"
+    },
+    {
+      "id": "59Xt-G083F",
+      "kind": "heading",
+      "text": "Email reimagined.Available today.",
+      "sourceUrl": "https://resend.com",
+      "selector": "body.bg-background > div.bg-black > div > section.mx-auto > h2.effect-font-styling"
+    },
+    {
+      "id": "an8usjpMwS",
+      "kind": "testimonial",
+      "text": "Resend is transforming email for developers. Simple interface, easy integrations, handy templates. What else could we ask for.",
+      "sourceUrl": "https://resend.com",
+      "selector": "body.bg-background > div.bg-black > div > div.relative > blockquote.mx-auto"
+    },
+    {
+      "id": "sn3K7Hx3jo",
+      "kind": "testimonial",
+      "text": "\"Our partnership with Resend has been a great experience. They've made sure we can focus on what we do best—building our product and growing our business.\"Sahil LavingiaCEO of Gumroad",
+      "sourceUrl": "https://resend.com",
+      "selector": "div.flex > div.flex > ul.group-hover:animation-paused > li.w-[350px] > blockquote"
+    },
+    {
+      "id": "rV1uzlh7FV",
+      "kind": "testimonial",
+      "text": "\"We're a small team with a lot on our plates. Email infrastructure is something we don't want to think about, and with Resend we don't have to.\"Peter SuhmOps at Tailwind",
+      "sourceUrl": "https://resend.com",
+      "selector": "div.flex > div.flex > ul.group-hover:animation-paused > li.w-[350px] > blockquote"
+    },
+    {
+      "id": "OgJHQg1Snu",
+      "kind": "testimonial",
+      "text": "\"The best part about taking Resend into production was that there was no friction at all.\"Tara NagarSoftware Engineer at Braintrust",
+      "sourceUrl": "https://resend.com",
+      "selector": "div.flex > div.flex > ul.group-hover:animation-paused > li.w-[350px] > blockquote"
+    },
+    {
+      "id": "TdCyOjiegL",
+      "kind": "testimonial",
+      "text": "\"The flexibility of Resend is what we value most. It allows us to quickly adapt and refine our email communications as our products evolve.\"Glauber CostaFounder and CEO at Turso",
+      "sourceUrl": "https://resend.com",
+      "selector": "div.flex > div.flex > ul.group-hover:animation-paused > li.w-[350px] > blockquote"
+    },
+    {
+      "id": "REr5uxzcJY",
+      "kind": "testimonial",
+      "text": "\"Resend is email with simpler APIs, better webhooks, and best-in-class debugging.\"Dan FarrellyCTO and Co-Founder of Inngest",
+      "sourceUrl": "https://resend.com",
+      "selector": "div.flex > div.flex > ul.group-hover:animation-paused > li.w-[350px] > blockquote"
+    },
+    {
+      "id": "Mi9Glj8mZR",
+      "kind": "cta",
+      "text": "Get started",
+      "sourceUrl": "https://resend.com",
+      "selector": "#base-ui-_R_reccltabsdb_"
+    },
+    {
+      "id": "NB_DJGnJA8",
+      "kind": "cta",
+      "text": "Join us at Resend Forward",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.flex > div.origin-center-left > div.flex > a.rainbow-border"
+    },
+    {
+      "id": "ARLjYo-iML",
+      "kind": "cta",
+      "text": "Download ZIP",
+      "sourceUrl": "https://resend.com",
+      "selector": "div > div.relative > div.outline-hidden > footer.absolute > a.outline-hidden"
+    },
+    {
+      "id": "eoWO_-5f-E",
+      "kind": "cta",
+      "text": "Learn more",
+      "sourceUrl": "https://resend.com",
+      "selector": "section.mx-auto > div.grid > div.relative > div.z-10 > a.outline-hidden"
+    },
+    {
+      "id": "nJ6QVWLKI1",
+      "kind": "hero",
+      "text": "Pricing",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "html.inter_5ab5b4e3-module__YT86iW__variable > body.bg-background > div.bg-black > div.mx-auto > h1.effect-font-styling"
+    },
+    {
+      "id": "ouumuB0Hq9",
+      "kind": "hero",
+      "text": "Start for free and scale as you grow.",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "html.inter_5ab5b4e3-module__YT86iW__variable > body.bg-background > div.bg-black > div.mx-auto > p.text-base"
+    },
+    {
+      "id": "zxP2wpy0Js",
+      "kind": "heading",
+      "text": "FreeRecommended",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div > div.w-full > div.grid > div.relative > h3.font-display"
+    },
+    {
+      "id": "gGRRR9SAr0",
+      "kind": "heading",
+      "text": "ProRecommended",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div > div.w-full > div.grid > div.relative > h3.font-display"
+    },
+    {
+      "id": "9L_sIOgXbq",
+      "kind": "heading",
+      "text": "ScaleRecommended",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div > div.w-full > div.grid > div.relative > h3.font-display"
+    },
+    {
+      "id": "us0mJmdIAO",
+      "kind": "heading",
+      "text": "CustomRecommended",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div > div.w-full > div.grid > div.relative > h3.font-display"
+    },
+    {
+      "id": "AoV31pMGbf",
+      "kind": "heading",
+      "text": "Pay-as-you-go",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.bg-black > div.mx-auto > div.mx-auto > div.relative > h2.font-display"
+    },
+    {
+      "id": "4QqOKasEE_",
+      "kind": "heading",
+      "text": "Emails",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.grid > div.relative > div.relative > div.flex > h3.font-display"
+    },
+    {
+      "id": "Q9eKL8zQYh",
+      "kind": "heading",
+      "text": "Automations · $0.0015 / per run",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.grid > div.relative > div.relative > div.flex > h3.font-display"
+    },
+    {
+      "id": "Pe8jbJkmp8",
+      "kind": "heading",
+      "text": "Add-ons",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.bg-black > div.mx-auto > div.mx-auto > div.my-24 > h2.font-display"
+    },
+    {
+      "id": "uectdE7b-l",
+      "kind": "heading",
+      "text": "Domains - $20 / mo",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.my-24 > div.relative > div.flex > div.flex > h2.font-display"
+    },
+    {
+      "id": "cRGh78-rPv",
+      "kind": "heading",
+      "text": "Dedicated IPs - $30 / mo",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.my-24 > div.relative > div.flex > div.flex > h2.font-display"
+    },
+    {
+      "id": "IGLDtlPK2J",
+      "kind": "heading",
+      "text": "Single Sign-On - $150 / mo",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.my-24 > div.relative > div.flex > div.flex > h2.font-display"
+    },
+    {
+      "id": "oIWG0SMnhU",
+      "kind": "heading",
+      "text": "Sending & receiving",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.bg-black > div.mx-auto > div.mx-auto > div.flex > h2.font-display"
+    },
+    {
+      "id": "VzxinDWwUB",
+      "kind": "heading",
+      "text": "Deliverability & reliability",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.bg-black > div.mx-auto > div.mx-auto > div.flex > h2.font-display"
+    },
+    {
+      "id": "xnlfm4avtR",
+      "kind": "heading",
+      "text": "Security & privacy",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.bg-black > div.mx-auto > div.mx-auto > div.flex > h2.font-display"
+    },
+    {
+      "id": "v8LwWpU8qR",
+      "kind": "heading",
+      "text": "Customer support",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.bg-black > div.mx-auto > div.mx-auto > div.flex > h2.font-display"
+    },
+    {
+      "id": "3s39rT3Z7C",
+      "kind": "heading",
+      "text": "AI credits",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.bg-black > div.mx-auto > div.mx-auto > div.flex > h2.font-display"
+    },
+    {
+      "id": "QPA4z36fFd",
+      "kind": "heading",
+      "text": "Frequently asked questions",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.bg-black > div.mx-auto > div.mx-auto > div.mb-36 > h2.font-display"
+    },
+    {
+      "id": "ppgWUpXY-v",
+      "kind": "heading",
+      "text": "Do you offer any discounts for annual subscriptions?",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.mx-auto > div.mb-36 > div > div.mb-4 > h3.flex"
+    },
+    {
+      "id": "5-aAkjy8q6",
+      "kind": "heading",
+      "text": "Do you offer non-profit or education pricing?",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.mx-auto > div.mb-36 > div > div.mb-4 > h3.flex"
+    },
+    {
+      "id": "PWHdcP2_Vw",
+      "kind": "heading",
+      "text": "What payment methods do you accept?",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.mx-auto > div.mb-36 > div > div.mb-4 > h3.flex"
+    },
+    {
+      "id": "na7KTjrdTR",
+      "kind": "heading",
+      "text": "Is there a free trial available?",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.mx-auto > div.mb-36 > div > div.mb-4 > h3.flex"
+    },
+    {
+      "id": "iS8b80tcxK",
+      "kind": "heading",
+      "text": "Who can I contact about a custom plan?",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.mx-auto > div.mb-36 > div > div.mb-4 > h3.flex"
+    },
+    {
+      "id": "ipkOtMn-bI",
+      "kind": "heading",
+      "text": "What happens if I send more emails than my plan allows?",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.mx-auto > div.mb-36 > div > div.mb-4 > h3.flex"
+    },
+    {
+      "id": "aB5xK9BY0I",
+      "kind": "heading",
+      "text": "What is the difference between transactional and marketing emails?",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.mx-auto > div.mb-36 > div > div.mb-4 > h3.flex"
+    },
+    {
+      "id": "YATE1CLmIt",
+      "kind": "heading",
+      "text": "What does \"unlimited broadcast sending\" mean?",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.mx-auto > div.mb-36 > div > div.mb-4 > h3.flex"
+    },
+    {
+      "id": "IOp0CzJ9r5",
+      "kind": "heading",
+      "text": "Do broadcast emails count against the transactional email limits?",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.mx-auto > div.mb-36 > div > div.mb-4 > h3.flex"
+    },
+    {
+      "id": "Si9rJVKe3e",
+      "kind": "heading",
+      "text": "How are inbound emails counted?",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.mx-auto > div.mb-36 > div > div.mb-4 > h3.flex"
+    },
+    {
+      "id": "kXQmuRxx5g",
+      "kind": "heading",
+      "text": "Start sending this morning",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "html.inter_5ab5b4e3-module__YT86iW__variable > body.bg-background > div.bg-black > div.mt-[10vh] > h2.font-display"
+    },
+    {
+      "id": "ODcSEkbyJa",
+      "kind": "stat",
+      "text": "Automations · $0.0015 / per run",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.grid > div.relative > div.relative > div.flex > h3.font-display"
+    },
+    {
+      "id": "HWvec4GC6Y",
+      "kind": "stat",
+      "text": "Domains - $20 / mo",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.my-24 > div.relative > div.flex > div.flex > h2.font-display"
+    },
+    {
+      "id": "neVLftHTTD",
+      "kind": "stat",
+      "text": "Dedicated IPs - $30 / mo",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.my-24 > div.relative > div.flex > div.flex > h2.font-display"
+    },
+    {
+      "id": "gvlpAbZrIC",
+      "kind": "stat",
+      "text": "Single Sign-On - $150 / mo",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.my-24 > div.relative > div.flex > div.flex > h2.font-display"
+    },
+    {
+      "id": "Iu2T1NSC8h",
+      "kind": "cta",
+      "text": "Contact us",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div > div.w-full > div.grid > div.relative > a.relative"
+    },
+    {
+      "id": "1OoCG5A464",
+      "kind": "cta",
+      "text": "Request dedicated IP",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "div.flex > div.flex > div.mt-4 > div > a.relative"
+    },
+    {
+      "id": "i2ad_NL9aE",
+      "kind": "cta",
+      "text": "Sign up for free",
+      "sourceUrl": "https://resend.com/pricing",
+      "selector": "html.inter_5ab5b4e3-module__YT86iW__variable > body.bg-background > div.bg-black > div.mt-[10vh] > a.relative"
+    },
+    {
+      "id": "yL14EZ31T6",
+      "kind": "hero",
+      "text": "Introduction",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#page-title"
+    },
+    {
+      "id": "GYER5ZCy4b",
+      "kind": "heading",
+      "text": "Documentation Index",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "html.inter_1d81deff-module__CYM0aG__variable > body.antialiased > blockquote.sr-only > h2"
+    },
+    {
+      "id": "ydSjTckrJN",
+      "kind": "heading",
+      "text": "Get started",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "div.size-full > div.min-w-0! > div > div.sidebar-group-header > h3.sidebar-title"
+    },
+    {
+      "id": "iAh41rokwE",
+      "kind": "heading",
+      "text": "Learn",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "div.size-full > div.min-w-0! > div.mt-6 > div.sidebar-group-header > h3.sidebar-title"
+    },
+    {
+      "id": "qoh6S1KvhE",
+      "kind": "heading",
+      "text": "Resources",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "div.size-full > div.min-w-0! > div.mt-6 > div.sidebar-group-header > h3.sidebar-title"
+    },
+    {
+      "id": "1DMuDCMl2y",
+      "kind": "heading",
+      "text": "On this page",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_1dllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "oqViQu0ez7",
+      "kind": "heading",
+      "text": "​Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#quickstart"
+    },
+    {
+      "id": "3cV3l8T85A",
+      "kind": "heading",
+      "text": "Node.js Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_nimdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "D0tGdW_-5i",
+      "kind": "heading",
+      "text": "Next.js Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_17imdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "Cl8VFOA-VR",
+      "kind": "heading",
+      "text": "Express Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_1nimdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "bCTm7URLu8",
+      "kind": "heading",
+      "text": "PHP Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_27imdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "Ixpq2ljppu",
+      "kind": "heading",
+      "text": "Laravel Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_2nimdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "yyYHNZ5zmP",
+      "kind": "heading",
+      "text": "Python Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_37imdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "8gihgGG9X8",
+      "kind": "heading",
+      "text": "Ruby Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_3nimdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "d82c6zjO2R",
+      "kind": "heading",
+      "text": "Rails Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_47imdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "1d1g6aR9Jn",
+      "kind": "heading",
+      "text": "Go Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_4nimdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "EiyIuvNjCF",
+      "kind": "heading",
+      "text": "Rust Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_57imdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "45EOjlLcgz",
+      "kind": "heading",
+      "text": "Elixir Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_5nimdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "liV-d_srkh",
+      "kind": "heading",
+      "text": "Java Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_67imdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "x_202384pX",
+      "kind": "heading",
+      "text": ".NET Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_6nimdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "gMgjzGjio6",
+      "kind": "heading",
+      "text": "CLI Quickstart",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_77imdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "-P4Em3Zloh",
+      "kind": "heading",
+      "text": "​Explore",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#explore"
+    },
+    {
+      "id": "Ynyz_fSrAZ",
+      "kind": "heading",
+      "text": "Domains",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_1aimdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "sRahY6DG_C",
+      "kind": "heading",
+      "text": "Webhooks",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "#_R_1qimdllfium6jiuqsnpfiutb_"
+    },
+    {
+      "id": "T_ZNFo6mYy",
+      "kind": "testimonial",
+      "text": "Documentation IndexFetch the complete documentation index at: /docs/llms.txtUse this file to discover all available pages before exploring further.",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "html.inter_1d81deff-module__CYM0aG__variable > body.antialiased > blockquote.sr-only"
+    },
+    {
+      "id": "sDQ43yDb_P",
+      "kind": "cta",
+      "text": "Contacts",
+      "sourceUrl": "https://resend.com/docs",
+      "selector": "div.min-w-0! > div.mt-6 > ul.sidebar-group > li.space-y-px > button.group"
+    }
+  ],
+  "siteBrief": {
+    "productName": "resend",
+    "summary": "Email fordevelopers",
+    "audience": "general",
+    "differentiator": "Email fordevelopers",
+    "strongestClaimFactId": "ODcSEkbyJa",
+    "factIds": [
+      "WAFu2rm0-w",
+      "wrSmbW53ct",
+      "MPY5xIsVxz",
+      "t4ilUJzcuN",
+      "FbaqwGto1G",
+      "K6aNpS_ztD",
+      "zzQYVAIr-y",
+      "FNn9tB4sIq",
+      "_oSCKUHX_5",
+      "o9cfoEw_6o",
+      "OoNKdUlKJv",
+      "m3QQAWHpFT",
+      "LfFX_Iu6PF",
+      "nr_-FRKglU",
+      "FkClKwC_R7",
+      "gs-cS-883s",
+      "Lm1oU7iib7",
+      "PlVPyuECcW",
+      "dEWzGAKLoB",
+      "bS3YAN7u4Z",
+      "Y1unDfJ4Ar",
+      "uGKd_8ud4D",
+      "Uha91PLUtb",
+      "HvUTualAWv",
+      "y6DDH5C4vA",
+      "yFkaHK1nlP",
+      "ZfCXwQVPxR",
+      "59Xt-G083F",
+      "an8usjpMwS",
+      "sn3K7Hx3jo",
+      "rV1uzlh7FV",
+      "OgJHQg1Snu",
+      "TdCyOjiegL",
+      "REr5uxzcJY",
+      "Mi9Glj8mZR",
+      "NB_DJGnJA8",
+      "ARLjYo-iML",
+      "eoWO_-5f-E",
+      "nJ6QVWLKI1",
+      "ouumuB0Hq9",
+      "zxP2wpy0Js",
+      "gGRRR9SAr0",
+      "9L_sIOgXbq",
+      "us0mJmdIAO",
+      "AoV31pMGbf",
+      "4QqOKasEE_",
+      "Q9eKL8zQYh",
+      "Pe8jbJkmp8",
+      "uectdE7b-l",
+      "cRGh78-rPv",
+      "IGLDtlPK2J",
+      "oIWG0SMnhU",
+      "VzxinDWwUB",
+      "xnlfm4avtR",
+      "v8LwWpU8qR",
+      "3s39rT3Z7C",
+      "QPA4z36fFd",
+      "ppgWUpXY-v",
+      "5-aAkjy8q6",
+      "PWHdcP2_Vw",
+      "na7KTjrdTR",
+      "iS8b80tcxK",
+      "ipkOtMn-bI",
+      "aB5xK9BY0I",
+      "YATE1CLmIt",
+      "IOp0CzJ9r5",
+      "Si9rJVKe3e",
+      "kXQmuRxx5g",
+      "ODcSEkbyJa",
+      "HWvec4GC6Y",
+      "neVLftHTTD",
+      "gvlpAbZrIC",
+      "Iu2T1NSC8h",
+      "1OoCG5A464",
+      "i2ad_NL9aE",
+      "yL14EZ31T6",
+      "GYER5ZCy4b",
+      "ydSjTckrJN",
+      "iAh41rokwE",
+      "qoh6S1KvhE",
+      "1DMuDCMl2y",
+      "oqViQu0ez7",
+      "3cV3l8T85A",
+      "D0tGdW_-5i",
+      "Cl8VFOA-VR",
+      "bCTm7URLu8",
+      "Ixpq2ljppu",
+      "yyYHNZ5zmP",
+      "8gihgGG9X8",
+      "d82c6zjO2R",
+      "1d1g6aR9Jn",
+      "EiyIuvNjCF",
+      "45EOjlLcgz",
+      "liV-d_srkh",
+      "x_202384pX",
+      "gMgjzGjio6",
+      "-P4Em3Zloh",
+      "Ynyz_fSrAZ",
+      "sRahY6DG_C",
+      "T_ZNFo6mYy",
+      "sDQ43yDb_P"
+    ],
+    "source": "fallback"
+  }
+}

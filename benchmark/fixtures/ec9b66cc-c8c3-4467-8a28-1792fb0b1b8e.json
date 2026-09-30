@@ -1,0 +1,679 @@
+{
+  "url": "https://www.linkedin.com",
+  "category": "bot_protected",
+  "domain": "www.linkedin.com",
+  "pages": [
+    {
+      "url": "https://www.linkedin.com",
+      "screenshotKey": "jobs/ec9b66cc-c8c3-4467-8a28-1792fb0b1b8e/crawl/home.png"
+    },
+    {
+      "url": "https://www.linkedin.com/top-content/productivity/",
+      "screenshotKey": "jobs/ec9b66cc-c8c3-4467-8a28-1792fb0b1b8e/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "screenshotKey": "jobs/ec9b66cc-c8c3-4467-8a28-1792fb0b1b8e/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgba(0, 0, 0, 0.9)",
+    "accent": "rgb(10, 102, 194)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://static.licdn.com/aero-v1/sc/h/al2o9zrvru7aqj8e1x2rzsrca"
+  },
+  "facts": [
+    {
+      "id": "EO-LZ01y8y",
+      "kind": "hero",
+      "text": "Grow your professional network and discover jobs and career tips",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "body > main.flex > section.section > div.self-start > h1.font-sans"
+    },
+    {
+      "id": "xRKukaAPYB",
+      "kind": "hero",
+      "text": "By clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement, Privacy Policy, and Cookie Policy.",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "main.flex > section.section > div.self-start > div.mt-3 > p.linkedin-tc__text"
+    },
+    {
+      "id": "-_4lFVO7v7",
+      "kind": "heading",
+      "text": "Explore top LinkedIn content",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "body > main.flex > section.section > div.self-start > h2.header"
+    },
+    {
+      "id": "ZP0p8q3wO4",
+      "kind": "heading",
+      "text": "Find the right job or internship for you",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "body > main.flex > section.section > div.self-start > h2.header"
+    },
+    {
+      "id": "tSktxwQsm8",
+      "kind": "heading",
+      "text": "Post your job for millions of people to see",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "body > main.flex > section.section > div.w-full > h2.header"
+    },
+    {
+      "id": "UglAnh6dOy",
+      "kind": "heading",
+      "text": "Discover the best software tools",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "body > main.flex > section.section > div.self-start > h2.header"
+    },
+    {
+      "id": "UmgkK8JOn7",
+      "kind": "heading",
+      "text": "Keep your mind sharp with games",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "body > main.flex > section.section > div.self-start > h2.header"
+    },
+    {
+      "id": "pFzgYsBHFi",
+      "kind": "heading",
+      "text": "Let the right people know you’re open to work",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "div.relative > ul.slide-list__list > li.flex > div.w-[564px] > h2.header"
+    },
+    {
+      "id": "_ualrnYY4O",
+      "kind": "heading",
+      "text": "Conversations today could lead to opportunity tomorrow",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "div.relative > ul.slide-list__list > li.flex > div.w-[564px] > h2.header"
+    },
+    {
+      "id": "nyI_sFRvOq",
+      "kind": "heading",
+      "text": "Stay up to date on your industry",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "div.relative > ul.slide-list__list > li.flex > div.w-[564px] > h2.header"
+    },
+    {
+      "id": "xvmXCR_Mdy",
+      "kind": "heading",
+      "text": "Connect with people who can help",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "div.flex > section.tile-module > div.flex > div.max-w-56 > h2.header"
+    },
+    {
+      "id": "0-Km-wWC6S",
+      "kind": "heading",
+      "text": "Learn the skills you need to succeed",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "div.flex > section.tile-module > div.flex > div.max-w-56 > h2.header"
+    },
+    {
+      "id": "kO3luMl-tS",
+      "kind": "heading",
+      "text": "Who is LinkedIn for?",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "main.flex > section.section > div.flex > div.block > h2.header"
+    },
+    {
+      "id": "RtCDiQIH6k",
+      "kind": "heading",
+      "text": "In it to chase my dream",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "main.flex > section.section > div.flex > div.w-full > h2.header"
+    },
+    {
+      "id": "k_iwCYE29Y",
+      "kind": "heading",
+      "text": "Check out Gayatri’s story of finding a new job on LinkedIn",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "main.flex > section.section > div.flex > div.w-full > h3.body"
+    },
+    {
+      "id": "tXgqT_czHx",
+      "kind": "heading",
+      "text": "Join your colleagues, classmates, and friends on LinkedIn",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "#bottom-cta-section__header"
+    },
+    {
+      "id": "z2lPg9adO-",
+      "kind": "heading",
+      "text": "General",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "main.flex > section.directory > div.w-full > div.w-full > h3.font-sans"
+    },
+    {
+      "id": "iPpTLtaUmv",
+      "kind": "heading",
+      "text": "Browse LinkedIn",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "main.flex > section.directory > div.w-full > div.w-full > h3.font-sans"
+    },
+    {
+      "id": "9pmXUgQn8Q",
+      "kind": "heading",
+      "text": "Business Solutions",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "main.flex > section.directory > div.w-full > div.w-full > h3.font-sans"
+    },
+    {
+      "id": "Oygqi_RD5Q",
+      "kind": "heading",
+      "text": "Directories",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "main.flex > section.directory > div.w-full > div.w-full > h3.font-sans"
+    },
+    {
+      "id": "Z8DHJSPBgl",
+      "kind": "cta",
+      "text": "Join now",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "body > div.sticky > nav.nav > div.nav__cta-container > a.nav__button-tertiary"
+    },
+    {
+      "id": "aiWR4yvkJf",
+      "kind": "cta",
+      "text": "Get started",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "body > main.flex > section.section > div.w-full > a.btn-md"
+    },
+    {
+      "id": "IWxYIg146v",
+      "kind": "cta",
+      "text": "Sign Up",
+      "sourceUrl": "https://www.linkedin.com",
+      "selector": "div.w-full > div.w-full > ul > li.babybear:my-1 > a.font-sans"
+    },
+    {
+      "id": "K4jbZJ4LoI",
+      "kind": "hero",
+      "text": "Productivity",
+      "sourceUrl": "https://www.linkedin.com/top-content/productivity/",
+      "selector": "section.core-rail > div.details > div.keyword-landing-page > div.keyword-landing-page-topic-header > h1.core-section-container__main-title"
+    },
+    {
+      "id": "6kII8fi7wE",
+      "kind": "hero",
+      "text": "Explore top LinkedIn content from expert professionals.",
+      "sourceUrl": "https://www.linkedin.com/top-content/productivity/",
+      "selector": "section.core-rail > div.details > div.keyword-landing-page > div.keyword-landing-page-topic-header > p.text-color-text-low-emphasis"
+    },
+    {
+      "id": "pPTKzbHFtb",
+      "kind": "heading",
+      "text": "More in Productivity",
+      "sourceUrl": "https://www.linkedin.com/top-content/productivity/",
+      "selector": "body > main.main > section.right-rail > section.aside-section-container > h2.aside-section-container__title"
+    },
+    {
+      "id": "hEzRCRqn6L",
+      "kind": "heading",
+      "text": "Explore categories",
+      "sourceUrl": "https://www.linkedin.com/top-content/productivity/",
+      "selector": "body > main.main > section.right-rail > section.aside-section-container > h2.aside-section-container__title"
+    },
+    {
+      "id": "KLkZGx-aZ6",
+      "kind": "cta",
+      "text": "Facebook",
+      "sourceUrl": "https://www.linkedin.com/top-content/productivity/",
+      "selector": "div.social-action-bar > div.collapsible-dropdown > ul.collapsible-dropdown__list > li > button.social-share__item"
+    },
+    {
+      "id": "IVT4Iyy39B",
+      "kind": "cta",
+      "text": "Poultry Production Practices",
+      "sourceUrl": "https://www.linkedin.com/top-content/productivity/",
+      "selector": "div.aside-section-container__content > div.show-more-less > ul.show-more-less__list > li.topic > a.flex"
+    },
+    {
+      "id": "v6iSNKPUlj",
+      "kind": "hero",
+      "text": "1,000+ Product Management Jobs in Pune",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "div.base-serp-page > div.base-serp-page__content > main.two-pane-serp-page__results > div.results-context-header > h1.results-context-header__context"
+    },
+    {
+      "id": "7FFSjpMf0C",
+      "kind": "heading",
+      "text": "Senior Product Manager",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "JUBXYGlcOQ",
+      "kind": "heading",
+      "text": "Lead Technical Product Manager - (IIT/IIM Preferred) - Product Management",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "uf0HfTu6aC",
+      "kind": "heading",
+      "text": "Product Manager (Digital Products, Payments) - Pune – 7+ years Exp",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "PMxPB_aqRZ",
+      "kind": "heading",
+      "text": "Product Manager (Core Platform and Infrastructure)",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "5dx_MJlKEm",
+      "kind": "heading",
+      "text": "Staff AI Product Manager",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "JsbvKv13Ow",
+      "kind": "heading",
+      "text": "Product Manager (Direct Procurement)",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "qKANIOUrMX",
+      "kind": "heading",
+      "text": "Sr Product Manager EDR",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "c1T1QK9iVb",
+      "kind": "heading",
+      "text": "Senior Product Manager - Technical",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "6_Fgtzdmdi",
+      "kind": "heading",
+      "text": "Senior Technical Product Manager",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "kOL7AmCqA9",
+      "kind": "heading",
+      "text": "Product Manager",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "_RNnnqxPb1",
+      "kind": "heading",
+      "text": "Product Management, Manager",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "6EWq8sbMdX",
+      "kind": "heading",
+      "text": "GCP Product Manager",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "6C2NGu90K1",
+      "kind": "heading",
+      "text": "Product Manager-II",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "yZesRhSmdm",
+      "kind": "heading",
+      "text": "Engineering Product Manager | 15+ Years",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "4mCwDl_Sse",
+      "kind": "heading",
+      "text": "AI Product Manager",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "uQhG7jkotY",
+      "kind": "heading",
+      "text": "Vice President, POM Product Owner",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "tpCKX0zOxx",
+      "kind": "heading",
+      "text": "Vice President, POM Technical Product Management - Developer Marketplace",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "YeJ09xU1m5",
+      "kind": "heading",
+      "text": "Product Manager (Technical) - Identity & Access Management",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "fj22dsJIEb",
+      "kind": "heading",
+      "text": "Product Manager II",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "DaqpB_gkmC",
+      "kind": "heading",
+      "text": "Technical Product Manager",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "VE-4Jll4Fl",
+      "kind": "heading",
+      "text": "Senior Manager, Product Management",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "DeI0me1YFg",
+      "kind": "heading",
+      "text": "Technical Product Manager - ServiceNow SPM & AI",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "ke3zZShOwX",
+      "kind": "heading",
+      "text": "Vice President, POM Technical Product Management - Reporting & Analytics",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "9u7EdRRYve",
+      "kind": "heading",
+      "text": "Specialist Product Manager",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "r1krMZQ1Pj",
+      "kind": "heading",
+      "text": "Vice President, POM Product Management",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "Zn4vYnQUcc",
+      "kind": "heading",
+      "text": "Lead Product Manager- Technical",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "4thIt21Gbp",
+      "kind": "heading",
+      "text": "Director Product Management - Source-to-Pay",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "IcP-OQDx3R",
+      "kind": "heading",
+      "text": "VP Product Owner - Demand and Deposit Accounting (DDA)",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "2Zup61-iZ5",
+      "kind": "heading",
+      "text": "Product Owner - Virtual Interlining",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "-cSsQzw8Ml",
+      "kind": "heading",
+      "text": "Senior Principal Product Manager,MROC/MSSP",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "EIgkOYVoh1",
+      "kind": "heading",
+      "text": "Senior PMT",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "7YMwhFos4A",
+      "kind": "heading",
+      "text": "Product Line Manager - Greases, Maintenance and Power transmission Products",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "sa9m_T-xhO",
+      "kind": "heading",
+      "text": "Product Manager, Senior",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "RqoXgmtY55",
+      "kind": "heading",
+      "text": "Manager, Product Management",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "yOuIX5SB0M",
+      "kind": "heading",
+      "text": "Principal Product Mgr: AppSec and ASPM",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "xa2R38EWwp",
+      "kind": "heading",
+      "text": "Senior Product Manager, Security Research",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "eEJwF6JoFP",
+      "kind": "heading",
+      "text": "Product Owner - Analytics Application",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "Fggfk5t-Tb",
+      "kind": "heading",
+      "text": "Software Product Owner",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "G8PYJOFUkX",
+      "kind": "heading",
+      "text": "Manager, Product Management, Product Resilience",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "geifxc6NOc",
+      "kind": "heading",
+      "text": "Payments - AVP Product Owner",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "2sFcZkkG9N",
+      "kind": "heading",
+      "text": "Product Owner",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "ZP9Z0rNsy2",
+      "kind": "heading",
+      "text": "Join or sign in to save this job",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "#job-details-topcard-save-modal-modal-header"
+    },
+    {
+      "id": "gEDRYDBF0N",
+      "kind": "heading",
+      "text": "Seniority level",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "section.core-section-container > div.core-section-container__content > ul.description__job-criteria-list > li.description__job-criteria-item > h3.description__job-criteria-subheader"
+    },
+    {
+      "id": "BMefTcVped",
+      "kind": "heading",
+      "text": "Employment type",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "section.core-section-container > div.core-section-container__content > ul.description__job-criteria-list > li.description__job-criteria-item > h3.description__job-criteria-subheader"
+    },
+    {
+      "id": "BMxBzkGXJt",
+      "kind": "heading",
+      "text": "Job function",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "section.core-section-container > div.core-section-container__content > ul.description__job-criteria-list > li.description__job-criteria-item > h3.description__job-criteria-subheader"
+    },
+    {
+      "id": "rAw3nUcRzE",
+      "kind": "heading",
+      "text": "Industries",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "section.core-section-container > div.core-section-container__content > ul.description__job-criteria-list > li.description__job-criteria-item > h3.description__job-criteria-subheader"
+    },
+    {
+      "id": "F_0Qq5SOb1",
+      "kind": "heading",
+      "text": "You’re signed out",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "#cta-modal-header"
+    },
+    {
+      "id": "9P7N_Udd8x",
+      "kind": "heading",
+      "text": "Sign in for the full experience.",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "#cta-modal-subheader"
+    },
+    {
+      "id": "y0UuYcAWt-",
+      "kind": "stat",
+      "text": "Engineering Product Manager | 15+ Years",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "ul.jobs-search__results-list > li > div.base-card > div.base-search-card__info > h3.base-search-card__title"
+    },
+    {
+      "id": "c2ou_DJxe3",
+      "kind": "cta",
+      "text": "Learn more",
+      "sourceUrl": "https://www.linkedin.com/jobs/product-management-jobs-pune-division?trk=homepage-basic_suggested-search",
+      "selector": "div.jserp-filters-row > div.filters-affordance > div.filters-affordance__popup > p.filters-affordance__body > a.filters-affordance__learn-more"
+    }
+  ],
+  "siteBrief": {
+    "productName": "linkedin",
+    "summary": "Grow your professional network and discover jobs and career tips",
+    "audience": "general",
+    "differentiator": "Grow your professional network and discover jobs and career tips",
+    "strongestClaimFactId": "y0UuYcAWt-",
+    "factIds": [
+      "EO-LZ01y8y",
+      "xRKukaAPYB",
+      "-_4lFVO7v7",
+      "ZP0p8q3wO4",
+      "tSktxwQsm8",
+      "UglAnh6dOy",
+      "UmgkK8JOn7",
+      "pFzgYsBHFi",
+      "_ualrnYY4O",
+      "nyI_sFRvOq",
+      "xvmXCR_Mdy",
+      "0-Km-wWC6S",
+      "kO3luMl-tS",
+      "RtCDiQIH6k",
+      "k_iwCYE29Y",
+      "tXgqT_czHx",
+      "z2lPg9adO-",
+      "iPpTLtaUmv",
+      "9pmXUgQn8Q",
+      "Oygqi_RD5Q",
+      "Z8DHJSPBgl",
+      "aiWR4yvkJf",
+      "IWxYIg146v",
+      "K4jbZJ4LoI",
+      "6kII8fi7wE",
+      "pPTKzbHFtb",
+      "hEzRCRqn6L",
+      "KLkZGx-aZ6",
+      "IVT4Iyy39B",
+      "v6iSNKPUlj",
+      "7FFSjpMf0C",
+      "JUBXYGlcOQ",
+      "uf0HfTu6aC",
+      "PMxPB_aqRZ",
+      "5dx_MJlKEm",
+      "JsbvKv13Ow",
+      "qKANIOUrMX",
+      "c1T1QK9iVb",
+      "6_Fgtzdmdi",
+      "kOL7AmCqA9",
+      "_RNnnqxPb1",
+      "6EWq8sbMdX",
+      "6C2NGu90K1",
+      "yZesRhSmdm",
+      "4mCwDl_Sse",
+      "uQhG7jkotY",
+      "tpCKX0zOxx",
+      "YeJ09xU1m5",
+      "fj22dsJIEb",
+      "DaqpB_gkmC",
+      "VE-4Jll4Fl",
+      "DeI0me1YFg",
+      "ke3zZShOwX",
+      "9u7EdRRYve",
+      "r1krMZQ1Pj",
+      "Zn4vYnQUcc",
+      "4thIt21Gbp",
+      "IcP-OQDx3R",
+      "2Zup61-iZ5",
+      "-cSsQzw8Ml",
+      "EIgkOYVoh1",
+      "7YMwhFos4A",
+      "sa9m_T-xhO",
+      "RqoXgmtY55",
+      "yOuIX5SB0M",
+      "xa2R38EWwp",
+      "eEJwF6JoFP",
+      "Fggfk5t-Tb",
+      "G8PYJOFUkX",
+      "geifxc6NOc",
+      "2sFcZkkG9N",
+      "ZP9Z0rNsy2",
+      "gEDRYDBF0N",
+      "BMefTcVped",
+      "BMxBzkGXJt",
+      "rAw3nUcRzE",
+      "F_0Qq5SOb1",
+      "9P7N_Udd8x",
+      "y0UuYcAWt-",
+      "c2ou_DJxe3"
+    ],
+    "source": "fallback"
+  }
+}

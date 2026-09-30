@@ -1,0 +1,847 @@
+{
+  "url": "https://linktr.ee",
+  "category": "js_spa",
+  "domain": "linktr.ee",
+  "pages": [
+    {
+      "url": "https://linktr.ee",
+      "screenshotKey": "jobs/24a00a61-4cd0-4761-a0f7-4db22655ed59/crawl/home.png"
+    },
+    {
+      "url": "https://linktr.ee/features/link-in-bio",
+      "screenshotKey": "jobs/24a00a61-4cd0-4761-a0f7-4db22655ed59/crawl/page-1.png"
+    },
+    {
+      "url": "https://linktr.ee/features/link-shortener",
+      "screenshotKey": "jobs/24a00a61-4cd0-4761-a0f7-4db22655ed59/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "rgb(240, 240, 240)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://linktr.ee/favicon.ico?favicon.12e703tnl4s-b.ico?dpl=5f1a5e100a6c670dd69752b51685d02aeea434e8"
+  },
+  "facts": [
+    {
+      "id": "9L0kBl7j6S",
+      "kind": "hero",
+      "text": "A link in bio built for you.",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.mt-fluid-4 > h1.text-h1"
+    },
+    {
+      "id": "dRulbk35qW",
+      "kind": "hero",
+      "text": "Join 70M+ people using Linktree for their link in bio. One link to help you share everything you create, curate and sell from your Instagram, TikTok, Twitter, YouTube and other social media profiles.",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.mt-fluid-4 > p.text-body"
+    },
+    {
+      "id": "-3EBTT5tip",
+      "kind": "heading",
+      "text": "Create and customize your Linktree in minutes",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-h2"
+    },
+    {
+      "id": "9CHgiesTCY",
+      "kind": "heading",
+      "text": "Share your Linktree anywhere you like!",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-h2"
+    },
+    {
+      "id": "gNdKmLAWfV",
+      "kind": "heading",
+      "text": "Analyze your audience and keep them engaged",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-h2"
+    },
+    {
+      "id": "s12CCMi7TV",
+      "kind": "heading",
+      "text": "The only link in bio trusted by 70M+",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "section.relative > div.mx-auto > div.mx-auto > div.flex > h2.text-current"
+    },
+    {
+      "id": "MDi3liaiuP",
+      "kind": "heading",
+      "text": "Share every type of content in limitless ways",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "section.relative > div.mx-auto > div.flex > a.flex > h3.text-h3"
+    },
+    {
+      "id": "tJBgqqNGEb",
+      "kind": "heading",
+      "text": "Sell products, collect payments and make monetization simple",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "section.relative > div.mx-auto > div.flex > a.flex > h3.text-h3"
+    },
+    {
+      "id": "7drMMPu8s-",
+      "kind": "heading",
+      "text": "Grow, own and engage your audience across all of your channels",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > a.flex > h3.text-h3"
+    },
+    {
+      "id": "33MReckabm",
+      "kind": "heading",
+      "text": "The fast, friendly and powerful link in bio tool.",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "body.dm_mono_98f7bdb8-module__lyi-bG__variable > main.-mt-navbar > section.relative > div.mx-auto > h2.text-h2"
+    },
+    {
+      "id": "n42BAze_mQ",
+      "kind": "heading",
+      "text": "As featured in…",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.mx-auto > h2.text-h2"
+    },
+    {
+      "id": "iN4uRfu2IY",
+      "kind": "heading",
+      "text": "Questions? Answered",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-center"
+    },
+    {
+      "id": "nRWGXD7xLz",
+      "kind": "heading",
+      "text": "Jumpstart your corner of the internet today",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "main.-mt-navbar > footer.relative > div.relative > div.relative > h2.text-h2"
+    },
+    {
+      "id": "hbnpBMPyOW",
+      "kind": "stat",
+      "text": "The only link in bio trusted by 70M+",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "section.relative > div.mx-auto > div.mx-auto > div.flex > h2.text-current"
+    },
+    {
+      "id": "atwt_jeLw-",
+      "kind": "testimonial",
+      "text": "“Linktree simplifies the process for creators to share multiple parts of themselves in one inclusive link.”",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "div.flex > div.min-w-0 > figure.mx-auto > div.mx-auto > blockquote"
+    },
+    {
+      "id": "6c8AhDP7s2",
+      "kind": "testimonial",
+      "text": "“Linktree helps my customers get where they need to go. It’s fast and easy.”",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "div.flex > div.min-w-0 > figure.mx-auto > div.mx-auto > blockquote"
+    },
+    {
+      "id": "RAr46rt-vs",
+      "kind": "testimonial",
+      "text": "“I use Linktree’s analytics to better understand my audience and what converts them.”",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "div.flex > div.min-w-0 > figure.mx-auto > div.mx-auto > blockquote"
+    },
+    {
+      "id": "r35Dg1AKuI",
+      "kind": "testimonial",
+      "text": "“My Linktree resume stood out from the rest, securing me my first full-time job as a TV reporter!”",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "div.flex > div.min-w-0 > figure.mx-auto > div.mx-auto > blockquote"
+    },
+    {
+      "id": "7ypBzFIg6B",
+      "kind": "testimonial",
+      "text": "“With Linktree, I can definitely see the monetization of my following becoming a full-time thing.”",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "div.flex > div.min-w-0 > figure.mx-auto > div.mx-auto > blockquote"
+    },
+    {
+      "id": "38sBae0TZC",
+      "kind": "cta",
+      "text": "Facebook",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "ul.flex > li > ul.ml-4 > li > a"
+    },
+    {
+      "id": "TN4dK8PT9a",
+      "kind": "cta",
+      "text": "Send contacts to email tools",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "ul.flex > li > ul.ml-4 > li > a"
+    },
+    {
+      "id": "e2RqzwSrnF",
+      "kind": "cta",
+      "text": "Earn with a Linktree Shop",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "ul.flex > li > ul.ml-4 > li > a"
+    },
+    {
+      "id": "Rf8qKGzj6O",
+      "kind": "cta",
+      "text": "Booked and paid, easily",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "ul.flex > li > ul.ml-4 > li > a"
+    },
+    {
+      "id": "bfzrYzNaEg",
+      "kind": "cta",
+      "text": "Sign up free",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "#signUpButton"
+    },
+    {
+      "id": "ToIN3mD0GX",
+      "kind": "cta",
+      "text": "Get started for free",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "div.mx-auto > div.mt-fluid-4 > div.flex > form.flex > button.inline-flex"
+    },
+    {
+      "id": "sL3HwhxKRp",
+      "kind": "cta",
+      "text": "Contact",
+      "sourceUrl": "https://linktr.ee",
+      "selector": "div.flex > div.flex > div.flex > div.flex > a.font-linksans"
+    },
+    {
+      "id": "3WMeUNKYSw",
+      "kind": "hero",
+      "text": "One link in bio for everything you do",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.mt-fluid-4 > h1.text-h1"
+    },
+    {
+      "id": "87vY60g7c7",
+      "kind": "heading",
+      "text": "70m+",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.grid > div.min-w-0 > div.flex > div.flex > h3.text-h3"
+    },
+    {
+      "id": "aHCrXLoO2p",
+      "kind": "heading",
+      "text": "1.7 billion",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.grid > div.min-w-0 > div.flex > div.flex > h3.text-h3"
+    },
+    {
+      "id": "HHHodsPEHF",
+      "kind": "heading",
+      "text": "1.4 billion",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.grid > div.min-w-0 > div.flex > div.flex > h3.text-h3"
+    },
+    {
+      "id": "J2Vt8ylLKn",
+      "kind": "heading",
+      "text": "Free",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.grid > div.min-w-0 > div.flex > div.flex > h3.text-h3"
+    },
+    {
+      "id": "eLQHqkphKQ",
+      "kind": "heading",
+      "text": "What is a link in bio?",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-h2"
+    },
+    {
+      "id": "krU5S3aQwF",
+      "kind": "heading",
+      "text": "Why you need a link in bio.",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "section.relative > div.mx-auto > div.flex > div.flex > h2.text-h2"
+    },
+    {
+      "id": "DZ4DJenxfp",
+      "kind": "heading",
+      "text": "Share everything from one link in bio",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "kBetamT62O",
+      "kind": "heading",
+      "text": "Reach your audience directly from your link in bio",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "fiIWK0RJWT",
+      "kind": "heading",
+      "text": "Understand what’s actually working",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "iPwQpVReMv",
+      "kind": "heading",
+      "text": "What to include on your link in bio page",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.mx-auto > h2.text-h2"
+    },
+    {
+      "id": "DfE9ID4eyL",
+      "kind": "heading",
+      "text": "Your latest content",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.min-w-0 > div.flex > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "zjC-xds0GK",
+      "kind": "heading",
+      "text": "Products or services",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.min-w-0 > div.flex > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "eO_NQplXMO",
+      "kind": "heading",
+      "text": "Booking and scheduling",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.min-w-0 > div.flex > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "K_zgLFLRgT",
+      "kind": "heading",
+      "text": "Email signup",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.min-w-0 > div.flex > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "4vZit7kSFq",
+      "kind": "heading",
+      "text": "Social profiles",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.min-w-0 > div.flex > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "m68ShOmRD5",
+      "kind": "heading",
+      "text": "Digital products",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.min-w-0 > div.flex > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "FyzrbwXnFi",
+      "kind": "heading",
+      "text": "A link in bio that matches your brand",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-h2"
+    },
+    {
+      "id": "5ggwPZ-YIs",
+      "kind": "heading",
+      "text": "Built-in analytics for your link in bio",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-h2"
+    },
+    {
+      "id": "4xRI-RjPLn",
+      "kind": "heading",
+      "text": "Earn from your audience without building a store.",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-h2"
+    },
+    {
+      "id": "JsZvTjsfTU",
+      "kind": "heading",
+      "text": "How creators and brands use their link in bio",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.mx-auto > h2.text-h2"
+    },
+    {
+      "id": "Rf5DJXvzWy",
+      "kind": "heading",
+      "text": "Examples of link in bio pages",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.mx-auto > h2.text-h2"
+    },
+    {
+      "id": "ecQpp8r4BO",
+      "kind": "heading",
+      "text": "Real Linktree examples",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.mx-auto > div.grid > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "GhUCrREfNh",
+      "kind": "heading",
+      "text": "Link in bio templates",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.mx-auto > div.grid > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "q6pyyyV8bF",
+      "kind": "heading",
+      "text": "Free link in bio vs. Pro: what’s included",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "section.relative > div.container > div.flex > div.flex > h2.text-h2"
+    },
+    {
+      "id": "jkcvJAlM3D",
+      "kind": "heading",
+      "text": "What to look for in a link in bio tool",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.mx-auto > h2.text-h2"
+    },
+    {
+      "id": "ZGKLajyHoK",
+      "kind": "heading",
+      "text": "Easy to set up and update",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.mx-auto > div.hidden > div.flex > button.group > h3.text-h4"
+    },
+    {
+      "id": "UTgLklzZaT",
+      "kind": "heading",
+      "text": "Design that matches your brand",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.mx-auto > div.hidden > div.flex > button.group > h3.text-h4"
+    },
+    {
+      "id": "pkWCHfk-x6",
+      "kind": "heading",
+      "text": "Built-in analytics",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.mx-auto > div.hidden > div.flex > button.group > h3.text-h4"
+    },
+    {
+      "id": "b_LWySlKtZ",
+      "kind": "heading",
+      "text": "Tools that help you grow",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.mx-auto > div.hidden > div.flex > button.group > h3.text-h4"
+    },
+    {
+      "id": "6OtwvmmlwC",
+      "kind": "heading",
+      "text": "Free to start",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.mx-auto > div.hidden > div.flex > button.group > h3.text-h4"
+    },
+    {
+      "id": "e9tbovjYwS",
+      "kind": "heading",
+      "text": "How to create your link in bio.",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div > section.relative > div.mx-auto > div.mx-auto > h2.text-h2"
+    },
+    {
+      "id": "MvhEmBZkYq",
+      "kind": "heading",
+      "text": "1. Sign up for free",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "gDmiPTgY5x",
+      "kind": "heading",
+      "text": "2. Add your links",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "1biZo6evdM",
+      "kind": "heading",
+      "text": "3. Customize your page",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "wmWm18eIux",
+      "kind": "heading",
+      "text": "4. Copy your Linktree URL",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "N2u29B5sV-",
+      "kind": "heading",
+      "text": "5. Paste it in your social bio",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "kDYM50g15l",
+      "kind": "heading",
+      "text": "How to add a link in bio on each platform",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.mx-auto > h2.text-h2"
+    },
+    {
+      "id": "UnDWcRrAzR",
+      "kind": "heading",
+      "text": "Bonus: share your link in bio in Instagram Stories",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.focus-visible:rounded-sm > div.flex > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "wWEriou3Iv",
+      "kind": "heading",
+      "text": "Frequently asked questions about link in bio",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-center"
+    },
+    {
+      "id": "A3sts2nCiy",
+      "kind": "heading",
+      "text": "Create your link in bio today",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "body.dm_mono_98f7bdb8-module__lyi-bG__variable > main.-mt-navbar > section.relative > div.mx-auto > h2.text-h2"
+    },
+    {
+      "id": "7iUdTBz7Zs",
+      "kind": "stat",
+      "text": "70m+",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.grid > div.min-w-0 > div.flex > div.flex > h3.text-h3"
+    },
+    {
+      "id": "ZR4d8R7VRV",
+      "kind": "stat",
+      "text": "1.7 billion",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.grid > div.min-w-0 > div.flex > div.flex > h3.text-h3"
+    },
+    {
+      "id": "tbFEBKd6Nq",
+      "kind": "stat",
+      "text": "1.4 billion",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.grid > div.min-w-0 > div.flex > div.flex > h3.text-h3"
+    },
+    {
+      "id": "wUBrx77wd5",
+      "kind": "stat",
+      "text": "1. Sign up for free",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "VjzpCMuzLq",
+      "kind": "stat",
+      "text": "2. Add your links",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "QmLs9f3ooC",
+      "kind": "stat",
+      "text": "3. Customize your page",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "QshEer5ERX",
+      "kind": "stat",
+      "text": "4. Copy your Linktree URL",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "ayPHAaHqqZ",
+      "kind": "stat",
+      "text": "5. Paste it in your social bio",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "QIT8ep8L9F",
+      "kind": "testimonial",
+      "text": "“We love how Linktree has helped us manage our business by having all social media and ways to pay in one location. The QR code has made it easy for customers to access it all!”",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > figure.mx-auto > div.mx-auto > blockquote"
+    },
+    {
+      "id": "5zcW8PVIX4",
+      "kind": "testimonial",
+      "text": "“Linktree has solved my need to drive my community to all of my different platforms. They’re now able to easily find and access resources that help them become more financially savvy.”",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.min-w-0 > figure.mx-auto > div.mx-auto > blockquote"
+    },
+    {
+      "id": "jTwsLk-kI5",
+      "kind": "cta",
+      "text": "Bookings",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.contents > div.flex > ul.m-0 > li > a.flex"
+    },
+    {
+      "id": "G0UGEFhVXG",
+      "kind": "cta",
+      "text": "Shopify",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.flex > ul.m-0 > li > a.flex"
+    },
+    {
+      "id": "VET1C06x15",
+      "kind": "cta",
+      "text": "Get Started",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.flex > ul.m-0 > li > a.flex"
+    },
+    {
+      "id": "SYvA4Yi73E",
+      "kind": "cta",
+      "text": "Contact us",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "div.flex > div.flex > ul.m-0 > li > a.flex"
+    },
+    {
+      "id": "jhF8UaaENa",
+      "kind": "cta",
+      "text": "Linktree Shops",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "section.relative > div.mx-auto > div.flex > p.text-body > a.underline"
+    },
+    {
+      "id": "BZLbi3NdRb",
+      "kind": "cta",
+      "text": "Get started today",
+      "sourceUrl": "https://linktr.ee/features/link-in-bio",
+      "selector": "section.relative > div.mx-auto > div.flex > div.flex-wrap > a.inline-flex"
+    },
+    {
+      "id": "lOBWuR07zU",
+      "kind": "hero",
+      "text": "The best free link shortener for creators & businesses",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.mt-fluid-4 > h1.text-h1"
+    },
+    {
+      "id": "UQ_nSJanaJ",
+      "kind": "hero",
+      "text": "Shorten, share and track your links — all in one place. Linktree’s free link shortener makes it easy to create shareable links that boost engagement and drive more traffic.",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.mt-fluid-4 > p.text-body"
+    },
+    {
+      "id": "NC5qXu2HQR",
+      "kind": "heading",
+      "text": "Shorten once, share everywhere.",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.mx-auto > h2.text-h2"
+    },
+    {
+      "id": "SSXmXHmm9j",
+      "kind": "heading",
+      "text": "Track your engagement",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "w0IN1kSqsN",
+      "kind": "heading",
+      "text": "QR codes for every short link",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "A4u6oXm-jM",
+      "kind": "heading",
+      "text": "Everything in one place",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "N1BHtNChG-",
+      "kind": "heading",
+      "text": "Shorten and share links anywhere.",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-h2"
+    },
+    {
+      "id": "j0wkKnc4rQ",
+      "kind": "heading",
+      "text": "How to generate hashtags",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-h2"
+    },
+    {
+      "id": "QM_QCezZmc",
+      "kind": "heading",
+      "text": "Manage links in one place.",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-h2"
+    },
+    {
+      "id": "TnSGXMVIgD",
+      "kind": "heading",
+      "text": "Fast, simple and secure link shortening",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "section.relative > div.mx-auto > div.flex > div.flex > h2.text-h2"
+    },
+    {
+      "id": "-8Q08Uk6OL",
+      "kind": "heading",
+      "text": "Quick and easy",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "mScmY33tDM",
+      "kind": "heading",
+      "text": "Short and shareable",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "kmwkQvLmVC",
+      "kind": "heading",
+      "text": "Secure and protected",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "-MhGyhcBk4",
+      "kind": "heading",
+      "text": "Real-time insights",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "JDEl836EQJ",
+      "kind": "heading",
+      "text": "Spam-free and reliable",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "Ur7Xup88rT",
+      "kind": "heading",
+      "text": "Use on any device",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "div.flex > div.min-w-0 > div.flex > div.flex > h3.text-h4"
+    },
+    {
+      "id": "n_6oDLPvua",
+      "kind": "heading",
+      "text": "Frequently asked questions",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > h2.text-center"
+    },
+    {
+      "id": "viJNwU85yI",
+      "kind": "cta",
+      "text": "Get started free",
+      "sourceUrl": "https://linktr.ee/features/link-shortener",
+      "selector": "main.-mt-navbar > section.relative > div.mx-auto > div.flex > a.inline-flex"
+    }
+  ],
+  "siteBrief": {
+    "productName": "linktr",
+    "summary": "A link in bio built for you.",
+    "audience": "general",
+    "differentiator": "A link in bio built for you.",
+    "strongestClaimFactId": "hbnpBMPyOW",
+    "factIds": [
+      "9L0kBl7j6S",
+      "dRulbk35qW",
+      "-3EBTT5tip",
+      "9CHgiesTCY",
+      "gNdKmLAWfV",
+      "s12CCMi7TV",
+      "MDi3liaiuP",
+      "tJBgqqNGEb",
+      "7drMMPu8s-",
+      "33MReckabm",
+      "n42BAze_mQ",
+      "iN4uRfu2IY",
+      "nRWGXD7xLz",
+      "hbnpBMPyOW",
+      "atwt_jeLw-",
+      "6c8AhDP7s2",
+      "RAr46rt-vs",
+      "r35Dg1AKuI",
+      "7ypBzFIg6B",
+      "38sBae0TZC",
+      "TN4dK8PT9a",
+      "e2RqzwSrnF",
+      "Rf8qKGzj6O",
+      "bfzrYzNaEg",
+      "ToIN3mD0GX",
+      "sL3HwhxKRp",
+      "3WMeUNKYSw",
+      "87vY60g7c7",
+      "aHCrXLoO2p",
+      "HHHodsPEHF",
+      "J2Vt8ylLKn",
+      "eLQHqkphKQ",
+      "krU5S3aQwF",
+      "DZ4DJenxfp",
+      "kBetamT62O",
+      "fiIWK0RJWT",
+      "iPwQpVReMv",
+      "DfE9ID4eyL",
+      "zjC-xds0GK",
+      "eO_NQplXMO",
+      "K_zgLFLRgT",
+      "4vZit7kSFq",
+      "m68ShOmRD5",
+      "FyzrbwXnFi",
+      "5ggwPZ-YIs",
+      "4xRI-RjPLn",
+      "JsZvTjsfTU",
+      "Rf5DJXvzWy",
+      "ecQpp8r4BO",
+      "GhUCrREfNh",
+      "q6pyyyV8bF",
+      "jkcvJAlM3D",
+      "ZGKLajyHoK",
+      "UTgLklzZaT",
+      "pkWCHfk-x6",
+      "b_LWySlKtZ",
+      "6OtwvmmlwC",
+      "e9tbovjYwS",
+      "MvhEmBZkYq",
+      "gDmiPTgY5x",
+      "1biZo6evdM",
+      "wmWm18eIux",
+      "N2u29B5sV-",
+      "kDYM50g15l",
+      "UnDWcRrAzR",
+      "wWEriou3Iv",
+      "A3sts2nCiy",
+      "7iUdTBz7Zs",
+      "ZR4d8R7VRV",
+      "tbFEBKd6Nq",
+      "wUBrx77wd5",
+      "VjzpCMuzLq",
+      "QmLs9f3ooC",
+      "QshEer5ERX",
+      "ayPHAaHqqZ",
+      "QIT8ep8L9F",
+      "5zcW8PVIX4",
+      "jTwsLk-kI5",
+      "G0UGEFhVXG",
+      "VET1C06x15",
+      "SYvA4Yi73E",
+      "jhF8UaaENa",
+      "BZLbi3NdRb",
+      "lOBWuR07zU",
+      "UQ_nSJanaJ",
+      "NC5qXu2HQR",
+      "SSXmXHmm9j",
+      "w0IN1kSqsN",
+      "A4u6oXm-jM",
+      "N1BHtNChG-",
+      "j0wkKnc4rQ",
+      "QM_QCezZmc",
+      "TnSGXMVIgD",
+      "-8Q08Uk6OL",
+      "mScmY33tDM",
+      "kmwkQvLmVC",
+      "-MhGyhcBk4",
+      "JDEl836EQJ",
+      "Ur7Xup88rT",
+      "n_6oDLPvua",
+      "viJNwU85yI"
+    ],
+    "source": "fallback"
+  }
+}

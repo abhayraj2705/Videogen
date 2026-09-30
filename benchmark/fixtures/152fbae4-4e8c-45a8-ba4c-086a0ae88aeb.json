@@ -1,0 +1,263 @@
+{
+  "url": "https://www.ustwo.com",
+  "category": "agency",
+  "domain": "www.ustwo.com",
+  "pages": [
+    {
+      "url": "https://www.ustwo.com",
+      "screenshotKey": "jobs/152fbae4-4e8c-45a8-ba4c-086a0ae88aeb/crawl/home.png"
+    },
+    {
+      "url": "https://www.ustwo.com/policies/cookie-policy/",
+      "screenshotKey": "jobs/152fbae4-4e8c-45a8-ba4c-086a0ae88aeb/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.ustwo.com/services/",
+      "screenshotKey": "jobs/152fbae4-4e8c-45a8-ba4c-086a0ae88aeb/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(43, 43, 43)",
+    "accent": "rgb(41, 255, 173)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "data:image/svg+xml;charset=utf-8,%3Csvg%20height='2160'%20width='3840'%20xmlns='http://www.w3.org/2000/svg'%20version='1.1'%3E%3C/svg%3E"
+  },
+  "facts": [
+    {
+      "id": "KjoA8-gnDH",
+      "kind": "hero",
+      "text": "Digital products people stick with",
+      "sourceUrl": "https://www.ustwo.com",
+      "selector": "article.index-module--homeWrapper--2cde2 > header.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div > h1.h1"
+    },
+    {
+      "id": "r5vF4szHm3",
+      "kind": "heading",
+      "text": "Our approach",
+      "sourceUrl": "https://www.ustwo.com",
+      "selector": "section.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2.label"
+    },
+    {
+      "id": "oreY4_5TeA",
+      "kind": "heading",
+      "text": "Our breadth of capabilities and the depth of our expertise will help you build more impactful products.",
+      "sourceUrl": "https://www.ustwo.com",
+      "selector": "section.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2.h2Bigger"
+    },
+    {
+      "id": "wkLgblJXj0",
+      "kind": "heading",
+      "text": "People-first AI",
+      "sourceUrl": "https://www.ustwo.com",
+      "selector": "section.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2.h2Small"
+    },
+    {
+      "id": "ndT2IebQZo",
+      "kind": "heading",
+      "text": "Full stack",
+      "sourceUrl": "https://www.ustwo.com",
+      "selector": "section.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2.h2Small"
+    },
+    {
+      "id": "o5f4BdWjG0",
+      "kind": "heading",
+      "text": "Play Thinking",
+      "sourceUrl": "https://www.ustwo.com",
+      "selector": "section.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2.h2Small"
+    },
+    {
+      "id": "OirpLlj4M0",
+      "kind": "heading",
+      "text": "Behavioural science",
+      "sourceUrl": "https://www.ustwo.com",
+      "selector": "section.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2.h2Small"
+    },
+    {
+      "id": "LKbTiv_zDf",
+      "kind": "heading",
+      "text": "We're socially, ethically and environmentally engaged",
+      "sourceUrl": "https://www.ustwo.com",
+      "selector": "section.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2.h2Bigger"
+    },
+    {
+      "id": "PpEIcDAeat",
+      "kind": "cta",
+      "text": "Contact us",
+      "sourceUrl": "https://www.ustwo.com",
+      "selector": "div.Header-module--navWrapper--3660a > nav.Header-module--nav--5978b > ul > li > a.Header-module--navLink--eb5d9"
+    },
+    {
+      "id": "tKmxT3FRcP",
+      "kind": "cta",
+      "text": "Learn more",
+      "sourceUrl": "https://www.ustwo.com",
+      "selector": "div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > p > a.AppLink-module--appLink--38fde"
+    },
+    {
+      "id": "SN-J_9CSgC",
+      "kind": "cta",
+      "text": "Join us",
+      "sourceUrl": "https://www.ustwo.com",
+      "selector": "div.Footer-module--leftColumn--d8eab > div > ul.Footer-module--listLinks--a8ef8 > li > a.smallBodyText"
+    },
+    {
+      "id": "LqEhU3qtl4",
+      "kind": "cta",
+      "text": "@Contact usContact us",
+      "sourceUrl": "https://www.ustwo.com",
+      "selector": "footer.Footer-module--footer--f407a > section.Section-module--section--d8c31 > div.Footer-module--helloFooter--1eb0b > div.Footer-module--contactButton--b65c4 > a.Button-module--button--b0d8f"
+    },
+    {
+      "id": "L9QKe8-uFF",
+      "kind": "hero",
+      "text": "Cookie Policy",
+      "sourceUrl": "https://www.ustwo.com/policies/cookie-policy/",
+      "selector": "header.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h1"
+    },
+    {
+      "id": "VDCDcKoSSv",
+      "kind": "hero",
+      "text": "At ustwo, we respect your privacy and want you to have a clear understanding of how we handle your data.",
+      "sourceUrl": "https://www.ustwo.com/policies/cookie-policy/",
+      "selector": "header.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > p"
+    },
+    {
+      "id": "e9QQT0jXbr",
+      "kind": "heading",
+      "text": "Policies",
+      "sourceUrl": "https://www.ustwo.com/policies/cookie-policy/",
+      "selector": "div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > nav > h3"
+    },
+    {
+      "id": "1xyttPG9QQ",
+      "kind": "heading",
+      "text": "Cookie use on our website",
+      "sourceUrl": "https://www.ustwo.com/policies/cookie-policy/",
+      "selector": "header.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2"
+    },
+    {
+      "id": "m3w5AD_vgk",
+      "kind": "heading",
+      "text": "1. Optional cookies",
+      "sourceUrl": "https://www.ustwo.com/policies/cookie-policy/",
+      "selector": "header.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h3"
+    },
+    {
+      "id": "fzCmZMdWUp",
+      "kind": "heading",
+      "text": "2. Necessary cookies",
+      "sourceUrl": "https://www.ustwo.com/policies/cookie-policy/",
+      "selector": "header.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h3"
+    },
+    {
+      "id": "Xpakf_RASf",
+      "kind": "stat",
+      "text": "1. Optional cookies",
+      "sourceUrl": "https://www.ustwo.com/policies/cookie-policy/",
+      "selector": "header.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h3"
+    },
+    {
+      "id": "FaSZ0MPpFS",
+      "kind": "stat",
+      "text": "Google Analytics 4",
+      "sourceUrl": "https://www.ustwo.com/policies/cookie-policy/",
+      "selector": "div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > p > strong"
+    },
+    {
+      "id": "Exl-Aa0gE-",
+      "kind": "stat",
+      "text": "2. Necessary cookies",
+      "sourceUrl": "https://www.ustwo.com/policies/cookie-policy/",
+      "selector": "header.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h3"
+    },
+    {
+      "id": "g_FeaZ8XWv",
+      "kind": "hero",
+      "text": "We offer end-to-end support from initial idea to getting it in hands.",
+      "sourceUrl": "https://www.ustwo.com/services/",
+      "selector": "header.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h1.noMargin"
+    },
+    {
+      "id": "5iIo461hdC",
+      "kind": "heading",
+      "text": "Validate new products, experiences, services, or business models",
+      "sourceUrl": "https://www.ustwo.com/services/",
+      "selector": "section.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2.noTopMargin"
+    },
+    {
+      "id": "HjlQ9xZxTC",
+      "kind": "heading",
+      "text": "Pilot new services and brands through design and development",
+      "sourceUrl": "https://www.ustwo.com/services/",
+      "selector": "section.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2.noTopMargin"
+    },
+    {
+      "id": "8prY1cDE7M",
+      "kind": "heading",
+      "text": "Design and build digital products that users return to",
+      "sourceUrl": "https://www.ustwo.com/services/",
+      "selector": "section.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2.noTopMargin"
+    },
+    {
+      "id": "D_dqRKkeCf",
+      "kind": "heading",
+      "text": "Elevate and scale existing solutions that push things to the next level",
+      "sourceUrl": "https://www.ustwo.com/services/",
+      "selector": "section.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2.noTopMargin"
+    },
+    {
+      "id": "hp1CdSUEqS",
+      "kind": "heading",
+      "text": "Let’s talk about how we could support your business goals",
+      "sourceUrl": "https://www.ustwo.com/services/",
+      "selector": "section.Section-module--section--d8c31 > div.Section-module--inner--76c37 > div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > h2.noTopMargin"
+    },
+    {
+      "id": "EK5_KCFHEx",
+      "kind": "testimonial",
+      "text": "We truly wouldn’t have reached this milestone without the hard work from the ustwo team. They brought innovation, customer focus and fun that still lives on.",
+      "sourceUrl": "https://www.ustwo.com/services/",
+      "selector": "div.Grid-module--gridContainer--cdcfb > div.Grid-module--col--39b2c > div.Quote-module--quote--d835d > div.Quote-module--quoteContent--eb1db > blockquote.Quote-module--innerQuoteContent--6fd49"
+    }
+  ],
+  "siteBrief": {
+    "productName": "ustwo",
+    "summary": "Digital products people stick with",
+    "audience": "general",
+    "differentiator": "Digital products people stick with",
+    "strongestClaimFactId": "Xpakf_RASf",
+    "factIds": [
+      "KjoA8-gnDH",
+      "r5vF4szHm3",
+      "oreY4_5TeA",
+      "wkLgblJXj0",
+      "ndT2IebQZo",
+      "o5f4BdWjG0",
+      "OirpLlj4M0",
+      "LKbTiv_zDf",
+      "PpEIcDAeat",
+      "tKmxT3FRcP",
+      "SN-J_9CSgC",
+      "LqEhU3qtl4",
+      "L9QKe8-uFF",
+      "VDCDcKoSSv",
+      "e9QQT0jXbr",
+      "1xyttPG9QQ",
+      "m3w5AD_vgk",
+      "fzCmZMdWUp",
+      "Xpakf_RASf",
+      "FaSZ0MPpFS",
+      "Exl-Aa0gE-",
+      "g_FeaZ8XWv",
+      "5iIo461hdC",
+      "HjlQ9xZxTC",
+      "8prY1cDE7M",
+      "D_dqRKkeCf",
+      "hp1CdSUEqS",
+      "EK5_KCFHEx"
+    ],
+    "source": "fallback"
+  }
+}

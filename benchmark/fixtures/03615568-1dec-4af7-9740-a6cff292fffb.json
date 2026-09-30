@@ -1,0 +1,935 @@
+{
+  "url": "https://www.allbirds.com",
+  "category": "ecommerce",
+  "domain": "www.allbirds.com",
+  "pages": [
+    {
+      "url": "https://www.allbirds.com",
+      "screenshotKey": "jobs/03615568-1dec-4af7-9740-a6cff292fffb/crawl/home.png"
+    },
+    {
+      "url": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "screenshotKey": "jobs/03615568-1dec-4af7-9740-a6cff292fffb/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.allbirds.com/products/mens-cruiser-medium-grey",
+      "screenshotKey": "jobs/03615568-1dec-4af7-9740-a6cff292fffb/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(236, 233, 226)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "rgb(255, 255, 255)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://www.allbirds.com/cdn/shop/files/A11559_25Q3_Cruiser_Dark_Navy_Blizzard_PDP_LEFT-2000x2000_9f5ba943-6b25-4f75-9c74-edd67a6a0aa7.png?v=1751900449&width=300"
+  },
+  "facts": [
+    {
+      "id": "uc-4gatac8",
+      "kind": "hero",
+      "text": "Wildly Comfortable. Super Natural.",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.swiper > ul.swiper-wrapper > li.swiper-slide > div.pointer-events-none > h1.z-content"
+    },
+    {
+      "id": "_kyyQQDEBf",
+      "kind": "hero",
+      "text": "All New Dasher NZ Collection",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.swiper > ul.swiper-wrapper > li.swiper-slide > div.pointer-events-none > p.z-content"
+    },
+    {
+      "id": "yzcxq285fh",
+      "kind": "heading",
+      "text": "Men's Shoes",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.flex > div > div.flex > div.flex > h3.text-xs"
+    },
+    {
+      "id": "8HbtEkZlUu",
+      "kind": "heading",
+      "text": "Customer Favorites",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.flex > div > div.flex > div.flex > h3.text-xs"
+    },
+    {
+      "id": "GYTMNgTlHN",
+      "kind": "heading",
+      "text": "Apparel & Accessories",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.flex > div > div.flex > div.flex > h3.text-xs"
+    },
+    {
+      "id": "42-yGcQXwG",
+      "kind": "heading",
+      "text": "Women's Shoes",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.flex > div > div.flex > div.flex > h3.text-xs"
+    },
+    {
+      "id": "D8pL4HNalQ",
+      "kind": "heading",
+      "text": "Popular Picks",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.flex > div > div.flex > div.flex > h3.text-xs"
+    },
+    {
+      "id": "5nbqASilNL",
+      "kind": "heading",
+      "text": "Men's",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div > div.flex > div.bg-natural-white-60 > div.mb-2.5 > h3.font-sans"
+    },
+    {
+      "id": "xMy1LuxwS0",
+      "kind": "heading",
+      "text": "Women's",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div > div.flex > div.bg-natural-white-60 > div.mb-2.5 > h3.font-sans"
+    },
+    {
+      "id": "imLuugetlw",
+      "kind": "heading",
+      "text": "Cart (0)",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div > div.z-takeover > div.flex > div.relative > h2.text-xs"
+    },
+    {
+      "id": "rD6MREChmv",
+      "kind": "heading",
+      "text": "Added to Cart",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.scrollbar-hidden > div.flex > div.sticky > h2.text-xl"
+    },
+    {
+      "id": "ycNNS2OV74",
+      "kind": "heading",
+      "text": "You may also like",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.scrollbar-hidden > div.bg-natural-white-60 > div.mb-2.5 > h3.font-mono"
+    },
+    {
+      "id": "YnxxNksGgZ",
+      "kind": "heading",
+      "text": "New Arrivals",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.swiper > ul.swiper-wrapper > li.swiper-slide > span.absolute > h2.category-row-item-title"
+    },
+    {
+      "id": "hqi3PyCOxd",
+      "kind": "heading",
+      "text": "Mens",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.swiper > ul.swiper-wrapper > li.swiper-slide > span.absolute > h2.category-row-item-title"
+    },
+    {
+      "id": "5LKknvEeWv",
+      "kind": "heading",
+      "text": "Womens",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.swiper > ul.swiper-wrapper > li.swiper-slide > span.absolute > h2.category-row-item-title"
+    },
+    {
+      "id": "8QgKRriuIZ",
+      "kind": "heading",
+      "text": "Best Sellers",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.swiper > ul.swiper-wrapper > li.swiper-slide > span.absolute > h2.category-row-item-title"
+    },
+    {
+      "id": "Sc5xEyPlwR",
+      "kind": "heading",
+      "text": "Summer Travel Essentials",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.grid > div.group > div.absolute > div.flex > h2.font-serif"
+    },
+    {
+      "id": "q1wI32TRlU",
+      "kind": "heading",
+      "text": "Fresh Colors For Summer",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.grid > div.group > div.absolute > div.flex > h2.font-serif"
+    },
+    {
+      "id": "X1rOWXuLaB",
+      "kind": "heading",
+      "text": "Follow The Flock",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.shopify-section > footer.bg-black > div.mb-10 > div.mb-10 > h3.mb-6"
+    },
+    {
+      "id": "GrVdK3Kjx-",
+      "kind": "heading",
+      "text": "Refund policy",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.z-takeover > div.flex > div.relative > div.flex > h2.mb-4"
+    },
+    {
+      "id": "-0d0djYzhh",
+      "kind": "heading",
+      "text": "Privacy policy",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.z-takeover > div.flex > div.relative > div.flex > h2.mb-4"
+    },
+    {
+      "id": "cZjazRQacf",
+      "kind": "heading",
+      "text": "1. Change in Ownership and Operation",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "HqpKtRks-k",
+      "kind": "heading",
+      "text": "2. Scope",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "vVgD5lj4_E",
+      "kind": "heading",
+      "text": "3. What Personal Information Do We Collect?",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "jJsuyLg6kC",
+      "kind": "heading",
+      "text": "4. How We Use Your Information",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "ulD95KQAp3",
+      "kind": "heading",
+      "text": "5. Cookies, Pixels, and Similar Technologies",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "d5beUpEJXO",
+      "kind": "heading",
+      "text": "6. How We Share Your Information",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "Ei_9PMa1lv",
+      "kind": "heading",
+      "text": "7. Managing Your Personal Information / Changing Marketing Preferences",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "rpRGjG-xeR",
+      "kind": "heading",
+      "text": "8. Security and Retention",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "79HmXWHEbL",
+      "kind": "heading",
+      "text": "9. Children's Privacy",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "NUurg2fgFb",
+      "kind": "heading",
+      "text": "10. U.S. State Privacy Rights",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "SprIql1Dr9",
+      "kind": "heading",
+      "text": "A. Categories of Personal Information We Collect",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h3"
+    },
+    {
+      "id": "HDMiWiduKP",
+      "kind": "heading",
+      "text": "B. How We Use Personal Information",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h3"
+    },
+    {
+      "id": "5R4rUQ2eEt",
+      "kind": "heading",
+      "text": "C. What Personal Information We Share",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h3"
+    },
+    {
+      "id": "7hAXc3jYP9",
+      "kind": "heading",
+      "text": "D. Your Rights",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h3"
+    },
+    {
+      "id": "oAam1u-k1c",
+      "kind": "heading",
+      "text": "11. Additional Topics",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "8C-2mvLr5J",
+      "kind": "heading",
+      "text": "12. Updating This Privacy Policy",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "5jVckJdUl6",
+      "kind": "heading",
+      "text": "Questions or Concerns",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "AKDqpArqKS",
+      "kind": "heading",
+      "text": "Terms of service",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.z-takeover > div.flex > div.relative > div.flex > h2.mb-4"
+    },
+    {
+      "id": "p_Cb291CTN",
+      "kind": "heading",
+      "text": "Table of Contents",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "aI5KcoBTOi",
+      "kind": "heading",
+      "text": "1. Privacy",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "nDwYPcNKOH",
+      "kind": "heading",
+      "text": "2. Registration",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "atVTNeh3-o",
+      "kind": "heading",
+      "text": "3. Purchases",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "FDpxzvCYxq",
+      "kind": "heading",
+      "text": "4. General Restrictions on Use",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "Why8XgsgHK",
+      "kind": "heading",
+      "text": "5. Content",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "N20MVO2d1f",
+      "kind": "heading",
+      "text": "6. SMS Messaging",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "P1FKYcH69j",
+      "kind": "heading",
+      "text": "7. Errors, Inaccuracies, and Omissions",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "30QjxriuLX",
+      "kind": "heading",
+      "text": "8. Disclaimers and Warranties",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "n19HMf8wPU",
+      "kind": "heading",
+      "text": "9. Limitation of Liability",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "VhYWYNhzt-",
+      "kind": "heading",
+      "text": "10. Indemnity",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "8wOKoqbEFb",
+      "kind": "heading",
+      "text": "11. Links to Other Sites",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "sO5soOb5-E",
+      "kind": "heading",
+      "text": "12. Digital Millennium Copyright Act — Copyright Infringement",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "7Le2dAzeaI",
+      "kind": "heading",
+      "text": "13. Dispute Resolution and Binding Arbitration",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "5eRfm7YBHJ",
+      "kind": "heading",
+      "text": "14. Governing Law and Venue",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "huseHaJ9r-",
+      "kind": "heading",
+      "text": "15. Miscellaneous",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "rKEk3Gn5G5",
+      "kind": "heading",
+      "text": "Where are we shipping to?",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.flex > div.relative > div.sm:flex > div.mt-3 > h3.text-center"
+    },
+    {
+      "id": "_ObYYjRGYP",
+      "kind": "stat",
+      "text": "Cart (0)",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div > div.z-takeover > div.flex > div.relative > h2.text-xs"
+    },
+    {
+      "id": "nFytpK3gZ-",
+      "kind": "stat",
+      "text": "1. Change in Ownership and Operation",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "fKEo2EgaSy",
+      "kind": "stat",
+      "text": "2. Scope",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "7P8hc_kJT0",
+      "kind": "stat",
+      "text": "4. How We Use Your Information",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "Yrg1oEsR61",
+      "kind": "stat",
+      "text": "6. How We Share Your Information",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "I7V4jOroPm",
+      "kind": "stat",
+      "text": "8. Security and Retention",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "zdDNBFwjla",
+      "kind": "stat",
+      "text": "9. Children's Privacy",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "6upe4YkY_m",
+      "kind": "stat",
+      "text": "10. U.S. State Privacy Rights",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "pmbFUOYHf_",
+      "kind": "stat",
+      "text": "11. Additional Topics",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "0wN5QES34u",
+      "kind": "stat",
+      "text": "12. Updating This Privacy Policy",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "4an744tW_C",
+      "kind": "stat",
+      "text": "1. Privacy",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "PjsCkkRdnF",
+      "kind": "stat",
+      "text": "2. Registration",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "5XwkTrdeVF",
+      "kind": "stat",
+      "text": "3. Purchases",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "H0IhNHRhYl",
+      "kind": "stat",
+      "text": "4. General Restrictions on Use",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "tZiLDcWNIn",
+      "kind": "stat",
+      "text": "5. Content",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "5_l12BX9dQ",
+      "kind": "stat",
+      "text": "6. SMS Messaging",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "ZdSEWNAZg8",
+      "kind": "stat",
+      "text": "7. Errors, Inaccuracies, and Omissions",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "I2x0ytrLpM",
+      "kind": "stat",
+      "text": "8. Disclaimers and Warranties",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "-Q2682hGtt",
+      "kind": "stat",
+      "text": "9. Limitation of Liability",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "D3THckzRte",
+      "kind": "stat",
+      "text": "10. Indemnity",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "SdrzCYanIb",
+      "kind": "stat",
+      "text": "11. Links to Other Sites",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "f6CsZ8r9rc",
+      "kind": "stat",
+      "text": "(i)(1) Applicable Rules.",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.flex > div.flex > div > p > strong"
+    },
+    {
+      "id": "3B5YzFYBQB",
+      "kind": "stat",
+      "text": "(i)(2) Initial Arbitrations.",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.flex > div.flex > div > p > strong"
+    },
+    {
+      "id": "8yb3BBW35d",
+      "kind": "stat",
+      "text": "(i)(3) Mediation.",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.flex > div.flex > div > p > strong"
+    },
+    {
+      "id": "gjFhZdDe5o",
+      "kind": "stat",
+      "text": "14. Governing Law and Venue",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "gWORkXTn-g",
+      "kind": "stat",
+      "text": "15. Miscellaneous",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.relative > div.flex > div.flex > div > h2"
+    },
+    {
+      "id": "Bks6H_aRso",
+      "kind": "cta",
+      "text": "Shop All",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.absolute > div.relative > div.flex > div.flex > a.cursor-pointer"
+    },
+    {
+      "id": "1trMRp1PRq",
+      "kind": "cta",
+      "text": "Shop Womens",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.z-takeover > div.mt-14 > ul.flex > li.w-full > button.btn"
+    },
+    {
+      "id": "k1IUSg2g71",
+      "kind": "cta",
+      "text": "Shop Mens",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.z-takeover > div.mt-14 > ul.flex > li.w-full > button.btn"
+    },
+    {
+      "id": "v-LG85fhrB",
+      "kind": "cta",
+      "text": "Shop Socks",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.z-takeover > div.mt-14 > ul.flex > li.w-full > button.btn"
+    },
+    {
+      "id": "RjP9XDobnD",
+      "kind": "cta",
+      "text": "Shop Women's Sale",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.z-takeover > div.mt-14 > ul.flex > li.w-full > button.btn"
+    },
+    {
+      "id": "qInCP1oGoi",
+      "kind": "cta",
+      "text": "Shop Men's Sale",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.z-takeover > div.mt-14 > ul.flex > li.w-full > button.btn"
+    },
+    {
+      "id": "PTJuh0nNF8",
+      "kind": "cta",
+      "text": "SHOP MEN",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "ul.swiper-wrapper > li.swiper-slide > div.pointer-events-none > div.z-content > a.btn"
+    },
+    {
+      "id": "RgYHpaDMJc",
+      "kind": "cta",
+      "text": "SHOP WOMEN",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "ul.swiper-wrapper > li.swiper-slide > div.pointer-events-none > div.z-content > a.btn"
+    },
+    {
+      "id": "Eld-jGBn8F",
+      "kind": "cta",
+      "text": "Sign Up",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.mb-10 > div.col-span-1 > form.flex > div.relative > button.btn"
+    },
+    {
+      "id": "zOcwfwn0v5",
+      "kind": "cta",
+      "text": "FAQ/Contact Us",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "div.menu-content > div > ul.grid > li > a.text-xs"
+    },
+    {
+      "id": "WwNRa63a95",
+      "kind": "cta",
+      "text": "Shop+-",
+      "sourceUrl": "https://www.allbirds.com",
+      "selector": "footer.bg-black > div.mb-10 > div.col-span-1 > div.col-span-1 > button.flex"
+    },
+    {
+      "id": "npJOfh4HGK",
+      "kind": "hero",
+      "text": "Men's Runner NZ Slip On",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "div.pointer-events-auto > div.px-5 > div.flex > div.flex > h1.font-serif"
+    },
+    {
+      "id": "dKL1dKdbie",
+      "kind": "hero",
+      "text": "Also available in: Women's Sizes",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "div.pointer-events-auto > div.px-5 > div.flex > div.flex > p.text-light-charcoal"
+    },
+    {
+      "id": "yJwT16KsNg",
+      "kind": "heading",
+      "text": "THE DETAILS",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "div.m-2.5 > div.grid > div.flex > div > h3.self-start"
+    },
+    {
+      "id": "JmYsFMhpjk",
+      "kind": "heading",
+      "text": "MATERIALLY BETTER",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "div.m-2.5 > div.grid > div.flex > div > h3.self-start"
+    },
+    {
+      "id": "cTFpcHeI0w",
+      "kind": "heading",
+      "text": "WASH & CARE",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "div.m-2.5 > div.grid > div.flex > div > h3.self-start"
+    },
+    {
+      "id": "5zoKL7lF1t",
+      "kind": "heading",
+      "text": "BREATHE EASY",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "section.shopify-section > div.relative > div.absolute > div.callout > h2.4xl:text-xl/6"
+    },
+    {
+      "id": "m9daC9QVLM",
+      "kind": "heading",
+      "text": "PLUSH FEATHERBED™",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "section.shopify-section > div.relative > div.absolute > div.callout > h2.4xl:text-xl/6"
+    },
+    {
+      "id": "26vjd02Wfx",
+      "kind": "heading",
+      "text": "MADE TO MOVE",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "section.shopify-section > div.relative > div.absolute > div.callout > h2.4xl:text-xl/6"
+    },
+    {
+      "id": "kj65E43Hh9",
+      "kind": "heading",
+      "text": "BUILT TO BOUNCE BACK",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "section.shopify-section > div.relative > div.absolute > div.callout > h2.4xl:text-xl/6"
+    },
+    {
+      "id": "BBunwL6H5E",
+      "kind": "heading",
+      "text": "Select a size",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "div.z-takeover > div.absolute > div.relative > div.flex > h3.font-sans"
+    },
+    {
+      "id": "NDz3mZe39Z",
+      "kind": "heading",
+      "text": "Reviews for Men's Runner NZ Slip On",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "body.bg-natural-white-60 > main.template-product > section.shopify-section > div.relative > h2.absolute"
+    },
+    {
+      "id": "Es2SmAFJhi",
+      "kind": "heading",
+      "text": "Men's Runner NZ Slip On",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "div.z-takeover > div.flex > div.relative > div.flex > h2.font-regular"
+    },
+    {
+      "id": "EGK1x2fh9q",
+      "kind": "heading",
+      "text": "Our Shoes are Unisex",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "div.relative > div.flex > div.mt-auto > div.mb-6 > h3.text-center"
+    },
+    {
+      "id": "AXQiTmE5Qs",
+      "kind": "cta",
+      "text": "Learn More",
+      "sourceUrl": "https://www.allbirds.com/products/mens-runner-nz-slip-on-mushroom",
+      "selector": "div.shopify-section > div.brand-message > div.brand-message-container > div.brand-message-content > a.btn"
+    },
+    {
+      "id": "h_PVB-21Q6",
+      "kind": "hero",
+      "text": "Men's Cruiser",
+      "sourceUrl": "https://www.allbirds.com/products/mens-cruiser-medium-grey",
+      "selector": "div.pointer-events-auto > div.px-5 > div.flex > div.flex > h1.font-serif"
+    },
+    {
+      "id": "uOjPj-hnj4",
+      "kind": "heading",
+      "text": "Thoughtfully designed",
+      "sourceUrl": "https://www.allbirds.com/products/mens-cruiser-medium-grey",
+      "selector": "div.border-natural-white > div.overflow-hidden > div.px-4 > div.mt-8 > h3.font-mono"
+    },
+    {
+      "id": "kvTDH7ZdMq",
+      "kind": "heading",
+      "text": "Best for",
+      "sourceUrl": "https://www.allbirds.com/products/mens-cruiser-medium-grey",
+      "selector": "div.border-natural-white > div.overflow-hidden > div.px-4 > div.mt-8 > h3.font-mono"
+    },
+    {
+      "id": "HdjnM5vN1l",
+      "kind": "heading",
+      "text": "Reviews for Men's Cruiser",
+      "sourceUrl": "https://www.allbirds.com/products/mens-cruiser-medium-grey",
+      "selector": "body.bg-natural-white-60 > main.template-product > section.shopify-section > div.relative > h2.absolute"
+    },
+    {
+      "id": "3tyxzluzNi",
+      "kind": "heading",
+      "text": "Men's Cruiser",
+      "sourceUrl": "https://www.allbirds.com/products/mens-cruiser-medium-grey",
+      "selector": "div.z-takeover > div.flex > div.relative > div.flex > h2.font-regular"
+    }
+  ],
+  "siteBrief": {
+    "productName": "allbirds",
+    "summary": "Wildly Comfortable. Super Natural.",
+    "audience": "general",
+    "differentiator": "Wildly Comfortable. Super Natural.",
+    "strongestClaimFactId": "_ObYYjRGYP",
+    "factIds": [
+      "uc-4gatac8",
+      "_kyyQQDEBf",
+      "yzcxq285fh",
+      "8HbtEkZlUu",
+      "GYTMNgTlHN",
+      "42-yGcQXwG",
+      "D8pL4HNalQ",
+      "5nbqASilNL",
+      "xMy1LuxwS0",
+      "imLuugetlw",
+      "rD6MREChmv",
+      "ycNNS2OV74",
+      "YnxxNksGgZ",
+      "hqi3PyCOxd",
+      "5LKknvEeWv",
+      "8QgKRriuIZ",
+      "Sc5xEyPlwR",
+      "q1wI32TRlU",
+      "X1rOWXuLaB",
+      "GrVdK3Kjx-",
+      "-0d0djYzhh",
+      "cZjazRQacf",
+      "HqpKtRks-k",
+      "vVgD5lj4_E",
+      "jJsuyLg6kC",
+      "ulD95KQAp3",
+      "d5beUpEJXO",
+      "Ei_9PMa1lv",
+      "rpRGjG-xeR",
+      "79HmXWHEbL",
+      "NUurg2fgFb",
+      "SprIql1Dr9",
+      "HDMiWiduKP",
+      "5R4rUQ2eEt",
+      "7hAXc3jYP9",
+      "oAam1u-k1c",
+      "8C-2mvLr5J",
+      "5jVckJdUl6",
+      "AKDqpArqKS",
+      "p_Cb291CTN",
+      "aI5KcoBTOi",
+      "nDwYPcNKOH",
+      "atVTNeh3-o",
+      "FDpxzvCYxq",
+      "Why8XgsgHK",
+      "N20MVO2d1f",
+      "P1FKYcH69j",
+      "30QjxriuLX",
+      "n19HMf8wPU",
+      "VhYWYNhzt-",
+      "8wOKoqbEFb",
+      "sO5soOb5-E",
+      "7Le2dAzeaI",
+      "5eRfm7YBHJ",
+      "huseHaJ9r-",
+      "rKEk3Gn5G5",
+      "_ObYYjRGYP",
+      "nFytpK3gZ-",
+      "fKEo2EgaSy",
+      "7P8hc_kJT0",
+      "Yrg1oEsR61",
+      "I7V4jOroPm",
+      "zdDNBFwjla",
+      "6upe4YkY_m",
+      "pmbFUOYHf_",
+      "0wN5QES34u",
+      "4an744tW_C",
+      "PjsCkkRdnF",
+      "5XwkTrdeVF",
+      "H0IhNHRhYl",
+      "tZiLDcWNIn",
+      "5_l12BX9dQ",
+      "ZdSEWNAZg8",
+      "I2x0ytrLpM",
+      "-Q2682hGtt",
+      "D3THckzRte",
+      "SdrzCYanIb",
+      "f6CsZ8r9rc",
+      "3B5YzFYBQB",
+      "8yb3BBW35d",
+      "gjFhZdDe5o",
+      "gWORkXTn-g",
+      "Bks6H_aRso",
+      "1trMRp1PRq",
+      "k1IUSg2g71",
+      "v-LG85fhrB",
+      "RjP9XDobnD",
+      "qInCP1oGoi",
+      "PTJuh0nNF8",
+      "RgYHpaDMJc",
+      "Eld-jGBn8F",
+      "zOcwfwn0v5",
+      "WwNRa63a95",
+      "npJOfh4HGK",
+      "dKL1dKdbie",
+      "yJwT16KsNg",
+      "JmYsFMhpjk",
+      "cTFpcHeI0w",
+      "5zoKL7lF1t",
+      "m9daC9QVLM",
+      "26vjd02Wfx",
+      "kj65E43Hh9",
+      "BBunwL6H5E",
+      "NDz3mZe39Z",
+      "Es2SmAFJhi",
+      "EGK1x2fh9q",
+      "AXQiTmE5Qs",
+      "h_PVB-21Q6",
+      "uOjPj-hnj4",
+      "kvTDH7ZdMq",
+      "HdjnM5vN1l",
+      "3tyxzluzNi"
+    ],
+    "source": "fallback"
+  }
+}

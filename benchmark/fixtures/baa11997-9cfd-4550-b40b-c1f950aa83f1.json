@@ -1,0 +1,823 @@
+{
+  "url": "https://www.indeed.com",
+  "category": "bot_protected",
+  "domain": "www.indeed.com",
+  "pages": [
+    {
+      "url": "https://www.indeed.com",
+      "screenshotKey": "jobs/baa11997-9cfd-4550-b40b-c1f950aa83f1/crawl/home.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "rgb(0, 79, 203)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://in.indeed.com/favicon.png"
+  },
+  "facts": [
+    {
+      "id": "WWpdRlyIvn",
+      "kind": "heading",
+      "text": "Your next job starts here",
+      "sourceUrl": "https://www.indeed.com",
+      "selector": "span.dd-privacy-allow > div.css-po7lh8 > div.css-14v6npv > div.css-1gv3d3g > h2.css-kousv8"
+    },
+    {
+      "id": "EXfF_f4wQu",
+      "kind": "heading",
+      "text": "Trending Searches",
+      "sourceUrl": "https://www.indeed.com",
+      "selector": "div.css-1csusx3 > div.css-10a3gst > div.css-wysz2f > div.css-1qv12fm > h2.css-xa0qfs"
+    },
+    {
+      "id": "00BCIrY6Xn",
+      "kind": "heading",
+      "text": "Trending Jobs",
+      "sourceUrl": "https://www.indeed.com",
+      "selector": "div.css-1csusx3 > div.css-10a3gst > div.css-wysz2f > div.css-1qv12fm > h2.css-xa0qfs"
+    },
+    {
+      "id": "fZvjs6w5F6",
+      "kind": "heading",
+      "text": "Trending Locations",
+      "sourceUrl": "https://www.indeed.com",
+      "selector": "div.css-1csusx3 > div.css-10a3gst > div.css-wysz2f > div.css-1qv12fm > h2.css-xa0qfs"
+    },
+    {
+      "id": "ryIu9JGOaH",
+      "kind": "heading",
+      "text": "Trending Companies",
+      "sourceUrl": "https://www.indeed.com",
+      "selector": "div.css-1csusx3 > div.css-10a3gst > div.css-wysz2f > div.css-1qv12fm > h2.css-xa0qfs"
+    },
+    {
+      "id": "NsL7yx_tGO",
+      "kind": "cta",
+      "text": "Change country🇮🇳 India",
+      "sourceUrl": "https://www.indeed.com",
+      "selector": "div > nav.gnav-header-1n5xwgh > ul.gnav-header-v31efc > li.gnav-header-vuy5ok > a.gnav-header-1pmrdpz"
+    },
+    {
+      "id": "JjrZOMRCsi",
+      "kind": "cta",
+      "text": "Get Started",
+      "sourceUrl": "https://www.indeed.com",
+      "selector": "span.dd-privacy-allow > div.css-po7lh8 > div.css-14v6npv > div.css-1gv3d3g > button.css-1yxihf5"
+    },
+    {
+      "id": "MkF1p5DUAk",
+      "kind": "hero",
+      "text": "Terms of Service",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#sub-menu-end"
+    },
+    {
+      "id": "pgYwlgAZRq",
+      "kind": "heading",
+      "text": "Introduction",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#Intro"
+    },
+    {
+      "id": "wpAMfoT9yI",
+      "kind": "heading",
+      "text": "Section A: Terms for Job Seekers",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#job-seeker"
+    },
+    {
+      "id": "wReV9H1c3F",
+      "kind": "heading",
+      "text": "Section B: Terms for Employers",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#employers"
+    },
+    {
+      "id": "zO2FgNzHv8",
+      "kind": "heading",
+      "text": "Section C: Terms for Specific Programs and Services",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#product"
+    },
+    {
+      "id": "spIAHoFzUR",
+      "kind": "heading",
+      "text": "1. Indeed Ads Program",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#IAP"
+    },
+    {
+      "id": "4jOOn7bZaG",
+      "kind": "heading",
+      "text": "2. Indeed Smart Sourcing Program Terms",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#resume"
+    },
+    {
+      "id": "JUnc-1itfT",
+      "kind": "heading",
+      "text": "3. Indeed APIs and Plugins",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#api"
+    },
+    {
+      "id": "3KbqPosRUj",
+      "kind": "heading",
+      "text": "4. Indeed Pro (Beta)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#JSpremium"
+    },
+    {
+      "id": "ftcvn5MmZu",
+      "kind": "heading",
+      "text": "5. Mock Interviews (Beta)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#mock"
+    },
+    {
+      "id": "iB-yxjOrb2",
+      "kind": "heading",
+      "text": "6. Indeed Career Scout (Beta)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#career"
+    },
+    {
+      "id": "Ji3DMuS-Z2",
+      "kind": "heading",
+      "text": "7. Indeed Talent Scout (Beta)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#talent"
+    },
+    {
+      "id": "GyUFnTgvmo",
+      "kind": "heading",
+      "text": "8. Indeed Smart Screening (Beta)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#SmartScreening"
+    },
+    {
+      "id": "lpyFALVadN",
+      "kind": "heading",
+      "text": "9. ‘Apply For Me’ Tool (Beta)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#auto"
+    },
+    {
+      "id": "940HWXAQSo",
+      "kind": "heading",
+      "text": "10. Indeed Academy",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#13-10-indeed-academy"
+    },
+    {
+      "id": "U1DeHdKygb",
+      "kind": "heading",
+      "text": "Section D: General Terms for All Users",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#users"
+    },
+    {
+      "id": "geCRfpQiM2",
+      "kind": "heading",
+      "text": "Section E: EU Digital Services Act (“DSA”)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#dsa"
+    },
+    {
+      "id": "xhYko-5Ijb",
+      "kind": "heading",
+      "text": "Section F: UK Online Safety Act (“OSA”) (UK Only)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#16-section-f-uk-online-safety-act-osa-uk-only"
+    },
+    {
+      "id": "6P9oakTCgQ",
+      "kind": "heading",
+      "text": "Indeed Affiliate Acceptable Use Policy",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#17-indeed-affiliate-acceptable-use-policy"
+    },
+    {
+      "id": "AgXNpbp9Xm",
+      "kind": "heading",
+      "text": "AI and AEDT FAQ",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#AIandAEDT"
+    },
+    {
+      "id": "amuH72MlEn",
+      "kind": "heading",
+      "text": "Privacy Policy",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#PP"
+    },
+    {
+      "id": "cuXy-vXjfz",
+      "kind": "heading",
+      "text": "Cookie Policy",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#CP"
+    },
+    {
+      "id": "NGttNCFj1w",
+      "kind": "heading",
+      "text": "Your U.S. Privacy Rights",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#CCPA"
+    },
+    {
+      "id": "6Dy4ZZuMls",
+      "kind": "heading",
+      "text": "Privacy FAQ",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#PPFAQ"
+    },
+    {
+      "id": "k8gYh21YDK",
+      "kind": "heading",
+      "text": "Transparency Reporting",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#TPR"
+    },
+    {
+      "id": "e4uc6ThhY3",
+      "kind": "heading",
+      "text": "Accessibility",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#ACC"
+    },
+    {
+      "id": "f0B2O2Wvkz",
+      "kind": "heading",
+      "text": "Data Processing Agreement",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#dpa"
+    },
+    {
+      "id": "Oun-v4Boi_",
+      "kind": "heading",
+      "text": "SCHEDULE",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#schedule"
+    },
+    {
+      "id": "aijnpulFL6",
+      "kind": "heading",
+      "text": "APPENDIX A",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#appendix-a"
+    },
+    {
+      "id": "r5CyWTsSjG",
+      "kind": "heading",
+      "text": "Appendix B",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#appb"
+    },
+    {
+      "id": "wLVSMTyyeM",
+      "kind": "heading",
+      "text": "We're here to help",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div.css-82q6gn > div.css-1cru9mr > div.css-u74ql7 > div.css-1m4y74q > h2.css-146enqi"
+    },
+    {
+      "id": "AxPOTTSeSE",
+      "kind": "heading",
+      "text": "Indeed",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div.css-82q6gn > div.css-1cru9mr > div.css-8odall > div.css-1y6bve3 > h2.css-gdsoyo"
+    },
+    {
+      "id": "l6vF1e8uLo",
+      "kind": "heading",
+      "text": "Jobseekers",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div.css-82q6gn > div.css-1cru9mr > div.css-8odall > div.css-1y6bve3 > h2.css-gdsoyo"
+    },
+    {
+      "id": "kMTfiKRW0X",
+      "kind": "heading",
+      "text": "Resources",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div.css-82q6gn > div.css-1cru9mr > div.css-8odall > div.css-1y6bve3 > h2.css-gdsoyo"
+    },
+    {
+      "id": "vg4wv44Gjw",
+      "kind": "stat",
+      "text": "Last Updated: September 29, 2026",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "f3Ye_tGJ9H",
+      "kind": "stat",
+      "text": "SECTION D.12",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div.post-content > p.wp-block-paragraph > a > strong"
+    },
+    {
+      "id": "KabXUgWobL",
+      "kind": "stat",
+      "text": "SECTION D.12(a)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div.post-content > p.wp-block-paragraph > a > strong"
+    },
+    {
+      "id": "YshLNZel5G",
+      "kind": "stat",
+      "text": "SECTION D.12(k)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div.post-content > p.wp-block-paragraph > a > strong"
+    },
+    {
+      "id": "hVSdt7Uz24",
+      "kind": "stat",
+      "text": "1. Indeed Ads Program",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#IAP"
+    },
+    {
+      "id": "rxgyrBOEpi",
+      "kind": "stat",
+      "text": "2. Indeed Smart Sourcing Program Terms",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#resume"
+    },
+    {
+      "id": "gqRw7IMkPq",
+      "kind": "stat",
+      "text": "3. Indeed APIs and Plugins",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#api"
+    },
+    {
+      "id": "r-pJN32xbd",
+      "kind": "stat",
+      "text": "4. Indeed Pro (Beta)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#JSpremium"
+    },
+    {
+      "id": "bicxmAKi8P",
+      "kind": "stat",
+      "text": "5. Mock Interviews (Beta)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#mock"
+    },
+    {
+      "id": "bxqXZ0O6W6",
+      "kind": "stat",
+      "text": "6. Indeed Career Scout (Beta)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#career"
+    },
+    {
+      "id": "wIFtdQXd_A",
+      "kind": "stat",
+      "text": "7. Indeed Talent Scout (Beta)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#talent"
+    },
+    {
+      "id": "Y8C6pg5N01",
+      "kind": "stat",
+      "text": "8. Indeed Smart Screening (Beta)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#SmartScreening"
+    },
+    {
+      "id": "RvmahT9Uyt",
+      "kind": "stat",
+      "text": "9. ‘Apply For Me’ Tool (Beta)",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#auto"
+    },
+    {
+      "id": "fRo0HE2PvG",
+      "kind": "stat",
+      "text": "10. Indeed Academy",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "#13-10-indeed-academy"
+    },
+    {
+      "id": "9mWp4OOy2a",
+      "kind": "stat",
+      "text": "30-Day Opt-Out Period.",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div.post-content > ol.wp-block-list > li > strong"
+    },
+    {
+      "id": "6tnSYm67oN",
+      "kind": "stat",
+      "text": "Last Updated: July 14, 2023",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "dhlqejsN97",
+      "kind": "stat",
+      "text": "2.1",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "73Jp8JxAb2",
+      "kind": "stat",
+      "text": "2.2",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "5MPaUL31NT",
+      "kind": "stat",
+      "text": "2.3",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "Y0EKv2bKe0",
+      "kind": "stat",
+      "text": "2.4",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "5MN3O4Abxs",
+      "kind": "stat",
+      "text": "2.4.1",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "DelNoQkCfB",
+      "kind": "stat",
+      "text": "2.4.2",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "XImmCsOvTv",
+      "kind": "stat",
+      "text": "2.4.3",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "fqVX5dm8yL",
+      "kind": "stat",
+      "text": "2.4.4",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "k-fzWJyYg_",
+      "kind": "stat",
+      "text": "2.4.5",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "0_kyY7ekCe",
+      "kind": "stat",
+      "text": "2.5",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "gtoWjo4hXg",
+      "kind": "stat",
+      "text": "2.6",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "UDSsNrTFyS",
+      "kind": "stat",
+      "text": "2.6.1",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "7QEeGzEmS4",
+      "kind": "stat",
+      "text": "2.6.2",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "i3ihkMw-T9",
+      "kind": "stat",
+      "text": "3.1",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "fdX-gxhb3c",
+      "kind": "stat",
+      "text": "3.2",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "1GUhrYTsHa",
+      "kind": "stat",
+      "text": "3.3",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "tscssat1fD",
+      "kind": "stat",
+      "text": "3.4",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "ncgxZfbZrM",
+      "kind": "stat",
+      "text": "4.1",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "NDPsf225uP",
+      "kind": "stat",
+      "text": "4.1.1",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "50ph1ekIYs",
+      "kind": "stat",
+      "text": "4.1.2",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "KX0sblBLDy",
+      "kind": "stat",
+      "text": "4.2 Personal Data Breach",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "g20tVhfiQ0",
+      "kind": "stat",
+      "text": "6.1",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "us17yo8eI7",
+      "kind": "stat",
+      "text": "6.2",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "DWfysfJWgh",
+      "kind": "stat",
+      "text": "9.1 Transfers of EEA/Swiss Data",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "ke012LqQnD",
+      "kind": "stat",
+      "text": "9.2 Transfers of UK Data",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "8uYWJmPEnG",
+      "kind": "stat",
+      "text": "9.3 Transfers of non-EEA/Swiss/UK Data",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "52o6QpMWWA",
+      "kind": "stat",
+      "text": "9.4 Transfers of non-EEA/Swiss/UK Data",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "A7gsfKxBPi",
+      "kind": "stat",
+      "text": "9.5",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "N6eskMc3mX",
+      "kind": "stat",
+      "text": "10. California Consumer Privacy Act",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > h4.wp-block-heading > strong"
+    },
+    {
+      "id": "rrt9VRtrlv",
+      "kind": "stat",
+      "text": "10.1",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "0oKTLQ09yH",
+      "kind": "stat",
+      "text": "10.2",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "0R20350VyC",
+      "kind": "stat",
+      "text": "13.1",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "3ETxAznPqZ",
+      "kind": "stat",
+      "text": "13.2",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "fjhrvrK3uF",
+      "kind": "stat",
+      "text": "13.3",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "mLKLzcLzVs",
+      "kind": "stat",
+      "text": "17.1",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "4V0-Qkh5Zr",
+      "kind": "stat",
+      "text": "17.1.1",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "NC-pVh9MuF",
+      "kind": "stat",
+      "text": "17.1.2",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > strong"
+    },
+    {
+      "id": "ZoNqA5_hto",
+      "kind": "cta",
+      "text": "contact Apple",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div.post-content > ol.wp-block-list > li > a"
+    },
+    {
+      "id": "Xu8CFV8AXL",
+      "kind": "cta",
+      "text": "Contact Indeed",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div > div.post-content > p.wp-block-paragraph > a"
+    },
+    {
+      "id": "p8JvclM4-5",
+      "kind": "cta",
+      "text": "contact form",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div.post-content > ol.wp-block-list > li > a"
+    },
+    {
+      "id": "r-Tpu7qwyM",
+      "kind": "cta",
+      "text": "contact us",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div > div.post-content > ol.wp-block-list > li > a"
+    },
+    {
+      "id": "XtF5tb6-5V",
+      "kind": "cta",
+      "text": "Contact support",
+      "sourceUrl": "https://www.indeed.com/legal?from=onetrust-banner",
+      "selector": "div.css-u74ql7 > div.css-1m4y74q > ul.css-rlrr2e > li.css-g85b5g > a.gnav-footer-gb67rk"
+    }
+  ],
+  "siteBrief": {
+    "productName": "indeed",
+    "summary": "Terms of Service",
+    "audience": "general",
+    "differentiator": "Terms of Service",
+    "strongestClaimFactId": "vg4wv44Gjw",
+    "factIds": [
+      "WWpdRlyIvn",
+      "EXfF_f4wQu",
+      "00BCIrY6Xn",
+      "fZvjs6w5F6",
+      "ryIu9JGOaH",
+      "NsL7yx_tGO",
+      "JjrZOMRCsi",
+      "MkF1p5DUAk",
+      "pgYwlgAZRq",
+      "wpAMfoT9yI",
+      "wReV9H1c3F",
+      "zO2FgNzHv8",
+      "spIAHoFzUR",
+      "4jOOn7bZaG",
+      "JUnc-1itfT",
+      "3KbqPosRUj",
+      "ftcvn5MmZu",
+      "iB-yxjOrb2",
+      "Ji3DMuS-Z2",
+      "GyUFnTgvmo",
+      "lpyFALVadN",
+      "940HWXAQSo",
+      "U1DeHdKygb",
+      "geCRfpQiM2",
+      "xhYko-5Ijb",
+      "6P9oakTCgQ",
+      "AgXNpbp9Xm",
+      "amuH72MlEn",
+      "cuXy-vXjfz",
+      "NGttNCFj1w",
+      "6Dy4ZZuMls",
+      "k8gYh21YDK",
+      "e4uc6ThhY3",
+      "f0B2O2Wvkz",
+      "Oun-v4Boi_",
+      "aijnpulFL6",
+      "r5CyWTsSjG",
+      "wLVSMTyyeM",
+      "AxPOTTSeSE",
+      "l6vF1e8uLo",
+      "kMTfiKRW0X",
+      "vg4wv44Gjw",
+      "f3Ye_tGJ9H",
+      "KabXUgWobL",
+      "YshLNZel5G",
+      "hVSdt7Uz24",
+      "rxgyrBOEpi",
+      "gqRw7IMkPq",
+      "r-pJN32xbd",
+      "bicxmAKi8P",
+      "bxqXZ0O6W6",
+      "wIFtdQXd_A",
+      "Y8C6pg5N01",
+      "RvmahT9Uyt",
+      "fRo0HE2PvG",
+      "9mWp4OOy2a",
+      "6tnSYm67oN",
+      "dhlqejsN97",
+      "73Jp8JxAb2",
+      "5MPaUL31NT",
+      "Y0EKv2bKe0",
+      "5MN3O4Abxs",
+      "DelNoQkCfB",
+      "XImmCsOvTv",
+      "fqVX5dm8yL",
+      "k-fzWJyYg_",
+      "0_kyY7ekCe",
+      "gtoWjo4hXg",
+      "UDSsNrTFyS",
+      "7QEeGzEmS4",
+      "i3ihkMw-T9",
+      "fdX-gxhb3c",
+      "1GUhrYTsHa",
+      "tscssat1fD",
+      "ncgxZfbZrM",
+      "NDPsf225uP",
+      "50ph1ekIYs",
+      "KX0sblBLDy",
+      "g20tVhfiQ0",
+      "us17yo8eI7",
+      "DWfysfJWgh",
+      "ke012LqQnD",
+      "8uYWJmPEnG",
+      "52o6QpMWWA",
+      "A7gsfKxBPi",
+      "N6eskMc3mX",
+      "rrt9VRtrlv",
+      "0oKTLQ09yH",
+      "0R20350VyC",
+      "3ETxAznPqZ",
+      "fjhrvrK3uF",
+      "mLKLzcLzVs",
+      "4V0-Qkh5Zr",
+      "NC-pVh9MuF",
+      "ZoNqA5_hto",
+      "Xu8CFV8AXL",
+      "p8JvclM4-5",
+      "r-Tpu7qwyM",
+      "XtF5tb6-5V"
+    ],
+    "source": "fallback"
+  }
+}

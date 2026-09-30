@@ -1,0 +1,32 @@
+{
+  "name": "sitereel",
+  "private": true,
+  "version": "0.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "dev:web": "pnpm --filter @sitereel/web run dev",
+    "dev:backend": "pnpm --filter @sitereel/backend run dev",
+    "dev:worker": "pnpm --filter @sitereel/worker run dev",
+    "infra:up": "docker compose -f infra/docker/compose.yml up -d",
+    "infra:down": "docker compose -f infra/docker/compose.yml down",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:status": "supabase status",
+    "db:migrate": "pnpm --filter @sitereel/db run db:migrate",
+    "db:generate": "pnpm --filter @sitereel/db run db:generate",
+    "db:studio": "pnpm --filter @sitereel/db run db:studio",
+    "phase0:render": "pnpm --filter @sitereel/renderer run render",
+    "phase0:purity": "pnpm --filter @sitereel/renderer run purity",
+    "phase2:benchmark": "pnpm --filter @sitereel/worker run benchmark"
+  },
+  "devDependencies": {
+    "turbo": "2.3.3",
+    "supabase": "2.118.0"
+  }
+}

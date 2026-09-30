@@ -1,0 +1,1199 @@
+{
+  "url": "https://www.pentagram.com",
+  "category": "agency",
+  "domain": "www.pentagram.com",
+  "pages": [
+    {
+      "url": "https://www.pentagram.com",
+      "screenshotKey": "jobs/41fdd7dd-d8c6-4e31-abc2-00963b408b92/crawl/home.png"
+    },
+    {
+      "url": "https://www.pentagram.com/about",
+      "screenshotKey": "jobs/41fdd7dd-d8c6-4e31-abc2-00963b408b92/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.pentagram.com/work/sustainability-solutions-group?setKey=9&exclude-slug=sustainability-solutions-group",
+      "screenshotKey": "jobs/41fdd7dd-d8c6-4e31-abc2-00963b408b92/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(26, 26, 26)",
+    "accent": "rgb(255, 255, 255)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://pentagram-production.imgix.net/48f85f1a-995a-4345-8882-bf534657fac1/01_TFS_Logo.png?auto=compress%2Cformat&fit=min&fm=jpg&q=80&rect=387%2C0%2C3321%2C2214&w=1500&h=1000&s=ba870a6812d34f80ef9350a6c441163a"
+  },
+  "facts": [
+    {
+      "id": "v-QDoORMK0",
+      "kind": "hero",
+      "text": "Pentagram",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "html.not-ie > body > header.h-header > div.container > h1"
+    },
+    {
+      "id": "RcWhujaC98",
+      "kind": "heading",
+      "text": "Site navigation",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "#mainNavHeading"
+    },
+    {
+      "id": "yosCI6x5iv",
+      "kind": "heading",
+      "text": "Social links",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "#mobileSocialHeading"
+    },
+    {
+      "id": "NURDJXTuAn",
+      "kind": "heading",
+      "text": "Discipline",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "#disciplinesHeading"
+    },
+    {
+      "id": "P5RilIzbfv",
+      "kind": "heading",
+      "text": "Sector",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "#sectorsHeading"
+    },
+    {
+      "id": "qi6pftRvyf",
+      "kind": "heading",
+      "text": "The Secret Life of Things",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > div.w-full > div.flex > div.w-12-cols-vw > h3.f-heading-1"
+    },
+    {
+      "id": "i4F3wyz8VH",
+      "kind": "heading",
+      "text": "See latest projects",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div > div.pjax__container > div.dynamic-work-block > div.project-count > h2.text-center"
+    },
+    {
+      "id": "ShxDQXVIbN",
+      "kind": "heading",
+      "text": "'In Defense of the Detour'",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-12-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "FkqQMIBQna",
+      "kind": "heading",
+      "text": "SMCC",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-12-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "gO3OB7rLeR",
+      "kind": "heading",
+      "text": "520 Fifth Avenue",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "FIFwAtVbW2",
+      "kind": "heading",
+      "text": "Living Optics Hyperspectral Camera",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "X0sjXl4HjU",
+      "kind": "heading",
+      "text": "Cass Art King’s Cross Store",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "f92Cmq0vRd",
+      "kind": "heading",
+      "text": "London Design Festival 2026",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "eDDF6_3qj7",
+      "kind": "heading",
+      "text": "Women+ on the Edge of Democracy",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "eHwkZ1LPo6",
+      "kind": "heading",
+      "text": "Xsolla",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "BHTB6u2X0v",
+      "kind": "heading",
+      "text": "Retrospective: Shakespeare in the Park",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > div.flex > div.w-12-cols > div.w-10-cols > h3.f-heading-1"
+    },
+    {
+      "id": "AFUtvOAwx6",
+      "kind": "heading",
+      "text": "8 latest Brand Identity projects",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div > div.pjax__container > div.dynamic-work-block > div.project-count > h2.text-center"
+    },
+    {
+      "id": "WHvFJqE0dj",
+      "kind": "heading",
+      "text": "Sada Mada",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-12-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "y-uMCxJcdO",
+      "kind": "heading",
+      "text": "De Niro Con",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-12-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "5Ovv_A75nv",
+      "kind": "heading",
+      "text": "Shakespeare in the Park 2026",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "B7W0Z61w1S",
+      "kind": "heading",
+      "text": "De Bijloke",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "_zhuTRrpqF",
+      "kind": "heading",
+      "text": "Jetour",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "7Z6_ovXOK5",
+      "kind": "heading",
+      "text": "Pfizer",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "yBT4oAgEqd",
+      "kind": "heading",
+      "text": "LenLen",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "8VPeP4Mi8I",
+      "kind": "heading",
+      "text": "Nothing Personal",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "fYZ11tMCj7",
+      "kind": "heading",
+      "text": "Our Future is the Ultimate Project",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > div.w-full > div.flex > div.w-12-cols-vw > h3.f-heading-1"
+    },
+    {
+      "id": "4zZmDtF1th",
+      "kind": "heading",
+      "text": "7 latest Motion Graphics & Film projects",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div > div.pjax__container > div.dynamic-work-block > div.project-count > h2.text-center"
+    },
+    {
+      "id": "XDwoj5VL32",
+      "kind": "heading",
+      "text": "Univers",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.container > li.w-full > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "wj5mHBhiH3",
+      "kind": "heading",
+      "text": "Bait",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "_Ow-PCF-xA",
+      "kind": "heading",
+      "text": "Together for Palestine",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "wk2vTPwIVr",
+      "kind": "heading",
+      "text": "‘The Four Seasons’",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "n3iiwBKFJF",
+      "kind": "heading",
+      "text": "‘America’s Sweethearts’",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "Ds8PBtrqRz",
+      "kind": "heading",
+      "text": "TwelveLabs",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "4ZBZXxgzox",
+      "kind": "heading",
+      "text": "Saturday Night Live Season 50",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "tdBHcirWF4",
+      "kind": "heading",
+      "text": "Retrospective: Saturday Night Live",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > div.flex > div.w-12-cols > div.w-10-cols > h3.f-heading-1"
+    },
+    {
+      "id": "HGSPaYuZoF",
+      "kind": "heading",
+      "text": "La Nouvelle Maison",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.container > li.w-full > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "XbWIl5eiCu",
+      "kind": "heading",
+      "text": "SUNY Binghamton Libraries Installation",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "3R0tgnMfgS",
+      "kind": "heading",
+      "text": "‘Breaking Through’",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "7MRNKr17nv",
+      "kind": "heading",
+      "text": "Queens Tourism Council",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "G3MhYIsnYq",
+      "kind": "heading",
+      "text": "Rugiet",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "Q3E-pSWtYq",
+      "kind": "heading",
+      "text": "The Obama Presidential Center",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "Rm5cX5z-n-",
+      "kind": "heading",
+      "text": "Imperial",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "MRhzrtTbPd",
+      "kind": "heading",
+      "text": "Past as Prologue",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > div.w-full > div.flex > div.w-12-cols-vw > h3.f-heading-1"
+    },
+    {
+      "id": "KLJ-aJciIo",
+      "kind": "heading",
+      "text": "Type Has Spirit",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > div.w-full > div.flex > div.w-12-cols-vw > h3.f-heading-1"
+    },
+    {
+      "id": "HMRQpUB0kc",
+      "kind": "heading",
+      "text": "8 latest Data Driven Experiences projects",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div > div.pjax__container > div.dynamic-work-block > div.project-count > h2.text-center"
+    },
+    {
+      "id": "Nq9ScDwc32",
+      "kind": "heading",
+      "text": "Dataland",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-12-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "5p1UX_MwZE",
+      "kind": "heading",
+      "text": "IEEE Honors Ceremony 2026",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-12-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "ao8B2mA47h",
+      "kind": "heading",
+      "text": "Giorgia Lupi: Data Humanism at Gallerie d'Italia",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "LeWMl71PYL",
+      "kind": "heading",
+      "text": "Silver Linings",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "_vpIoAMfyM",
+      "kind": "heading",
+      "text": "Capacity",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "ytDqdyNdkS",
+      "kind": "heading",
+      "text": "Climate Tech Map",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "2GZdG8wu6a",
+      "kind": "heading",
+      "text": "Gender Equality Index UK",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "RVzQY3nRsf",
+      "kind": "heading",
+      "text": "'Speak Data'",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "0MJ3ZS91Jd",
+      "kind": "heading",
+      "text": "London Calling",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > div.w-full > div.flex > div.w-12-cols-vw > h3.f-heading-1"
+    },
+    {
+      "id": "a3Ra8gfODL",
+      "kind": "heading",
+      "text": "Here is New York",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > div.w-full > div.flex > div.w-12-cols-vw > h3.f-heading-1"
+    },
+    {
+      "id": "kR1v6Sjv9y",
+      "kind": "heading",
+      "text": "8 latest Industrial/Product Design projects",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div > div.pjax__container > div.dynamic-work-block > div.project-count > h2.text-center"
+    },
+    {
+      "id": "BbzOSP6DKQ",
+      "kind": "heading",
+      "text": "Caligra c100 Developer Terminal",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-12-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "84z725Wob7",
+      "kind": "heading",
+      "text": "MINI x DEUS",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-12-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "Ph8FXZW2E0",
+      "kind": "heading",
+      "text": "Behold Wildlife Camera",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "Dp3U1lewus",
+      "kind": "heading",
+      "text": "KARRI",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "dwS3FSX7SY",
+      "kind": "heading",
+      "text": "ICD Beauty",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "HFzlAZqu4H",
+      "kind": "heading",
+      "text": "Peter F. Collier Award for Ethics in Journalism",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "5RhO1oyW06",
+      "kind": "heading",
+      "text": "‘3 Days in China’",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "52-yBM_0aX",
+      "kind": "heading",
+      "text": "Loka Chai Maker",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "ZUFKpmzgpz",
+      "kind": "heading",
+      "text": "Retrospective: London Design Festival",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > div.flex > div.w-12-cols > div.w-10-cols > h3.f-heading-1"
+    },
+    {
+      "id": "O2d2NmDZ34",
+      "kind": "heading",
+      "text": "Lake",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "c1HrCILzpA",
+      "kind": "heading",
+      "text": "Pentagram Papers 52: The Hudson Transparencies",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "pyomCAX4Er",
+      "kind": "heading",
+      "text": "Windham–Campbell Prizes 2025",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "dxpuRmJXw6",
+      "kind": "heading",
+      "text": "The Hudson Transparencies: Exhibition",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "SEMfh9dc1C",
+      "kind": "heading",
+      "text": "Mozilla Foundation",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "gapK1AjX2R",
+      "kind": "heading",
+      "text": "Hiut",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "IomlQm5DBe",
+      "kind": "heading",
+      "text": "1994 World Cup",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "bd3N8qARFI",
+      "kind": "heading",
+      "text": "Wes Anderson: The Archives",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "Dzl4EBA5GP",
+      "kind": "heading",
+      "text": "MedExpress",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "aL7HvTWgnG",
+      "kind": "heading",
+      "text": "8 latest Signage & Environmental Graphics projects",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div > div.pjax__container > div.dynamic-work-block > div.project-count > h2.text-center"
+    },
+    {
+      "id": "3pzrtY_JRS",
+      "kind": "heading",
+      "text": "Green-Wood Cemetery",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-12-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "1ooaxHakpo",
+      "kind": "heading",
+      "text": "Mosaic Rooms",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-12-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "wISvKcN_Le",
+      "kind": "heading",
+      "text": "MoN Takanawa: The Museum of Narratives",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "MFJWOr6NM6",
+      "kind": "heading",
+      "text": "Folger Shakespeare Library",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "mxIGnfUQ4m",
+      "kind": "heading",
+      "text": "London Design Festival 2025",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "TWVUpQAOb0",
+      "kind": "heading",
+      "text": "Museo Casa Kahlo",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "WVevk4Y_1N",
+      "kind": "heading",
+      "text": "Chateau Engalin",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "NOnnqTiOPc",
+      "kind": "heading",
+      "text": "Chiba Tech",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "cDxukfGg2x",
+      "kind": "heading",
+      "text": "News",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > div.footer-sections > section.footer-news > div.w-12-cols > h3"
+    },
+    {
+      "id": "b09gY8dtu4",
+      "kind": "heading",
+      "text": "Giorgia Lupi at MIT Future Fest",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "article.news-item > div.flex > div.news-item-content > div > h2.f-body-1"
+    },
+    {
+      "id": "axxyIQxcI5",
+      "kind": "heading",
+      "text": "Paula Scher at AGI Open",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "article.news-item > div.flex > div.news-item-content > div > h2.f-body-1"
+    },
+    {
+      "id": "O8P0Vrn87R",
+      "kind": "heading",
+      "text": "New Business Inquiries",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > div.footer-sections > section.keyline-t > div.w-6-cols > h3"
+    },
+    {
+      "id": "7gA8CJ2CUu",
+      "kind": "heading",
+      "text": "Open Positions",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.footer__inner > div.container > div.footer-sections > section.keyline-t > h3.w-6-cols"
+    },
+    {
+      "id": "vKperyHQX6",
+      "kind": "heading",
+      "text": "About",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.footer__inner > div.container > div.footer-sections > section.keyline-t > h3.w-6-cols"
+    },
+    {
+      "id": "x8851vmbxc",
+      "kind": "heading",
+      "text": "Footer navigation",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "#footerNavHeading"
+    },
+    {
+      "id": "_lsv8PjRl6",
+      "kind": "stat",
+      "text": "520 Fifth Avenue",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "MeAoO_P_64",
+      "kind": "stat",
+      "text": "London Design Festival 2026",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "08RNRFUMlW",
+      "kind": "stat",
+      "text": "8 latest Brand Identity projects",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div > div.pjax__container > div.dynamic-work-block > div.project-count > h2.text-center"
+    },
+    {
+      "id": "V9hSUykYlr",
+      "kind": "stat",
+      "text": "Shakespeare in the Park 2026",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "T5JrlsfPU3",
+      "kind": "stat",
+      "text": "Saturday Night Live Season 50",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "lnN1x41YXI",
+      "kind": "stat",
+      "text": "IEEE Honors Ceremony 2026",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-12-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "e8VfmuvPaS",
+      "kind": "stat",
+      "text": "‘3 Days in China’",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "aAwtcSMzdY",
+      "kind": "stat",
+      "text": "Windham–Campbell Prizes 2025",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "Eho3sg2CN5",
+      "kind": "stat",
+      "text": "1994 World Cup",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "Jyw_Swyr0L",
+      "kind": "stat",
+      "text": "London Design Festival 2025",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "ul.mt-space-9 > li.w-6-cols > div.group > a.block > h3.f-body-1"
+    },
+    {
+      "id": "-_uOaABbGb",
+      "kind": "testimonial",
+      "text": "Great design can push you out of your aesthetic comfort zone. If it’s meaningful to the client, it’s the right solution. Jody Hudson-Powell",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.pjax__container > div.block--dark > div.quote__inner > div.container > blockquote.flex"
+    },
+    {
+      "id": "27SkARVhe3",
+      "kind": "testimonial",
+      "text": "Design is about making choices. Sometimes the best solution is the simplest one. Emily Oberman",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.pjax__container > div.block--dark > div.quote__inner > div.container > blockquote.flex"
+    },
+    {
+      "id": "sO1IOduf4c",
+      "kind": "testimonial",
+      "text": "Design should evoke emotion. Whether it’s joy, curiosity, or nostalgia, it should make people feel something. Michael Gericke",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.pjax__container > div.block--dark > div.quote__inner > div.container > blockquote.flex"
+    },
+    {
+      "id": "Eh1wpy5klp",
+      "kind": "cta",
+      "text": "Contact",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > nav.hidden > ul.flex > li > a.header__item--contact"
+    },
+    {
+      "id": "gahkLO_9fL",
+      "kind": "cta",
+      "text": "Facebook",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.container > div.mt-auto > ul.flex > li > a"
+    },
+    {
+      "id": "dtWjLkd5et",
+      "kind": "cta",
+      "text": "Close Books",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.searchFilters__list > div.searchFilters__listInner > ul > li > a.searchFilters__item"
+    },
+    {
+      "id": "oGa3_gkUJK",
+      "kind": "cta",
+      "text": "Books",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.modal-inner-container > div.filters-container > div.filters-inner-container > div.top-0 > button.py-9"
+    },
+    {
+      "id": "43c4goBPLP",
+      "kind": "cta",
+      "text": "Saturday Night Live: The Book",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "div.mt-24 > div.w-full > div.flickity-viewport > div.flickity-slider > a.h-fit"
+    },
+    {
+      "id": "ysHlUX-Tgl",
+      "kind": "cta",
+      "text": "Subscribe",
+      "sourceUrl": "https://www.pentagram.com",
+      "selector": "footer.footer > div.newsletter > div.container > form.newsletter__form > button.btn"
+    },
+    {
+      "id": "ly9FhkYVSp",
+      "kind": "heading",
+      "text": "Partners",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "#partnersHeading"
+    },
+    {
+      "id": "Cc2kpTReWU",
+      "kind": "heading",
+      "text": "Abbott Miller",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "HpJQLh9Ozq",
+      "kind": "heading",
+      "text": "Andrea Trabucco-Campos",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "T30ggc8jJQ",
+      "kind": "heading",
+      "text": "Angus Hyland",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "b4HXOJYQe6",
+      "kind": "heading",
+      "text": "DJ Stout",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "vjnQlwO0vn",
+      "kind": "heading",
+      "text": "Domenic Lippa",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "rgUgzRTe5H",
+      "kind": "heading",
+      "text": "Eddie Opara",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "RtOlSB3ioT",
+      "kind": "heading",
+      "text": "Emily Oberman",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "oC7UJfdS41",
+      "kind": "heading",
+      "text": "Giorgia Lupi",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "riU54v2-OO",
+      "kind": "heading",
+      "text": "Harry Pearce",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "t3Cd4v8Xc6",
+      "kind": "heading",
+      "text": "Hugh Miller",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "uajttqifKQ",
+      "kind": "heading",
+      "text": "Jody Hudson-Powell",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "2ZtxVE7E2y",
+      "kind": "heading",
+      "text": "John Rushworth",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "mOPjziDrc9",
+      "kind": "heading",
+      "text": "Jon Marshall",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "fiCyL9GT3H",
+      "kind": "heading",
+      "text": "Justus Oehler",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "BJJm4I_xO9",
+      "kind": "heading",
+      "text": "Luke Hayman",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "xxqQmV0KTu",
+      "kind": "heading",
+      "text": "Luke Powell",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "AVCh1G-J32",
+      "kind": "heading",
+      "text": "Marina Willer",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "rd2KghLskj",
+      "kind": "heading",
+      "text": "Matt Willey",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "PoVHcKoyzJ",
+      "kind": "heading",
+      "text": "Michael Gericke",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "RM5MRIFlG-",
+      "kind": "heading",
+      "text": "Natasha Jen",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "bNDoaFhgEJ",
+      "kind": "heading",
+      "text": "Paula Scher",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "b96Ug7tw_t",
+      "kind": "heading",
+      "text": "Piotr Woronkowicz",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "qugyn6xlBB",
+      "kind": "heading",
+      "text": "Samar Maakaroun",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "div.container > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "L9Z-YVkONB",
+      "kind": "heading",
+      "text": "Partner at Large",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "#partnersAtLargeHeading"
+    },
+    {
+      "id": "Y4r_AhYTLs",
+      "kind": "heading",
+      "text": "Michael Bierut",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "section.mt-spacing-9 > ul.mt-spacing-9 > li > a.block > h3.f-body-1"
+    },
+    {
+      "id": "TjQPotd26V",
+      "kind": "heading",
+      "text": "Associates",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "#associatesHeading"
+    },
+    {
+      "id": "gkoaUqphVg",
+      "kind": "heading",
+      "text": "Partners Emeriti",
+      "sourceUrl": "https://www.pentagram.com/about",
+      "selector": "#emeritiHeading"
+    },
+    {
+      "id": "IJvMZMFi07",
+      "kind": "heading",
+      "text": "Client",
+      "sourceUrl": "https://www.pentagram.com/work/sustainability-solutions-group?setKey=9&exclude-slug=sustainability-solutions-group",
+      "selector": "div.mb-64 > div.f-body-1 > div.w-3-cols > div > h3.text-secondary"
+    },
+    {
+      "id": "4a3d_IG3Bc",
+      "kind": "heading",
+      "text": "Office",
+      "sourceUrl": "https://www.pentagram.com/work/sustainability-solutions-group?setKey=9&exclude-slug=sustainability-solutions-group",
+      "selector": "#metaOffice"
+    },
+    {
+      "id": "--8j7qCYyj",
+      "kind": "heading",
+      "text": "Partner",
+      "sourceUrl": "https://www.pentagram.com/work/sustainability-solutions-group?setKey=9&exclude-slug=sustainability-solutions-group",
+      "selector": "#metaPartner"
+    },
+    {
+      "id": "AmkQORicN9",
+      "kind": "heading",
+      "text": "Project team",
+      "sourceUrl": "https://www.pentagram.com/work/sustainability-solutions-group?setKey=9&exclude-slug=sustainability-solutions-group",
+      "selector": "#metaTeam"
+    },
+    {
+      "id": "tHYc_6t44i",
+      "kind": "heading",
+      "text": "Collaborators",
+      "sourceUrl": "https://www.pentagram.com/work/sustainability-solutions-group?setKey=9&exclude-slug=sustainability-solutions-group",
+      "selector": "#metaCollaborators"
+    },
+    {
+      "id": "FdjyZkW2SS",
+      "kind": "heading",
+      "text": "Zeff",
+      "sourceUrl": "https://www.pentagram.com/work/sustainability-solutions-group?setKey=9&exclude-slug=sustainability-solutions-group",
+      "selector": "div.workNext > a.block > div.container > header.mt-spacing-8 > h2.f-heading-1"
+    },
+    {
+      "id": "bI8A6BPxO9",
+      "kind": "testimonial",
+      "text": "It was clear from the first conversations that SSG required a new brand language that would represent the knowledge and expertise they bring, and the truly visionary way they work.",
+      "sourceUrl": "https://www.pentagram.com/work/sustainability-solutions-group?setKey=9&exclude-slug=sustainability-solutions-group",
+      "selector": "article.mt-48 > div.flex > div.h-fit > div.workQuote > blockquote.py-32"
+    },
+    {
+      "id": "fTkNVsG8ou",
+      "kind": "testimonial",
+      "text": "SSG now radiates with boldness and depth—smart textures and patterns working together to reflect the intelligent identity of a true collective.",
+      "sourceUrl": "https://www.pentagram.com/work/sustainability-solutions-group?setKey=9&exclude-slug=sustainability-solutions-group",
+      "selector": "article.mt-48 > div.flex > div.h-fit > div.workQuote > blockquote.py-32"
+    }
+  ],
+  "siteBrief": {
+    "productName": "pentagram",
+    "summary": "Pentagram",
+    "audience": "general",
+    "differentiator": "Pentagram",
+    "strongestClaimFactId": "_lsv8PjRl6",
+    "factIds": [
+      "v-QDoORMK0",
+      "RcWhujaC98",
+      "yosCI6x5iv",
+      "NURDJXTuAn",
+      "P5RilIzbfv",
+      "qi6pftRvyf",
+      "i4F3wyz8VH",
+      "ShxDQXVIbN",
+      "FkqQMIBQna",
+      "gO3OB7rLeR",
+      "FIFwAtVbW2",
+      "X0sjXl4HjU",
+      "f92Cmq0vRd",
+      "eDDF6_3qj7",
+      "eHwkZ1LPo6",
+      "BHTB6u2X0v",
+      "AFUtvOAwx6",
+      "WHvFJqE0dj",
+      "y-uMCxJcdO",
+      "5Ovv_A75nv",
+      "B7W0Z61w1S",
+      "_zhuTRrpqF",
+      "7Z6_ovXOK5",
+      "yBT4oAgEqd",
+      "8VPeP4Mi8I",
+      "fYZ11tMCj7",
+      "4zZmDtF1th",
+      "XDwoj5VL32",
+      "wj5mHBhiH3",
+      "_Ow-PCF-xA",
+      "wk2vTPwIVr",
+      "n3iiwBKFJF",
+      "Ds8PBtrqRz",
+      "4ZBZXxgzox",
+      "tdBHcirWF4",
+      "HGSPaYuZoF",
+      "XbWIl5eiCu",
+      "3R0tgnMfgS",
+      "7MRNKr17nv",
+      "G3MhYIsnYq",
+      "Q3E-pSWtYq",
+      "Rm5cX5z-n-",
+      "MRhzrtTbPd",
+      "KLJ-aJciIo",
+      "HMRQpUB0kc",
+      "Nq9ScDwc32",
+      "5p1UX_MwZE",
+      "ao8B2mA47h",
+      "LeWMl71PYL",
+      "_vpIoAMfyM",
+      "ytDqdyNdkS",
+      "2GZdG8wu6a",
+      "RVzQY3nRsf",
+      "0MJ3ZS91Jd",
+      "a3Ra8gfODL",
+      "kR1v6Sjv9y",
+      "BbzOSP6DKQ",
+      "84z725Wob7",
+      "Ph8FXZW2E0",
+      "Dp3U1lewus",
+      "dwS3FSX7SY",
+      "HFzlAZqu4H",
+      "5RhO1oyW06",
+      "52-yBM_0aX",
+      "ZUFKpmzgpz",
+      "O2d2NmDZ34",
+      "c1HrCILzpA",
+      "pyomCAX4Er",
+      "dxpuRmJXw6",
+      "SEMfh9dc1C",
+      "gapK1AjX2R",
+      "IomlQm5DBe",
+      "bd3N8qARFI",
+      "Dzl4EBA5GP",
+      "aL7HvTWgnG",
+      "3pzrtY_JRS",
+      "1ooaxHakpo",
+      "wISvKcN_Le",
+      "MFJWOr6NM6",
+      "mxIGnfUQ4m",
+      "TWVUpQAOb0",
+      "WVevk4Y_1N",
+      "NOnnqTiOPc",
+      "cDxukfGg2x",
+      "b09gY8dtu4",
+      "axxyIQxcI5",
+      "O8P0Vrn87R",
+      "7gA8CJ2CUu",
+      "vKperyHQX6",
+      "x8851vmbxc",
+      "_lsv8PjRl6",
+      "MeAoO_P_64",
+      "08RNRFUMlW",
+      "V9hSUykYlr",
+      "T5JrlsfPU3",
+      "lnN1x41YXI",
+      "e8VfmuvPaS",
+      "aAwtcSMzdY",
+      "Eho3sg2CN5",
+      "Jyw_Swyr0L",
+      "-_uOaABbGb",
+      "27SkARVhe3",
+      "sO1IOduf4c",
+      "Eh1wpy5klp",
+      "gahkLO_9fL",
+      "dtWjLkd5et",
+      "oGa3_gkUJK",
+      "43c4goBPLP",
+      "ysHlUX-Tgl",
+      "ly9FhkYVSp",
+      "Cc2kpTReWU",
+      "HpJQLh9Ozq",
+      "T30ggc8jJQ",
+      "b4HXOJYQe6",
+      "vjnQlwO0vn",
+      "rgUgzRTe5H",
+      "RtOlSB3ioT",
+      "oC7UJfdS41",
+      "riU54v2-OO",
+      "t3Cd4v8Xc6",
+      "uajttqifKQ",
+      "2ZtxVE7E2y",
+      "mOPjziDrc9",
+      "fiCyL9GT3H",
+      "BJJm4I_xO9",
+      "xxqQmV0KTu",
+      "AVCh1G-J32",
+      "rd2KghLskj",
+      "PoVHcKoyzJ",
+      "RM5MRIFlG-",
+      "bNDoaFhgEJ",
+      "b96Ug7tw_t",
+      "qugyn6xlBB",
+      "L9Z-YVkONB",
+      "Y4r_AhYTLs",
+      "TjQPotd26V",
+      "gkoaUqphVg",
+      "IJvMZMFi07",
+      "4a3d_IG3Bc",
+      "--8j7qCYyj",
+      "AmkQORicN9",
+      "tHYc_6t44i",
+      "FdjyZkW2SS",
+      "bI8A6BPxO9",
+      "fTkNVsG8ou"
+    ],
+    "source": "fallback"
+  }
+}

@@ -1,0 +1,2359 @@
+{
+  "url": "https://www.glossier.com",
+  "category": "ecommerce",
+  "domain": "www.glossier.com",
+  "pages": [
+    {
+      "url": "https://www.glossier.com",
+      "screenshotKey": "jobs/f7b9ee65-0310-4080-9a31-f875876ff739/crawl/home.png"
+    },
+    {
+      "url": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "screenshotKey": "jobs/f7b9ee65-0310-4080-9a31-f875876ff739/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "screenshotKey": "jobs/f7b9ee65-0310-4080-9a31-f875876ff739/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "rgb(56, 96, 190)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://www.glossier.com/cdn/shop/t/1469/assets/search-icon.svg?v=17597307012293460771790692678"
+  },
+  "facts": [
+    {
+      "id": "G5TeExEFlP",
+      "kind": "heading",
+      "text": "Search our site",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#headerSearchTitle"
+    },
+    {
+      "id": "Nt1pOOLzfX",
+      "kind": "heading",
+      "text": "Free fragrance, anyone?",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.home__hero-content-wrapper > div.home__hero-content-block > div.home__hero-content > div.home__hero-content-title > h2"
+    },
+    {
+      "id": "0ewd1Gy2sv",
+      "kind": "heading",
+      "text": "SHOP BESTSELLERS",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.shopify-section > div.is-scroll-target > div.collection > div.featured-products__header > h2.headline"
+    },
+    {
+      "id": "6jgynluCtX",
+      "kind": "heading",
+      "text": "Boy Brow",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "s2kCPW0I7Q",
+      "kind": "heading",
+      "text": "Cloud Paint Plush Blush",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "_cMLePkR8H",
+      "kind": "heading",
+      "text": "Futuredew",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "cuK4xHVOmq",
+      "kind": "heading",
+      "text": "Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "8jFdbbxtxg",
+      "kind": "heading",
+      "text": "Glossier You",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "jygeG5YE_A",
+      "kind": "heading",
+      "text": "Glossier You Doux",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "NSCYS5EXtD",
+      "kind": "heading",
+      "text": "Glossier You Soie",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "P7lK17SFuz",
+      "kind": "heading",
+      "text": "Glossier You Fleur",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "buszaEp1Bl",
+      "kind": "heading",
+      "text": "I ❤️ NY",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.shopify-section > section.container > div.review-highlight__section > div.hide-desktop > h2.headline"
+    },
+    {
+      "id": "Mzp2Mq3jrm",
+      "kind": "heading",
+      "text": "MAKE IT YOURS",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "main.page-wrap > div.shopify-section > section.ugc__section > div.ugc__header > h2.headline"
+    },
+    {
+      "id": "zxIZH4ryBo",
+      "kind": "heading",
+      "text": "How can we help?",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#acc-button-links-heading-1"
+    },
+    {
+      "id": "QREgf2K6ri",
+      "kind": "heading",
+      "text": "About Glossier",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#acc-button-links-heading-2"
+    },
+    {
+      "id": "sahnj6C8i1",
+      "kind": "heading",
+      "text": "Find your store",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#acc-button-links-heading-3"
+    },
+    {
+      "id": "8okibOmbnz",
+      "kind": "heading",
+      "text": "Social",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#acc-button-links-heading-5"
+    },
+    {
+      "id": "TTcK-wDcH7",
+      "kind": "heading",
+      "text": "Shopping Bag",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#bagTitle"
+    },
+    {
+      "id": "10TinWKI65",
+      "kind": "heading",
+      "text": "Edit item",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#bagEditModalTitle"
+    },
+    {
+      "id": "tSU2UzUuby",
+      "kind": "heading",
+      "text": "Location settings",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#headerModalTitle"
+    },
+    {
+      "id": "tZpenEfIZb",
+      "kind": "heading",
+      "text": "Get notified",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#modalTitle-bis"
+    },
+    {
+      "id": "jn6UWNFKjV",
+      "kind": "heading",
+      "text": "Welcome to Glossier",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#welcomeMatModalTitle"
+    },
+    {
+      "id": "RQvwL_r9l2",
+      "kind": "heading",
+      "text": "Privacy Preference Center",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#ot-pc-title"
+    },
+    {
+      "id": "2tv1Sg5q0j",
+      "kind": "heading",
+      "text": "Your Privacy",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#ot-pvcy-txt"
+    },
+    {
+      "id": "ElBv8ebRmP",
+      "kind": "heading",
+      "text": "Performance/Analytical Cookies",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#ot-header-id-C0002"
+    },
+    {
+      "id": "q7EeITyv_F",
+      "kind": "heading",
+      "text": "Functional Cookies",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#ot-header-id-C0003"
+    },
+    {
+      "id": "hmHRo-JHIn",
+      "kind": "heading",
+      "text": "Targeting/Advertising Cookies",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#ot-header-id-C0004"
+    },
+    {
+      "id": "PPh5ObSLqF",
+      "kind": "heading",
+      "text": "Strictly Necessary Cookies Always Active",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "#ot-header-id-C0001"
+    },
+    {
+      "id": "uz6p4gWF7l",
+      "kind": "heading",
+      "text": "Cookie List",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "section.ot-hide > div.ot-lst-cntr > div > div > h3"
+    },
+    {
+      "id": "fJQRwaJVTB",
+      "kind": "feature",
+      "text": "SHOP BESTSELLERS",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.shopify-section > div.is-scroll-target > div.collection > div.featured-products__header > h2.headline"
+    },
+    {
+      "id": "NFeKGIIiWG",
+      "kind": "feature",
+      "text": "Grooming pomade",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "M6sGpEXBqO",
+      "kind": "feature",
+      "text": "Boy Brow",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "gN_oOltG9J",
+      "kind": "feature",
+      "text": "Cloud Paint Plush Blush",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "XXG5ACL9fL",
+      "kind": "feature",
+      "text": "Seamless cheek color",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "VBZGXgKd7T",
+      "kind": "feature",
+      "text": "Futuredew",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "wFpzdJiXi2",
+      "kind": "feature",
+      "text": "Skincare-makeup hybrid",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "u3o-uH5dKD",
+      "kind": "feature",
+      "text": "Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "scAnxIda1o",
+      "kind": "feature",
+      "text": "Nourishing lip balm",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "cxndMgR6rW",
+      "kind": "feature",
+      "text": "Glossier You",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "QQvurTUpti",
+      "kind": "feature",
+      "text": "Eau de parfum",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "CLAXAXznUR",
+      "kind": "feature",
+      "text": "Glossier You Doux",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "7z1WMYJd8J",
+      "kind": "feature",
+      "text": "Glossier You Soie",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "IBs7YBnL55",
+      "kind": "feature",
+      "text": "Glossier You Fleur",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "7Ofw2VBZFR",
+      "kind": "testimonial",
+      "text": "I ❤️ NY Take a bite of the Big Apple with our newest Balm Dotcom. Shop now I ❤️ NY Take a bite of the Big Apple with our newest Balm Dotcom. Shop now",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "body.template-index > main.page-wrap > div.shopify-section > section.container > div.review-highlight__section"
+    },
+    {
+      "id": "XykCBuYuu2",
+      "kind": "testimonial",
+      "text": "I ❤️ NY Take a bite of the Big Apple with our newest Balm Dotcom. Shop now",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "main.page-wrap > div.shopify-section > section.container > div.review-highlight__section > div.hide-desktop"
+    },
+    {
+      "id": "dLk6BeuT3v",
+      "kind": "testimonial",
+      "text": "I ❤️ NY",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.shopify-section > section.container > div.review-highlight__section > div.hide-desktop > h2.headline"
+    },
+    {
+      "id": "H8yxmee0eh",
+      "kind": "testimonial",
+      "text": "Take a bite of the Big Apple with our newest Balm Dotcom.",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.shopify-section > section.container > div.review-highlight__section > div.hide-desktop > div.review-highlight__header-description"
+    },
+    {
+      "id": "Uuf_gMVvW_",
+      "kind": "testimonial",
+      "text": "Shop now",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.shopify-section > section.container > div.review-highlight__section > div.hide-desktop > div.review-highlight__header-cta"
+    },
+    {
+      "id": "ykP3kOz9qf",
+      "kind": "cta",
+      "text": "Shop All",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.header__container > div.header__flex > ul.header__navigation-list > li.header__navigation-item > a.header__navigation-item-link"
+    },
+    {
+      "id": "3eRkN1zmPN",
+      "kind": "cta",
+      "text": "Shop now",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.home__hero-content-wrapper > div.home__hero-content-block > div.home__hero-content > div.home__hero-content-ctas > a.btn"
+    },
+    {
+      "id": "bFWmiz23Ji",
+      "kind": "cta",
+      "text": "Contact",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.footer__nav--left > div.footer__nav-col > ul.footer__nav-list > li.footer__nav-item > a.footer__nav-link"
+    },
+    {
+      "id": "QZg0YrF6M1",
+      "kind": "cta",
+      "text": "EU: Withdraw order",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.footer__nav--left > div.footer__nav-col > ul.footer__nav-list > li.footer__nav-item > a.footer__nav-link"
+    },
+    {
+      "id": "Vm4GPBf_yk",
+      "kind": "cta",
+      "text": "Facebook Opens in a new tab",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "div.footer__nav--right > div.footer__nav-col > ul.footer__nav-list > li.footer__nav-item > a.footer__nav-link"
+    },
+    {
+      "id": "qRunvaV0E-",
+      "kind": "cta",
+      "text": "Continue shopping",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "aside.modal > div.modal__inner > div.modal__content > div.modal__button-group > button.btn"
+    },
+    {
+      "id": "9wXWdFCCIK",
+      "kind": "cta",
+      "text": "Change shipping country",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "aside.modal > div.modal__inner > div.modal__content > div.modal__button-group > button.btn"
+    },
+    {
+      "id": "wmFUg_UvwA",
+      "kind": "cta",
+      "text": "Sign up",
+      "sourceUrl": "https://www.glossier.com",
+      "selector": "form.needsclick > div.needsclick > div.needsclick > div.needsclick > button.needsclick"
+    },
+    {
+      "id": "yjhsW1LxBr",
+      "kind": "hero",
+      "text": "Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "section.pv-essentials > div.pv-essentials__container > div.pv-essential > header.pv-header > h1.pv-header__title"
+    },
+    {
+      "id": "RCRDjjdL6I",
+      "kind": "hero",
+      "text": "Nourishing lip balm",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-essentials__container > div.pv-essential > header.pv-header > div.pv-header__sub > p.pv-header__intent"
+    },
+    {
+      "id": "0PYmHjJ2Go",
+      "kind": "heading",
+      "text": "Save With Sets",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "section.pv-essentials > div.pv-essentials__container > div.pv-essential > section.pv-save-with-sets > h2.product-accordion__title"
+    },
+    {
+      "id": "b_pjaJI8Nr",
+      "kind": "heading",
+      "text": "Balm + Line Duo",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.product-accordion__item > button.product-accordion__acc-btn > div.product-accordion__acc-btn-wrapper > div.product-accordion__acc-btn-content > h3.product-accordion__acc-btn-title"
+    },
+    {
+      "id": "acrf0TAR4p",
+      "kind": "heading",
+      "text": "In A New York Minute Set",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.product-accordion__item > button.product-accordion__acc-btn > div.product-accordion__acc-btn-wrapper > div.product-accordion__acc-btn-content > h3.product-accordion__acc-btn-title"
+    },
+    {
+      "id": "bamfgC98U2",
+      "kind": "heading",
+      "text": "The Glossier Icons",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.product-accordion__item > button.product-accordion__acc-btn > div.product-accordion__acc-btn-wrapper > div.product-accordion__acc-btn-content > h3.product-accordion__acc-btn-title"
+    },
+    {
+      "id": "1sTXv5BfZb",
+      "kind": "heading",
+      "text": "INGREDIENTS",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "section.container > div.collapsible-content__acc > button.collapsible-content__acc-btn > span.acc__title > h2.headline"
+    },
+    {
+      "id": "krAXosRkuH",
+      "kind": "heading",
+      "text": "CLINICAL STUDIES",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.clinical-trial > div.clinical-trial__acc > button.clinical-trial__acc-btn > span.acc__title > h2.clinical-trial__name"
+    },
+    {
+      "id": "4YBnFIq6vg",
+      "kind": "heading",
+      "text": "Clinically proven to moisturize lips for up to 12 hours",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.clinical-trial__acc > div.clinical-trial__acc-menu > div.clinical-trial__content-wrapper > div.clinical-trial__content > h2.clinical-trial__header"
+    },
+    {
+      "id": "56As8qnX5z",
+      "kind": "heading",
+      "text": "Apply to lips wherever and whenever you need an extra dose of moisture.",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.media-text__acc > div.media-text__acc-menu > div.media-text__wrapper > div.media-text__content > h2.media-text__heading"
+    },
+    {
+      "id": "BbO1_xNdzn",
+      "kind": "heading",
+      "text": "GET THE LOOK",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "main.page-wrap > div.shopify-section > section.ugc__section > div.ugc__header > h2.headline"
+    },
+    {
+      "id": "am6UMhxUCF",
+      "kind": "heading",
+      "text": "Lip Line",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "TX5ymzIT-z",
+      "kind": "heading",
+      "text": "Travel Spray + Balm",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "6YuAz627l9",
+      "kind": "heading",
+      "text": "Crème de You",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "6ehwDSYT_i",
+      "kind": "heading",
+      "text": "Mini Beauty Bag",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "z6dcffeXG9",
+      "kind": "heading",
+      "text": "Glossier Candles",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "stfmHd31nI",
+      "kind": "heading",
+      "text": "Reviews",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews > div.container > div.pv-reviews__header > div.pv-reviews__header-top > h2.pv-reviews__title"
+    },
+    {
+      "id": "1LbGmvxnkw",
+      "kind": "heading",
+      "text": "Write a review",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__header > div > div.pv-reviews__write-review-wrapper > form.pv-reviews__write-review-form > h2.pv-reviews__write-review-title"
+    },
+    {
+      "id": "kurT96Sgxr",
+      "kind": "heading",
+      "text": "Thank you for posting a review!",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__header > div > div.pv-reviews__write-review-success-wrapper > div.pv-reviews__write-review-success > h2.pv-reviews__write-review-success-title"
+    },
+    {
+      "id": "sh9ut20ZyW",
+      "kind": "heading",
+      "text": "Balm Dotcom ingredients",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "#modalTitle-template--27848922202357__collapsible_content_T3FFEz"
+    },
+    {
+      "id": "NhIaPgLVGp",
+      "kind": "feature",
+      "text": "I ❤️ NY",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.shopify-section > div > div.collection > div.featured-products__header > h2.headline"
+    },
+    {
+      "id": "Ia8eF27P3W",
+      "kind": "feature",
+      "text": "In A New York Minute Set",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "1z2kpBTDvk",
+      "kind": "feature",
+      "text": "On-the-go makeup essentials",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "DkyQegVTro",
+      "kind": "feature",
+      "text": "Lip Line",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "aqjAyMEmtZ",
+      "kind": "feature",
+      "text": "Enhancing pencil",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "bW2e2M1fL5",
+      "kind": "feature",
+      "text": "Travel Spray + Balm",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "4cUmNlCRjo",
+      "kind": "feature",
+      "text": "Choose your own adventure.",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "D3obIuKJbJ",
+      "kind": "feature",
+      "text": "The Glossier Icons",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "Zw0pc7HScU",
+      "kind": "feature",
+      "text": "Meet the classics",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "-ff4K1yap7",
+      "kind": "feature",
+      "text": "Balm + Line Duo",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "Ygg7yRI6Lt",
+      "kind": "feature",
+      "text": "Balm Dotcom + Lip Line",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "KIxHwtr2Hc",
+      "kind": "feature",
+      "text": "Pink Pepper, Iris, Ambrox",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "lU-DmfY9Fh",
+      "kind": "feature",
+      "text": "Crème de You",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "rLePaFFWYv",
+      "kind": "feature",
+      "text": "Body butter",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "owaHGle4vG",
+      "kind": "feature",
+      "text": "Mini Beauty Bag",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "WAiU2JLh0b",
+      "kind": "feature",
+      "text": "Permanent collection",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "AO6xZbJIdG",
+      "kind": "feature",
+      "text": "Glossier Candles",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "Ldx5qF7VDc",
+      "kind": "feature",
+      "text": "Scented candles",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "9IWiPClBDr",
+      "kind": "stat",
+      "text": "8 ml",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.product-set__item > div.product-set__item-details > div.product-set__item-details-wrapper > div.product-set__item-details-column > span.product-set__item-statement"
+    },
+    {
+      "id": "TIBdc2D9II",
+      "kind": "testimonial",
+      "text": "4.4523787 star rating (10825)",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-essential > header.pv-header > div.pv-header__sub > div > a.pv-reviews__total-rating"
+    },
+    {
+      "id": "ptUV6wWaw2",
+      "kind": "testimonial",
+      "text": "4.4523787 star rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "header.pv-header > div.pv-header__sub > div > a.pv-reviews__total-rating > div.pv-reviews__total-rating-stars"
+    },
+    {
+      "id": "kjwDheuaeq",
+      "kind": "testimonial",
+      "text": "(10825)",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "header.pv-header > div.pv-header__sub > div > a.pv-reviews__total-rating > p.pv-reviews__total-rating-count"
+    },
+    {
+      "id": "I40HX9Xg76",
+      "kind": "testimonial",
+      "text": "ReviewsWrite a review",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "section.pv-reviews__app > div.pv-reviews > div.container > div.pv-reviews__header > div.pv-reviews__header-top"
+    },
+    {
+      "id": "nPwapSiLYq",
+      "kind": "testimonial",
+      "text": "Reviews",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews > div.container > div.pv-reviews__header > div.pv-reviews__header-top > h2.pv-reviews__title"
+    },
+    {
+      "id": "NXiap_66EC",
+      "kind": "testimonial",
+      "text": "10825Total reviews4.54.4523787 star ratingAverage rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews > div.container > div.pv-reviews__header > div.hide-desktop > div.pv-reviews__header-summary"
+    },
+    {
+      "id": "lsJUSZZO0A",
+      "kind": "testimonial",
+      "text": "10825Total reviews",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > div.pv-reviews__header > div.hide-desktop > div.pv-reviews__header-summary > div.pv-reviews__header-summary-item"
+    },
+    {
+      "id": "yK79r63yDl",
+      "kind": "testimonial",
+      "text": "10825",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__header > div.hide-desktop > div.pv-reviews__header-summary > div.pv-reviews__header-summary-item > span.pv-reviews__header-summary-item-value"
+    },
+    {
+      "id": "8c2O5Qljv9",
+      "kind": "testimonial",
+      "text": "Total reviews",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__header > div.hide-desktop > div.pv-reviews__header-summary > div.pv-reviews__header-summary-item > span.pv-reviews__header-summary-item-label"
+    },
+    {
+      "id": "klTLDM6sgw",
+      "kind": "testimonial",
+      "text": "4.54.4523787 star ratingAverage rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > div.pv-reviews__header > div.hide-desktop > div.pv-reviews__header-summary > div.pv-reviews__header-summary-item"
+    },
+    {
+      "id": "6PP83w_M8M",
+      "kind": "testimonial",
+      "text": "4.54.4523787 star rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__header > div.hide-desktop > div.pv-reviews__header-summary > div.pv-reviews__header-summary-item > div.pv-reviews__header-score"
+    },
+    {
+      "id": "HrwIiSf5P_",
+      "kind": "testimonial",
+      "text": "4.5",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.hide-desktop > div.pv-reviews__header-summary > div.pv-reviews__header-summary-item > div.pv-reviews__header-score > span.pv-reviews__header-summary-item-value"
+    },
+    {
+      "id": "Sc00HDGo-9",
+      "kind": "testimonial",
+      "text": "Average rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__header > div.hide-desktop > div.pv-reviews__header-summary > div.pv-reviews__header-summary-item > span.pv-reviews__header-summary-item-label"
+    },
+    {
+      "id": "f_xcvpduux",
+      "kind": "testimonial",
+      "text": "Write a review",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__header > div > div.pv-reviews__write-review-wrapper > form.pv-reviews__write-review-form > h2.pv-reviews__write-review-title"
+    },
+    {
+      "id": "dg97nypFE7",
+      "kind": "testimonial",
+      "text": "Score*Vote for 5 stars out of 5Vote for 4 stars out of 5Vote for 3 stars out of 5Vote for 2 stars out of 5Vote for 1 stars out of 5",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "#writeReviewRating"
+    },
+    {
+      "id": "lItHJPZCFC",
+      "kind": "testimonial",
+      "text": "Vote for 5 stars out of 5Vote for 4 stars out of 5Vote for 3 stars out of 5Vote for 2 stars out of 5Vote for 1 stars out of 5",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__write-review-wrapper > form.pv-reviews__write-review-form > div.pv-reviews__write-review-content > div.pv-reviews__write-review-score > fieldset.pv-reviews__write-review-score-stars"
+    },
+    {
+      "id": "YpOkLU9mlw",
+      "kind": "testimonial",
+      "text": "* indicates a required field",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div > div.pv-reviews__write-review-wrapper > form.pv-reviews__write-review-form > div.pv-reviews__write-review-content > p.pv-reviews__write-review-required-text"
+    },
+    {
+      "id": "lXIEnI9CZV",
+      "kind": "testimonial",
+      "text": "Bottom Line",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "form.pv-reviews__write-review-form > div.pv-reviews__write-review-content > ul.form-list > li.form-item > p.pv-reviews__write-review-form-item-header"
+    },
+    {
+      "id": "0O5ZgWvJ-9",
+      "kind": "testimonial",
+      "text": "Submit review",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div > div.pv-reviews__write-review-wrapper > form.pv-reviews__write-review-form > div.pv-reviews__write-review-content > button.pv-reviews__write-review-submit"
+    },
+    {
+      "id": "jL7lpcMxSp",
+      "kind": "testimonial",
+      "text": "Thank you for posting a review!Share your review so everyone else can enjoy it too. Facebook Twitter LinkedIn Close review success messsage",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews > div.container > div.pv-reviews__header > div > div.pv-reviews__write-review-success-wrapper"
+    },
+    {
+      "id": "sRePNQ2iug",
+      "kind": "testimonial",
+      "text": "Thank you for posting a review!Share your review so everyone else can enjoy it too. Facebook Twitter LinkedIn",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > div.pv-reviews__header > div > div.pv-reviews__write-review-success-wrapper > div.pv-reviews__write-review-success"
+    },
+    {
+      "id": "pfUhS1FdKP",
+      "kind": "testimonial",
+      "text": "Thank you for posting a review!",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__header > div > div.pv-reviews__write-review-success-wrapper > div.pv-reviews__write-review-success > h2.pv-reviews__write-review-success-title"
+    },
+    {
+      "id": "MX61Uci6-L",
+      "kind": "testimonial",
+      "text": "Share your review so everyone else can enjoy it too.",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__header > div > div.pv-reviews__write-review-success-wrapper > div.pv-reviews__write-review-success > p.pv-reviews__write-review-success-content"
+    },
+    {
+      "id": "_eWV-g3x2P",
+      "kind": "testimonial",
+      "text": "Facebook",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div > div.pv-reviews__write-review-success-wrapper > div.pv-reviews__write-review-success > ul.list-reset > li.pv-reviews__write-review-success-share"
+    },
+    {
+      "id": "NDq-o_g-S-",
+      "kind": "testimonial",
+      "text": "Twitter",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div > div.pv-reviews__write-review-success-wrapper > div.pv-reviews__write-review-success > ul.list-reset > li.pv-reviews__write-review-success-share"
+    },
+    {
+      "id": "_oFMyfDT60",
+      "kind": "testimonial",
+      "text": "LinkedIn",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div > div.pv-reviews__write-review-success-wrapper > div.pv-reviews__write-review-success > ul.list-reset > li.pv-reviews__write-review-success-share"
+    },
+    {
+      "id": "vc1F-6WGRw",
+      "kind": "testimonial",
+      "text": "Close review success messsage",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > div.pv-reviews__header > div > div.pv-reviews__write-review-success-wrapper > button.pv-reviews__write-review-success-close"
+    },
+    {
+      "id": "X7DS2ZSas9",
+      "kind": "testimonial",
+      "text": "10825Total reviews4.54.4523787 star ratingAverage ratingSearch for a question or a keywordSearchSort by(Newest first)Newest firstHighest ratingLowest ratingMost helpful",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "section.pv-reviews__app > div.pv-reviews > div.container > div.pv-reviews__header > div.pv-reviews__header-main"
+    },
+    {
+      "id": "mNC6Uvba9U",
+      "kind": "testimonial",
+      "text": "Search for a question or a keywordSearchSort by(Newest first)Newest firstHighest ratingLowest ratingMost helpful",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews > div.container > div.pv-reviews__header > div.pv-reviews__header-main > div.pv-reviews__refine-wrapper"
+    },
+    {
+      "id": "EZvMlmaEb0",
+      "kind": "testimonial",
+      "text": "Search for a question or a keywordSearch",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > div.pv-reviews__header > div.pv-reviews__header-main > div.pv-reviews__refine-wrapper > div.pv-reviews__refine-wrapper-left"
+    },
+    {
+      "id": "QUmotsFwPv",
+      "kind": "testimonial",
+      "text": "Search for a question or a keyword",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__refine-wrapper-left > section.pv-reviews__search-wrapper > form > div.input-placeholder > label.pv-reviews__search-label"
+    },
+    {
+      "id": "Ta_SewhgXs",
+      "kind": "testimonial",
+      "text": "Search",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__refine-wrapper-left > section.pv-reviews__search-wrapper > form > div.input-placeholder > button.btn-icon"
+    },
+    {
+      "id": "bcvI401lUU",
+      "kind": "testimonial",
+      "text": "Sort by(Newest first)Newest firstHighest ratingLowest ratingMost helpful",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > div.pv-reviews__header > div.pv-reviews__header-main > div.pv-reviews__refine-wrapper > div.pv-reviews__refine-wrapper-right"
+    },
+    {
+      "id": "EDhSVZ_c-h",
+      "kind": "testimonial",
+      "text": "Sort by",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__header-main > div.pv-reviews__refine-wrapper > div.pv-reviews__refine-wrapper-right > div.pv-reviews__sort > label.pv-reviews__sort-label"
+    },
+    {
+      "id": "BIDQa0wQ6k",
+      "kind": "testimonial",
+      "text": "(Newest first)Newest firstHighest ratingLowest ratingMost helpful",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__header-main > div.pv-reviews__refine-wrapper > div.pv-reviews__refine-wrapper-right > div.pv-reviews__sort > div.pv-reviews__sort-select-wrapper"
+    },
+    {
+      "id": "TUfWpXRJ8I",
+      "kind": "testimonial",
+      "text": "Newest firstHighest ratingLowest ratingMost helpful",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "#pvReviewsSort"
+    },
+    {
+      "id": "BP9Uwi8OQD",
+      "kind": "testimonial",
+      "text": "30.09.26María A. (Germany)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeCombinationSkin ShadeMediumAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary"
+    },
+    {
+      "id": "BBk9Hwkjaa",
+      "kind": "testimonial",
+      "text": "30.09.26María A. (Germany)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top"
+    },
+    {
+      "id": "b29ClmOmdq",
+      "kind": "testimonial",
+      "text": "30.09.26",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > p.pv-reviews-item__created-at"
+    },
+    {
+      "id": "Aown_tvAMY",
+      "kind": "testimonial",
+      "text": "María A. (Germany)",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > p.pv-reviews-item__user"
+    },
+    {
+      "id": "4hD9q0ayo4",
+      "kind": "testimonial",
+      "text": "0upvote0downvoteUpvotes: 0, Downvotes: 0",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > div.screenreader > div.pv-reviews-item__vote"
+    },
+    {
+      "id": "HqVLAgF82x",
+      "kind": "testimonial",
+      "text": "0upvote",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > div.screenreader > div.pv-reviews-item__vote > button.btn"
+    },
+    {
+      "id": "rLQbB13DS2",
+      "kind": "testimonial",
+      "text": "0downvote",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > div.screenreader > div.pv-reviews-item__vote > button.btn"
+    },
+    {
+      "id": "DxJKDWhswI",
+      "kind": "testimonial",
+      "text": "Upvotes: 0, Downvotes: 0",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > div.screenreader > div.pv-reviews-item__vote > div.pv-reviews-item__vote-live"
+    },
+    {
+      "id": "JUBWHzOVv_",
+      "kind": "testimonial",
+      "text": "Verified Buyer",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > p.pv-reviews-item__verified-buyer"
+    },
+    {
+      "id": "ZaJLSlDSHt",
+      "kind": "testimonial",
+      "text": "Skin TypeCombinationSkin ShadeMediumAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper"
+    },
+    {
+      "id": "AsjpoWZffC",
+      "kind": "testimonial",
+      "text": "Skin TypeCombination",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper > div.pv-reviews-item__summary-bottom > p.pv-reviews-item__extra-field"
+    },
+    {
+      "id": "YqEzAroga5",
+      "kind": "testimonial",
+      "text": "Skin Type",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper > div.pv-reviews-item__summary-bottom > p.pv-reviews-item__extra-field > span.pv-reviews-item__extra-field-label"
+    },
+    {
+      "id": "wNWgwSsw4T",
+      "kind": "testimonial",
+      "text": "Skin ShadeMedium",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper > div.pv-reviews-item__summary-bottom > p.pv-reviews-item__extra-field"
+    },
+    {
+      "id": "RlEzfMqQvg",
+      "kind": "testimonial",
+      "text": "Skin Shade",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper > div.pv-reviews-item__summary-bottom > p.pv-reviews-item__extra-field > span.pv-reviews-item__extra-field-label"
+    },
+    {
+      "id": "7Eke8WVJG9",
+      "kind": "testimonial",
+      "text": "Age Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper > div.pv-reviews-item__summary-bottom > p.pv-reviews-item__extra-field"
+    },
+    {
+      "id": "HQQvpBzF26",
+      "kind": "testimonial",
+      "text": "Age Range",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper > div.pv-reviews-item__summary-bottom > p.pv-reviews-item__extra-field > span.pv-reviews-item__extra-field-label"
+    },
+    {
+      "id": "0nfhFkUDJH",
+      "kind": "testimonial",
+      "text": "5 star rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > div.pv-reviews-item__review-stars"
+    },
+    {
+      "id": "15pVnNlrc_",
+      "kind": "testimonial",
+      "text": "Always and forever my endgame",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > p.pv-reviews-item__title"
+    },
+    {
+      "id": "pwQaUGu6Uv",
+      "kind": "testimonial",
+      "text": "Show more",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > button.pv-reviews-item__show-more"
+    },
+    {
+      "id": "ECVRitk_Pm",
+      "kind": "testimonial",
+      "text": "30.09.265 star rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > div.pv-reviews-item__summary-top-mobile"
+    },
+    {
+      "id": "-sVCpfW4iB",
+      "kind": "testimonial",
+      "text": "María A. (Germany)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeCombinationSkin ShadeMediumAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary"
+    },
+    {
+      "id": "FdkYr1hYak",
+      "kind": "testimonial",
+      "text": "0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeCombinationSkin ShadeMediumAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-mobile"
+    },
+    {
+      "id": "Q1OrsfmwLm",
+      "kind": "testimonial",
+      "text": "Verified Buyer Skin TypeCombinationSkin ShadeMediumAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-mobile > div.pv-reviews-item__buyer-info"
+    },
+    {
+      "id": "yteakf3AKf",
+      "kind": "testimonial",
+      "text": "30.09.26Giovanna R. (New York)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeCombinationSkin ShadeLightAge Range51-60",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary"
+    },
+    {
+      "id": "PmfW0M9V-O",
+      "kind": "testimonial",
+      "text": "30.09.26Giovanna R. (New York)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top"
+    },
+    {
+      "id": "1QnWs0rTAv",
+      "kind": "testimonial",
+      "text": "Giovanna R. (New York)",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > p.pv-reviews-item__user"
+    },
+    {
+      "id": "DSetQXCQ0L",
+      "kind": "testimonial",
+      "text": "Skin TypeCombinationSkin ShadeLightAge Range51-60",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper"
+    },
+    {
+      "id": "SIbZVn0Zqg",
+      "kind": "testimonial",
+      "text": "Skin ShadeLight",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper > div.pv-reviews-item__summary-bottom > p.pv-reviews-item__extra-field"
+    },
+    {
+      "id": "s_ucQ_l6Jg",
+      "kind": "testimonial",
+      "text": "Age Range51-60",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper > div.pv-reviews-item__summary-bottom > p.pv-reviews-item__extra-field"
+    },
+    {
+      "id": "qnh8yhbtd7",
+      "kind": "testimonial",
+      "text": "5 star ratingBalm dotcom “ILoveNY”Very good product and amazing taste Bottom line Yes - I would recommend this to a friend0upvote0downvoteUpvotes: 0, Downvotes: 0",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review"
+    },
+    {
+      "id": "JyJV00AK3o",
+      "kind": "testimonial",
+      "text": "5 star ratingBalm dotcom “ILoveNY”Very good product and amazing taste Bottom line Yes - I would recommend this to a friend",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content"
+    },
+    {
+      "id": "cDbai8ePqd",
+      "kind": "testimonial",
+      "text": "Balm dotcom “ILoveNY”",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > p.pv-reviews-item__title"
+    },
+    {
+      "id": "xOSYIaxIGr",
+      "kind": "testimonial",
+      "text": "Very good product and amazing taste Bottom line Yes - I would recommend this to a friend",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > div.pv-reviews-item__content-wrapper"
+    },
+    {
+      "id": "zYKo11eO2y",
+      "kind": "testimonial",
+      "text": "30.09.265 star ratingBalm dotcom “ILoveNY”Very good product and amazing taste Bottom line Yes - I would recommend this to a friend",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review"
+    },
+    {
+      "id": "eeyj50_Y43",
+      "kind": "testimonial",
+      "text": "Giovanna R. (New York)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeCombinationSkin ShadeLightAge Range51-60",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary"
+    },
+    {
+      "id": "eZAJI-V0kX",
+      "kind": "testimonial",
+      "text": "0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeCombinationSkin ShadeLightAge Range51-60",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-mobile"
+    },
+    {
+      "id": "J_E7lvb_4-",
+      "kind": "testimonial",
+      "text": "Verified Buyer Skin TypeCombinationSkin ShadeLightAge Range51-60",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-mobile > div.pv-reviews-item__buyer-info"
+    },
+    {
+      "id": "Eo5TiSjaIn",
+      "kind": "testimonial",
+      "text": "30.09.26Alondra M. (BAY AREAAAAA)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeDrySkin ShadeMediumAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary"
+    },
+    {
+      "id": "nX5Cn74ciV",
+      "kind": "testimonial",
+      "text": "30.09.26Alondra M. (BAY AREAAAAA)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top"
+    },
+    {
+      "id": "ZXPtaUyRru",
+      "kind": "testimonial",
+      "text": "Alondra M. (BAY AREAAAAA)",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > p.pv-reviews-item__user"
+    },
+    {
+      "id": "bBcEt55moT",
+      "kind": "testimonial",
+      "text": "Skin TypeDrySkin ShadeMediumAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper"
+    },
+    {
+      "id": "ERLSgH-15o",
+      "kind": "testimonial",
+      "text": "Skin TypeDry",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper > div.pv-reviews-item__summary-bottom > p.pv-reviews-item__extra-field"
+    },
+    {
+      "id": "jRdk5DmyNu",
+      "kind": "testimonial",
+      "text": "5 star ratingAPPLE ALL THE WAYYYI love GLOSIERRRR!!! the balms are my staple!! so lasting upon application as well as longevity of the product. Bottom line Yes - I would recommend this to a friend",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content"
+    },
+    {
+      "id": "x0hEA-jNq2",
+      "kind": "testimonial",
+      "text": "APPLE ALL THE WAYYY",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > p.pv-reviews-item__title"
+    },
+    {
+      "id": "J2pRa8Vez4",
+      "kind": "testimonial",
+      "text": "I love GLOSIERRRR!!! the balms are my staple!! so lasting upon application as well as longevity of the product. Bottom line Yes - I would recommend this to a friend",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > div.pv-reviews-item__content-wrapper"
+    },
+    {
+      "id": "ncJnaZyeo5",
+      "kind": "testimonial",
+      "text": "Alondra M. (BAY AREAAAAA)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeDrySkin ShadeMediumAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary"
+    },
+    {
+      "id": "M8DXjb5svU",
+      "kind": "testimonial",
+      "text": "0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeDrySkin ShadeMediumAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-mobile"
+    },
+    {
+      "id": "K-MalYQjgO",
+      "kind": "testimonial",
+      "text": "Verified Buyer Skin TypeDrySkin ShadeMediumAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-mobile > div.pv-reviews-item__buyer-info"
+    },
+    {
+      "id": "TYfKzLQWzV",
+      "kind": "testimonial",
+      "text": "29.09.26Alesia L. (Soho)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeNormalSkin ShadeLightAge Range25-30",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary"
+    },
+    {
+      "id": "6ljys74efO",
+      "kind": "testimonial",
+      "text": "29.09.26Alesia L. (Soho)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top"
+    },
+    {
+      "id": "T5V5ud8tTf",
+      "kind": "testimonial",
+      "text": "29.09.26",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > p.pv-reviews-item__created-at"
+    },
+    {
+      "id": "Y2hBErMzD8",
+      "kind": "testimonial",
+      "text": "Alesia L. (Soho)",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > p.pv-reviews-item__user"
+    },
+    {
+      "id": "ZIXpToaLo-",
+      "kind": "testimonial",
+      "text": "Skin TypeNormalSkin ShadeLightAge Range25-30",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper"
+    },
+    {
+      "id": "XJxUSse8H5",
+      "kind": "testimonial",
+      "text": "Skin TypeNormal",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper > div.pv-reviews-item__summary-bottom > p.pv-reviews-item__extra-field"
+    },
+    {
+      "id": "Xk7qcOqM99",
+      "kind": "testimonial",
+      "text": "Age Range25-30",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper > div.pv-reviews-item__summary-bottom > p.pv-reviews-item__extra-field"
+    },
+    {
+      "id": "X3GaLl7JGM",
+      "kind": "testimonial",
+      "text": "5 star ratingLove this productLove the smell, the moisture and tint this balm leaves on my lips! Bottom line Yes - I would recommend this to a friend0upvote0downvoteUpvotes: 0, Downvotes: 0",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review"
+    },
+    {
+      "id": "XX-D75rh0a",
+      "kind": "testimonial",
+      "text": "5 star ratingLove this productLove the smell, the moisture and tint this balm leaves on my lips! Bottom line Yes - I would recommend this to a friend",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content"
+    },
+    {
+      "id": "fSkfN6uMDm",
+      "kind": "testimonial",
+      "text": "Love this product",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > p.pv-reviews-item__title"
+    },
+    {
+      "id": "RvyZZjYr0x",
+      "kind": "testimonial",
+      "text": "Love the smell, the moisture and tint this balm leaves on my lips! Bottom line Yes - I would recommend this to a friend",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > div.pv-reviews-item__content-wrapper"
+    },
+    {
+      "id": "X_OHoRBFBr",
+      "kind": "testimonial",
+      "text": "29.09.265 star ratingLove this productLove the smell, the moisture and tint this balm leaves on my lips! Bottom line Yes - I would recommend this to a friend",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review"
+    },
+    {
+      "id": "2RREe3dstm",
+      "kind": "testimonial",
+      "text": "29.09.265 star rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > div.pv-reviews-item__summary-top-mobile"
+    },
+    {
+      "id": "D6gWCD2UWb",
+      "kind": "testimonial",
+      "text": "Alesia L. (Soho)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeNormalSkin ShadeLightAge Range25-30",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary"
+    },
+    {
+      "id": "GCrzV_L_O6",
+      "kind": "testimonial",
+      "text": "0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeNormalSkin ShadeLightAge Range25-30",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-mobile"
+    },
+    {
+      "id": "dpeESJ7kEp",
+      "kind": "testimonial",
+      "text": "Verified Buyer Skin TypeNormalSkin ShadeLightAge Range25-30",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-mobile > div.pv-reviews-item__buyer-info"
+    },
+    {
+      "id": "1t_x83Vnq0",
+      "kind": "testimonial",
+      "text": "Load more",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.shopify-section > section.pv-reviews__app > div.pv-reviews > div.container > div.pv-reviews__pagination"
+    },
+    {
+      "id": "UcyMgZlzcu",
+      "kind": "cta",
+      "text": "Facebook",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom",
+      "selector": "div.pv-reviews__write-review-success-wrapper > div.pv-reviews__write-review-success > ul.list-reset > li.pv-reviews__write-review-success-share > a.pv-reviews__write-review-success-share-link"
+    },
+    {
+      "id": "N26bf5l5za",
+      "kind": "hero",
+      "text": "Balm Dotcom Trio",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "section.pv-essentials > div.pv-essentials__container > div.pv-essential > header.pv-header > h1.pv-header__title"
+    },
+    {
+      "id": "Q4dy48vTNx",
+      "kind": "hero",
+      "text": "Original formula",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pv-essentials__container > div.pv-essential > header.pv-header > div.pv-header__sub > p.pv-header__intent"
+    },
+    {
+      "id": "3ElEzLC0Fk",
+      "kind": "heading",
+      "text": "Add On",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "section.pv-essentials > div.pv-essentials__container > div.pv-essential > section.pv-add-on > h2.product-accordion__title"
+    },
+    {
+      "id": "5KyVKuPFsK",
+      "kind": "heading",
+      "text": "The Beauty Bag",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "li.product-accordion__item > button.product-accordion__acc-btn > div.product-accordion__acc-btn-wrapper > div.product-accordion__acc-btn-content > h3.product-accordion__acc-btn-title"
+    },
+    {
+      "id": "M-WAjzvXxD",
+      "kind": "heading",
+      "text": "Product Details",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.shopify-section > section.pv > section.pv-set-details > div.container > h2.pv-set-details__title"
+    },
+    {
+      "id": "icq-NJ0L4Q",
+      "kind": "heading",
+      "text": "YOU MAY ALSO LIKE",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.shopify-section > div > div.collection > div.featured-products__header > h2.headline"
+    },
+    {
+      "id": "dazOO3Pe-9",
+      "kind": "heading",
+      "text": "Fragrance Duo",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "0F5As5hEJ4",
+      "kind": "heading",
+      "text": "Fragrance Trio",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "6i2toKErzw",
+      "kind": "heading",
+      "text": "Fragrance Two Ways",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "upSXKu2TJ0",
+      "kind": "heading",
+      "text": "Boy Brow Duo",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "T_Nvvc2nG0",
+      "kind": "heading",
+      "text": "You + You Travel Spray",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "h13Ef15DpP",
+      "kind": "heading",
+      "text": "The Glossier You Routine",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "PlKzaolnTL",
+      "kind": "heading",
+      "text": "The Brow Kit",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "pgpUZmBk6a",
+      "kind": "heading",
+      "text": "The Lip Kit",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "wvunvQkeYi",
+      "kind": "heading",
+      "text": "The Cheek Kit",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "jp88z8KG-K",
+      "kind": "heading",
+      "text": "The Face Kit",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "TOAldUUqNz",
+      "kind": "heading",
+      "text": "Cloud Paint Duo",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "VNtZlamcl0",
+      "kind": "heading",
+      "text": "The No-Makeup Makeup Kit",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "u9cMuKlyAK",
+      "kind": "heading",
+      "text": "You Look Good Pet Set",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "UbfdgXHiSK",
+      "kind": "heading",
+      "text": "The Curbside Set",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "JvRC4X0qE3",
+      "kind": "heading",
+      "text": "Full Body Routine",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "EtoIpBfgSz",
+      "kind": "heading",
+      "text": "Glossier You Discovery Kit",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "nTDEF7vtm9",
+      "kind": "heading",
+      "text": "Lash Slick Duo",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "byRcikwdfR",
+      "kind": "heading",
+      "text": "Ultralip Duo",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "Po3QmCWK4j",
+      "kind": "heading",
+      "text": "Care Package",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "NjaPBRYdsl",
+      "kind": "feature",
+      "text": "YOU MAY ALSO LIKE",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.shopify-section > div > div.collection > div.featured-products__header > h2.headline"
+    },
+    {
+      "id": "M6AGPx3W8y",
+      "kind": "feature",
+      "text": "Fragrance Duo",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "QZU3qnsrvJ",
+      "kind": "feature",
+      "text": "Choose your scents",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "C6N2I1avj_",
+      "kind": "feature",
+      "text": "Fragrance Trio",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "6N5pb_iK9m",
+      "kind": "feature",
+      "text": "Fragrance Two Ways",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "U7vopkjA35",
+      "kind": "feature",
+      "text": "Boy Brow Duo",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "hyRPkvpP4U",
+      "kind": "feature",
+      "text": "Grooming pomades",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "3-HiJfExB0",
+      "kind": "feature",
+      "text": "You + You Travel Spray",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "fUcli75o7E",
+      "kind": "feature",
+      "text": "Two of You",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "PBQg8Wtryz",
+      "kind": "feature",
+      "text": "The Glossier You Routine",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "R1LgV_gzdZ",
+      "kind": "feature",
+      "text": "Body butter + Eau de parfum",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "Nc7goHtqu9",
+      "kind": "feature",
+      "text": "The Brow Kit",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "asZ7EtZQZ9",
+      "kind": "feature",
+      "text": "Limited edition",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "dKb2nVe5P6",
+      "kind": "feature",
+      "text": "The Lip Kit",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "lOB1jl3lxw",
+      "kind": "feature",
+      "text": "Enhancing pencil + nourishing shine and color",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "aTsPfdNzyT",
+      "kind": "feature",
+      "text": "The Cheek Kit",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "2K5SIQ-E0w",
+      "kind": "feature",
+      "text": "Cloud Paint + Futuredew",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "h03xmG_gJG",
+      "kind": "feature",
+      "text": "The Face Kit",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "oAQtqvg_7C",
+      "kind": "feature",
+      "text": "Perfecting Skin Tint + Stretch Balm Concealer",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "lnyGoCGiLW",
+      "kind": "feature",
+      "text": "Cloud Paint Duo",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "BW8YNWjQER",
+      "kind": "feature",
+      "text": "The No-Makeup Makeup Kit",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "rLqqlH50lJ",
+      "kind": "feature",
+      "text": "Boy Brow + Lash Slick + Stretch Balm Concealer",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "cgcum5cJkD",
+      "kind": "feature",
+      "text": "You Look Good Pet Set",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "2tQo2rUekV",
+      "kind": "feature",
+      "text": "Four dog walking essentials",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "5rsGD45wpO",
+      "kind": "feature",
+      "text": "The Curbside Set",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "M5yHp_-NBc",
+      "kind": "feature",
+      "text": "Pet Waste Bag Dispenser + Smile Wave Pet Waste Bags",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "C_pa-wOZkT",
+      "kind": "feature",
+      "text": "Full Body Routine",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "GidjX40kot",
+      "kind": "feature",
+      "text": "Daily Perfecting Lotion + Daily Oil Wash + Body Spritz",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "PySgjGTebR",
+      "kind": "feature",
+      "text": "Glossier You Discovery Kit",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "yzTBa5ntxE",
+      "kind": "feature",
+      "text": "Lash Slick Duo",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "2YpQdtO_w4",
+      "kind": "feature",
+      "text": "Film form mascaras",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "hiDzXTqB1V",
+      "kind": "feature",
+      "text": "Ultralip Duo",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "Hb0HuhhaHA",
+      "kind": "feature",
+      "text": "Choose two Ultralips",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "6-4Go_x2BA",
+      "kind": "feature",
+      "text": "Care Package",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "article.pi > div.pi__desc > div.pi__desc-wrapper-top > div.pi__details > h3.pi__title"
+    },
+    {
+      "id": "-uFUfLAhTY",
+      "kind": "feature",
+      "text": "Balm Dotcom + Hand Cream",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pi__desc > div.pi__desc-wrapper-top > div.pi__options > div.pi__option-name-wrapper > p.pi__option-soi"
+    },
+    {
+      "id": "h6X89WiSNX",
+      "kind": "testimonial",
+      "text": "4.452328 star rating (10824)",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pv-essential > header.pv-header > div.pv-header__sub > div > a.pv-reviews__total-rating"
+    },
+    {
+      "id": "1H0gNVx8B9",
+      "kind": "testimonial",
+      "text": "4.452328 star rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "header.pv-header > div.pv-header__sub > div > a.pv-reviews__total-rating > div.pv-reviews__total-rating-stars"
+    },
+    {
+      "id": "CYvrqIcXj1",
+      "kind": "testimonial",
+      "text": "(10824)",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "header.pv-header > div.pv-header__sub > div > a.pv-reviews__total-rating > p.pv-reviews__total-rating-count"
+    },
+    {
+      "id": "ra2VSzDaSx",
+      "kind": "testimonial",
+      "text": "10824Total reviews4.54.452328 star ratingAverage rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pv-reviews > div.container > div.pv-reviews__header > div.hide-desktop > div.pv-reviews__header-summary"
+    },
+    {
+      "id": "z26m6xXKBt",
+      "kind": "testimonial",
+      "text": "10824Total reviews",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.container > div.pv-reviews__header > div.hide-desktop > div.pv-reviews__header-summary > div.pv-reviews__header-summary-item"
+    },
+    {
+      "id": "6-DWBAySGB",
+      "kind": "testimonial",
+      "text": "10824",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pv-reviews__header > div.hide-desktop > div.pv-reviews__header-summary > div.pv-reviews__header-summary-item > span.pv-reviews__header-summary-item-value"
+    },
+    {
+      "id": "RQL3X9G40o",
+      "kind": "testimonial",
+      "text": "4.54.452328 star ratingAverage rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.container > div.pv-reviews__header > div.hide-desktop > div.pv-reviews__header-summary > div.pv-reviews__header-summary-item"
+    },
+    {
+      "id": "fPvPE_89Fj",
+      "kind": "testimonial",
+      "text": "4.54.452328 star rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pv-reviews__header > div.hide-desktop > div.pv-reviews__header-summary > div.pv-reviews__header-summary-item > div.pv-reviews__header-score"
+    },
+    {
+      "id": "DR3ut3FGRi",
+      "kind": "testimonial",
+      "text": "10824Total reviews4.54.452328 star ratingAverage ratingSearch for a question or a keywordSearchSort by(Newest first)Newest firstHighest ratingLowest ratingMost helpful",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "section.pv-reviews__app > div.pv-reviews > div.container > div.pv-reviews__header > div.pv-reviews__header-main"
+    },
+    {
+      "id": "-RfZXWub3G",
+      "kind": "testimonial",
+      "text": "5 star ratingBalm dotcom “ILoveNY”Very good product and amazing taste Bottom line Yes - I would recommend this to a friend Reviewed on Balm Dotcom0upvote0downvoteUpvotes: 0, Downvotes: 0",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review"
+    },
+    {
+      "id": "qAJqHvUBvl",
+      "kind": "testimonial",
+      "text": "5 star ratingBalm dotcom “ILoveNY”Very good product and amazing taste Bottom line Yes - I would recommend this to a friend Reviewed on Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content"
+    },
+    {
+      "id": "O8GbLDLCOq",
+      "kind": "testimonial",
+      "text": "Very good product and amazing taste Bottom line Yes - I would recommend this to a friend Reviewed on Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > div.pv-reviews-item__content-wrapper"
+    },
+    {
+      "id": "0gLW31IkLc",
+      "kind": "testimonial",
+      "text": "Reviewed on",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > div.pv-reviews-item__content-wrapper > span.pv-reviews-item__reviewed-on-title"
+    },
+    {
+      "id": "58heITSGfq",
+      "kind": "testimonial",
+      "text": "30.09.265 star ratingBalm dotcom “ILoveNY”Very good product and amazing taste Bottom line Yes - I would recommend this to a friend Reviewed on Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review"
+    },
+    {
+      "id": "gpDfgW-Bsl",
+      "kind": "testimonial",
+      "text": "I love GLOSIERRRR!!! the balms are my staple!! so lasting upon application as well as longevity of the product. Bottom line Yes - I would recommend this to a friend Reviewed on Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > div.pv-reviews-item__content-wrapper"
+    },
+    {
+      "id": "VwVUAqqSBT",
+      "kind": "testimonial",
+      "text": "5 star ratingLove this productLove the smell, the moisture and tint this balm leaves on my lips! Bottom line Yes - I would recommend this to a friend Reviewed on Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content"
+    },
+    {
+      "id": "9lA5SXyUwn",
+      "kind": "testimonial",
+      "text": "Love the smell, the moisture and tint this balm leaves on my lips! Bottom line Yes - I would recommend this to a friend Reviewed on Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > div.pv-reviews-item__content-wrapper"
+    },
+    {
+      "id": "CvHIw-Wd19",
+      "kind": "testimonial",
+      "text": "29.09.265 star ratingLove this productLove the smell, the moisture and tint this balm leaves on my lips! Bottom line Yes - I would recommend this to a friend Reviewed on Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review"
+    },
+    {
+      "id": "SViVwmIr6O",
+      "kind": "testimonial",
+      "text": "28.09.26London N. (Where I got it - North Park Mall Dallas,Texas)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeCombinationSkin ShadeLightAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary"
+    },
+    {
+      "id": "LLNCHoce2r",
+      "kind": "testimonial",
+      "text": "28.09.26London N. (Where I got it - North Park Mall Dallas,Texas)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top"
+    },
+    {
+      "id": "JlXXhLuShN",
+      "kind": "testimonial",
+      "text": "28.09.26",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > p.pv-reviews-item__created-at"
+    },
+    {
+      "id": "vEVXf4f-95",
+      "kind": "testimonial",
+      "text": "London N. (Where I got it - North Park Mall Dallas,Texas)",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-top > p.pv-reviews-item__user"
+    },
+    {
+      "id": "qlPwpEJdoh",
+      "kind": "testimonial",
+      "text": "Skin TypeCombinationSkin ShadeLightAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-wrapper"
+    },
+    {
+      "id": "lOUJvB28WA",
+      "kind": "testimonial",
+      "text": "5 star ratingLondon’s Review!!Amazing!!! 100/100!!!🤍🩷:hands_heart: Bottom line Yes - I would recommend this to a friend Reviewed on Balm Dotcom0upvote0downvoteUpvotes: 0, Downvotes: 0",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review"
+    },
+    {
+      "id": "ygNXY_DiZq",
+      "kind": "testimonial",
+      "text": "5 star ratingLondon’s Review!!Amazing!!! 100/100!!!🤍🩷:hands_heart: Bottom line Yes - I would recommend this to a friend Reviewed on Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content"
+    },
+    {
+      "id": "kpdavutew0",
+      "kind": "testimonial",
+      "text": "London’s Review!!",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > p.pv-reviews-item__title"
+    },
+    {
+      "id": "Bgp2aa2GVa",
+      "kind": "testimonial",
+      "text": "Amazing!!! 100/100!!!🤍🩷:hands_heart: Bottom line Yes - I would recommend this to a friend Reviewed on Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > div.pv-reviews-item__content-wrapper"
+    },
+    {
+      "id": "BSRLzDYXzi",
+      "kind": "testimonial",
+      "text": "28.09.265 star ratingLondon’s Review!!Amazing!!! 100/100!!!🤍🩷:hands_heart: Bottom line Yes - I would recommend this to a friend Reviewed on Balm Dotcom",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review"
+    },
+    {
+      "id": "wKIfZwm-AI",
+      "kind": "testimonial",
+      "text": "28.09.265 star rating",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__review > div.pv-reviews-item__review-content > div.pv-reviews-item__summary-top-mobile"
+    },
+    {
+      "id": "ngb7r37kWQ",
+      "kind": "testimonial",
+      "text": "London N. (Where I got it - North Park Mall Dallas,Texas)0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeCombinationSkin ShadeLightAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.container > ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary"
+    },
+    {
+      "id": "kadvq0TZo4",
+      "kind": "testimonial",
+      "text": "0upvote0downvoteUpvotes: 0, Downvotes: 0Verified Buyer Skin TypeCombinationSkin ShadeLightAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "ul.list-reset > li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-mobile"
+    },
+    {
+      "id": "e4ZLIJElAE",
+      "kind": "testimonial",
+      "text": "Verified Buyer Skin TypeCombinationSkin ShadeLightAge Range17-24",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "li.pv-reviews-item > div.pv-reviews-item__wrapper > div.pv-reviews-item__summary > div.pv-reviews-item__summary-bottom-mobile > div.pv-reviews-item__buyer-info"
+    },
+    {
+      "id": "lARsap-lYH",
+      "kind": "cta",
+      "text": "Shop all Sets",
+      "sourceUrl": "https://www.glossier.com/en-in/products/balm-dotcom-trio",
+      "selector": "div.shopify-section > div > div.collection > div.featured-products__header > a.btn"
+    }
+  ],
+  "siteBrief": {
+    "productName": "glossier",
+    "summary": "Balm Dotcom",
+    "audience": "general",
+    "differentiator": "SHOP BESTSELLERS",
+    "strongestClaimFactId": "9IWiPClBDr",
+    "factIds": [
+      "G5TeExEFlP",
+      "Nt1pOOLzfX",
+      "0ewd1Gy2sv",
+      "6jgynluCtX",
+      "s2kCPW0I7Q",
+      "_cMLePkR8H",
+      "cuK4xHVOmq",
+      "8jFdbbxtxg",
+      "jygeG5YE_A",
+      "NSCYS5EXtD",
+      "P7lK17SFuz",
+      "buszaEp1Bl",
+      "Mzp2Mq3jrm",
+      "zxIZH4ryBo",
+      "QREgf2K6ri",
+      "sahnj6C8i1",
+      "8okibOmbnz",
+      "TTcK-wDcH7",
+      "10TinWKI65",
+      "tSU2UzUuby",
+      "tZpenEfIZb",
+      "jn6UWNFKjV",
+      "RQvwL_r9l2",
+      "2tv1Sg5q0j",
+      "ElBv8ebRmP",
+      "q7EeITyv_F",
+      "hmHRo-JHIn",
+      "PPh5ObSLqF",
+      "uz6p4gWF7l",
+      "fJQRwaJVTB",
+      "NFeKGIIiWG",
+      "M6sGpEXBqO",
+      "gN_oOltG9J",
+      "XXG5ACL9fL",
+      "VBZGXgKd7T",
+      "wFpzdJiXi2",
+      "u3o-uH5dKD",
+      "scAnxIda1o",
+      "cxndMgR6rW",
+      "QQvurTUpti",
+      "CLAXAXznUR",
+      "7z1WMYJd8J",
+      "IBs7YBnL55",
+      "7Ofw2VBZFR",
+      "XykCBuYuu2",
+      "dLk6BeuT3v",
+      "H8yxmee0eh",
+      "Uuf_gMVvW_",
+      "ykP3kOz9qf",
+      "3eRkN1zmPN",
+      "bFWmiz23Ji",
+      "QZg0YrF6M1",
+      "Vm4GPBf_yk",
+      "qRunvaV0E-",
+      "9wXWdFCCIK",
+      "wmFUg_UvwA",
+      "yjhsW1LxBr",
+      "RCRDjjdL6I",
+      "0PYmHjJ2Go",
+      "b_pjaJI8Nr",
+      "acrf0TAR4p",
+      "bamfgC98U2",
+      "1sTXv5BfZb",
+      "krAXosRkuH",
+      "4YBnFIq6vg",
+      "56As8qnX5z",
+      "BbO1_xNdzn",
+      "am6UMhxUCF",
+      "TX5ymzIT-z",
+      "6YuAz627l9",
+      "6ehwDSYT_i",
+      "z6dcffeXG9",
+      "stfmHd31nI",
+      "1LbGmvxnkw",
+      "kurT96Sgxr",
+      "sh9ut20ZyW",
+      "NhIaPgLVGp",
+      "Ia8eF27P3W",
+      "1z2kpBTDvk",
+      "DkyQegVTro",
+      "aqjAyMEmtZ",
+      "bW2e2M1fL5",
+      "4cUmNlCRjo",
+      "D3obIuKJbJ",
+      "Zw0pc7HScU",
+      "-ff4K1yap7",
+      "Ygg7yRI6Lt",
+      "KIxHwtr2Hc",
+      "lU-DmfY9Fh",
+      "rLePaFFWYv",
+      "owaHGle4vG",
+      "WAiU2JLh0b",
+      "AO6xZbJIdG",
+      "Ldx5qF7VDc",
+      "9IWiPClBDr",
+      "TIBdc2D9II",
+      "ptUV6wWaw2",
+      "kjwDheuaeq",
+      "I40HX9Xg76",
+      "nPwapSiLYq",
+      "NXiap_66EC",
+      "lsJUSZZO0A",
+      "yK79r63yDl",
+      "8c2O5Qljv9",
+      "klTLDM6sgw",
+      "6PP83w_M8M",
+      "HrwIiSf5P_",
+      "Sc00HDGo-9",
+      "f_xcvpduux",
+      "dg97nypFE7",
+      "lItHJPZCFC",
+      "YpOkLU9mlw",
+      "lXIEnI9CZV",
+      "0O5ZgWvJ-9",
+      "jL7lpcMxSp",
+      "sRePNQ2iug",
+      "pfUhS1FdKP",
+      "MX61Uci6-L",
+      "_eWV-g3x2P",
+      "NDq-o_g-S-",
+      "_oFMyfDT60",
+      "vc1F-6WGRw",
+      "X7DS2ZSas9",
+      "mNC6Uvba9U",
+      "EZvMlmaEb0",
+      "QUmotsFwPv",
+      "Ta_SewhgXs",
+      "bcvI401lUU",
+      "EDhSVZ_c-h",
+      "BIDQa0wQ6k",
+      "TUfWpXRJ8I",
+      "BP9Uwi8OQD",
+      "BBk9Hwkjaa",
+      "b29ClmOmdq",
+      "Aown_tvAMY",
+      "4hD9q0ayo4",
+      "HqVLAgF82x",
+      "rLQbB13DS2",
+      "DxJKDWhswI",
+      "JUBWHzOVv_",
+      "ZaJLSlDSHt",
+      "AsjpoWZffC",
+      "YqEzAroga5",
+      "wNWgwSsw4T",
+      "RlEzfMqQvg",
+      "7Eke8WVJG9",
+      "HQQvpBzF26",
+      "0nfhFkUDJH",
+      "15pVnNlrc_",
+      "pwQaUGu6Uv",
+      "ECVRitk_Pm",
+      "-sVCpfW4iB",
+      "FdkYr1hYak",
+      "Q1OrsfmwLm",
+      "yteakf3AKf",
+      "PmfW0M9V-O",
+      "1QnWs0rTAv",
+      "DSetQXCQ0L",
+      "SIbZVn0Zqg",
+      "s_ucQ_l6Jg",
+      "qnh8yhbtd7",
+      "JyJV00AK3o",
+      "cDbai8ePqd",
+      "xOSYIaxIGr",
+      "zYKo11eO2y",
+      "eeyj50_Y43",
+      "eZAJI-V0kX",
+      "J_E7lvb_4-",
+      "Eo5TiSjaIn",
+      "nX5Cn74ciV",
+      "ZXPtaUyRru",
+      "bBcEt55moT",
+      "ERLSgH-15o",
+      "jRdk5DmyNu",
+      "x0hEA-jNq2",
+      "J2pRa8Vez4",
+      "ncJnaZyeo5",
+      "M8DXjb5svU",
+      "K-MalYQjgO",
+      "TYfKzLQWzV",
+      "6ljys74efO",
+      "T5V5ud8tTf",
+      "Y2hBErMzD8",
+      "ZIXpToaLo-",
+      "XJxUSse8H5",
+      "Xk7qcOqM99",
+      "X3GaLl7JGM",
+      "XX-D75rh0a",
+      "fSkfN6uMDm",
+      "RvyZZjYr0x",
+      "X_OHoRBFBr",
+      "2RREe3dstm",
+      "D6gWCD2UWb",
+      "GCrzV_L_O6",
+      "dpeESJ7kEp",
+      "1t_x83Vnq0",
+      "UcyMgZlzcu",
+      "N26bf5l5za",
+      "Q4dy48vTNx",
+      "3ElEzLC0Fk",
+      "5KyVKuPFsK",
+      "M-WAjzvXxD",
+      "icq-NJ0L4Q",
+      "dazOO3Pe-9",
+      "0F5As5hEJ4",
+      "6i2toKErzw",
+      "upSXKu2TJ0",
+      "T_Nvvc2nG0",
+      "h13Ef15DpP",
+      "PlKzaolnTL",
+      "pgpUZmBk6a",
+      "wvunvQkeYi",
+      "jp88z8KG-K",
+      "TOAldUUqNz",
+      "VNtZlamcl0",
+      "u9cMuKlyAK",
+      "UbfdgXHiSK",
+      "JvRC4X0qE3",
+      "EtoIpBfgSz",
+      "nTDEF7vtm9",
+      "byRcikwdfR",
+      "Po3QmCWK4j",
+      "NjaPBRYdsl",
+      "M6AGPx3W8y",
+      "QZU3qnsrvJ",
+      "C6N2I1avj_",
+      "6N5pb_iK9m",
+      "U7vopkjA35",
+      "hyRPkvpP4U",
+      "3-HiJfExB0",
+      "fUcli75o7E",
+      "PBQg8Wtryz",
+      "R1LgV_gzdZ",
+      "Nc7goHtqu9",
+      "asZ7EtZQZ9",
+      "dKb2nVe5P6",
+      "lOB1jl3lxw",
+      "aTsPfdNzyT",
+      "2K5SIQ-E0w",
+      "h03xmG_gJG",
+      "oAQtqvg_7C",
+      "lnyGoCGiLW",
+      "BW8YNWjQER",
+      "rLqqlH50lJ",
+      "cgcum5cJkD",
+      "2tQo2rUekV",
+      "5rsGD45wpO",
+      "M5yHp_-NBc",
+      "C_pa-wOZkT",
+      "GidjX40kot",
+      "PySgjGTebR",
+      "yzTBa5ntxE",
+      "2YpQdtO_w4",
+      "hiDzXTqB1V",
+      "Hb0HuhhaHA",
+      "6-4Go_x2BA",
+      "-uFUfLAhTY",
+      "h6X89WiSNX",
+      "1H0gNVx8B9",
+      "CYvrqIcXj1",
+      "ra2VSzDaSx",
+      "z26m6xXKBt",
+      "6-DWBAySGB",
+      "RQL3X9G40o",
+      "fPvPE_89Fj",
+      "DR3ut3FGRi",
+      "-RfZXWub3G",
+      "qAJqHvUBvl",
+      "O8GbLDLCOq",
+      "0gLW31IkLc",
+      "58heITSGfq",
+      "gpDfgW-Bsl",
+      "VwVUAqqSBT",
+      "9lA5SXyUwn",
+      "CvHIw-Wd19",
+      "SViVwmIr6O",
+      "LLNCHoce2r",
+      "JlXXhLuShN",
+      "vEVXf4f-95",
+      "qlPwpEJdoh",
+      "lOUJvB28WA",
+      "ygNXY_DiZq",
+      "kpdavutew0",
+      "Bgp2aa2GVa",
+      "BSRLzDYXzi",
+      "wKIfZwm-AI",
+      "ngb7r37kWQ",
+      "kadvq0TZo4",
+      "e4ZLIJElAE",
+      "lARsap-lYH"
+    ],
+    "source": "fallback"
+  }
+}

@@ -1,0 +1,1399 @@
+{
+  "url": "https://stripe.com",
+  "category": "saas",
+  "domain": "stripe.com",
+  "pages": [
+    {
+      "url": "https://stripe.com",
+      "screenshotKey": "jobs/eeb4eb09-d425-4e15-828d-23e045958a74/crawl/home.png"
+    },
+    {
+      "url": "https://stripe.com/in/pricing",
+      "screenshotKey": "jobs/eeb4eb09-d425-4e15-828d-23e045958a74/crawl/page-1.png"
+    },
+    {
+      "url": "https://stripe.com/in/products",
+      "screenshotKey": "jobs/eeb4eb09-d425-4e15-828d-23e045958a74/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "rgb(83, 58, 253)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://images.stripeassets.com/fzn2n1nzq965/1hgcBNd12BfT9VLgbId7By/01d91920114b124fb4cf6d448f9f06eb/favicon.svg"
+  },
+  "facts": [
+    {
+      "id": "yUBxPlqwib",
+      "kind": "hero",
+      "text": "Financial infrastructure to grow your revenue. Accept payments, offer financial services and implement custom revenue models – from your first transaction to your billionth.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "main > section.hds-color-mode > div.section-container > div.hero-section__layout-grid > h1.hds-heading"
+    },
+    {
+      "id": "La3wFK8fqf",
+      "kind": "heading",
+      "text": "Flexible solutions for every business model.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "main > section.hds-color-mode > div.section-container > div.section-title > h2.hds-heading"
+    },
+    {
+      "id": "MA1yM3WFEN",
+      "kind": "heading",
+      "text": "Accept and optimise payments globally – online and in person",
+      "sourceUrl": "https://stripe.com",
+      "selector": "#bento-card-title-payments"
+    },
+    {
+      "id": "RC7EtmKP6u",
+      "kind": "heading",
+      "text": "Enable any billing model",
+      "sourceUrl": "https://stripe.com",
+      "selector": "#bento-card-title-billing"
+    },
+    {
+      "id": "IGhd5xTq1c",
+      "kind": "heading",
+      "text": "Monetise through agentic commerce",
+      "sourceUrl": "https://stripe.com",
+      "selector": "#bento-card-title-agentic-commerce"
+    },
+    {
+      "id": "Z_Z-inu3kF",
+      "kind": "heading",
+      "text": "Create a card issuing programme",
+      "sourceUrl": "https://stripe.com",
+      "selector": "#bento-card-title-issuing"
+    },
+    {
+      "id": "xypeFLswyy",
+      "kind": "heading",
+      "text": "Access borderless money movement with stablecoins and crypto",
+      "sourceUrl": "https://stripe.com",
+      "selector": "#bento-card-title-crypto"
+    },
+    {
+      "id": "cCTSDUc-5-",
+      "kind": "heading",
+      "text": "Embed payments in your platform",
+      "sourceUrl": "https://stripe.com",
+      "selector": "#bento-card-title-connect"
+    },
+    {
+      "id": "k7FiNtZmCF",
+      "kind": "heading",
+      "text": "The backbone of global commerce",
+      "sourceUrl": "https://stripe.com",
+      "selector": "main > section.hds-color-mode > div.section-container > div.section-row > h2.hds-heading"
+    },
+    {
+      "id": "ktMyy3NueE",
+      "kind": "heading",
+      "text": "Powering businesses of all sizes.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "main > section.hds-color-mode > div.section-container > div.section-title > h2.hds-heading"
+    },
+    {
+      "id": "SO_WR1KMt6",
+      "kind": "heading",
+      "text": "Transform your enterprise with agile financial infrastructure",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > section.section-row > header.section-header > div.section-header__primary > h3.hds-heading"
+    },
+    {
+      "id": "BLi7zWs9kE",
+      "kind": "heading",
+      "text": "Hertz unifies commerce with Stripe.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "#summary-customer-content-Hertz"
+    },
+    {
+      "id": "AIrltwwmsC",
+      "kind": "heading",
+      "text": "URBN consolidates $5 billion in online and in-store revenue onto Stripe.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "#summary-customer-content-URBN"
+    },
+    {
+      "id": "6meNzrgHqn",
+      "kind": "heading",
+      "text": "Instacart powers online grocery delivery with Stripe.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "#summary-customer-content-Instacart"
+    },
+    {
+      "id": "T3Xzgs5Y8e",
+      "kind": "heading",
+      "text": "Le Monde improves local and international payments with Stripe.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "#summary-customer-content-LeMonde"
+    },
+    {
+      "id": "kdWJHOpRBV",
+      "kind": "heading",
+      "text": "Build a foundation for your startup that enables faster growth",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > section.section-row > header.section-header > div.section-header__primary > h3.hds-heading"
+    },
+    {
+      "id": "hJ-_1SXBG5",
+      "kind": "heading",
+      "text": "Make your SaaS platform a complete financial operating system",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > section.section-row > header.section-header > div.section-header__primary > h3.hds-heading"
+    },
+    {
+      "id": "lGX1YUiJRh",
+      "kind": "heading",
+      "text": "Reliable, extensible infrastructure for every stack.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "section.hds-color-mode > div.section-container > div.section-row > div.section-title > h2.hds-heading"
+    },
+    {
+      "id": "34umcSOw2F",
+      "kind": "heading",
+      "text": "Connect to existing systems.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-container > div.section-row > div.section-row > div.section-title > h3.hds-heading"
+    },
+    {
+      "id": "6t9nL30T8g",
+      "kind": "heading",
+      "text": "Scale with confidence.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-container > div.section-row > div.developers-scale-subsection > div.section-title > h3.hds-heading"
+    },
+    {
+      "id": "RGIhe6M4pC",
+      "kind": "heading",
+      "text": "Choose an integration path.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-container > div.section-row > div.section-row > div.section-title > h3.hds-heading"
+    },
+    {
+      "id": "IxLc_qS-fD",
+      "kind": "heading",
+      "text": "What's happening",
+      "sourceUrl": "https://stripe.com",
+      "selector": "#events-carousel-heading"
+    },
+    {
+      "id": "-LUCI7OY30",
+      "kind": "heading",
+      "text": "Businesses on Stripe generated US$1.9tn in 2025.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.squeezy-carousel__items-details-container > div.squeezy-carousel__item-details > div.squeezy-carousel__item-copy > h3.hds-heading"
+    },
+    {
+      "id": "gKGU8K8CUm",
+      "kind": "heading",
+      "text": "150k+ users have their best day ever on Stripe.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.squeezy-carousel__items-details-container > div.squeezy-carousel__item-details > div.squeezy-carousel__item-copy > h3.hds-heading"
+    },
+    {
+      "id": "VvWVzC_Eqy",
+      "kind": "heading",
+      "text": "Tidemark's vertical and SMB SaaS benchmark report.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.squeezy-carousel__items-details-container > div.squeezy-carousel__item-details > div.squeezy-carousel__item-copy > h3.hds-heading"
+    },
+    {
+      "id": "tiEDZnl82M",
+      "kind": "heading",
+      "text": "Shopify's Tobi Lütke sits down with John Collison.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.squeezy-carousel__items-details-container > div.squeezy-carousel__item-details > div.squeezy-carousel__item-copy > h3.hds-heading"
+    },
+    {
+      "id": "FjRbvMM1o9",
+      "kind": "heading",
+      "text": "New tools to process payments outside app stores.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.squeezy-carousel__items-details-container > div.squeezy-carousel__item-details > div.squeezy-carousel__item-copy > h3.hds-heading"
+    },
+    {
+      "id": "XmL6iGwyDB",
+      "kind": "heading",
+      "text": "Crypto.com partners with Stripe to enable better crypto payments.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.squeezy-carousel__items-details-container > div.squeezy-carousel__item-details > div.squeezy-carousel__item-copy > h3.hds-heading"
+    },
+    {
+      "id": "7Xh2qx-76G",
+      "kind": "heading",
+      "text": "Make your products shoppable through AI platforms.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.squeezy-carousel__items-details-container > div.squeezy-carousel__item-details > div.squeezy-carousel__item-copy > h3.hds-heading"
+    },
+    {
+      "id": "uqGCz0IW60",
+      "kind": "heading",
+      "text": "How leading retailers unify customer experiences and drive growth.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.squeezy-carousel__items-details-container > div.squeezy-carousel__item-details > div.squeezy-carousel__item-copy > h3.hds-heading"
+    },
+    {
+      "id": "m5r8v3dmT4",
+      "kind": "heading",
+      "text": "Book of the week",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-container > div.section-row > div.section-row > div.section-title > h3.hds-heading"
+    },
+    {
+      "id": "wnR0ckB_ot",
+      "kind": "feature",
+      "text": "Professional services.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__content > h4.hds-text"
+    },
+    {
+      "id": "BzCGCUjObZ",
+      "kind": "feature",
+      "text": "Get tailored guidance from Stripe on implementation, complex integrations, or major migrations.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__content > p.hds-text"
+    },
+    {
+      "id": "u5fLcfqxFo",
+      "kind": "feature",
+      "text": "Stripe-certified experts.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__content > h4.hds-text"
+    },
+    {
+      "id": "qYUr7t76Gv",
+      "kind": "feature",
+      "text": "Work with a Stripe consulting partner that can integrate and deploy Stripe solutions on your behalf.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__content > p.hds-text"
+    },
+    {
+      "id": "89pGsHEvSb",
+      "kind": "feature",
+      "text": "Support plans.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__content > h4.hds-text"
+    },
+    {
+      "id": "SHSzAUkDB3",
+      "kind": "feature",
+      "text": "Receive ongoing assistance and day-to-day support for technical questions with tiered plans based on your needs.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__content > p.hds-text"
+    },
+    {
+      "id": "eGdFjD4Z1W",
+      "kind": "feature",
+      "text": "Get to market faster.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.platform-value__graphic-container > div.columns > div.feature-detail > div.feature-detail__content > h4.hds-text"
+    },
+    {
+      "id": "-ZrfrOpGgs",
+      "kind": "feature",
+      "text": "Launch and scale payments products with lower operational overhead using embedded components and no-code tools.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.platform-value__graphic-container > div.columns > div.feature-detail > div.feature-detail__content > p.hds-text"
+    },
+    {
+      "id": "SAHi8CleGv",
+      "kind": "feature",
+      "text": "Grow new lines of revenue.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.platform-value__graphic-container > div.columns > div.feature-detail > div.feature-detail__content > h4.hds-text"
+    },
+    {
+      "id": "YnM5uv6jWb",
+      "kind": "feature",
+      "text": "Monetise platform transactions – including payments, card interchange and financing fees.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.platform-value__graphic-container > div.columns > div.feature-detail > div.feature-detail__content > p.hds-text"
+    },
+    {
+      "id": "y4I705wgsh",
+      "kind": "feature",
+      "text": "Manage platform risk.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.platform-value__graphic-container > div.columns > div.feature-detail > div.feature-detail__content > h4.hds-text"
+    },
+    {
+      "id": "hq4B3vWB4d",
+      "kind": "feature",
+      "text": "Stay ahead of global regulations with tools for compliance, credit risk, fraud prevention and account security.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.platform-value__graphic-container > div.columns > div.feature-detail > div.feature-detail__content > p.hds-text"
+    },
+    {
+      "id": "xSjZKp0vGM",
+      "kind": "feature",
+      "text": "Don't code?",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__content > h4.hds-text"
+    },
+    {
+      "id": "01RwiDJZwU",
+      "kind": "feature",
+      "text": "Set up billing, take in-person payments, or share a payment link – right from the Stripe Dashboard, no code required.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__content > p.hds-text"
+    },
+    {
+      "id": "haeGHbLaYf",
+      "kind": "feature",
+      "text": "Use a pre-integrated platform.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__content > h4.hds-text"
+    },
+    {
+      "id": "IDElGgGptU",
+      "kind": "feature",
+      "text": "Browse our directory of platforms that integrate Stripe with website-building tools.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__content > p.hds-text"
+    },
+    {
+      "id": "ILvU1gu4U0",
+      "kind": "feature",
+      "text": "Build your own integration.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__content > h4.hds-text"
+    },
+    {
+      "id": "8JE-L5fx3A",
+      "kind": "feature",
+      "text": "Use our SDKs, APIs, MCP server and AI developer tools to build and maintain your own integration with Stripe.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__content > p.hds-text"
+    },
+    {
+      "id": "dMVVN-ggmh",
+      "kind": "feature",
+      "text": "See what you'll pay",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.footer-cta-section__feature-grid > div.footer-cta-section__feature-card > div.feature-detail > div.feature-detail__content > h4.hds-text"
+    },
+    {
+      "id": "-RYlK8ZzUu",
+      "kind": "feature",
+      "text": "Integrated per-transaction pricing with no hidden fees.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.footer-cta-section__feature-grid > div.footer-cta-section__feature-card > div.feature-detail > div.feature-detail__content > p.hds-text"
+    },
+    {
+      "id": "3zjI-VI7o0",
+      "kind": "feature",
+      "text": "Start building",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.footer-cta-section__feature-grid > div.footer-cta-section__feature-card > div.feature-detail > div.feature-detail__content > h4.hds-text"
+    },
+    {
+      "id": "obGoZu8tTv",
+      "kind": "feature",
+      "text": "Get up and running with Stripe in as little as 10 minutes.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.footer-cta-section__feature-grid > div.footer-cta-section__feature-card > div.feature-detail > div.feature-detail__content > p.hds-text"
+    },
+    {
+      "id": "CoaNrkSbcP",
+      "kind": "stat",
+      "text": "135+",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-container > div.section-row > div.stats-section__stats-list > div.stats-list__stat > p.hds-text"
+    },
+    {
+      "id": "swTl3Th1W1",
+      "kind": "stat",
+      "text": "US$1.9tn",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-container > div.section-row > div.stats-section__stats-list > div.stats-list__stat > p.hds-text"
+    },
+    {
+      "id": "Z-QzMzLC4v",
+      "kind": "stat",
+      "text": "in payments volume processed in 2025",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-container > div.section-row > div.stats-section__stats-list > div.stats-list__stat > p.hds-text"
+    },
+    {
+      "id": "VvgAWlXUOR",
+      "kind": "stat",
+      "text": "99.999%",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-container > div.section-row > div.stats-section__stats-list > div.stats-list__stat > p.hds-text"
+    },
+    {
+      "id": "Mvdu5jsZIF",
+      "kind": "stat",
+      "text": "200m+",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-container > div.section-row > div.stats-section__stats-list > div.stats-list__stat > p.hds-text"
+    },
+    {
+      "id": "AC-QrA9Mgu",
+      "kind": "stat",
+      "text": "160 countries",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.customer-stories > div.customer-stories__customer > div.customer-stories__customer-content > div.customer-stories__customer-data > div.customer-stories__customer-data-stat"
+    },
+    {
+      "id": "OjkmPnG8Z8",
+      "kind": "stat",
+      "text": "11k+ locations globally",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.customer-stories > div.customer-stories__customer > div.customer-stories__customer-content > div.customer-stories__customer-data > div.customer-stories__customer-data-stat"
+    },
+    {
+      "id": "gmx_UFsct9",
+      "kind": "stat",
+      "text": "700+ store locations",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.customer-stories > div.customer-stories__customer > div.customer-stories__customer-content > div.customer-stories__customer-data > div.customer-stories__customer-data-stat"
+    },
+    {
+      "id": "ROW7cydl4B",
+      "kind": "stat",
+      "text": "600k+ shoppers",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.customer-stories > div.customer-stories__customer > div.customer-stories__customer-content > div.customer-stories__customer-data > div.customer-stories__customer-data-stat"
+    },
+    {
+      "id": "HQCWyyerLn",
+      "kind": "stat",
+      "text": "500m+API requests per day",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-container > div.section-row > div.developers-scale-subsection > div.developers-scale-subsection__stats-grid > div.developers-scale-subsection__stats-grid-item"
+    },
+    {
+      "id": "zH6yqBt8fP",
+      "kind": "stat",
+      "text": "500m+",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.developers-scale-subsection > div.developers-scale-subsection__stats-grid > div.developers-scale-subsection__stats-grid-item > h4.hds-heading"
+    },
+    {
+      "id": "NVj70wSIit",
+      "kind": "stat",
+      "text": "10k+API requests per second",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-container > div.section-row > div.developers-scale-subsection > div.developers-scale-subsection__stats-grid > div.developers-scale-subsection__stats-grid-item"
+    },
+    {
+      "id": "8JxESrSWU_",
+      "kind": "stat",
+      "text": "10k+",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.developers-scale-subsection > div.developers-scale-subsection__stats-grid > div.developers-scale-subsection__stats-grid-item > h4.hds-heading"
+    },
+    {
+      "id": "raD6V-47D1",
+      "kind": "stat",
+      "text": "150k+transactions per minute",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-container > div.section-row > div.developers-scale-subsection > div.developers-scale-subsection__stats-grid > div.developers-scale-subsection__stats-grid-item"
+    },
+    {
+      "id": "udPLPxXdqV",
+      "kind": "stat",
+      "text": "150k+",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.developers-scale-subsection > div.developers-scale-subsection__stats-grid > div.developers-scale-subsection__stats-grid-item > h4.hds-heading"
+    },
+    {
+      "id": "XWkqRUDc1G",
+      "kind": "stat",
+      "text": "NORMALserver.js100% ≡ 6/6 ln : 4",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.dom-graphic > div.dom-graphic__content > div.integrated-code-graphic__card > div.integrated-code-graphic__terminal > div.integrated-code-graphic__statusbar"
+    },
+    {
+      "id": "ohpMFfeGtg",
+      "kind": "stat",
+      "text": "100% ≡ 6/6 ln : 4",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.dom-graphic__content > div.integrated-code-graphic__card > div.integrated-code-graphic__terminal > div.integrated-code-graphic__statusbar > div.statusbar-right"
+    },
+    {
+      "id": "De_Fd_Xwr9",
+      "kind": "testimonial",
+      "text": "With Stripe, we have a global technology partner to help our customers – from Canadian yoga studios to British boxing classes – keep growing and evolving in a new wellness world.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.testimonial-carousel-container > div > div.testimonial-carousel__cards > div.testimonial-card > q.testimonial-card__quote"
+    },
+    {
+      "id": "9cLRp8K8Ea",
+      "kind": "testimonial",
+      "text": "Kurtis Moyer, Lead Product Manager of Payments, Mindbody",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.testimonial-carousel-container > div > div.testimonial-carousel__cards > div.testimonial-card > div.testimonial-card__author"
+    },
+    {
+      "id": "mtVk0gDRpi",
+      "kind": "testimonial",
+      "text": "Lead Product Manager of Payments, Mindbody",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div > div.testimonial-carousel__cards > div.testimonial-card > div.testimonial-card__author > span.testimonial-card__author-role"
+    },
+    {
+      "id": "f3dd33gYvp",
+      "kind": "testimonial",
+      "text": "Laura Collinson, Director of Fintech, Jobber",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.testimonial-carousel-container > div > div.testimonial-carousel__cards > div.testimonial-card > div.testimonial-card__author"
+    },
+    {
+      "id": "lu8PFM_Lxp",
+      "kind": "testimonial",
+      "text": "Director of Fintech, Jobber",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div > div.testimonial-carousel__cards > div.testimonial-card > div.testimonial-card__author > span.testimonial-card__author-role"
+    },
+    {
+      "id": "OQxmwaDwDK",
+      "kind": "testimonial",
+      "text": "Seth McMillan, Engineering Manager, Substack",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.testimonial-carousel-container > div > div.testimonial-carousel__cards > div.testimonial-card > div.testimonial-card__author"
+    },
+    {
+      "id": "V304x94oSg",
+      "kind": "testimonial",
+      "text": "Engineering Manager, Substack",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div > div.testimonial-carousel__cards > div.testimonial-card > div.testimonial-card__author > span.testimonial-card__author-role"
+    },
+    {
+      "id": "yIZCETkbWB",
+      "kind": "testimonial",
+      "text": "Stripe offers an enterprise-grade infrastructure that puts our customers on the cutting edge of modern payments technology. The combination of Terminal and Connect is a powerful integrated solution.",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.testimonial-carousel-container > div > div.testimonial-carousel__cards > div.testimonial-card > q.testimonial-card__quote"
+    },
+    {
+      "id": "2gQJpturut",
+      "kind": "testimonial",
+      "text": "Dax Dasilva, Founder and CEO, Lightspeed",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.testimonial-carousel-container > div > div.testimonial-carousel__cards > div.testimonial-card > div.testimonial-card__author"
+    },
+    {
+      "id": "LvmVUX9Abe",
+      "kind": "testimonial",
+      "text": "Founder and CEO, Lightspeed",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div > div.testimonial-carousel__cards > div.testimonial-card > div.testimonial-card__author > span.testimonial-card__author-role"
+    },
+    {
+      "id": "Dr0qNnxAQ1",
+      "kind": "cta",
+      "text": "Contact sales",
+      "sourceUrl": "https://stripe.com",
+      "selector": "nav.hds-navigation-menu > div.navigation-menu-overflow > section.navigation-menu-footer > div.hds-button-group > a.hds-button"
+    },
+    {
+      "id": "hALilcPqPK",
+      "kind": "cta",
+      "text": "Request an invite",
+      "sourceUrl": "https://stripe.com",
+      "selector": "section.hds-color-mode > div.section-container > div.hero-section__layout-grid > div.hds-button-group > a.hds-button"
+    },
+    {
+      "id": "nOALyV9oy4",
+      "kind": "cta",
+      "text": "Get started",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.section-row > div.columns > div.feature-detail > div.feature-detail__footer > a.hds-link"
+    },
+    {
+      "id": "J6H3Fl9NlV",
+      "kind": "cta",
+      "text": "book",
+      "sourceUrl": "https://stripe.com",
+      "selector": "div.book-of-the-week > div.book-of-the-week__content > div.book-of-the-week__text > div.hds-text > a.hds-link"
+    },
+    {
+      "id": "qaTJ_zvy99",
+      "kind": "hero",
+      "text": "Stripe logo",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "header.SiteHeader > div.SiteHeader__stickyContainer > div.SiteHeader__container > div.SiteHeader__navContainer > h1.SiteHeader__logo"
+    },
+    {
+      "id": "uygq6Eo0Le",
+      "kind": "heading",
+      "text": "Standard pricing for all products",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Section__layout > div.RowLayout > section.Copy > header.Copy__header > h2.Copy__caption"
+    },
+    {
+      "id": "GMKZ2KfV5X",
+      "kind": "heading",
+      "text": "Navigate to:",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingBottomSheetNav__nav > div.PricingBottomSheetNav__container > div.PricingBottomSheetNav__pricingCategoryHeader > div.PricingBottomSheetNav__pricingCategoryHeaderWrapper > h3.PricingBottomSheetNav__pricingCategorySubtitle"
+    },
+    {
+      "id": "gM3-AkP1Oa",
+      "kind": "heading",
+      "text": "Custom pricing",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.ColumnLayout > div.RowLayout > section.Copy > header.Copy__header > h2.Copy__caption"
+    },
+    {
+      "id": "i3WvFgspxl",
+      "kind": "heading",
+      "text": "Report",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.GuideGraphic > div.GuidesCard > div.Card > div.GuidesCard__text > h2.GuidesCard__category"
+    },
+    {
+      "id": "4V30NfWuII",
+      "kind": "heading",
+      "text": "How are payment fees calculated?",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Section__layout > div.RowLayout > div.Accordion > div.AccordionItem > h3.AccordionItem__heading"
+    },
+    {
+      "id": "M4dq2CUMFd",
+      "kind": "heading",
+      "text": "Will I be charged tax?",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Section__layout > div.RowLayout > div.Accordion > div.AccordionItem > h3.AccordionItem__heading"
+    },
+    {
+      "id": "eKNmenNAOD",
+      "kind": "heading",
+      "text": "Are there additional fees for refunds?",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Section__layout > div.RowLayout > div.Accordion > div.AccordionItem > h3.AccordionItem__heading"
+    },
+    {
+      "id": "tKGFlZSXcw",
+      "kind": "heading",
+      "text": "Do you have setup fees or monthly fees?",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Section__layout > div.RowLayout > div.Accordion > div.AccordionItem > h3.AccordionItem__heading"
+    },
+    {
+      "id": "3JgF9kXD5t",
+      "kind": "heading",
+      "text": "Do you offer any discounts?",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Section__layout > div.RowLayout > div.Accordion > div.AccordionItem > h3.AccordionItem__heading"
+    },
+    {
+      "id": "_A_q18XGvj",
+      "kind": "feature",
+      "text": "Accept widely used credit and debit cards, prepaid cards, and digital wallets for cards issued domestically.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "r4w6FNIcnO",
+      "kind": "feature",
+      "text": "for Mastercard and Visa cards issued in India*",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "kjQDIlorFu",
+      "kind": "feature",
+      "text": "Accept widely used credit and debit cards, prepaid cards, and digital wallets for cards issued internationally.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "v8Ccj-eHWT",
+      "kind": "feature",
+      "text": "for Mastercard and Visa cards issued outside India",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "zOPdk8TdKt",
+      "kind": "feature",
+      "text": "₹1,000.00",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "0WlZXzVNGR",
+      "kind": "feature",
+      "text": "Respond to card payment disputes, also known as chargebacks.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "505REUZjq8",
+      "kind": "feature",
+      "text": "for each dispute you receive.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "64EtFkkYEW",
+      "kind": "feature",
+      "text": "30%",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "opYBELv0Jv",
+      "kind": "feature",
+      "text": "Respond to disputes with evidence that Stripe's AI prepares for you. You can also add your own evidence.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "VREtuzoLAG",
+      "kind": "feature",
+      "text": "of the disputed amount for each dispute you win.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "hFGK1Ieg3c",
+      "kind": "feature",
+      "text": "Included",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "c8OkmLpk45",
+      "kind": "feature",
+      "text": "Help reduce dispute rates with dispute prevention tools powered by Verifi from Visa and Ethoca from Mastercard.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "3WfJiyDZ0Z",
+      "kind": "feature",
+      "text": "Dispute deflection lookups",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "n5QJq-07C2",
+      "kind": "feature",
+      "text": "Included at no additional charge for businesses on standard payments pricing",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeatureGroup__heading > div.PricingProductFeatureGroup__headingRight > button.PortalTooltipItem > span.PortalTooltipItem__tooltip > p"
+    },
+    {
+      "id": "wSsrrixbMP",
+      "kind": "feature",
+      "text": "Increase acceptance rates and reduce card processing costs with AI-powered payment optimisations, inclusive of Adaptive Acceptance, card account updater and network tokens.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "6gzB2wYX84",
+      "kind": "feature",
+      "text": "with Payments",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "YcxMOeB0sU",
+      "kind": "feature",
+      "text": "Present prices in local currencies to your customers, tailoring customer experience and increasing revenue.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "zDDap8cO5l",
+      "kind": "feature",
+      "text": "Stripe sets and collects processing fees from your users, so you don’t have to. Learn more about how to qualify for a revenue share from Stripe.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "NTAn5oscVt",
+      "kind": "feature",
+      "text": "0.7%",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "tNghOb-SFW",
+      "kind": "feature",
+      "text": "Start billing for recurring subscriptions & usage based billing.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "CmY1KxAqDS",
+      "kind": "feature",
+      "text": "of Billing volume",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "0jmxp5ItsS",
+      "kind": "feature",
+      "text": "US$0.04",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "Nonor8hPB3",
+      "kind": "feature",
+      "text": "For teams launching usage-based products. Pay as your business grows.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "5gd6xeVKom",
+      "kind": "feature",
+      "text": "per 1K ingest events",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "hVBiPbGmst",
+      "kind": "feature",
+      "text": "Custom pricing",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "BABTWD8gnT",
+      "kind": "feature",
+      "text": "For companies scaling revenue or transforming pricing. Tailored pricing for your needs.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "9AEE6Q3-XV",
+      "kind": "feature",
+      "text": "Data export available only on custom plans:",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "zisFkfjPT9",
+      "kind": "feature",
+      "text": "0.4%",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "kixJ-gAR4P",
+      "kind": "feature",
+      "text": "Invoicing features to get started quickly.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "Dr5FEFipmW",
+      "kind": "feature",
+      "text": "per paid invoice",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "k3zPLdSFN4",
+      "kind": "feature",
+      "text": "Pay for what you use. No recurring fees. Best for low or unpredictable volumes.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "8GE6aORAWf",
+      "kind": "feature",
+      "text": "For accounts with all payment methods on standard pricing",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "9pFVHFHTHX",
+      "kind": "feature",
+      "text": "US$500.00",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "7_tOBUI_no",
+      "kind": "feature",
+      "text": "Incorporate your company, get your EIN, issue equity, and file your 83(b) tax election.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "TxhmYLsS4t",
+      "kind": "feature",
+      "text": "one-off setup fee (includes government fees and your first year of registered agent services)",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "X6Ns9ogLoG",
+      "kind": "feature",
+      "text": "No commitment, no recurring fees. Start building workflows today.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__left > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "OIiS-gypLz",
+      "kind": "feature",
+      "text": "10,000 steps per month",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > span.PricingGridPrice__label > p"
+    },
+    {
+      "id": "IJLBQ-XHPH",
+      "kind": "feature",
+      "text": "Report",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.GuideGraphic > div.GuidesCard > div.Card > div.GuidesCard__text > h2.GuidesCard__category"
+    },
+    {
+      "id": "-JK9DfIpgC",
+      "kind": "feature",
+      "text": "Forrester’s Total Economic Impact study suggests a more than 3x return on investment among businesses that deployed Stripe.",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.FeatureCard__layout > section.Copy > div.Copy__body > p"
+    },
+    {
+      "id": "sdGLgNlGRS",
+      "kind": "stat",
+      "text": "3.5%",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "leEf408BKV",
+      "kind": "stat",
+      "text": "4.3%",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "hXm8BNO5n-",
+      "kind": "stat",
+      "text": "₹1,000.00",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "OOaln5pyyN",
+      "kind": "stat",
+      "text": "30%",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "W02Qw1aAal",
+      "kind": "stat",
+      "text": "₹2,000.00",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "xXCgYLKmnC",
+      "kind": "stat",
+      "text": "0.7%",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "jnoJ3Y7uDx",
+      "kind": "stat",
+      "text": "US$0.04",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "jIpSu3GVCg",
+      "kind": "stat",
+      "text": "0.8%",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "Bn73ogJUdg",
+      "kind": "stat",
+      "text": "0.4%",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "hWWntvrkv0",
+      "kind": "stat",
+      "text": "US$500.00",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "ELwVqFH7SN",
+      "kind": "stat",
+      "text": "₹1.64",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > strong.PricingGridPrice__amount"
+    },
+    {
+      "id": "iQj1zBJt7M",
+      "kind": "stat",
+      "text": "350+ US dealerships",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Track > div.Track__track > aside.HomepageEnterpriseCarouselAside > div.HomepageEnterpriseCarouselAside__statGrid > section.Copy"
+    },
+    {
+      "id": "dv6Tt5ns5M",
+      "kind": "stat",
+      "text": "50+ Payment methods available on Stripe",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Track > div.Track__track > aside.HomepageEnterpriseCarouselAside > div.HomepageEnterpriseCarouselAside__statGrid > section.Copy"
+    },
+    {
+      "id": "zRDid4z1jt",
+      "kind": "stat",
+      "text": "130 Countries in logistics network",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Track > div.Track__track > aside.HomepageEnterpriseCarouselAside > div.HomepageEnterpriseCarouselAside__statGrid > section.Copy"
+    },
+    {
+      "id": "Tvjh4LN-c7",
+      "kind": "stat",
+      "text": "+1% Uplift from Adaptive Acceptance",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Track > div.Track__track > aside.HomepageEnterpriseCarouselAside > div.HomepageEnterpriseCarouselAside__statGrid > section.Copy"
+    },
+    {
+      "id": "fKh_lA7XE-",
+      "kind": "cta",
+      "text": "Learn more",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.PricingProductFeature__left > section.Copy > div.Copy__body > p > a.Link"
+    },
+    {
+      "id": "LOulH1yOvt",
+      "kind": "cta",
+      "text": "Sign up with Metronome",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.RowLayout > section.ProductGroupDisplay__productSection > div.Card > div.PricingProductCardHeader > a.CtaButton"
+    },
+    {
+      "id": "SvJUkciakO",
+      "kind": "cta",
+      "text": "Contact Metronome",
+      "sourceUrl": "https://stripe.com/in/pricing",
+      "selector": "div.Card > div.PricingProductFeature > div.PricingProductFeature__priceContainer > section.PricingGridPrice > a.CtaButton"
+    },
+    {
+      "id": "IcxueS3wUm",
+      "kind": "hero",
+      "text": "See everything Stripe can do. Explore products for payments, risk, revenue, banking, data and more.",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "section.hds-color-mode > div.section-container > div.section-row > div.all-products-hero__content > h1.all-products-hero__duotone"
+    },
+    {
+      "id": "xqmWArFDt0",
+      "kind": "heading",
+      "text": "Product areas",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "#product-areas-heading"
+    },
+    {
+      "id": "HH0Gr20s50",
+      "kind": "heading",
+      "text": "Accept and optimise payments globally",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.all-products-catalog__content > div.all-products-catalog__areas > section.all-products-catalog__area > div.all-products-catalog__area-header > h2.hds-heading"
+    },
+    {
+      "id": "5F0ZKlq33F",
+      "kind": "heading",
+      "text": "Safeguard your business without slowing growth",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.all-products-catalog__content > div.all-products-catalog__areas > section.all-products-catalog__area > div.all-products-catalog__area-header > h2.hds-heading"
+    },
+    {
+      "id": "yrBvS3Pwmo",
+      "kind": "heading",
+      "text": "Automate revenue, from billing to reconciliation",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.all-products-catalog__content > div.all-products-catalog__areas > section.all-products-catalog__area > div.all-products-catalog__area-header > h2.hds-heading"
+    },
+    {
+      "id": "_IJyb_C3yc",
+      "kind": "heading",
+      "text": "Access, analyse and act on your Stripe data",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.all-products-catalog__content > div.all-products-catalog__areas > section.all-products-catalog__area > div.all-products-catalog__area-header > h2.hds-heading"
+    },
+    {
+      "id": "yg4GBL2qMt",
+      "kind": "heading",
+      "text": "Receive, store, send and finance from one place.",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.all-products-catalog__content > div.all-products-catalog__areas > section.all-products-catalog__area > div.all-products-catalog__area-header > h2.hds-heading"
+    },
+    {
+      "id": "XM0C0YwpWV",
+      "kind": "heading",
+      "text": "Monetise embedded payments and financial products",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.all-products-catalog__content > div.all-products-catalog__areas > section.all-products-catalog__area > div.all-products-catalog__area-header > h2.hds-heading"
+    },
+    {
+      "id": "t-7RJcsr1v",
+      "kind": "heading",
+      "text": "Launch borderless financial services with crypto",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.all-products-catalog__content > div.all-products-catalog__areas > section.all-products-catalog__area > div.all-products-catalog__area-header > h2.hds-heading"
+    },
+    {
+      "id": "UXQclCrHIH",
+      "kind": "heading",
+      "text": "Build, operate and extend your Stripe integration",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.all-products-catalog__content > div.all-products-catalog__areas > section.all-products-catalog__area > div.all-products-catalog__area-header > h2.hds-heading"
+    },
+    {
+      "id": "xxKqOqgYf0",
+      "kind": "heading",
+      "text": "See what's ahead",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.section-container > div.all-products-highlight-card > div.all-products-highlight-card__copy > div.all-products-highlight-card__content > h2.all-products-highlight-card__title"
+    },
+    {
+      "id": "2sMtNTkjiU",
+      "kind": "heading",
+      "text": "Frequently asked questions",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "main > section.hds-color-mode > div.section-container > div.faq-section-header > h3.hds-heading"
+    },
+    {
+      "id": "TXU3Xm-g53",
+      "kind": "feature",
+      "text": "Adaptive Acceptance",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.compact-authorization-boost-graphic__card > div.compact-authorization-boost-graphic__table > div.compact-authorization-boost-graphic__row > div.compact-authorization-boost-graphic__feature > p.compact-authorization-boost-graphic__feature-label"
+    },
+    {
+      "id": "tvVGKdKole",
+      "kind": "stat",
+      "text": "Showing 53 products.",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.all-products-page > main > section.hds-color-mode > div.section-container > p.all-products-catalog__status"
+    },
+    {
+      "id": "C1w31sQqfw",
+      "kind": "stat",
+      "text": "53 products",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "main > section.hds-color-mode > div.section-container > p.all-products-catalog__status > strong"
+    },
+    {
+      "id": "bPPz_655o2",
+      "kind": "stat",
+      "text": "Total wallets19.8M",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.compact-embedded-wallets-by-privy-graphic > div.compact-embedded-wallets-by-privy-graphic__foreground > div.compact-embedded-wallets-by-privy-graphic__card > div.compact-embedded-wallets-by-privy-graphic__stats > div.compact-embedded-wallets-by-privy-graphic__stat-box"
+    },
+    {
+      "id": "XQp_clMUiZ",
+      "kind": "stat",
+      "text": "19.8M",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.compact-embedded-wallets-by-privy-graphic__foreground > div.compact-embedded-wallets-by-privy-graphic__card > div.compact-embedded-wallets-by-privy-graphic__stats > div.compact-embedded-wallets-by-privy-graphic__stat-box > div.compact-embedded-wallets-by-privy-graphic__stat-value"
+    },
+    {
+      "id": "PTz_tnyQPM",
+      "kind": "stat",
+      "text": "Transition count134.2M",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.compact-embedded-wallets-by-privy-graphic > div.compact-embedded-wallets-by-privy-graphic__foreground > div.compact-embedded-wallets-by-privy-graphic__card > div.compact-embedded-wallets-by-privy-graphic__stats > div.compact-embedded-wallets-by-privy-graphic__stat-box"
+    },
+    {
+      "id": "efjnuz3t2G",
+      "kind": "stat",
+      "text": "134.2M",
+      "sourceUrl": "https://stripe.com/in/products",
+      "selector": "div.compact-embedded-wallets-by-privy-graphic__foreground > div.compact-embedded-wallets-by-privy-graphic__card > div.compact-embedded-wallets-by-privy-graphic__stats > div.compact-embedded-wallets-by-privy-graphic__stat-box > div.compact-embedded-wallets-by-privy-graphic__stat-value"
+    }
+  ],
+  "siteBrief": {
+    "productName": "stripe",
+    "summary": "Financial infrastructure to grow your revenue. Accept payments, offer financial services and implement custom revenue models – from your first transaction to your billionth.",
+    "audience": "general",
+    "differentiator": "Professional services.",
+    "strongestClaimFactId": "CoaNrkSbcP",
+    "factIds": [
+      "yUBxPlqwib",
+      "La3wFK8fqf",
+      "MA1yM3WFEN",
+      "RC7EtmKP6u",
+      "IGhd5xTq1c",
+      "Z_Z-inu3kF",
+      "xypeFLswyy",
+      "cCTSDUc-5-",
+      "k7FiNtZmCF",
+      "ktMyy3NueE",
+      "SO_WR1KMt6",
+      "BLi7zWs9kE",
+      "AIrltwwmsC",
+      "6meNzrgHqn",
+      "T3Xzgs5Y8e",
+      "kdWJHOpRBV",
+      "hJ-_1SXBG5",
+      "lGX1YUiJRh",
+      "34umcSOw2F",
+      "6t9nL30T8g",
+      "RGIhe6M4pC",
+      "IxLc_qS-fD",
+      "-LUCI7OY30",
+      "gKGU8K8CUm",
+      "VvWVzC_Eqy",
+      "tiEDZnl82M",
+      "FjRbvMM1o9",
+      "XmL6iGwyDB",
+      "7Xh2qx-76G",
+      "uqGCz0IW60",
+      "m5r8v3dmT4",
+      "wnR0ckB_ot",
+      "BzCGCUjObZ",
+      "u5fLcfqxFo",
+      "qYUr7t76Gv",
+      "89pGsHEvSb",
+      "SHSzAUkDB3",
+      "eGdFjD4Z1W",
+      "-ZrfrOpGgs",
+      "SAHi8CleGv",
+      "YnM5uv6jWb",
+      "y4I705wgsh",
+      "hq4B3vWB4d",
+      "xSjZKp0vGM",
+      "01RwiDJZwU",
+      "haeGHbLaYf",
+      "IDElGgGptU",
+      "ILvU1gu4U0",
+      "8JE-L5fx3A",
+      "dMVVN-ggmh",
+      "-RYlK8ZzUu",
+      "3zjI-VI7o0",
+      "obGoZu8tTv",
+      "CoaNrkSbcP",
+      "swTl3Th1W1",
+      "Z-QzMzLC4v",
+      "VvgAWlXUOR",
+      "Mvdu5jsZIF",
+      "AC-QrA9Mgu",
+      "OjkmPnG8Z8",
+      "gmx_UFsct9",
+      "ROW7cydl4B",
+      "HQCWyyerLn",
+      "zH6yqBt8fP",
+      "NVj70wSIit",
+      "8JxESrSWU_",
+      "raD6V-47D1",
+      "udPLPxXdqV",
+      "XWkqRUDc1G",
+      "ohpMFfeGtg",
+      "De_Fd_Xwr9",
+      "9cLRp8K8Ea",
+      "mtVk0gDRpi",
+      "f3dd33gYvp",
+      "lu8PFM_Lxp",
+      "OQxmwaDwDK",
+      "V304x94oSg",
+      "yIZCETkbWB",
+      "2gQJpturut",
+      "LvmVUX9Abe",
+      "Dr0qNnxAQ1",
+      "hALilcPqPK",
+      "nOALyV9oy4",
+      "J6H3Fl9NlV",
+      "qaTJ_zvy99",
+      "uygq6Eo0Le",
+      "GMKZ2KfV5X",
+      "gM3-AkP1Oa",
+      "i3WvFgspxl",
+      "4V30NfWuII",
+      "M4dq2CUMFd",
+      "eKNmenNAOD",
+      "tKGFlZSXcw",
+      "3JgF9kXD5t",
+      "_A_q18XGvj",
+      "r4w6FNIcnO",
+      "kjQDIlorFu",
+      "v8Ccj-eHWT",
+      "zOPdk8TdKt",
+      "0WlZXzVNGR",
+      "505REUZjq8",
+      "64EtFkkYEW",
+      "opYBELv0Jv",
+      "VREtuzoLAG",
+      "hFGK1Ieg3c",
+      "c8OkmLpk45",
+      "3WfJiyDZ0Z",
+      "n5QJq-07C2",
+      "wSsrrixbMP",
+      "6gzB2wYX84",
+      "YcxMOeB0sU",
+      "zDDap8cO5l",
+      "NTAn5oscVt",
+      "tNghOb-SFW",
+      "CmY1KxAqDS",
+      "0jmxp5ItsS",
+      "Nonor8hPB3",
+      "5gd6xeVKom",
+      "hVBiPbGmst",
+      "BABTWD8gnT",
+      "9AEE6Q3-XV",
+      "zisFkfjPT9",
+      "kixJ-gAR4P",
+      "Dr5FEFipmW",
+      "k3zPLdSFN4",
+      "8GE6aORAWf",
+      "9pFVHFHTHX",
+      "7_tOBUI_no",
+      "TxhmYLsS4t",
+      "X6Ns9ogLoG",
+      "OIiS-gypLz",
+      "IJLBQ-XHPH",
+      "-JK9DfIpgC",
+      "sdGLgNlGRS",
+      "leEf408BKV",
+      "hXm8BNO5n-",
+      "OOaln5pyyN",
+      "W02Qw1aAal",
+      "xXCgYLKmnC",
+      "jnoJ3Y7uDx",
+      "jIpSu3GVCg",
+      "Bn73ogJUdg",
+      "hWWntvrkv0",
+      "ELwVqFH7SN",
+      "iQj1zBJt7M",
+      "dv6Tt5ns5M",
+      "zRDid4z1jt",
+      "Tvjh4LN-c7",
+      "fKh_lA7XE-",
+      "LOulH1yOvt",
+      "SvJUkciakO",
+      "IcxueS3wUm",
+      "xqmWArFDt0",
+      "HH0Gr20s50",
+      "5F0ZKlq33F",
+      "yrBvS3Pwmo",
+      "_IJyb_C3yc",
+      "yg4GBL2qMt",
+      "XM0C0YwpWV",
+      "t-7RJcsr1v",
+      "UXQclCrHIH",
+      "xxKqOqgYf0",
+      "2sMtNTkjiU",
+      "TXU3Xm-g53",
+      "tvVGKdKole",
+      "C1w31sQqfw",
+      "bPPz_655o2",
+      "XQp_clMUiZ",
+      "PTz_tnyQPM",
+      "efjnuz3t2G"
+    ],
+    "source": "fallback"
+  }
+}

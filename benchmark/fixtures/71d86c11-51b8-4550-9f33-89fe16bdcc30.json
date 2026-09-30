@@ -1,0 +1,295 @@
+{
+  "url": "https://airtable.com",
+  "category": "saas",
+  "domain": "airtable.com",
+  "pages": [
+    {
+      "url": "https://airtable.com",
+      "screenshotKey": "jobs/71d86c11-51b8-4550-9f33-89fe16bdcc30/crawl/home.png"
+    },
+    {
+      "url": "https://airtable.com/pricing",
+      "screenshotKey": "jobs/71d86c11-51b8-4550-9f33-89fe16bdcc30/crawl/page-1.png"
+    },
+    {
+      "url": "https://airtable.com/developers/web/api/introduction",
+      "screenshotKey": "jobs/71d86c11-51b8-4550-9f33-89fe16bdcc30/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(51, 51, 51)",
+    "accent": "rgb(24, 29, 38)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://static.airtable.com/images/marketing-nav-platform-graphic.webp"
+  },
+  "facts": [
+    {
+      "id": "_6WKHMoqOF",
+      "kind": "hero",
+      "text": "Teams, workflows, agents — one space",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.e9Hero > div.band > div.rail > section.hero > h1"
+    },
+    {
+      "id": "uzs1qyRFrY",
+      "kind": "hero",
+      "text": "Other tools let you build with agents. Airtable lets you build with your whole team (agents included).",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.e9Hero > div.band > div.rail > section.hero > p.sub"
+    },
+    {
+      "id": "llNlBxeyif",
+      "kind": "heading",
+      "text": "Builder speed becomes business momentum",
+      "sourceUrl": "https://airtable.com",
+      "selector": "#_r_0_-heading"
+    },
+    {
+      "id": "I02NCmdLy6",
+      "kind": "stat",
+      "text": "$132K",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.crm-body > div.sc-main > div.sc-titlebar > span.sc-total > b"
+    },
+    {
+      "id": "D8OhDOfEb7",
+      "kind": "stat",
+      "text": "$14,490",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.sc-main > div.sc-row2 > div.sc-card > div.sc-trow > b"
+    },
+    {
+      "id": "GKxyKixMVW",
+      "kind": "stat",
+      "text": "$13,799",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.sc-main > div.sc-row2 > div.sc-card > div.sc-trow > b"
+    },
+    {
+      "id": "6k-KpSy-T4",
+      "kind": "stat",
+      "text": "$56,011",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.sc-main > div.sc-row2 > div.sc-card > div.sc-trow > b"
+    },
+    {
+      "id": "TkjrgngJFc",
+      "kind": "stat",
+      "text": "$48,138",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.sc-main > div.sc-row2 > div.sc-card > div.sc-trow > b"
+    },
+    {
+      "id": "Q0Sjx7rZ4W",
+      "kind": "cta",
+      "text": "Try it now",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.PromoCard-module_promoBarWrap__jQt14 > div.PromoCard-module_promoBarInner__czp5O > div.flex > span.PromoCard-module_promoLinkWrap__8bVj0 > a.PromoCard-module_promoLink__X2isC"
+    },
+    {
+      "id": "1FIdXRQCrm",
+      "kind": "cta",
+      "text": "Learn more",
+      "sourceUrl": "https://airtable.com",
+      "selector": "li > div.Drawer-module_defaultPromoDrawer__5Q8DI > div.NavPromoDrawer-module_wrapper__YeMdg > div.NavPromoDrawer-module_intro__PdY1R > a.ActionButton-module_actionButton__sZl5R"
+    },
+    {
+      "id": "annCRX0sva",
+      "kind": "cta",
+      "text": "eBooks",
+      "sourceUrl": "https://airtable.com",
+      "selector": "li > nav.CategoryGroup-module_wrapper__8-PsD > ul.CategoryGroup-module_list__d9yoj > li > a.DrawerLink-module_drawerLinkWrap__0w0Vt"
+    },
+    {
+      "id": "mpUwLszVF-",
+      "kind": "cta",
+      "text": "Contact Support",
+      "sourceUrl": "https://airtable.com",
+      "selector": "li > nav.v2-module_hideSubTextThruLg__u7Fgo > ul.CategoryGroup-module_list__d9yoj > li > a.DrawerLink-module_drawerLinkWrap__0w0Vt"
+    },
+    {
+      "id": "t6huXb72rn",
+      "kind": "cta",
+      "text": "Book demo",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.MainNav-module_mainNavWrapper__LVslZ > div.Collapse-module_navCollapseWrap__qV-rI > div.Collapse-module_navCollapseInner__naiCn > div.v2-module_mobileActionLinkWrapper__CV1-X > a.Link-module_navLink__S7Fvz"
+    },
+    {
+      "id": "kiXmh_A55C",
+      "kind": "cta",
+      "text": "Sign up for freeSign up",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.flex > header.shellTypography-module_shellSeasonSans__Gmjfy > nav.Nav-module_headerInnerWrap__HmlLk > div.ActionGroup-module_actionGroupWrap__95a8B > a.ActionButton-module_actionButton__sZl5R"
+    },
+    {
+      "id": "gyaHY1W2pI",
+      "kind": "cta",
+      "text": "Book a demo",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.band > div.rail > section.hero > div.cta-row > a.btn"
+    },
+    {
+      "id": "G5MJjN-1ny",
+      "kind": "cta",
+      "text": "Try the template for free",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.HowToBuildTabber-module-scss-module__BU8Aqa__expandInner > div.HowToBuildTabber-module-scss-module__BU8Aqa__panelBody > div.HowToBuildTabber-module-scss-module__BU8Aqa__copyCol > div.HowToBuildTabber-module-scss-module__BU8Aqa__copyFooter > a.HowToBuildTabber-module-scss-module__BU8Aqa__cta"
+    },
+    {
+      "id": "HY5WS-UDVy",
+      "kind": "cta",
+      "text": "Facebook",
+      "sourceUrl": "https://airtable.com",
+      "selector": "nav.marketingFooterV2-module_navWrap__IMPkR > div.marketingFooterV2-module_social__LPVel > ul.socialIcons-module_socialIcons__OmQtL > li > a.socialIcons-module_navLink__P4abY"
+    },
+    {
+      "id": "RKnG646ltm",
+      "kind": "cta",
+      "text": "Try Airtable for free",
+      "sourceUrl": "https://airtable.com",
+      "selector": "li.footerLinkColumns-module_footerColumnItemWrap__XP--I > div.footerColumn-module_accordionItemPanel__2PHfa > ul.footerColumn-module_accordionItemPanelBody__I60Yl > li.footerColumn-module_linksWrap__FT17p > a.FooterLink-module_link__AdEPz"
+    },
+    {
+      "id": "j3W12lq-lf",
+      "kind": "cta",
+      "text": "Contact sales",
+      "sourceUrl": "https://airtable.com",
+      "selector": "li.footerLinkColumns-module_footerColumnItemWrap__XP--I > div.footerColumn-module_accordionItemPanel__2PHfa > ul.footerColumn-module_accordionItemPanelBody__I60Yl > li.footerColumn-module_linksWrap__FT17p > a.FooterLink-module_link__AdEPz"
+    },
+    {
+      "id": "8hR50qt7dX",
+      "kind": "cta",
+      "text": "Download on the App Store",
+      "sourceUrl": "https://airtable.com",
+      "selector": "div.marketingFooterV2-module_utilityBarWrapper__iI-tx > div.Wrapper-module_gridWrap__VemQ0 > div.FooterUtilityBar-module_utilityBar__t-vrG > div.FooterUtilityBar-module_downloadButtons__iHKEY > a.BkLink-module_bkLink__cwxsV"
+    },
+    {
+      "id": "kTyAw64fsq",
+      "kind": "hero",
+      "text": "A plan for every organization's needs",
+      "sourceUrl": "https://airtable.com/pricing",
+      "selector": "div > div.baymax > div.mt3 > div.pb4 > h1.mx-auto"
+    },
+    {
+      "id": "FHxxfGUW50",
+      "kind": "heading",
+      "text": "Free",
+      "sourceUrl": "https://airtable.com/pricing",
+      "selector": "div.mt3 > div.col-12 > div.flex > div.flex > h2.flex-auto"
+    },
+    {
+      "id": "sz0q5kAbmw",
+      "kind": "heading",
+      "text": "Team",
+      "sourceUrl": "https://airtable.com/pricing",
+      "selector": "div.mt3 > div.col-12 > div.flex > div.flex > h2.flex-auto"
+    },
+    {
+      "id": "a3P8LR3zKl",
+      "kind": "heading",
+      "text": "Business",
+      "sourceUrl": "https://airtable.com/pricing",
+      "selector": "div.mt3 > div.col-12 > div.flex > div.flex > h2.flex-auto"
+    },
+    {
+      "id": "xkzEYpU4yS",
+      "kind": "heading",
+      "text": "Enterprise Scale",
+      "sourceUrl": "https://airtable.com/pricing",
+      "selector": "div.mt3 > div.col-12 > div.flex > div.flex > h2.flex-auto"
+    },
+    {
+      "id": "Ybi8bfVPy5",
+      "kind": "heading",
+      "text": "Compare our plans",
+      "sourceUrl": "https://airtable.com/pricing",
+      "selector": "div > div.sticky > div.flex > div.col-12 > h2.huge"
+    },
+    {
+      "id": "nsIF6l6gGe",
+      "kind": "heading",
+      "text": "Have additional questions?",
+      "sourceUrl": "https://airtable.com/pricing",
+      "selector": "div > div.baymax > div.mt3 > div.my4 > h2.center"
+    },
+    {
+      "id": "5yVW8qtnhM",
+      "kind": "heading",
+      "text": "Frequently asked questions",
+      "sourceUrl": "https://airtable.com/pricing",
+      "selector": "div > div.baymax > div.mt3 > div.col-12 > h2.huge"
+    },
+    {
+      "id": "G3LkZjbQYH",
+      "kind": "cta",
+      "text": "Try for free",
+      "sourceUrl": "https://airtable.com/pricing",
+      "selector": "div.col-12 > div.flex > div.flex > div.flex-auto > a.pill"
+    },
+    {
+      "id": "40s625bV9g",
+      "kind": "cta",
+      "text": "Get started",
+      "sourceUrl": "https://airtable.com/pricing",
+      "selector": "div > div.rounded-huge-bottom > div.pb1 > div.flex > a.pill"
+    },
+    {
+      "id": "b2i-8iDWzI",
+      "kind": "hero",
+      "text": "API Reference",
+      "sourceUrl": "https://airtable.com/developers/web/api/introduction",
+      "selector": "div.pb4 > article.PageContainer > div.StylizedIntro > div.line-height-5 > h1.AnchorIcon-parent"
+    },
+    {
+      "id": "MFkKf7EFmy",
+      "kind": "hero",
+      "text": "This is the reference for the Airtable API. Use the sidebar to explore the API and learn about important concepts.",
+      "sourceUrl": "https://airtable.com/developers/web/api/introduction",
+      "selector": "div.pb4 > article.PageContainer > div.StylizedIntro > div.line-height-5 > p"
+    }
+  ],
+  "siteBrief": {
+    "productName": "airtable",
+    "summary": "Teams, workflows, agents — one space",
+    "audience": "general",
+    "differentiator": "Teams, workflows, agents — one space",
+    "strongestClaimFactId": "I02NCmdLy6",
+    "factIds": [
+      "_6WKHMoqOF",
+      "uzs1qyRFrY",
+      "llNlBxeyif",
+      "I02NCmdLy6",
+      "D8OhDOfEb7",
+      "GKxyKixMVW",
+      "6k-KpSy-T4",
+      "TkjrgngJFc",
+      "Q0Sjx7rZ4W",
+      "1FIdXRQCrm",
+      "annCRX0sva",
+      "mpUwLszVF-",
+      "t6huXb72rn",
+      "kiXmh_A55C",
+      "gyaHY1W2pI",
+      "G5MJjN-1ny",
+      "HY5WS-UDVy",
+      "RKnG646ltm",
+      "j3W12lq-lf",
+      "8hR50qt7dX",
+      "kTyAw64fsq",
+      "FHxxfGUW50",
+      "sz0q5kAbmw",
+      "a3P8LR3zKl",
+      "xkzEYpU4yS",
+      "Ybi8bfVPy5",
+      "nsIF6l6gGe",
+      "5yVW8qtnhM",
+      "G3LkZjbQYH",
+      "40s625bV9g",
+      "b2i-8iDWzI",
+      "MFkKf7EFmy"
+    ],
+    "source": "fallback"
+  }
+}

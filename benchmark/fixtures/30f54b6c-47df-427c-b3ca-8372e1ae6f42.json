@@ -1,0 +1,375 @@
+{
+  "url": "https://vercel.com",
+  "category": "js_spa",
+  "domain": "vercel.com",
+  "pages": [
+    {
+      "url": "https://vercel.com",
+      "screenshotKey": "jobs/30f54b6c-47df-427c-b3ca-8372e1ae6f42/crawl/home.png"
+    },
+    {
+      "url": "https://vercel.com/products/observability",
+      "screenshotKey": "jobs/30f54b6c-47df-427c-b3ca-8372e1ae6f42/crawl/page-1.png"
+    },
+    {
+      "url": "https://vercel.com/products/previews",
+      "screenshotKey": "jobs/30f54b6c-47df-427c-b3ca-8372e1ae6f42/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(250, 250, 250)",
+    "fg": "rgb(23, 23, 23)",
+    "accent": "rgb(255, 255, 255)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://vercel.com/vc-ap-vercel-marketing/_next/static/immutable/media/eve-light.1e3bxs4ejw62x.svg"
+  },
+  "facts": [
+    {
+      "id": "LeJKAcYNMr",
+      "kind": "hero",
+      "text": "Agentic Infrastructure",
+      "sourceUrl": "https://vercel.com",
+      "selector": "section.relative > div.relative > div.group/hero > header.relative > h1.my-0"
+    },
+    {
+      "id": "reU9Bwb-ll",
+      "kind": "hero",
+      "text": "To ship apps and agentsFor coding agentsFor coding agents to ship apps and agents automated by agents.",
+      "sourceUrl": "https://vercel.com",
+      "selector": "section.relative > div.relative > div.group/hero > header.relative > p.text-copy-16"
+    },
+    {
+      "id": "GoxDDnloE1",
+      "kind": "heading",
+      "text": "Build agents on infrastructure that thinks like them",
+      "sourceUrl": "https://vercel.com",
+      "selector": "section.mt-40 > div.flex > div.flex > section.flex > h2.row-start-1"
+    },
+    {
+      "id": "GGSFYIczCG",
+      "kind": "heading",
+      "text": "Ship apps that scale from zero to millions instantly",
+      "sourceUrl": "https://vercel.com",
+      "selector": "div.flex > div > div.flex > section.flex > h2.row-start-1"
+    },
+    {
+      "id": "KS4X0K7cdJ",
+      "kind": "heading",
+      "text": "Host platforms that serve every customer",
+      "sourceUrl": "https://vercel.com",
+      "selector": "div.flex > div > div.flex > section.flex > h2.row-start-1"
+    },
+    {
+      "id": "EiAj-sZBsW",
+      "kind": "heading",
+      "text": "Recently shipped",
+      "sourceUrl": "https://vercel.com",
+      "selector": "div.max-w-(--ds-page-width-with-margin) > div > section.mt-40 > section.flex > h2.row-start-1"
+    },
+    {
+      "id": "_F_m4E7tB-",
+      "kind": "heading",
+      "text": "Built by you, or your agents",
+      "sourceUrl": "https://vercel.com",
+      "selector": "div.max-w-(--ds-page-width-with-margin) > div.px-px > section.mt-53 > section.flex > h2.m-0"
+    },
+    {
+      "id": "8Jq8Oi15WQ",
+      "kind": "heading",
+      "text": "Agent Stack",
+      "sourceUrl": "https://vercel.com",
+      "selector": "footer.max-w-[var(--ds-page-width-with-margin)] > nav > div.grid > div > h2.text-gray-1000"
+    },
+    {
+      "id": "XDOwgrhhSC",
+      "kind": "heading",
+      "text": "Core Platform",
+      "sourceUrl": "https://vercel.com",
+      "selector": "footer.max-w-[var(--ds-page-width-with-margin)] > nav > div.grid > div > h2.text-gray-1000"
+    },
+    {
+      "id": "GtZAOvkrzH",
+      "kind": "heading",
+      "text": "Security",
+      "sourceUrl": "https://vercel.com",
+      "selector": "footer.max-w-[var(--ds-page-width-with-margin)] > nav > div.grid > div > h2.text-gray-1000"
+    },
+    {
+      "id": "PK-54fpe0S",
+      "kind": "heading",
+      "text": "Tools",
+      "sourceUrl": "https://vercel.com",
+      "selector": "footer.max-w-[var(--ds-page-width-with-margin)] > nav > div.grid > div > h2.text-gray-1000"
+    },
+    {
+      "id": "nvmTEQLJB1",
+      "kind": "heading",
+      "text": "Frameworks",
+      "sourceUrl": "https://vercel.com",
+      "selector": "footer.max-w-[var(--ds-page-width-with-margin)] > nav > div.grid > div > h2.text-gray-1000"
+    },
+    {
+      "id": "8wHqU5TNnQ",
+      "kind": "heading",
+      "text": "SDKs",
+      "sourceUrl": "https://vercel.com",
+      "selector": "footer.max-w-[var(--ds-page-width-with-margin)] > nav > div.grid > div > h2.text-gray-1000"
+    },
+    {
+      "id": "q1tqrov08J",
+      "kind": "heading",
+      "text": "Build",
+      "sourceUrl": "https://vercel.com",
+      "selector": "footer.max-w-[var(--ds-page-width-with-margin)] > nav > div.grid > div > h2.text-gray-1000"
+    },
+    {
+      "id": "NjdBLgp6lF",
+      "kind": "heading",
+      "text": "Learn",
+      "sourceUrl": "https://vercel.com",
+      "selector": "footer.max-w-[var(--ds-page-width-with-margin)] > nav > div.grid > div > h2.text-gray-1000"
+    },
+    {
+      "id": "CmIBqq-JEU",
+      "kind": "heading",
+      "text": "Explore",
+      "sourceUrl": "https://vercel.com",
+      "selector": "footer.max-w-[var(--ds-page-width-with-margin)] > nav > div.grid > div > h2.text-gray-1000"
+    },
+    {
+      "id": "SbO57QqQVs",
+      "kind": "heading",
+      "text": "Company",
+      "sourceUrl": "https://vercel.com",
+      "selector": "footer.max-w-[var(--ds-page-width-with-margin)] > nav > div.grid > div > h2.text-gray-1000"
+    },
+    {
+      "id": "SZNn2THRP9",
+      "kind": "heading",
+      "text": "Legal & Trust",
+      "sourceUrl": "https://vercel.com",
+      "selector": "footer.max-w-[var(--ds-page-width-with-margin)] > nav > div.grid > div > h2.text-gray-1000"
+    },
+    {
+      "id": "FlV5qpfV55",
+      "kind": "heading",
+      "text": "Social",
+      "sourceUrl": "https://vercel.com",
+      "selector": "footer.max-w-[var(--ds-page-width-with-margin)] > nav > div.grid > div > h2.text-gray-1000"
+    },
+    {
+      "id": "tPv2GNvwQE",
+      "kind": "cta",
+      "text": "Download Brand Assets",
+      "sourceUrl": "https://vercel.com",
+      "selector": "header.peer > div.mx-auto > div.m-0 > div.mt-2 > button.flex"
+    },
+    {
+      "id": "3UhZhVJ4MZ",
+      "kind": "cta",
+      "text": "Sign Up",
+      "sourceUrl": "https://vercel.com",
+      "selector": "div.mx-auto > div.ml-auto > div.contents > div.contents > a.outline-none"
+    },
+    {
+      "id": "ZsE7Z2xMeR",
+      "kind": "hero",
+      "text": "Understand production from the inside out",
+      "sourceUrl": "https://vercel.com/products/observability",
+      "selector": "section.flex > div.grid > div.pointer-events-none > div.flex > h1.text-heading-40"
+    },
+    {
+      "id": "UHOwrnhUHl",
+      "kind": "heading",
+      "text": "Proactive Anomaly Detection and Alerting",
+      "sourceUrl": "https://vercel.com/products/observability",
+      "selector": "section.flex > div.grid > div.order-2 > div.flex > h2.text-balance"
+    },
+    {
+      "id": "kBbornbUj-",
+      "kind": "heading",
+      "text": "Framework-aware insights",
+      "sourceUrl": "https://vercel.com/products/observability",
+      "selector": "div.max-w-(--ds-page-width-with-margin) > section.flex > div.grid > div.col-span-full > h2.text-balance"
+    },
+    {
+      "id": "PXu0klIXUE",
+      "kind": "heading",
+      "text": "Quick, accurate debugging",
+      "sourceUrl": "https://vercel.com/products/observability",
+      "selector": "div.max-w-(--ds-page-width-with-margin) > section.flex > div.grid > div.col-span-full > h2.text-balance"
+    },
+    {
+      "id": "y3aZ1E7NQt",
+      "kind": "heading",
+      "text": "View, search, inspect",
+      "sourceUrl": "https://vercel.com/products/observability",
+      "selector": "div.max-w-(--ds-page-width-with-margin) > section.flex > div.grid > div.col-span-full > h2.text-balance"
+    },
+    {
+      "id": "YHbM6xJqig",
+      "kind": "heading",
+      "text": "Instrument, collect, and send data with flexibility",
+      "sourceUrl": "https://vercel.com/products/observability",
+      "selector": "div.max-w-(--ds-page-width-with-margin) > section.flex > div.grid > div.col-span-full > h2.text-balance"
+    },
+    {
+      "id": "PcqENizeHf",
+      "kind": "heading",
+      "text": "Break out of the black box",
+      "sourceUrl": "https://vercel.com/products/observability",
+      "selector": "section.flex > div.dark-theme > div.grid > div.col-span-full > h2.text-heading-40"
+    },
+    {
+      "id": "V1jPoMM7Fw",
+      "kind": "heading",
+      "text": "Understand your engagement",
+      "sourceUrl": "https://vercel.com/products/observability",
+      "selector": "section.flex > div.grid > div.col-span-full > div.flex > h2.text-balance"
+    },
+    {
+      "id": "paoKpQgzkc",
+      "kind": "heading",
+      "text": "Real users, real metrics",
+      "sourceUrl": "https://vercel.com/products/observability",
+      "selector": "div.max-w-(--ds-page-width-with-margin) > section.flex > div.grid > div.col-span-full > h2.text-balance"
+    },
+    {
+      "id": "UtnBZf_Y1b",
+      "kind": "heading",
+      "text": "Inspect your app",
+      "sourceUrl": "https://vercel.com/products/observability",
+      "selector": "main > div.max-w-(--ds-page-width-with-margin) > section.flex > div.grid > h2.text-balance"
+    },
+    {
+      "id": "H6WldEmSS8",
+      "kind": "stat",
+      "text": "42%",
+      "sourceUrl": "https://vercel.com/products/observability",
+      "selector": "div.relative > div.flex > div.flex > p.text-copy-14 > strong.text-gray-1000"
+    },
+    {
+      "id": "K8xnxCpYNq",
+      "kind": "stat",
+      "text": "429 Status Codes",
+      "sourceUrl": "https://vercel.com/products/observability",
+      "selector": "div.rounded-xs > div.bg-background-100 > div.flex > p.text-label-14 > strong.text-gray-1000"
+    },
+    {
+      "id": "vS73jPhWTZ",
+      "kind": "hero",
+      "text": "A deployment for every idea",
+      "sourceUrl": "https://vercel.com/products/previews",
+      "selector": "section.flex > div.grid > div.col-span-full > div.flex > h1.text-heading-40"
+    },
+    {
+      "id": "Tloyy7QiwE",
+      "kind": "heading",
+      "text": "Zero-config to deploy. Instantly share your work",
+      "sourceUrl": "https://vercel.com/products/previews",
+      "selector": "div.@container > main > div.max-w-(--ds-page-width-with-margin) > div.grid > h2.text-balance"
+    },
+    {
+      "id": "BYoqPhnHo8",
+      "kind": "heading",
+      "text": "Keep pushing forward.",
+      "sourceUrl": "https://vercel.com/products/previews",
+      "selector": "div.flex > div.flex > div.flex > div._3Ry7Nq_title > h2"
+    },
+    {
+      "id": "tV9zF4wlMC",
+      "kind": "heading",
+      "text": "Engage with feedback.",
+      "sourceUrl": "https://vercel.com/products/previews",
+      "selector": "div.flex > div.flex > div.flex > div._3Ry7Nq_title > h2"
+    },
+    {
+      "id": "Dxejgmae9i",
+      "kind": "heading",
+      "text": "Customize with feature flags.",
+      "sourceUrl": "https://vercel.com/products/previews",
+      "selector": "div.flex > div.flex > div.flex > div._3Ry7Nq_title > h2"
+    },
+    {
+      "id": "ZvhjGduHrd",
+      "kind": "heading",
+      "text": "Empower your edits.",
+      "sourceUrl": "https://vercel.com/products/previews",
+      "selector": "div.flex > div.flex > div.flex > div._3Ry7Nq_title > h2"
+    },
+    {
+      "id": "IhQrp5LjPs",
+      "kind": "heading",
+      "text": "Audit your accessibility.",
+      "sourceUrl": "https://vercel.com/products/previews",
+      "selector": "div.flex > div.flex > div.flex > div._3Ry7Nq_title > h2"
+    },
+    {
+      "id": "E50NQtlRQQ",
+      "kind": "heading",
+      "text": "No more layout shifts.",
+      "sourceUrl": "https://vercel.com/products/previews",
+      "selector": "div.flex > div.flex > div.flex > div._3Ry7Nq_title > h2"
+    },
+    {
+      "id": "EcivWirhT6",
+      "kind": "heading",
+      "text": "Ready to deploy?",
+      "sourceUrl": "https://vercel.com/products/previews",
+      "selector": "main > div.max-w-(--ds-page-width-with-margin) > section.flex > div.grid > h2.text-balance"
+    }
+  ],
+  "siteBrief": {
+    "productName": "vercel",
+    "summary": "Agentic Infrastructure",
+    "audience": "general",
+    "differentiator": "Agentic Infrastructure",
+    "strongestClaimFactId": "H6WldEmSS8",
+    "factIds": [
+      "LeJKAcYNMr",
+      "reU9Bwb-ll",
+      "GoxDDnloE1",
+      "GGSFYIczCG",
+      "KS4X0K7cdJ",
+      "EiAj-sZBsW",
+      "_F_m4E7tB-",
+      "8Jq8Oi15WQ",
+      "XDOwgrhhSC",
+      "GtZAOvkrzH",
+      "PK-54fpe0S",
+      "nvmTEQLJB1",
+      "8wHqU5TNnQ",
+      "q1tqrov08J",
+      "NjdBLgp6lF",
+      "CmIBqq-JEU",
+      "SbO57QqQVs",
+      "SZNn2THRP9",
+      "FlV5qpfV55",
+      "tPv2GNvwQE",
+      "3UhZhVJ4MZ",
+      "ZsE7Z2xMeR",
+      "UHOwrnhUHl",
+      "kBbornbUj-",
+      "PXu0klIXUE",
+      "y3aZ1E7NQt",
+      "YHbM6xJqig",
+      "PcqENizeHf",
+      "V1jPoMM7Fw",
+      "paoKpQgzkc",
+      "UtnBZf_Y1b",
+      "H6WldEmSS8",
+      "K8xnxCpYNq",
+      "vS73jPhWTZ",
+      "Tloyy7QiwE",
+      "BYoqPhnHo8",
+      "tV9zF4wlMC",
+      "Dxejgmae9i",
+      "ZvhjGduHrd",
+      "IhQrp5LjPs",
+      "E50NQtlRQQ",
+      "EcivWirhT6"
+    ],
+    "source": "fallback"
+  }
+}

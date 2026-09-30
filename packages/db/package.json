@@ -1,0 +1,26 @@
+{
+  "name": "@sitereel/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/migrate.ts",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@sitereel/shared": "workspace:*",
+    "drizzle-orm": "0.38.3",
+    "postgres": "3.4.5"
+  },
+  "devDependencies": {
+    "drizzle-kit": "0.30.1",
+    "typescript": "5.7.3",
+    "tsx": "4.19.2",
+    "dotenv": "16.4.7",
+    "@types/node": "22.10.5"
+  }
+}

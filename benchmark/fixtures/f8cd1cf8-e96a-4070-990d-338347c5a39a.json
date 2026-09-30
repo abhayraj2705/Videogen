@@ -1,0 +1,95 @@
+{
+  "url": "https://www.licious.in",
+  "category": "indian_smb",
+  "domain": "www.licious.in",
+  "pages": [
+    {
+      "url": "https://www.licious.in",
+      "screenshotKey": "jobs/f8cd1cf8-e96a-4070-990d-338347c5a39a/crawl/home.png"
+    },
+    {
+      "url": "https://www.licious.in/about-us",
+      "screenshotKey": "jobs/f8cd1cf8-e96a-4070-990d-338347c5a39a/crawl/page-1.png"
+    },
+    {
+      "url": "https://www.licious.in/store-locator?city_name=Bengaluru&city_id=1",
+      "screenshotKey": "jobs/f8cd1cf8-e96a-4070-990d-338347c5a39a/crawl/page-2.png"
+    }
+  ],
+  "brand": {
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(0, 0, 0)",
+    "accent": "rgb(212, 212, 212)",
+    "fontDisplay": "Inter",
+    "fontBody": "Inter",
+    "logoUrl": "https://www.licious.in/_next/image?url=%2Fimage%2Frebranding%2Fpng%2Flogo-homepage.png&w=256&q=75"
+  },
+  "facts": [
+    {
+      "id": "CzEPs7ieUl",
+      "kind": "cta",
+      "text": "Order Chicken online in delhi",
+      "sourceUrl": "https://www.licious.in",
+      "selector": "#delhi-chicken"
+    },
+    {
+      "id": "Ps0Duhgg_7",
+      "kind": "cta",
+      "text": "Order Chicken online in mumbai",
+      "sourceUrl": "https://www.licious.in",
+      "selector": "#mumbai-chicken"
+    },
+    {
+      "id": "P5H5_JoBCw",
+      "kind": "cta",
+      "text": "Order Chicken online in pune",
+      "sourceUrl": "https://www.licious.in",
+      "selector": "#pune-chicken"
+    },
+    {
+      "id": "-BwNYbF-80",
+      "kind": "hero",
+      "text": "Find your nearest",
+      "sourceUrl": "https://www.licious.in/store-locator?city_name=Bengaluru&city_id=1",
+      "selector": "div > div > div.NearestStoreCarousel_nearest_store_carousel__ZOZqR > div.NearestStoreCarousel_curved_container__xqe4s > h1.NearestStoreCarousel_title__l_2KN"
+    },
+    {
+      "id": "UN0Oxr-pGI",
+      "kind": "heading",
+      "text": "store",
+      "sourceUrl": "https://www.licious.in/store-locator?city_name=Bengaluru&city_id=1",
+      "selector": "div > div.NearestStoreCarousel_nearest_store_carousel__ZOZqR > div.NearestStoreCarousel_curved_container__xqe4s > div.NearestStoreCarousel_logo_container__YrQUb > h2.NearestStoreCarousel_subtitle__zITet"
+    },
+    {
+      "id": "MSCT6IQPay",
+      "kind": "heading",
+      "text": "Fresh, Exclusive & Just for You",
+      "sourceUrl": "https://www.licious.in/store-locator?city_name=Bengaluru&city_id=1",
+      "selector": "div > div > div.FreshExclusive_fresh_exclusive__CvY4p > div.FreshExclusive_fresh_exclusive_content__VG6aQ > h3.FreshExclusive_fresh_exclusive_content_title__Yzzlr"
+    },
+    {
+      "id": "DoTBVy6fWx",
+      "kind": "heading",
+      "text": "Get ₹100 OFF on your first Licious store visit",
+      "sourceUrl": "https://www.licious.in/store-locator?city_name=Bengaluru&city_id=1",
+      "selector": "html > body > div.StoreOfferLoginModal_modal_container__2Ljl2 > div.StoreOfferLoginModal_modal_content__9UH7L > h2.StoreOfferLoginModal_modal_title__PE0H9"
+    }
+  ],
+  "siteBrief": {
+    "productName": "licious",
+    "summary": "Find your nearest",
+    "audience": "general",
+    "differentiator": "Find your nearest",
+    "strongestClaimFactId": "-BwNYbF-80",
+    "factIds": [
+      "CzEPs7ieUl",
+      "Ps0Duhgg_7",
+      "P5H5_JoBCw",
+      "-BwNYbF-80",
+      "UN0Oxr-pGI",
+      "MSCT6IQPay",
+      "DoTBVy6fWx"
+    ],
+    "source": "fallback"
+  }
+}
