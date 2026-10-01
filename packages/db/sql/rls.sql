@@ -66,3 +66,43 @@ create policy renders_owner_select on renders
       where storyboards.id = renders.storyboard_id and jobs.user_id = auth.uid()
     )
   );
+
+-- Wave A tables -------------------------------------------------------------
+
+alter table shares enable row level security;
+alter table ratings enable row level security;
+alter table brand_kits enable row level security;
+alter table payments enable row level security;
+alter table webhook_events enable row level security;
+alter table deletion_requests enable row level security;
+
+-- Shares: owners manage their own. The *public* read path is the backend's
+-- GET /api/share/:shareId (service role), never PostgREST, so there is
+-- deliberately no anon select policy.
+drop policy if exists shares_owner_all on shares;
+create policy shares_owner_all on shares
+  for all using (
+    exists (select 1 from jobs where jobs.id = shares.job_id and jobs.user_id = auth.uid())
+  ) with check (
+    auth.uid() = created_by
+    and exists (select 1 from jobs where jobs.id = shares.job_id and jobs.user_id = auth.uid())
+  );
+
+drop policy if exists ratings_owner_all on ratings;
+create policy ratings_owner_all on ratings
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+drop policy if exists brand_kits_owner_all on brand_kits;
+create policy brand_kits_owner_all on brand_kits
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Payments are written only by the backend (webhooks); users may read theirs.
+drop policy if exists payments_owner_select on payments;
+create policy payments_owner_select on payments
+  for select using (auth.uid() = user_id);
+
+-- webhook_events: service role only (RLS enabled + no policies = no access).
+
+drop policy if exists deletion_requests_owner_select on deletion_requests;
+create policy deletion_requests_owner_select on deletion_requests
+  for select using (auth.uid() = user_id);
