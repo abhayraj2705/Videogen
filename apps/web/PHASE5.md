@@ -74,11 +74,12 @@ checkouts or always `rm -rf .next` between the two.
   what `<video controls>` already gives a viewer.
 - **No script review editor** (W6) — `/videos/:id`'s review state is a single "Approve &
   render" button, not the three-panel scene-by-scene editor. That's explicitly Phase 6.
-- **No public share page** (`/v/:shareId`, W9), **no email** (W: "video ready" /
-  "we need your help" — needs a Resend account, not available here), **no needs-input
-  upload flow** (shows the failure reason and a "try a different URL" link, not the
-  screenshot-upload form) — all real scope, none blocking the core journey the plan's
-  exit criterion actually asks for.
+- ~~No public share page / email / needs-input upload~~ — added in Wave A: `/v/:shareId`
+  (+ `/embed`, OG/twitter player tags), share/revoke + caption copy + rating on the
+  result screen, `/videos/:id/needs-input` presigned-upload form, React Email templates
+  (`emails/`) sent via `lib/email/send.ts` and `POST /api/internal/email`. The backend
+  routes these call (`/share`, `/rating`, `/uploads/presign`, `/resume`, `/api/me`)
+  land in parallel/next wave; the UI handles their absence with error states.
 - **No Lighthouse audit run** — needs a deployed/staging environment to measure
   meaningfully; the dark-theme tokens and `prefers-reduced-motion` handling from
   Phase 1 are already in place, but the ≥90 score itself is unverified.
