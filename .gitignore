@@ -15,3 +15,5 @@ apps/worker/.data/
 supabase/.branches/
 supabase/.temp/
 *.tsbuildinfo
+apps/web/test-results/
+apps/web/playwright-report/

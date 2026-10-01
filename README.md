@@ -45,6 +45,19 @@ cp packages/db/.env.example packages/db/.env
 pnpm db:migrate
 ```
 
+**Storage note:** `STORAGE_LOCAL_DIR` (worker + backend `.env`) must be the exact same
+absolute path in both files — each process otherwise resolves the default
+`./.data/storage` relative to its own cwd, so backend silently 404s on every render the
+worker actually wrote. See the comment in `apps/worker/.env.example`.
+
+**Auth redirect note:** if magic links land you on `/?code=...` instead of
+`/auth/callback?code=...`, `supabase/config.toml`'s `auth.additional_redirect_urls`
+doesn't include your dev origin — Supabase silently falls back to `site_url` (the bare
+root) for any `emailRedirectTo` not on that allowlist. It already includes
+`http://127.0.0.1:3000/**` and `http://localhost:3000/**`; add your own if you're
+running on a different host/port, then `pnpm supabase:stop && pnpm supabase:start` to
+reload the config.
+
 ## Running it
 
 ```bash
@@ -53,10 +66,12 @@ pnpm dev:worker
 pnpm dev:web       # http://localhost:3000
 ```
 
-Open http://localhost:3000, sign in with a magic link (opens in the local Inbucket
-inbox at http://127.0.0.1:54324 since there's no real mail server in dev), land on
-`/dashboard`, click **Create test job**. That exercises the whole Phase 1 slice:
-web → backend → Postgres + BullMQ → worker → Postgres → Redis pub/sub → SSE → web.
+Open http://localhost:3000, sign in with a magic link (opens in the local Mailpit/
+Inbucket inbox at http://127.0.0.1:54324 since there's no real mail server in dev),
+click **+ New video**, paste a URL, and submit. That runs the full pipeline for real:
+crawl → extract → plan → voice → build → QA → render → encode, landing you on a
+playable result once it's done (or "review" first if review-before-render is checked —
+click **Approve & render** there to continue).
 
 Google sign-in needs a real Google OAuth app registered against your Supabase
 project — skip it in local dev and use the magic link instead.
@@ -64,3 +79,13 @@ project — skip it in local dev and use the magic link instead.
 ## Phase 0 (film-runtime / renderer)
 
 See `packages/renderer/README.md`.
+
+## End-to-end tests
+
+```bash
+cd apps/web
+pnpm e2e
+```
+
+Real browser tests against the live stack (signup via a real magic link, through to a
+playable rendered video) — not mocks. See `apps/web/PHASE5.md`.

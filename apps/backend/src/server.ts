@@ -3,18 +3,21 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { loadServerEnv } from "@sitereel/shared";
 import { createDb } from "@sitereel/db";
+import { createStorageClientFromEnv } from "@sitereel/storage";
 import { createLogger } from "./lib/logger.js";
 import { createAuthVerifier } from "./lib/auth.js";
 import { createQueues } from "./lib/queue.js";
 import { JobEventBus } from "./lib/events.js";
 import { registerJobRoutes } from "./routes/jobs.js";
 import { registerUrlPreviewRoutes } from "./routes/url-preview.js";
+import { registerRenderRoutes } from "./routes/renders.js";
 
 async function main() {
   const env = loadServerEnv();
   const logger = createLogger(env.LOG_LEVEL);
 
   const db = createDb(env.DATABASE_URL);
+  const storage = createStorageClientFromEnv(env);
   const queues = createQueues(env.REDIS_URL);
   const events = new JobEventBus(env.REDIS_URL);
   const verifyAuth = createAuthVerifier(env.SUPABASE_URL);
@@ -27,6 +30,7 @@ async function main() {
 
   registerJobRoutes(app, { db, queues, events, verifyAuth });
   registerUrlPreviewRoutes(app, { verifyAuth });
+  registerRenderRoutes(app, { db, storage, storageDriver: env.STORAGE_DRIVER, verifyAuth });
 
   const address = await app.listen({ port: env.PORT, host: "0.0.0.0" });
   logger.info({ address }, "backend listening");

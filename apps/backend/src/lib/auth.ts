@@ -26,11 +26,18 @@ export function createAuthVerifier(supabaseUrl: string) {
 
   return async function verifyAuth(req: FastifyRequest, reply: FastifyReply): Promise<AuthedUser | undefined> {
     const header = req.headers.authorization;
-    if (!header?.startsWith("Bearer ")) {
+    // <video>/<img>/<a> tags can't send an Authorization header, so media
+    // routes (apps/backend/src/routes/renders.ts) need a URL-carryable
+    // fallback. Query-param tokens are short-lived (the frontend fetches a
+    // fresh Supabase session token per page load) and this is GET-only
+    // media, not a mutating route — an acceptable trade for Phase 5; a
+    // dedicated short-lived signed-URL scheme (§4.3) is the production fix.
+    const queryToken = (req.query as Record<string, unknown> | undefined)?.token;
+    const token = header?.startsWith("Bearer ") ? header.slice("Bearer ".length) : typeof queryToken === "string" ? queryToken : undefined;
+    if (!token) {
       reply.code(401).send({ error: "missing_authorization" });
       return undefined;
     }
-    const token = header.slice("Bearer ".length);
     try {
       const { payload } = await jwtVerify<SupabaseJwtClaims>(token, jwks);
       if (!payload.sub) throw new Error("token missing sub");

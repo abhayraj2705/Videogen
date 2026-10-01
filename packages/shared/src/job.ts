@@ -38,6 +38,14 @@ export function formatSlug(format: AspectFormat): string {
   return format.replace(":", "x");
 }
 
+/** Inverse of formatSlug — e.g. a route param like "16x9" back to "16:9". Throws on anything that isn't a known format. */
+export function parseFormatSlug(slug: string): AspectFormat {
+  const candidate = slug.replace("x", ":");
+  const parsed = AspectFormat.safeParse(candidate);
+  if (!parsed.success) throw new Error(`Unknown format slug: ${slug}`);
+  return parsed.data;
+}
+
 export const Tone = z.enum(["clean", "playful", "cinematic", "app-store"]);
 export type Tone = z.infer<typeof Tone>;
 
