@@ -30,7 +30,10 @@ export async function updateSession(request: NextRequest) {
   const isProtected = PROTECTED_PREFIXES.some((p) => request.nextUrl.pathname.startsWith(p));
   if (isProtected && !user) {
     const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("next", request.nextUrl.pathname);
+    // Keep the query string too (e.g. /new?url=... from the landing page's
+    // URL box) — losing it here would mean a logged-out visitor's typed URL
+    // vanishes the moment they're bounced to /login.
+    loginUrl.searchParams.set("next", request.nextUrl.pathname + request.nextUrl.search);
     return NextResponse.redirect(loginUrl);
   }
 
