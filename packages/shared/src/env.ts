@@ -38,6 +38,32 @@ export const ServerEnv = z.object({
   // deterministic fallback storyboard instead of escalating.
   ANTHROPIC_API_KEY: z.string().optional(),
   ANTHROPIC_MODEL: z.string().default("claude-sonnet-5-5"),
+
+  // --- Observability (§7) ---
+  // Sentry is initialised only when SENTRY_DSN is set.
+  SENTRY_DSN: z.string().optional(),
+  SENTRY_ENVIRONMENT: z.string().optional(),
+  SENTRY_TRACES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(0),
+
+  // --- Abuse controls (§8.1) ---
+  // Set when running behind a proxy/load balancer so req.ip is the client IP
+  // (X-Forwarded-For) rather than the proxy's — per-IP limits are useless otherwise.
+  TRUST_PROXY: z
+    .enum(["true", "false", "1", "0"])
+    .default("false")
+    .transform((v) => v === "true" || v === "1"),
+  MAX_ACTIVE_JOBS_PER_USER: z.coerce.number().int().min(1).default(2),
+  RATE_LIMIT_IP_PER_MIN: z.coerce.number().int().min(1).default(300),
+  RATE_LIMIT_USER_PER_MIN: z.coerce.number().int().min(1).default(240),
+  RATE_LIMIT_JOB_CREATE_PER_HOUR: z.coerce.number().int().min(1).default(20),
+  // Per-target-domain throttle on job creation across ALL users, so SiteReel
+  // can't be used to hammer one site.
+  DOMAIN_THROTTLE_MAX: z.coerce.number().int().min(1).default(10),
+  DOMAIN_THROTTLE_WINDOW_SEC: z.coerce.number().int().min(1).default(600),
+
+  // --- SSE replay buffer ---
+  SSE_REPLAY_MAX_EVENTS: z.coerce.number().int().min(10).default(500),
+  SSE_REPLAY_TTL_SEC: z.coerce.number().int().min(60).default(86_400),
 });
 export type ServerEnv = z.infer<typeof ServerEnv>;
 

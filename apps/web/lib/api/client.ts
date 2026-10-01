@@ -25,9 +25,38 @@ async function authedFetch(path: string, init?: RequestInit): Promise<Response> 
   });
 }
 
+/**
+ * Error carrying the backend's JSON error body. `message` is the server's
+ * human-readable message when it sent one (e.g. 402 insufficient_credits,
+ * 429 too_many_active_jobs), so `toast.error(err.message)` reads well.
+ */
+export class ApiError extends Error {
+  constructor(
+    readonly status: number,
+    readonly code: string | undefined,
+    message: string,
+    readonly body: Record<string, unknown> | undefined,
+  ) {
+    super(message);
+    this.name = "ApiError";
+  }
+}
+
+async function toApiError(res: Response, fallback: string): Promise<ApiError> {
+  let body: Record<string, unknown> | undefined;
+  try {
+    body = (await res.json()) as Record<string, unknown>;
+  } catch {
+    body = undefined;
+  }
+  const code = typeof body?.error === "string" ? body.error : undefined;
+  const message = typeof body?.message === "string" ? body.message : `${fallback}: ${res.status}${code ? ` (${code})` : ""}`;
+  return new ApiError(res.status, code, message, body);
+}
+
 export async function createJob(body: CreateJobRequest): Promise<Job> {
   const res = await authedFetch("/api/jobs", { method: "POST", body: JSON.stringify(body) });
-  if (!res.ok) throw new Error(`createJob failed: ${res.status}`);
+  if (!res.ok) throw await toApiError(res, "createJob failed");
   return res.json();
 }
 
@@ -83,6 +112,66 @@ export async function previewUrl(url: string): Promise<UrlPreview> {
   const res = await authedFetch(`/api/url/preview?url=${encodeURIComponent(url)}`);
   if (!res.ok) throw new Error(`previewUrl failed: ${res.status}`);
   return res.json();
+}
+
+// --- W9 public sharing --------------------------------------------------------
+
+export interface ShareLink {
+  shareId: string;
+  /** Public web URL: `${WEB_ORIGIN}/v/${shareId}`. */
+  url: string;
+}
+
+/** Owner only; job must be `done` (409 otherwise). Idempotent — returns the existing active link if there is one. */
+export async function createShare(jobId: string): Promise<ShareLink> {
+  const res = await authedFetch(`/api/jobs/${jobId}/share`, { method: "POST" });
+  if (!res.ok) throw await toApiError(res, "createShare failed");
+  return res.json();
+}
+
+/** Revokes the active link; its page and media URLs 404 immediately. */
+export async function revokeShare(jobId: string): Promise<void> {
+  const res = await authedFetch(`/api/jobs/${jobId}/share`, { method: "DELETE" });
+  if (!res.ok) throw await toApiError(res, "revokeShare failed");
+}
+
+export interface PublicShare {
+  shareId: string;
+  title: string;
+  caption: string | null;
+  sourceUrl: string;
+  createdAt: string;
+  /** Media URLs are absolute and need no auth (share-scoped routes). */
+  renders: RenderInfo[];
+}
+
+/**
+ * Public, unauthenticated. Returns null when the link doesn't exist or was
+ * revoked. Note this module is "use client" — a Server Component (e.g. for
+ * /v/:shareId OG tags) should fetch `${API_URL}/api/share/:shareId` directly
+ * with the same shape.
+ */
+export async function getPublicShare(shareId: string, init?: RequestInit): Promise<PublicShare | null> {
+  const res = await fetch(`${API_BASE}/api/share/${encodeURIComponent(shareId)}`, init);
+  if (res.status === 404) return null;
+  if (!res.ok) throw await toApiError(res, "getPublicShare failed");
+  const data = (await res.json()) as PublicShare;
+  return {
+    ...data,
+    renders: data.renders.map((r) => ({
+      ...r,
+      videoUrl: `${API_BASE}${r.videoUrl}`,
+      posterUrl: `${API_BASE}${r.posterUrl}`,
+      captionsUrl: `${API_BASE}${r.captionsUrl}`,
+    })),
+  };
+}
+
+// --- Ratings ------------------------------------------------------------------
+
+export async function rateJob(jobId: string, thumbs: "up" | "down", reason?: string): Promise<void> {
+  const res = await authedFetch(`/api/jobs/${jobId}/rating`, { method: "POST", body: JSON.stringify({ thumbs, reason }) });
+  if (!res.ok) throw await toApiError(res, "rateJob failed");
 }
 
 export { API_BASE };

@@ -11,6 +11,16 @@ interface SupabaseJwtClaims extends JWTPayload {
   role?: string;
 }
 
+export type AuthResolution = { user: AuthedUser } | { error: "missing_authorization" | "invalid_token" };
+
+/** Pulls the bearer token from the Authorization header, falling back to `?token=` (media tags can't send headers). */
+export function extractToken(req: Pick<FastifyRequest, "headers" | "query">): string | undefined {
+  const header = req.headers.authorization;
+  if (header?.startsWith("Bearer ")) return header.slice("Bearer ".length);
+  const queryToken = (req.query as Record<string, unknown> | undefined)?.token;
+  return typeof queryToken === "string" && queryToken.length > 0 ? queryToken : undefined;
+}
+
 /**
  * Verifies the Supabase-issued access token from the Authorization header.
  * Current Supabase projects (local CLI and new cloud projects alike) sign
@@ -20,32 +30,49 @@ interface SupabaseJwtClaims extends JWTPayload {
  * The backend trusts this instead of re-hitting Supabase per request; RLS in
  * Postgres (sql/rls.sql) is the second line of defense for any path that ever
  * talks to Postgres directly.
+ *
+ * <video>/<img>/<a> tags can't send an Authorization header, so media routes
+ * (routes/renders.ts) accept `?token=` too. Query tokens are short-lived
+ * Supabase access tokens and only ever used on GET media routes; public share
+ * media goes through share-scoped routes that need no token at all.
+ *
+ * Resolution is memoised per request, so the per-user rate limiter (which runs
+ * before the handler) and the handler's own verifyAuth share one JWT verify.
  */
 export function createAuthVerifier(supabaseUrl: string) {
   const jwks = createRemoteJWKSet(new URL("/auth/v1/.well-known/jwks.json", supabaseUrl));
+  const cache = new WeakMap<FastifyRequest, Promise<AuthResolution>>();
 
-  return async function verifyAuth(req: FastifyRequest, reply: FastifyReply): Promise<AuthedUser | undefined> {
-    const header = req.headers.authorization;
-    // <video>/<img>/<a> tags can't send an Authorization header, so media
-    // routes (apps/backend/src/routes/renders.ts) need a URL-carryable
-    // fallback. Query-param tokens are short-lived (the frontend fetches a
-    // fresh Supabase session token per page load) and this is GET-only
-    // media, not a mutating route — an acceptable trade for Phase 5; a
-    // dedicated short-lived signed-URL scheme (§4.3) is the production fix.
-    const queryToken = (req.query as Record<string, unknown> | undefined)?.token;
-    const token = header?.startsWith("Bearer ") ? header.slice("Bearer ".length) : typeof queryToken === "string" ? queryToken : undefined;
-    if (!token) {
-      reply.code(401).send({ error: "missing_authorization" });
-      return undefined;
-    }
+  async function doResolve(req: FastifyRequest): Promise<AuthResolution> {
+    const token = extractToken(req);
+    if (!token) return { error: "missing_authorization" };
     try {
       const { payload } = await jwtVerify<SupabaseJwtClaims>(token, jwks);
       if (!payload.sub) throw new Error("token missing sub");
-      return { id: payload.sub, email: payload.email ?? null };
+      return { user: { id: payload.sub, email: payload.email ?? null } };
     } catch (err) {
       req.log.warn({ err }, "auth token verification failed");
-      reply.code(401).send({ error: "invalid_token" });
-      return undefined;
+      return { error: "invalid_token" };
     }
-  };
+  }
+
+  function resolveAuth(req: FastifyRequest): Promise<AuthResolution> {
+    let pending = cache.get(req);
+    if (!pending) {
+      pending = doResolve(req);
+      cache.set(req, pending);
+    }
+    return pending;
+  }
+
+  async function verifyAuth(req: FastifyRequest, reply: FastifyReply): Promise<AuthedUser | undefined> {
+    const result = await resolveAuth(req);
+    if ("user" in result) return result.user;
+    reply.code(401).send({ error: result.error });
+    return undefined;
+  }
+
+  return Object.assign(verifyAuth, { resolve: resolveAuth });
 }
+
+export type AuthVerifier = ReturnType<typeof createAuthVerifier>;
