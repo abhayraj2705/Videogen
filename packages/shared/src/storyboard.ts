@@ -15,10 +15,19 @@ import { Tone } from "./job.js";
  * assets only by fact id / role, not by final URL.
  */
 
-// Phase 0's four templates. Phase 4 adds LogoReveal, HeroRebuild, UIFlowCursor,
-// StatCounter, QuoteCard, ChecklistReveal — extend this enum there, not before,
-// since the film-runtime registry has to grow in lockstep.
-export const TemplateId = z.enum(["KineticHook", "FeatureTriplet", "SectionShowcase", "CTAEndCard"]);
+/** Full 10-template catalog — must stay in lockstep with film-runtime's TEMPLATE_REGISTRY. */
+export const TemplateId = z.enum([
+  "KineticHook",
+  "FeatureTriplet",
+  "SectionShowcase",
+  "CTAEndCard",
+  "LogoReveal",
+  "HeroRebuild",
+  "UIFlowCursor",
+  "StatCounter",
+  "QuoteCard",
+  "ChecklistReveal",
+]);
 export type TemplateId = z.infer<typeof TemplateId>;
 
 export const StoryboardScene = z.object({

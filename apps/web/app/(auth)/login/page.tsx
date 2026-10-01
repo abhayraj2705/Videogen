@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -41,45 +41,56 @@ export default function LoginPage() {
   }
 
   return (
+    <Card className="w-full max-w-sm">
+      <CardHeader>
+        <CardTitle>Sign in to make your video</CardTitle>
+        <CardDescription>Google or a magic link — no password.</CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-4">
+        <Button variant="secondary" onClick={signInWithGoogle} type="button">
+          Continue with Google
+        </Button>
+        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="h-px flex-1 bg-border" />
+          or
+          <div className="h-px flex-1 bg-border" />
+        </div>
+        {sent ? (
+          <p className="text-sm text-muted-foreground">
+            Link sent to <span className="text-foreground">{email}</span>. In local dev, open{" "}
+            <a className="text-primary underline" href="http://127.0.0.1:54324" target="_blank" rel="noreferrer">
+              Inbucket
+            </a>{" "}
+            to view it.
+          </p>
+        ) : (
+          <form onSubmit={sendMagicLink} className="flex flex-col gap-2">
+            <Input
+              type="email"
+              required
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Button type="submit" disabled={sending}>
+              {sending ? "Sending…" : "Send magic link"}
+            </Button>
+          </form>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+export default function LoginPage() {
+  return (
     <main className="flex min-h-screen items-center justify-center px-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Sign in to make your video</CardTitle>
-          <CardDescription>Google or a magic link — no password.</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <Button variant="secondary" onClick={signInWithGoogle} type="button">
-            Continue with Google
-          </Button>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <div className="h-px flex-1 bg-border" />
-            or
-            <div className="h-px flex-1 bg-border" />
-          </div>
-          {sent ? (
-            <p className="text-sm text-muted-foreground">
-              Link sent to <span className="text-foreground">{email}</span>. In local dev, open{" "}
-              <a className="text-primary underline" href="http://127.0.0.1:54324" target="_blank" rel="noreferrer">
-                Inbucket
-              </a>{" "}
-              to view it.
-            </p>
-          ) : (
-            <form onSubmit={sendMagicLink} className="flex flex-col gap-2">
-              <Input
-                type="email"
-                required
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <Button type="submit" disabled={sending}>
-                {sending ? "Sending…" : "Send magic link"}
-              </Button>
-            </form>
-          )}
-        </CardContent>
-      </Card>
+      {/* useSearchParams() opts the subtree out of static rendering unless
+          boundary-wrapped — without this, `next build` fails prerendering
+          this page entirely (caught via a real production build, not `next dev`). */}
+      <Suspense fallback={<div className="h-64 w-full max-w-sm animate-pulse rounded-xl bg-card" />}>
+        <LoginForm />
+      </Suspense>
     </main>
   );
 }

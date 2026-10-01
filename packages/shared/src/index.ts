@@ -7,3 +7,4 @@ export * from "./ssrf.js";
 export * from "./reading.js";
 export * from "./storyboard.js";
 export * from "./storyboard-validators.js";
+export * from "./ffmpeg.js";

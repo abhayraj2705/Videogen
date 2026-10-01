@@ -39,4 +39,9 @@ export async function getJob(id: string): Promise<Job> {
   return res.json();
 }
 
+export async function approveJob(id: string): Promise<void> {
+  const res = await authedFetch(`/api/jobs/${id}/approve`, { method: "POST" });
+  if (!res.ok) throw new Error(`approveJob failed: ${res.status}`);
+}
+
 export { API_BASE };

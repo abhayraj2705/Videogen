@@ -21,3 +21,25 @@ export const PlanJobData = z.object({
   jobId: z.string().uuid(),
 });
 export type PlanJobData = z.infer<typeof PlanJobData>;
+
+export const VoiceJobData = z.object({
+  jobId: z.string().uuid(),
+});
+export type VoiceJobData = z.infer<typeof VoiceJobData>;
+
+export const BuildJobData = z.object({
+  jobId: z.string().uuid(),
+});
+export type BuildJobData = z.infer<typeof BuildJobData>;
+
+export const QaJobData = z.object({
+  jobId: z.string().uuid(),
+  format: z.enum(["16:9", "9:16", "1:1"]),
+});
+export type QaJobData = z.infer<typeof QaJobData>;
+
+export const RenderJobData = z.object({
+  jobId: z.string().uuid(),
+  format: z.enum(["16:9", "9:16", "1:1"]),
+});
+export type RenderJobData = z.infer<typeof RenderJobData>;

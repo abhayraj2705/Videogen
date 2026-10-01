@@ -26,6 +26,28 @@ export const TEMPLATE_PROP_SCHEMAS: Record<TemplateId, z.ZodType> = {
     ctaText: z.string().min(1),
     domain: z.string().min(1),
   }),
+  LogoReveal: z.object({
+    productName: z.string().min(1),
+  }),
+  HeroRebuild: z.object({
+    headline: z.string().min(1),
+    subheadline: z.string().min(1),
+  }),
+  UIFlowCursor: z.object({
+    sourcePageUrl: z.string().url(),
+    caption: z.string().min(1),
+  }),
+  StatCounter: z.object({
+    value: z.string().min(1),
+    label: z.string().min(1),
+  }),
+  QuoteCard: z.object({
+    quote: z.string().min(1),
+    author: z.string().optional(),
+  }),
+  ChecklistReveal: z.object({
+    items: z.array(z.string().min(1)).min(2).max(4),
+  }),
 };
 
 function numbersIn(text: string): string[] {

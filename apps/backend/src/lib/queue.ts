@@ -12,6 +12,7 @@ export function createQueues(redisUrl: string) {
   const connection = createRedisConnection(redisUrl);
   return {
     crawl: new Queue(QUEUE_NAMES.crawl, { connection }),
+    voice: new Queue(QUEUE_NAMES.voice, { connection }),
     connection,
   };
 }

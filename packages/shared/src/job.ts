@@ -22,6 +22,22 @@ export type JobStatus = z.infer<typeof JobStatus>;
 export const AspectFormat = z.enum(["16:9", "9:16", "1:1"]);
 export type AspectFormat = z.infer<typeof AspectFormat>;
 
+/** Render dimensions per format (§3.6 W7 result screen: 1920×1080 / 1080×1920 / 1080×1080). */
+export const FORMAT_DIMENSIONS: Record<AspectFormat, { width: number; height: number }> = {
+  "16:9": { width: 1920, height: 1080 },
+  "9:16": { width: 1080, height: 1920 },
+  "1:1": { width: 1080, height: 1080 },
+};
+
+/**
+ * `:` is illegal in Windows paths — any storage/file key built from a format
+ * string (manifest-16:9.json, etc.) silently breaks local-disk storage on
+ * Windows dev machines. Use this wherever a format appears in a key.
+ */
+export function formatSlug(format: AspectFormat): string {
+  return format.replace(":", "x");
+}
+
 export const Tone = z.enum(["clean", "playful", "cinematic", "app-store"]);
 export type Tone = z.infer<typeof Tone>;
 

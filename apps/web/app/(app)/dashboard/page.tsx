@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { createJob, listJobs } from "@/lib/api/client";
+import { approveJob, createJob, listJobs } from "@/lib/api/client";
 import { useJobEvents } from "@/hooks/use-job-events";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -64,6 +64,16 @@ export default function DashboardPage() {
   });
 
   const { events, connected } = useJobEvents(activeJobId);
+  const activeJob = jobsQuery.data?.find((j) => j.id === activeJobId);
+
+  const approveMutation = useMutation({
+    mutationFn: (jobId: string) => approveJob(jobId),
+    onSuccess: () => {
+      toast.success("Approved — rendering…");
+      queryClient.invalidateQueries({ queryKey: ["jobs"] });
+    },
+    onError: (err: Error) => toast.error(err.message),
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -78,18 +88,24 @@ export default function DashboardPage() {
       </div>
 
       <p className="text-sm text-muted-foreground">
-        This runs the real Phase 2 crawl + extract stage: the worker launches Chromium against the URL above
-        (SSRF-guarded), pulls brand colors/fonts, builds a FactLedger from the page content, and summarizes it
-        into a SiteBrief — live progress streams below over SSE. Planning/voice/render (Phase 3+) haven&apos;t
-        been built yet, so the job settles into &quot;planning&quot; and waits there.
+        This runs the full pipeline: crawl → extract → plan → voice → build → QA → render, producing a real MP4.
+        The job pauses at &quot;review&quot; by default (review-before-render is on) — click{" "}
+        <strong className="text-foreground">Approve &amp; render</strong> below once it gets there to continue.
       </p>
 
       {activeJobId && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              Live events for {activeJobId.slice(0, 8)}…
-              <Badge variant={connected ? "success" : "secondary"}>{connected ? "connected" : "connecting…"}</Badge>
+            <CardTitle className="flex items-center justify-between gap-2 text-base">
+              <span className="flex items-center gap-2">
+                Live events for {activeJobId.slice(0, 8)}…
+                <Badge variant={connected ? "success" : "secondary"}>{connected ? "connected" : "connecting…"}</Badge>
+              </span>
+              {activeJob?.status === "review" && (
+                <Button size="sm" onClick={() => approveMutation.mutate(activeJobId)} disabled={approveMutation.isPending}>
+                  {approveMutation.isPending ? "Approving…" : "Approve & render"}
+                </Button>
+              )}
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-2">

@@ -1,32 +1,5 @@
 import { spawn } from "node:child_process";
-import fs from "node:fs";
-import path from "node:path";
-
-/** Resolves an ffmpeg binary: PATH first, then common winget install locations on Windows. */
-export function resolveFfmpegPath(): string {
-  if (process.env.FFMPEG_PATH) return process.env.FFMPEG_PATH;
-
-  const wingetPackages = path.join(
-    process.env.LOCALAPPDATA ?? "",
-    "Microsoft",
-    "WinGet",
-    "Packages",
-  );
-  if (fs.existsSync(wingetPackages)) {
-    const ffmpegDir = fs
-      .readdirSync(wingetPackages)
-      .find((name) => name.startsWith("Gyan.FFmpeg_"));
-    if (ffmpegDir) {
-      const base = path.join(wingetPackages, ffmpegDir);
-      const versionDirs = fs.readdirSync(base).filter((n) => fs.statSync(path.join(base, n)).isDirectory());
-      for (const v of versionDirs) {
-        const candidate = path.join(base, v, "bin", "ffmpeg.exe");
-        if (fs.existsSync(candidate)) return candidate;
-      }
-    }
-  }
-  return "ffmpeg"; // fall back to PATH
-}
+import { resolveFfmpegPath } from "@sitereel/shared";
 
 export interface FfmpegEncodeOptions {
   width: number;
@@ -61,7 +34,7 @@ export function spawnFfmpegEncoder(opts: FfmpegEncodeOptions) {
 export function extractPosterFrame(inputPath: string, atSeconds: number, outPath: string): Promise<void> {
   const ffmpegBin = resolveFfmpegPath();
   return new Promise((resolve, reject) => {
-    const proc = spawn(ffmpegBin, ["-y", "-ss", String(atSeconds), "-i", inputPath, "-frames:v", "1", outPath], {
+    const proc = spawn(ffmpegBin, ["-y", "-ss", String(atSeconds), "-i", inputPath, "-frames:v", "1", "-update", "1", outPath], {
       stdio: "inherit",
     });
     proc.on("exit", (code) => (code === 0 ? resolve() : reject(new Error(`ffmpeg poster exit ${code}`))));

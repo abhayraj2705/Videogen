@@ -10,6 +10,8 @@ alter table stage_runs enable row level security;
 alter table credit_ledger enable row level security;
 alter table crawls enable row level security;
 alter table storyboards enable row level security;
+alter table audio_takes enable row level security;
+alter table renders enable row level security;
 
 drop policy if exists users_self_select on users;
 create policy users_self_select on users
@@ -43,4 +45,24 @@ drop policy if exists storyboards_owner_select on storyboards;
 create policy storyboards_owner_select on storyboards
   for select using (
     exists (select 1 from jobs where jobs.id = storyboards.job_id and jobs.user_id = auth.uid())
+  );
+
+drop policy if exists audio_takes_owner_select on audio_takes;
+create policy audio_takes_owner_select on audio_takes
+  for select using (
+    exists (
+      select 1 from storyboards
+      join jobs on jobs.id = storyboards.job_id
+      where storyboards.id = audio_takes.storyboard_id and jobs.user_id = auth.uid()
+    )
+  );
+
+drop policy if exists renders_owner_select on renders;
+create policy renders_owner_select on renders
+  for select using (
+    exists (
+      select 1 from storyboards
+      join jobs on jobs.id = storyboards.job_id
+      where storyboards.id = renders.storyboard_id and jobs.user_id = auth.uid()
+    )
   );

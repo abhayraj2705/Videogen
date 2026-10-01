@@ -1,7 +1,7 @@
 import type { Job as BullJob } from "bullmq";
 import { eq, desc } from "drizzle-orm";
 import { jobs, stageRuns, crawls, storyboards } from "@sitereel/db";
-import { PlanJobData, type CrawlOutput, type JobStatus } from "@sitereel/shared";
+import { PlanJobData, QUEUE_NAMES, type CrawlOutput, type JobStatus } from "@sitereel/shared";
 import { runPlanStage } from "../stages/plan.js";
 import type { WorkerDeps } from "./types.js";
 
@@ -71,10 +71,15 @@ export function createPlanProcessor(deps: WorkerDeps) {
 
     log.info({ source: result.storyboard.source, attempts: result.attempts, valid: result.validation.valid, costUsd: result.costUsd }, "plan completed");
 
-    // Resting state until Phase 4 adds voice/build workers. reviewBeforeRender
-    // decides which resting state — both are dead ends today either way.
+    // reviewBeforeRender=true stops here — the job waits at "review" until
+    // POST /api/jobs/:id/approve enqueues voice (§3.6 W6 script review screen,
+    // not built yet; the API route is, so this is testable today via curl).
+    // reviewBeforeRender=false skips straight to voice.
     const nextStatus: JobStatus = jobRow.options.reviewBeforeRender ? "review" : "voicing";
     await setJobStatus(deps, jobId, nextStatus);
+    if (!jobRow.options.reviewBeforeRender) {
+      await deps.queues.voice.add(QUEUE_NAMES.voice, { jobId }, { jobId, attempts: 2, backoff: { type: "fixed", delay: 5_000 } });
+    }
 
     await deps.publish({
       jobId,

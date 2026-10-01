@@ -1,8 +1,14 @@
 import type { CrawlOutput, JobOptions } from "@sitereel/shared";
 
 const TEMPLATE_CATALOG = `- KineticHook: opening scene (2-3s). props: { productName, headline }. Use once, first scene.
+- LogoReveal: short bumper (1-2s), logo only. props: { productName }. Optional, at most once.
+- HeroRebuild: a second, bigger headline moment (3-4s). props: { headline, subheadline }. Optional.
 - FeatureTriplet: three grounded facts side by side (3-5s). props: { features: [{label, icon?}, {label, icon?}, {label, icon?}] } — exactly 3 entries.
 - SectionShowcase: a real screenshot of the product with a caption (4-6s). props: { sourcePageUrl (must be one of the crawled page URLs below), caption }.
+- UIFlowCursor: a real screenshot with an animated cursor implying interactivity (4-6s). props: { sourcePageUrl, caption }. Use instead of SectionShowcase when the facts suggest a workflow/UI, not just a static page.
+- StatCounter: one grounded number, counted up big (2-3s). props: { value (must be the exact number text from a stat fact), label }. Only use if a "stat" kind fact exists.
+- QuoteCard: a verbatim testimonial (3-4s). props: { quote (must be the exact text of a testimonial fact), author? }. Only use if a "testimonial" kind fact exists.
+- ChecklistReveal: 2-4 short grounded items checked off in sequence (3-5s). props: { items: string[] } (2-4 entries, each from a fact).
 - CTAEndCard: closing scene (2-4s). props: { productName, ctaText, domain }. Use once, last scene.`;
 
 const BANNED_PHRASES = ["streamline your workflow", "supercharge", "unlock", "elevate"];

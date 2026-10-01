@@ -1,11 +1,15 @@
 "use strict";
 (() => {
-  // ../film-runtime/src/util/easing.ts
+  // ../../packages/film-runtime/src/util/easing.ts
   var clamp01 = (t) => Math.min(1, Math.max(0, t));
   var linear = (t) => clamp01(t);
   var easeOutCubic = (t) => {
     const x = clamp01(t);
     return 1 - Math.pow(1 - x, 3);
+  };
+  var easeInOutCubic = (t) => {
+    const x = clamp01(t);
+    return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
   };
   var easeOutBack = (t) => {
     const x = clamp01(t);
@@ -13,12 +17,19 @@
     const c3 = c1 + 1;
     return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
   };
+  var easeOutExpo = (t) => {
+    const x = clamp01(t);
+    return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
+  };
   function progress(localT, start, end, ease = linear) {
     if (end <= start) return localT >= end ? 1 : 0;
     return ease(clamp01((localT - start) / (end - start)));
   }
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
 
-  // ../film-runtime/src/util/dom.ts
+  // ../../packages/film-runtime/src/util/dom.ts
   function el(tag, className, text) {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -33,7 +44,7 @@
     node.style.transform = `translateY(${(1 - p) * riseDistancePx}px)`;
   }
 
-  // ../film-runtime/src/util/text-fit.ts
+  // ../../packages/film-runtime/src/util/text-fit.ts
   function wrapText(text, maxCharsPerLine, maxLines = 3) {
     const words = text.trim().split(/\s+/).filter(Boolean);
     const lines = [];
@@ -56,7 +67,7 @@
     return lines;
   }
 
-  // ../film-runtime/src/templates/kinetic-hook.ts
+  // ../../packages/film-runtime/src/templates/kinetic-hook.ts
   function createKineticHook() {
     let instance;
     return {
@@ -153,7 +164,7 @@
     };
   }
 
-  // ../film-runtime/src/templates/feature-triplet.ts
+  // ../../packages/film-runtime/src/templates/feature-triplet.ts
   var CARD_STAGGER = 0.2;
   var CARD_RISE_DURATION = 0.4;
   function createFeatureTriplet() {
@@ -224,7 +235,7 @@
     };
   }
 
-  // ../film-runtime/src/templates/section-showcase.ts
+  // ../../packages/film-runtime/src/templates/section-showcase.ts
   function createSectionShowcase() {
     let instance;
     return {
@@ -295,7 +306,7 @@
     };
   }
 
-  // ../film-runtime/src/templates/cta-end-card.ts
+  // ../../packages/film-runtime/src/templates/cta-end-card.ts
   function createCTAEndCard() {
     let instance;
     return {
@@ -393,12 +404,476 @@
     };
   }
 
-  // ../film-runtime/src/registry.ts
+  // ../../packages/film-runtime/src/templates/logo-reveal.ts
+  function createLogoReveal() {
+    let instance;
+    return {
+      id: "LogoReveal",
+      mount(root, props, ctx) {
+        setStyle(root, {
+          position: "absolute",
+          inset: "0",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: ctx.palette.bg
+        });
+        const size = ctx.height * 0.22;
+        const wrap = el("div", "lr-logo");
+        setStyle(wrap, {
+          position: "relative",
+          width: `${size}px`,
+          height: `${size}px`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        });
+        const ring = el("div", "lr-ring");
+        setStyle(ring, {
+          position: "absolute",
+          inset: "0",
+          borderRadius: "50%",
+          border: `3px solid ${ctx.palette.accent}`
+        });
+        wrap.appendChild(ring);
+        if (props.logoUrl) {
+          const img = el("img");
+          img.src = props.logoUrl;
+          setStyle(img, { width: "55%", height: "55%", objectFit: "contain", position: "relative" });
+          wrap.appendChild(img);
+        } else {
+          const fallback = el("div", "lr-fallback", props.productName.slice(0, 1).toUpperCase());
+          setStyle(fallback, {
+            fontSize: `${size * 0.4}px`,
+            fontWeight: "700",
+            color: ctx.palette.fg
+          });
+          wrap.appendChild(fallback);
+        }
+        root.appendChild(wrap);
+        instance = { wrap, ring };
+      },
+      seek(localT) {
+        if (!instance) return;
+        const popP = progress(localT, 0, 0.45, easeOutBack);
+        instance.wrap.style.opacity = String(popP);
+        instance.wrap.style.transform = `scale(${0.5 + 0.5 * popP})`;
+        const ringP = progress(localT, 0.1, 0.6);
+        instance.ring.style.clipPath = `inset(0 ${100 - ringP * 100}% 0 0)`;
+      },
+      marks() {
+        return [
+          { t: 0, type: "start" },
+          { t: 0.6, type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
+  // ../../packages/film-runtime/src/templates/hero-rebuild.ts
+  function createHeroRebuild() {
+    let instance;
+    return {
+      id: "HeroRebuild",
+      mount(root, props, ctx) {
+        setStyle(root, {
+          position: "absolute",
+          inset: "0",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: `${ctx.height * 0.02}px`,
+          background: ctx.palette.bg,
+          fontFamily: ctx.fonts.display,
+          padding: `0 ${ctx.width * 0.1}px`
+        });
+        const accentBar = el("div", "hr-accent");
+        setStyle(accentBar, {
+          width: "0px",
+          height: "4px",
+          background: ctx.palette.accent,
+          borderRadius: "2px",
+          marginBottom: `${ctx.height * 0.015}px`
+        });
+        root.appendChild(accentBar);
+        const headlineWrap = el("div", "hr-headline");
+        setStyle(headlineWrap, { display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25em" });
+        const lines = wrapText(props.headline, Math.round(ctx.width / 30), 2);
+        const lineNodes = lines.map((line) => {
+          const node = el("div", "hr-line", line);
+          setStyle(node, {
+            fontSize: `${ctx.height * 0.062}px`,
+            fontWeight: "700",
+            color: ctx.palette.fg,
+            textAlign: "center",
+            lineHeight: "1.15"
+          });
+          headlineWrap.appendChild(node);
+          return node;
+        });
+        root.appendChild(headlineWrap);
+        const subNode = el("div", "hr-sub", props.subheadline);
+        setStyle(subNode, {
+          fontSize: `${ctx.height * 0.03}px`,
+          color: ctx.palette.accent,
+          fontFamily: ctx.fonts.body,
+          textAlign: "center",
+          maxWidth: `${ctx.width * 0.6}px`
+        });
+        root.appendChild(subNode);
+        instance = { lineNodes, subNode, accentBar };
+      },
+      seek(localT) {
+        if (!instance) return;
+        const barP = progress(localT, 0, 0.3, easeOutCubic);
+        instance.accentBar.style.width = `${barP * 56}px`;
+        instance.lineNodes.forEach((node, i) => {
+          const start = 0.2 + i * 0.15;
+          applyReveal(node, progress(localT, start, start + 0.35, easeOutCubic), 18);
+        });
+        const subStart = 0.2 + instance.lineNodes.length * 0.15 + 0.15;
+        applyReveal(instance.subNode, progress(localT, subStart, subStart + 0.35, easeOutCubic), 12);
+      },
+      marks() {
+        return [
+          { t: 0, type: "start" },
+          { t: 0.9, type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
+  // ../../packages/film-runtime/src/templates/ui-flow-cursor.ts
+  var DEFAULT_PATH = [
+    [0.25, 0.35],
+    [0.6, 0.5],
+    [0.45, 0.7]
+  ];
+  function createUIFlowCursor() {
+    let instance;
+    return {
+      id: "UIFlowCursor",
+      mount(root, props, ctx) {
+        setStyle(root, {
+          position: "absolute",
+          inset: "0",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: `${ctx.height * 0.025}px`,
+          background: ctx.palette.bg,
+          fontFamily: ctx.fonts.body
+        });
+        const width = ctx.width * 0.76;
+        const height = ctx.height * 0.58;
+        const imageWrap = el("div", "uf-image-wrap");
+        setStyle(imageWrap, {
+          position: "relative",
+          width: `${width}px`,
+          height: `${height}px`,
+          borderRadius: "14px",
+          overflow: "hidden",
+          boxShadow: "0 30px 60px -20px rgba(0,0,0,0.5)",
+          border: `1px solid ${ctx.palette.accent}`
+        });
+        const img = el("img");
+        img.src = props.screenshotUrl;
+        setStyle(img, { width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" });
+        imageWrap.appendChild(img);
+        const cursor = el("div", "uf-cursor");
+        const cursorSize = ctx.height * 0.022;
+        setStyle(cursor, {
+          position: "absolute",
+          width: `${cursorSize}px`,
+          height: `${cursorSize}px`,
+          borderRadius: "50%",
+          background: ctx.palette.accent,
+          boxShadow: `0 0 0 6px ${ctx.palette.accent}33`,
+          transform: "translate(-50%, -50%)"
+        });
+        imageWrap.appendChild(cursor);
+        root.appendChild(imageWrap);
+        const captionWrap = el("div", "uf-caption", props.caption);
+        setStyle(captionWrap, {
+          fontSize: `${ctx.height * 0.036}px`,
+          fontWeight: "600",
+          color: ctx.palette.fg,
+          textAlign: "center"
+        });
+        root.appendChild(captionWrap);
+        instance = { imageWrap, cursor, captionWrap, path: props.cursorPath ?? DEFAULT_PATH, width, height };
+      },
+      seek(localT) {
+        if (!instance) return;
+        const revealP = progress(localT, 0, 0.3, easeOutCubic);
+        applyReveal(instance.imageWrap, revealP, 12);
+        const capP = progress(localT, 0.15, 0.45, easeOutCubic);
+        applyReveal(instance.captionWrap, capP, 10);
+        const path = instance.path;
+        const segments = path.length - 1;
+        const t = progress(localT, 0.3, 1);
+        const segF = t * segments;
+        const segIdx = Math.min(segments - 1, Math.floor(segF));
+        const localSegT = easeInOutCubic(segF - segIdx);
+        const [x0, y0] = path[segIdx];
+        const [x1, y1] = path[segIdx + 1] ?? path[segIdx];
+        const x = lerp(x0, x1, localSegT) * instance.width;
+        const y = lerp(y0, y1, localSegT) * instance.height;
+        instance.cursor.style.opacity = t > 0 ? "1" : "0";
+        instance.cursor.style.left = `${x}px`;
+        instance.cursor.style.top = `${y}px`;
+      },
+      marks() {
+        return [
+          { t: 0, type: "start" },
+          { t: 0.45, type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
+  // ../../packages/film-runtime/src/templates/stat-counter.ts
+  function parseStatValue(value) {
+    const match = /^([^\d]*)([\d,]+(?:\.\d+)?)([^\d]*)$/.exec(value.trim());
+    if (!match) return { numeric: null, prefix: "", suffix: "", decimals: 0 };
+    const [, prefix, numStr, suffix] = match;
+    const numeric = Number(numStr.replace(/,/g, ""));
+    if (Number.isNaN(numeric)) return { numeric: null, prefix: "", suffix: "", decimals: 0 };
+    const decimals = numStr.includes(".") ? numStr.split(".")[1].length : 0;
+    return { numeric, prefix: prefix ?? "", suffix: suffix ?? "", decimals };
+  }
+  function formatCounted(n, decimals) {
+    return n.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  }
+  function createStatCounter() {
+    let instance;
+    return {
+      id: "StatCounter",
+      mount(root, props, ctx) {
+        setStyle(root, {
+          position: "absolute",
+          inset: "0",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: `${ctx.height * 0.015}px`,
+          background: ctx.palette.bg
+        });
+        const { numeric, prefix, suffix, decimals } = parseStatValue(props.value);
+        const valueNode = el("div", "sc-value", numeric === null ? props.value : `${prefix}0${suffix}`);
+        setStyle(valueNode, {
+          fontSize: `${ctx.height * 0.16}px`,
+          fontWeight: "800",
+          color: ctx.palette.accent,
+          fontFamily: ctx.fonts.display,
+          letterSpacing: "-0.02em"
+        });
+        root.appendChild(valueNode);
+        const labelNode = el("div", "sc-label", props.label);
+        setStyle(labelNode, {
+          fontSize: `${ctx.height * 0.034}px`,
+          color: ctx.palette.fg,
+          fontFamily: ctx.fonts.body,
+          textAlign: "center"
+        });
+        root.appendChild(labelNode);
+        instance = { valueNode, labelNode, numericTarget: numeric, prefix, suffix, decimals };
+      },
+      seek(localT) {
+        if (!instance) return;
+        const revealP = progress(localT, 0, 0.2, easeOutExpo);
+        instance.valueNode.style.opacity = String(revealP);
+        if (instance.numericTarget !== null) {
+          const countP = progress(localT, 0.1, 0.75, easeOutExpo);
+          const current = instance.numericTarget * countP;
+          instance.valueNode.textContent = `${instance.prefix}${formatCounted(current, instance.decimals)}${instance.suffix}`;
+        }
+        applyReveal(instance.labelNode, progress(localT, 0.35, 0.65), 10);
+      },
+      marks() {
+        return [
+          { t: 0, type: "start" },
+          { t: 0.75, type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
+  // ../../packages/film-runtime/src/templates/quote-card.ts
+  function createQuoteCard() {
+    let instance;
+    return {
+      id: "QuoteCard",
+      mount(root, props, ctx) {
+        setStyle(root, {
+          position: "absolute",
+          inset: "0",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: `${ctx.height * 0.02}px`,
+          background: ctx.palette.bg,
+          padding: `0 ${ctx.width * 0.12}px`
+        });
+        const markNode = el("div", "qc-mark", "\u201C");
+        setStyle(markNode, {
+          fontSize: `${ctx.height * 0.1}px`,
+          lineHeight: "1",
+          color: ctx.palette.accent,
+          fontFamily: ctx.fonts.display,
+          fontWeight: "800"
+        });
+        root.appendChild(markNode);
+        const quoteWrap = el("div", "qc-quote-wrap");
+        setStyle(quoteWrap, { display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3em", marginTop: `-${ctx.height * 0.04}px` });
+        const lines = wrapText(props.quote, Math.round(ctx.width / 36), 3);
+        const lineNodes = lines.map((line) => {
+          const node = el("div", "qc-line", line);
+          setStyle(node, {
+            fontSize: `${ctx.height * 0.044}px`,
+            fontWeight: "600",
+            color: ctx.palette.fg,
+            textAlign: "center",
+            lineHeight: "1.25",
+            fontFamily: ctx.fonts.display
+          });
+          quoteWrap.appendChild(node);
+          return node;
+        });
+        root.appendChild(quoteWrap);
+        const authorNode = el("div", "qc-author", props.author ?? "");
+        setStyle(authorNode, {
+          fontSize: `${ctx.height * 0.026}px`,
+          color: ctx.palette.accent,
+          fontFamily: ctx.fonts.body
+        });
+        root.appendChild(authorNode);
+        instance = { markNode, lineNodes, authorNode };
+      },
+      seek(localT) {
+        if (!instance) return;
+        applyReveal(instance.markNode, progress(localT, 0, 0.25, easeOutCubic), 8);
+        instance.lineNodes.forEach((node, i) => {
+          const start = 0.15 + i * 0.12;
+          applyReveal(node, progress(localT, start, start + 0.3, easeOutCubic), 10);
+        });
+        const authorStart = 0.15 + instance.lineNodes.length * 0.12 + 0.1;
+        applyReveal(instance.authorNode, progress(localT, authorStart, authorStart + 0.3, easeOutCubic), 8);
+      },
+      marks() {
+        return [
+          { t: 0, type: "start" },
+          { t: 0.8, type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
+  // ../../packages/film-runtime/src/templates/checklist-reveal.ts
+  var ROW_STAGGER = 0.22;
+  var ROW_DURATION = 0.4;
+  function createChecklistReveal() {
+    let instance;
+    return {
+      id: "ChecklistReveal",
+      mount(root, props, ctx) {
+        setStyle(root, {
+          position: "absolute",
+          inset: "0",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          gap: `${ctx.height * 0.028}px`,
+          background: ctx.palette.bg,
+          padding: `0 ${ctx.width * 0.16}px`
+        });
+        const rows = props.items.map((item) => {
+          const row = el("div", "cl-row");
+          setStyle(row, { display: "flex", alignItems: "center", gap: `${ctx.height * 0.02}px` });
+          const check = el("div", "cl-check", "\u2713");
+          const checkSize = ctx.height * 0.045;
+          setStyle(check, {
+            width: `${checkSize}px`,
+            height: `${checkSize}px`,
+            minWidth: `${checkSize}px`,
+            borderRadius: "50%",
+            background: ctx.palette.accent,
+            color: ctx.palette.bg,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: `${checkSize * 0.55}px`,
+            fontWeight: "700"
+          });
+          row.appendChild(check);
+          const label = el("div", "cl-label", item);
+          setStyle(label, {
+            fontSize: `${ctx.height * 0.038}px`,
+            fontWeight: "600",
+            color: ctx.palette.fg,
+            fontFamily: ctx.fonts.body
+          });
+          row.appendChild(label);
+          root.appendChild(row);
+          return { check, label };
+        });
+        instance = { rows };
+      },
+      seek(localT) {
+        if (!instance) return;
+        instance.rows.forEach(({ check, label }, i) => {
+          const start = i * ROW_STAGGER;
+          const checkP = progress(localT, start, start + ROW_DURATION * 0.6, easeOutBack);
+          check.style.opacity = String(checkP);
+          check.style.transform = `scale(${0.4 + 0.6 * checkP})`;
+          applyReveal(label, progress(localT, start, start + ROW_DURATION, easeOutCubic), 12);
+        });
+      },
+      marks(props) {
+        const lastStart = (props.items.length - 1) * ROW_STAGGER;
+        return [
+          { t: 0, type: "start" },
+          { t: lastStart + ROW_DURATION, type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
+  // ../../packages/film-runtime/src/registry.ts
   var TEMPLATE_REGISTRY = {
     KineticHook: createKineticHook,
     FeatureTriplet: createFeatureTriplet,
     SectionShowcase: createSectionShowcase,
-    CTAEndCard: createCTAEndCard
+    CTAEndCard: createCTAEndCard,
+    LogoReveal: createLogoReveal,
+    HeroRebuild: createHeroRebuild,
+    UIFlowCursor: createUIFlowCursor,
+    StatCounter: createStatCounter,
+    QuoteCard: createQuoteCard,
+    ChecklistReveal: createChecklistReveal
   };
   function createTemplate(templateId) {
     const factory = TEMPLATE_REGISTRY[templateId];
@@ -408,7 +883,7 @@
     return factory();
   }
 
-  // ../film-runtime/src/util/rng.ts
+  // ../../packages/film-runtime/src/util/rng.ts
   function hashString(input) {
     let h = 2166136261;
     for (let i = 0; i < input.length; i++) {
@@ -440,7 +915,7 @@
     };
   }
 
-  // ../film-runtime/src/player.ts
+  // ../../packages/film-runtime/src/player.ts
   async function mountFilm(stage, manifest) {
     stage.innerHTML = "";
     Object.assign(stage.style, {
@@ -501,7 +976,7 @@
     return { seek, duration: manifest.duration, marks };
   }
 
-  // src/film-entry.ts
+  // ../../packages/renderer/src/film-entry.ts
   async function boot() {
     const params = new URLSearchParams(window.location.search);
     const manifestUrl = params.get("manifest");

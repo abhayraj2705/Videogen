@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { randomUUID } from "node:crypto";
 import { eq, desc } from "drizzle-orm";
 import { jobs, type Db } from "@sitereel/db";
-import { CreateJobRequest, QUEUE_NAMES, type CrawlJobData } from "@sitereel/shared";
+import { CreateJobRequest, QUEUE_NAMES, type CrawlJobData, type VoiceJobData } from "@sitereel/shared";
 import type { createAuthVerifier } from "../lib/auth.js";
 import type { Queues } from "../lib/queue.js";
 import type { JobEventBus } from "../lib/events.js";
@@ -71,6 +71,23 @@ export function registerJobRoutes(app: FastifyInstance, deps: JobRouteDeps): voi
     const [row] = await db.select().from(jobs).where(eq(jobs.id, req.params.id)).limit(1);
     if (!row || row.userId !== user.id) return reply.code(404).send({ error: "not_found" });
     return reply.send(row);
+  });
+
+  app.post<{ Params: { id: string } }>("/api/jobs/:id/approve", async (req, reply) => {
+    const user = await verifyAuth(req, reply);
+    if (!user) return;
+
+    const [row] = await db.select().from(jobs).where(eq(jobs.id, req.params.id)).limit(1);
+    if (!row || row.userId !== user.id) return reply.code(404).send({ error: "not_found" });
+    if (row.status !== "review") {
+      return reply.code(409).send({ error: "not_in_review", status: row.status });
+    }
+
+    const voiceData: VoiceJobData = { jobId: row.id };
+    await queues.voice.add(QUEUE_NAMES.voice, voiceData, { jobId: row.id, attempts: 2, backoff: { type: "fixed", delay: 5_000 } });
+
+    req.log.info({ jobId: row.id, userId: user.id }, "job approved, voice enqueued");
+    return reply.send({ ok: true });
   });
 
   app.get<{ Params: { id: string } }>("/api/jobs/:id/events", async (req, reply) => {

@@ -15,6 +15,13 @@
       "when": 1790797010492,
       "tag": "0001_nostalgic_giant_girl",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790836980896,
+      "tag": "0002_robust_starjammers",
+      "breakpoints": true
     }
   ]
 }

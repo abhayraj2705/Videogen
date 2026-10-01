@@ -31,13 +31,14 @@ export const VIRTUAL_CLOCK_INIT_SCRIPT = `
 
   performance.now = () => virtualNowMs;
 
-  // Neutralize timers and rAF: scene code must never rely on them for visual state.
-  // Callbacks are dropped rather than deferred, so a template that depends on a
-  // timer firing will visibly fail instead of silently working by luck.
-  window.setTimeout = (() => 0);
-  window.setInterval = (() => 0);
-  window.requestAnimationFrame = (() => 0);
-  window.cancelAnimationFrame = (() => {});
+  // NOT neutering setTimeout/requestAnimationFrame: headless Chromium's own
+  // internal rendering pipeline — specifically, resolving img.decode() —
+  // depends on real animation-frame ticks actually happening. Disabling rAF
+  // entirely (tried first) left every render hung forever waiting on
+  // __film.ready, since decode() never resolved. Template purity (no template
+  // may use rAF/setTimeout to drive its OWN visual state) is independently
+  // enforced by the purity test (seek(t) must be pixel-identical), which is
+  // the actual safety net here — not this override.
 
   window.__setVirtualTimeMs = (ms) => {
     virtualNowMs = ms;
