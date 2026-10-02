@@ -2,7 +2,7 @@ import { Sentry, sentryEnabled } from "./instrument.js";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
-import { loadServerEnv } from "@sitereel/shared";
+import { createHmac } from "node:crypto";
 import { createDb } from "@sitereel/db";
 import { createStorageClientFromEnv } from "@sitereel/storage";
 import { createLogger } from "./lib/logger.js";
@@ -15,9 +15,18 @@ import { registerJobRoutes } from "./routes/jobs.js";
 import { registerUrlPreviewRoutes } from "./routes/url-preview.js";
 import { registerRenderRoutes } from "./routes/renders.js";
 import { registerShareRoutes } from "./routes/shares.js";
+import { registerMeRoutes } from "./routes/me.js";
+import { registerStoryboardRoutes } from "./routes/storyboards.js";
+import { registerJobActionRoutes } from "./routes/job-actions.js";
+import { registerBrandKitRoutes } from "./routes/brand-kits.js";
+import { registerBillingRoutes } from "./routes/billing.js";
+import { registerAdminRoutes } from "./routes/admin.js";
+import { loadBackendEnv } from "./lib/env.js";
+import { createUploadSigner } from "./lib/uploads.js";
+import { createRazorpayGateway, createStripeGateway } from "./lib/payments.js";
 
 async function main() {
-  const env = loadServerEnv();
+  const env = loadBackendEnv();
   const logger = createLogger(env.LOG_LEVEL);
 
   const db = createDb(env.DATABASE_URL);
@@ -60,6 +69,32 @@ async function main() {
   registerUrlPreviewRoutes(app, { verifyAuth });
   registerRenderRoutes(app, { db, storage, storageDriver: env.STORAGE_DRIVER, verifyAuth });
   registerShareRoutes(app, { db, storage, storageDriver: env.STORAGE_DRIVER, verifyAuth, logger, webOrigin: env.WEB_ORIGIN });
+
+  // --- Wave B (Phase 6) ---
+  const uploadTokenSecret = env.UPLOAD_TOKEN_SECRET ?? createHmac("sha256", env.SUPABASE_SERVICE_ROLE_KEY).update("sitereel-upload-token").digest("hex");
+  const uploads = createUploadSigner({
+    storage,
+    storageDriver: env.STORAGE_DRIVER,
+    apiPublicUrl: env.API_PUBLIC_URL ?? `http://localhost:${env.PORT}`,
+    tokenSecret: uploadTokenSecret,
+  });
+  const storageDeps = { storage, storageDriver: env.STORAGE_DRIVER };
+  registerMeRoutes(app, { db, queues, verifyAuth, logger });
+  registerStoryboardRoutes(app, { db, queues, ...storageDeps, verifyAuth, logger });
+  registerJobActionRoutes(app, { db, queues, ...storageDeps, verifyAuth, logger, uploads, uploadTokenSecret });
+  registerBrandKitRoutes(app, { db, ...storageDeps, verifyAuth, logger, uploads });
+  registerBillingRoutes(app, {
+    db,
+    verifyAuth,
+    logger,
+    webOrigin: env.WEB_ORIGIN,
+    stripe: env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET ? createStripeGateway(env.STRIPE_SECRET_KEY) : null,
+    stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET,
+    razorpay:
+      env.RAZORPAY_KEY_ID && env.RAZORPAY_KEY_SECRET && env.RAZORPAY_WEBHOOK_SECRET ? createRazorpayGateway(env.RAZORPAY_KEY_ID, env.RAZORPAY_KEY_SECRET) : null,
+    razorpayWebhookSecret: env.RAZORPAY_WEBHOOK_SECRET,
+  });
+  registerAdminRoutes(app, { db, queues, ...storageDeps, verifyAuth, logger, readReplay: (jobId) => events.readReplay(jobId) });
 
   const address = await app.listen({ port: env.PORT, host: "0.0.0.0" });
   logger.info({ address, sentry: sentryEnabled }, "backend listening");

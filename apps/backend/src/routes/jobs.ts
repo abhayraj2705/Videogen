@@ -1,14 +1,8 @@
 import type { FastifyInstance } from "fastify";
-import { eq, desc } from "drizzle-orm";
-import { createJobWithCharge, jobs, refundJobCredits, type Db } from "@sitereel/db";
-import {
-  CreateJobRequest,
-  QUEUE_NAMES,
-  SSE_EVENT_NAMES,
-  parseLastEventId,
-  type CrawlJobData,
-  type VoiceJobData,
-} from "@sitereel/shared";
+import { and, eq, desc } from "drizzle-orm";
+import { z } from "zod";
+import { brandKits, createJobWithCharge, jobs, refundJobCredits, type Db } from "@sitereel/db";
+import { CreateJobRequest, QUEUE_NAMES, SSE_EVENT_NAMES, parseLastEventId, type CrawlJobData } from "@sitereel/shared";
 import type { AuthVerifier } from "../lib/auth.js";
 import type { Queues } from "../lib/queue.js";
 import type { JobEventBus } from "../lib/events.js";
@@ -26,6 +20,9 @@ export interface JobRouteDeps {
   maxActiveJobsPerUser: number;
 }
 
+/** Phase 6: `brandKitId` may be sent top-level or inside `options` (JobOptions already has it). */
+const CreateJobBody = CreateJobRequest.extend({ brandKitId: z.string().uuid().optional() });
+
 const SSE_HEARTBEAT_MS = 15_000;
 const SSE_RETRY_MS = 3_000;
 
@@ -38,7 +35,7 @@ export function registerJobRoutes(app: FastifyInstance, deps: JobRouteDeps): voi
 
   /**
    * POST /api/jobs → 201 Job
-   *   400 invalid_body
+   *   400 invalid_body | invalid_brand_kit (brandKitId not owned by the caller)
    *   402 { error: "insufficient_credits", required, available }
    *   429 { error: "too_many_active_jobs", active, max }
    *   429 { error: "job_create_rate_limited" | "domain_throttled", retryAfterSec }
@@ -47,11 +44,21 @@ export function registerJobRoutes(app: FastifyInstance, deps: JobRouteDeps): voi
     const user = await verifyAuth(req, reply);
     if (!user) return;
 
-    const parsed = CreateJobRequest.safeParse(req.body);
+    const parsed = CreateJobBody.safeParse(req.body);
     if (!parsed.success) {
-      return reply.code(400).send({ error: "invalid_body", issues: parsed.error.issues });
+      return reply.code(400).send({ error: "invalid_body", message: "Invalid request body", issues: parsed.error.issues });
     }
-    const { url, options } = parsed.data;
+    const { url } = parsed.data;
+    const brandKitId = parsed.data.brandKitId ?? parsed.data.options.brandKitId;
+    if (brandKitId) {
+      const [kit] = await db
+        .select({ id: brandKits.id })
+        .from(brandKits)
+        .where(and(eq(brandKits.id, brandKitId), eq(brandKits.userId, user.id)))
+        .limit(1);
+      if (!kit) return reply.code(400).send({ error: "invalid_brand_kit", message: "That brand kit doesn't exist." });
+    }
+    const options = { ...parsed.data.options, ...(brandKitId ? { brandKitId } : {}) };
 
     if (!(await limiters.checkJobCreate(req, reply))) return reply;
     if (!(await limiters.checkDomain(req, reply))) return reply;
@@ -61,6 +68,7 @@ export function registerJobRoutes(app: FastifyInstance, deps: JobRouteDeps): voi
       url,
       domain: domainOf(url),
       options,
+      brandKitId: brandKitId ?? null,
       maxActiveJobs: deps.maxActiveJobsPerUser,
     });
 
@@ -125,23 +133,7 @@ export function registerJobRoutes(app: FastifyInstance, deps: JobRouteDeps): voi
     return reply.send(row);
   });
 
-  app.post<{ Params: { id: string } }>("/api/jobs/:id/approve", async (req, reply) => {
-    const user = await verifyAuth(req, reply);
-    if (!user) return;
-    const log = withJob(deps.logger, req.params.id, user.id);
-
-    const [row] = await db.select().from(jobs).where(eq(jobs.id, req.params.id)).limit(1);
-    if (!row || row.userId !== user.id) return reply.code(404).send({ error: "not_found" });
-    if (row.status !== "review") {
-      return reply.code(409).send({ error: "not_in_review", status: row.status });
-    }
-
-    const voiceData: VoiceJobData = { jobId: row.id };
-    await queues.voice.add(QUEUE_NAMES.voice, voiceData, { jobId: row.id, attempts: 2, backoff: { type: "fixed", delay: 5_000 } });
-
-    log.info("job approved, voice enqueued");
-    return reply.send({ ok: true });
-  });
+  // POST /api/jobs/:id/approve lives in routes/storyboards.ts (Phase 6: optional { version }).
 
   /**
    * GET /api/jobs/:id/events — SSE.
