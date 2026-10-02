@@ -155,7 +155,7 @@ async function main() {
   const env = { STORAGE_DRIVER: "local" as const, STORAGE_LOCAL_DIR: storageDir };
   const { primary: gemini, escalation: anthropic } = selectLlmProviders(process.env as LlmEnv);
   if (gemini) console.log(`  LLM: ${gemini.id}${anthropic ? ` (escalation: ${anthropic.id})` : ""}`);
-  const tts = process.env.GEMINI_API_KEY ? createGeminiTtsProvider({ apiKey: process.env.GEMINI_API_KEY }) : null;
+  const tts = process.env.GEMINI_API_KEY ? createGeminiTtsProvider({ apiKey: process.env.GEMINI_API_KEY, model: process.env.GEMINI_TTS_MODEL || undefined }) : null;
   const sidecar = getAudioSidecarFromEnv((m) => console.warn(`  [sidecar] ${m}`));
   const jobId = cache.jobId;
   const timings: Record<string, number> = {};

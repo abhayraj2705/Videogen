@@ -268,6 +268,10 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
   const allFactText = allFacts.map((f) => f.text).join(" \n ");
   const productName = deriveProductName(crawlOutput);
   const narrate = (t: string) => (options.noVoiceover ? undefined : t);
+  // Product scenes carry their claim on screen, so the voice frames it instead of reading it out
+  // ("Meet Acme." over the homepage). English only: other languages keep the read-out, which is
+  // at least in the viewer's language. Framing lines state no facts, so they need no grounding.
+  const frame = (line: string, readOut: string) => narrate(options.voiceLanguage === "en" && numbersIn(line).length === 0 && findBannedPhrases(line).length === 0 ? line : readOut);
   const used = new Set<string>();
   const take = (f: FactLedgerEntry | undefined) => {
     if (f) used.add(f.id);
@@ -299,7 +303,7 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
       id: "reveal",
       templateId: "SectionShowcase",
       durationSec: durationFor([caption], 3),
-      narration: narrate(caption),
+      narration: frame(`Meet ${productName}.`, caption),
       onScreenText: [caption],
       factIds: [revealFact.id],
       props: { sourcePageUrl: revealPage.url, caption },
@@ -388,7 +392,7 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
       // A page with several section captures gets the collage, so the two product scenes don't look alike.
       templateId: (showcasePage.sectionScreenshotKeys?.length ?? 0) >= 2 ? "ScreenCollage" : "SectionShowcase",
       durationSec: durationFor([caption], 4),
-      narration: narrate(caption),
+      narration: frame("Take a closer look.", caption),
       onScreenText: [caption],
       factIds: [showcaseFact.id],
       props: { sourcePageUrl: showcasePage.url, caption },
@@ -402,7 +406,9 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
     id: "cta",
     templateId: "CTAEndCard",
     durationSec: durationFor([ctaText], 2.5),
-    narration: narrate(spokenList([productName, ctaText])),
+    narration: domain
+      ? frame(`${ctaText.replace(/[\s.,;:!?]+$/, "")} at ${domain.replace(/^www\./, "")}.`, spokenList([productName, ctaText]))
+      : narrate(spokenList([productName, ctaText])),
     onScreenText: [ctaText],
     factIds: cta ? [cta.id] : [],
     props: { productName, ctaText, domain: domain || "website" },

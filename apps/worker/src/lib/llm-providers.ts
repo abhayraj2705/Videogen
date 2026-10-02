@@ -46,7 +46,7 @@ export function selectLlmProviders(env: LlmEnv): { primary: LlmProvider | null; 
             jsonObjectMode: true,
           })
         : null,
-    gemini: () => (env.GEMINI_API_KEY ? createGeminiProvider({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.0-flash-lite" }) : null),
+    gemini: () => (env.GEMINI_API_KEY ? createGeminiProvider({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-3.5-flash-lite" }) : null),
   };
 
   const preferred = AUTO_ORDER.find((k) => k === env.LLM_PRIMARY);

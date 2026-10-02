@@ -43,7 +43,7 @@ if (!primaryProvider) {
 } else {
   logger.info({ provider: primaryProvider.id, escalation: escalationProvider?.id ?? null }, "primary LLM provider");
 }
-const ttsProvider: TtsProvider | null = env.GEMINI_API_KEY ? createGeminiTtsProvider({ apiKey: env.GEMINI_API_KEY }) : null;
+const ttsProvider: TtsProvider | null = env.GEMINI_API_KEY ? createGeminiTtsProvider({ apiKey: env.GEMINI_API_KEY, model: process.env.GEMINI_TTS_MODEL || undefined }) : null;
 if (!ttsProvider) {
   logger.warn("GEMINI_API_KEY not set — voice lines will synthesize as silence with estimated word timings");
 }

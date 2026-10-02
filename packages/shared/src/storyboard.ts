@@ -78,8 +78,42 @@ export const Storyboard = z.object({
 });
 export type Storyboard = z.infer<typeof Storyboard>;
 
+/**
+ * Every prop any template takes, all optional. The LLM's output schema spells
+ * them out because structured-output modes (Gemini's responseSchema) return an
+ * empty object for a free-form `z.record` — which made every LLM storyboard
+ * fail validation. Which props a given template needs is still checked per
+ * template by TEMPLATE_PROP_SCHEMAS.
+ */
+export const LlmSceneProps = z.object({
+  productName: z.string().optional(),
+  headline: z.string().optional(),
+  subheadline: z.string().optional(),
+  features: z.array(z.object({ label: z.string(), icon: z.string().optional() })).optional(),
+  sourcePageUrl: z.string().optional(),
+  caption: z.string().optional(),
+  section: z.number().optional(),
+  value: z.string().optional(),
+  label: z.string().optional(),
+  quote: z.string().optional(),
+  author: z.string().optional(),
+  items: z.array(z.string()).optional(),
+  text: z.string().optional(),
+  highlight: z.string().optional(),
+  title: z.string().optional(),
+  ctaText: z.string().optional(),
+  domain: z.string().optional(),
+});
+
+/** Drops the props a model left empty (null, "", []), so optional template props stay absent rather than blank. */
+export function compactLlmProps(props: Record<string, unknown>): Record<string, unknown> {
+  return Object.fromEntries(Object.entries(props).filter(([, v]) => v !== null && v !== undefined && v !== "" && !(Array.isArray(v) && v.length === 0)));
+}
+
 /** What the LLM actually returns — no `source` (the caller stamps that on), used to keep the prompt's output contract minimal. */
-export const StoryboardLlmOutput = Storyboard.omit({ source: true, version: true });
+export const StoryboardLlmOutput = Storyboard.omit({ source: true, version: true }).extend({
+  scenes: z.array(StoryboardScene.extend({ props: LlmSceneProps })).min(1),
+});
 export type StoryboardLlmOutput = z.infer<typeof StoryboardLlmOutput>;
 
 export interface ValidationIssue {

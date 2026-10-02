@@ -55,6 +55,21 @@ function pcm16ToWav(pcm: Buffer, sampleRate: number, channels = 1): Buffer {
  * then replaces them with the audio sidecar's /align result when the sidecar
  * is reachable (apps/worker/src/stages/voice.ts).
  */
+/** Length of a RIFF/WAVE file from its header, or null when the buffer isn't one. */
+export function wavInfo(buf: Buffer): { durationSec: number } | null {
+  if (buf.length < 44 || buf.toString("ascii", 0, 4) !== "RIFF" || buf.toString("ascii", 8, 12) !== "WAVE") return null;
+  let byteRate = 0;
+  for (let at = 12; at + 8 <= buf.length; ) {
+    const id = buf.toString("ascii", at, at + 4);
+    const size = buf.readUInt32LE(at + 4);
+    if (id === "fmt ") byteRate = buf.readUInt32LE(at + 16);
+    // Streamed files may leave the data size as 0 or 0xFFFFFFFF; trust what is actually there.
+    if (id === "data") return byteRate > 0 ? { durationSec: Math.min(size || Infinity, buf.length - at - 8) / byteRate } : null;
+    at += 8 + size + (size % 2);
+  }
+  return null;
+}
+
 export function createGeminiTtsProvider(opts: GeminiTtsOptions): TtsProvider {
   const model = opts.model ?? "gemini-2.5-flash-preview-tts";
   const timeoutMs = opts.timeoutMs ?? 30_000;
@@ -91,13 +106,21 @@ export function createGeminiTtsProvider(opts: GeminiTtsOptions): TtsProvider {
         const inline = json.candidates?.[0]?.content?.parts?.[0]?.inlineData;
         if (!inline?.data) throw new Error("Gemini TTS response had no inline audio data");
 
-        const pcm = Buffer.from(inline.data, "base64");
-        // Gemini's native-audio output is 24kHz 16-bit mono PCM (per mimeType
-        // audio/L16;rate=24000 convention); wrap it so ffmpeg can read it directly.
-        const sampleRateMatch = /rate=(\d+)/.exec(inline.mimeType ?? "");
-        const sampleRate = sampleRateMatch ? Number(sampleRateMatch[1]) : 24000;
-        const wav = pcm16ToWav(pcm, sampleRate);
-        const durationSec = pcm.length / 2 / sampleRate; // 16-bit mono
+        const raw = Buffer.from(inline.data, "base64");
+        let wav: Buffer;
+        let durationSec: number;
+        const riff = wavInfo(raw);
+        if (riff) {
+          // Newer TTS models return a finished WAV file; wrapping it again would bury its header in the audio.
+          wav = raw;
+          durationSec = riff.durationSec;
+        } else {
+          // Older models return bare 24kHz 16-bit mono PCM (mimeType audio/L16;rate=24000); wrap it so ffmpeg can read it.
+          const sampleRateMatch = /rate=(\d+)/.exec(inline.mimeType ?? "");
+          const sampleRate = sampleRateMatch ? Number(sampleRateMatch[1]) : 24000;
+          wav = pcm16ToWav(raw, sampleRate);
+          durationSec = raw.length / 2 / sampleRate; // 16-bit mono
+        }
 
         return {
           audio: wav,
