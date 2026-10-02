@@ -1,6 +1,6 @@
 # SiteReel API (Fastify). Build from the repo root:
 #   docker build -f infra/docker/backend.Dockerfile -t sitereel-backend .
-FROM node:22-slim
+FROM node:26-slim
 
 WORKDIR /app
 RUN corepack enable
