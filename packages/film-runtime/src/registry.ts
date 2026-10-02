@@ -12,10 +12,14 @@ import { createChecklistReveal } from "./templates/checklist-reveal.js";
 import { createBigStatement } from "./templates/big-statement.js";
 import { createBentoGrid } from "./templates/bento-grid.js";
 import { createScreenCollage } from "./templates/screen-collage.js";
+import { createDeviceMockup } from "./templates/device-mockup.js";
+import { createZoomDetail } from "./templates/zoom-detail.js";
+import { createSplitCompare } from "./templates/split-compare.js";
+import { createLogoWall } from "./templates/logo-wall.js";
 
 export type TemplateFactory = () => SceneTemplate<any>;
 
-/** Full 13-template catalog (Phase 0: first 4; Phase 4: next 6; then BigStatement + BentoGrid; then ScreenCollage). */
+/** Full 17-template catalog — must stay in lockstep with shared's TemplateId enum. */
 export const TEMPLATE_REGISTRY: Record<string, TemplateFactory> = {
   KineticHook: createKineticHook,
   FeatureTriplet: createFeatureTriplet,
@@ -30,6 +34,10 @@ export const TEMPLATE_REGISTRY: Record<string, TemplateFactory> = {
   BigStatement: createBigStatement,
   BentoGrid: createBentoGrid,
   ScreenCollage: createScreenCollage,
+  DeviceMockup: createDeviceMockup,
+  ZoomDetail: createZoomDetail,
+  SplitCompare: createSplitCompare,
+  LogoWall: createLogoWall,
 };
 
 /**

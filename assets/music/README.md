@@ -4,9 +4,11 @@
 one entry per track with `id`, `file`, `mood`, `bpm`, `durationSec`, `loopSec`,
 `beatGrid` (seconds of every beat within one loop), `license`, and `source`.
 
-When a job has `musicOn: true`, the first track whose `mood` matches
-`options.musicMood` is used (falling back to `upbeat`, then to any track). The
-Build stage snaps scene cuts to its beat grid (timing engine,
+When a job has `musicOn: true`, a track whose `mood` matches
+`options.musicMood` is used (falling back to `upbeat`, then to any track); when
+a mood has several, the job id picks one, so every stage of a job agrees. The
+Build stage snaps scene cuts to its beat grid — to a bar line when one is
+close, for the bundled 4/4 tracks (timing engine,
 `packages/film-runtime/src/timing.ts`) and the Render stage mixes it under the
 voice with sidechain ducking and loudness normalization to -14 LUFS (audio
 sidecar `/mix`, or the worker's ffmpeg fallback). Tracks loop if the video is
@@ -14,7 +16,7 @@ longer than the track.
 
 ## Bundled tracks are placeholders
 
-The four `sitereel-*-01.mp3` files are **procedurally synthesized** by
+The eight `sitereel-*.mp3` files (two per mood) are **procedurally synthesized** by
 `build_library.py generate` (numpy oscillators + noise drums), so they carry no
 third-party rights. They exist so the pipeline has real music with real beat
 grids offline; they are not production-quality music.
@@ -25,6 +27,10 @@ grids offline; they are not production-quality music.
 | sitereel-energetic-01 | energetic | 128 |
 | sitereel-calm-01 | calm | 84 |
 | sitereel-cinematic-01 | cinematic | 90 |
+| sitereel-upbeat-02 | upbeat | 112 |
+| sitereel-energetic-02 | energetic | 136 |
+| sitereel-calm-02 | calm | 76 |
+| sitereel-cinematic-02 | cinematic | 100 |
 
 Their beat grids are exact (we wrote the notes); `detectedBpm` is what
 librosa's tracker hears, recorded as a sanity check (it locks onto a metrical

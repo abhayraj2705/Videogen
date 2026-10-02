@@ -121,7 +121,7 @@ export function browserFrame(opts: { className: string; width: number; height: n
     const r = { x: rect.x * width, y: rect.y * width, w: rect.w * width, h: rect.h * width };
     if (r.w < 4 || r.h < 4 || r.y + r.h > pageHeight || r.x + r.w > width + 1) return (focusPose = null);
     // Enlarge until the region fills ~70% of the window, without magnifying the capture past 2x its pixels.
-    const scale = Math.max(1, Math.min(2, (2 * image.naturalWidth) / width, (width * 0.7) / r.w, (viewportHeight * 0.7) / r.h));
+    const scale = Math.max(1, Math.min(2.6, (2 * image.naturalWidth) / width, (width * 0.7) / r.w, (viewportHeight * 0.7) / r.h));
     const tx = Math.min(0, Math.max(width - scale * width, width / 2 - scale * (r.x + r.w / 2)));
     const ty = Math.min(0, Math.max(viewportHeight - scale * pageHeight, viewportHeight / 2 - scale * (r.y + r.h / 2)));
     const pad = 10 * u;

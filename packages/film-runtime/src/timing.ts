@@ -38,6 +38,12 @@ export interface TimingOptions {
   beatGrid?: number[] | null;
   /** Loop length of the music track (beat grid repeats every loopSec). */
   loopSec?: number | null;
+  /**
+   * Beats per bar, when the grid starts on a downbeat (the bundled procedural
+   * tracks do). A cut then lands on the next bar line if that is within
+   * maxSnapSec, and on the next beat otherwise. Omit for grids of unknown phase.
+   */
+  beatsPerBar?: number;
   /** Never extend a slot by more than this to reach a beat; past it, snap to the nearest later beat anyway but log it via `snapped=false`. */
   maxSnapSec?: number;
 }
@@ -101,6 +107,7 @@ export function computeTimeline(scenes: TimingSceneInput[], options: TimingOptio
   // 2. Cut points, optionally beat-locked (only ever moved *later*, so no slot shrinks below its requirement).
   const roughTotal = required.reduce((a, b) => a + b, 0) + scenes.length * o.maxSnapSec * 2 + 10;
   const beats = o.beatGrid && o.beatGrid.length > 0 ? expandBeatGrid(o.beatGrid, o.loopSec, roughTotal) : [];
+  const bar = Math.round(options.beatsPerBar ?? 0);
   const cuts: number[] = [0];
   const onBeat: boolean[] = [];
   for (let i = 0; i < scenes.length; i++) {
@@ -108,7 +115,8 @@ export function computeTimeline(scenes: TimingSceneInput[], options: TimingOptio
     let cut = raw;
     let snapped = false;
     if (beats.length > 0) {
-      const next = beats.find((b) => b >= raw - 1e-6);
+      const downbeat = bar > 1 ? beats.find((b, k) => k % bar === 0 && b >= raw - 1e-6) : undefined;
+      const next = downbeat !== undefined && downbeat - raw <= o.maxSnapSec + 1e-6 ? downbeat : beats.find((b) => b >= raw - 1e-6);
       if (next !== undefined) {
         cut = next;
         snapped = next - raw <= o.maxSnapSec + 1e-6;

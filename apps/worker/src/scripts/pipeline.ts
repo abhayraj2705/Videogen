@@ -184,6 +184,9 @@ async function main() {
     }
     const r = await runCrawlStage(jobId, target, { storage, llmProvider: gemini });
     if (r.outcome !== "ok") throw new Error(`crawl needs input: ${r.reason} — ${r.message}`);
+    // Saved in fixture form: re-run offline against the same site with `pipeline run <out>/crawl.json --out <out>`
+    // (same --out, so the screenshots already in <out>/storage are found).
+    await fsp.writeFile(path.join(outDir, "crawl.json"), JSON.stringify({ url: target, ...r.crawlOutput }, null, 2));
     return r.crawlOutput;
   });
   note("crawl", fixturePath ? "skipped" : "ran", fixturePath ? "saved fixture" : undefined);
@@ -226,7 +229,7 @@ async function main() {
   await saveCache();
 
   // 4. Build — skip when storyboard content, audio, brand, music and formats are unchanged.
-  const track = selectMusicTrack(REPO_ROOT, options);
+  const track = selectMusicTrack(REPO_ROOT, { ...options, seed: flag(rest, "track") ?? jobId });
   const audioHashes = Object.fromEntries(voice.scenes.map((s) => [s.sceneId, `${sceneHashes.get(s.sceneId)}:${s.audioKey ?? ""}`]));
   const buildHash = buildStageHash({ storyboard, audioHashes, brand: crawl.brand, musicId: track?.id ?? null, formats });
   const manifests = new Map<AspectFormat, FilmManifest>();

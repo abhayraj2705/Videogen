@@ -77,7 +77,7 @@ export function createBentoGrid(): SceneTemplate<BentoGridProps> {
         alignItems: "flex-start",
         padding: `${pad * 1.2}px`,
         borderRadius: `${36 * u}px`,
-        background: `linear-gradient(140deg, ${ctx.palette.accent}, ${ctx.palette.accentAlt})`,
+        background: `${ctx.palette.accent} linear-gradient(140deg, ${ctx.palette.accent}, ${ctx.palette.accentAlt})`,
         boxShadow: `0 ${30 * u}px ${80 * u}px -${30 * u}px ${ctx.palette.glow}`,
         minWidth: "0",
         minHeight: "0",

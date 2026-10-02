@@ -1,4 +1,5 @@
 import type { FilmManifest } from "@sitereel/film-runtime";
+import { SCREENSHOT_TEMPLATES } from "@sitereel/shared";
 
 export interface EditorialIssue {
   code: "long_scene" | "repetitive_edit" | "low_product_share" | "narration_reads_titles";
@@ -7,7 +8,7 @@ export interface EditorialIssue {
   message: string;
 }
 
-const PRODUCT_TEMPLATES = new Set(["SectionShowcase", "UIFlowCursor", "ScreenCollage"]);
+const PRODUCT_TEMPLATES = SCREENSHOT_TEMPLATES;
 /** Past this a scene has outlived its one idea, unless it reveals a list on voice cues. */
 const MAX_SCENE_SEC = 6;
 

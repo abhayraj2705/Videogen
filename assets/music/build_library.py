@@ -1,6 +1,7 @@
 """Builds assets/music: procedural royalty-free placeholder tracks + manifest.json.
 
-    python assets/music/build_library.py generate          # (re)synthesize the bundled tracks
+    python assets/music/build_library.py generate          # synthesize any bundled track that is missing
+    python assets/music/build_library.py generate --all    # re-synthesize every bundled track
     python assets/music/build_library.py ingest FILE --id ID --mood MOOD --license "..." [--title ...]
                                                            # add a licensed track; beat grid via librosa
 
@@ -15,7 +16,8 @@ sanity check that the grid matches what an analyzer hears.
 the same librosa tracker the audio sidecar's /beats endpoint uses, then
 appends the entry to manifest.json.
 
-Requires numpy, soundfile, librosa and ffmpeg (for mp3 encoding).
+Requires numpy and ffmpeg (for mp3 encoding). soundfile and librosa are optional for `generate`
+(without librosa, `detectedBpm` is recorded as null); `ingest` needs both.
 """
 
 from __future__ import annotations
@@ -28,8 +30,14 @@ import subprocess
 import sys
 from pathlib import Path
 
+import wave
+
 import numpy as np
-import soundfile as sf
+
+try:
+    import soundfile as sf
+except ImportError:  # generate works without it (stdlib wave writer below)
+    sf = None
 
 HERE = Path(__file__).resolve().parent
 MANIFEST = HERE / "manifest.json"
@@ -93,6 +101,9 @@ def place(buf: np.ndarray, sig: np.ndarray, at: float, gain: float = 1.0, pan: f
 PROGRESSIONS = {
     "pop": [[0, 4, 7], [7, 11, 14], [9, 12, 16], [5, 9, 12]],
     "minor": [[0, 3, 7], [8, 12, 15], [3, 7, 10], [10, 14, 17]],
+    # vi-IV-I-V and i-VII-VI-VII: the second track of each mood shouldn't sound like the first transposed
+    "lift": [[9, 12, 16], [5, 9, 12], [0, 4, 7], [7, 11, 14]],
+    "drive": [[0, 3, 7], [10, 14, 17], [8, 12, 15], [10, 14, 17]],
 }
 
 STYLES = {
@@ -102,9 +113,33 @@ STYLES = {
     "cinematic": dict(bpm=90, bars=12, key="A", prog="minor", drums="toms", bass="drone", lead="none", pad=0.2),
 }
 
+# Every bundled track: (number, mood, style overrides, seed). All are 4/4 from beat 0, so bar lines are every 4th beat.
+TRACKS = [
+    ("01", "upbeat", {}, 7),
+    ("01", "energetic", {}, 7),
+    ("01", "calm", {}, 7),
+    ("01", "cinematic", {}, 7),
+    ("02", "upbeat", dict(bpm=112, key="G", prog="lift", drums="four", bass="offbeat", lead="arp8", pad=0.12), 11),
+    ("02", "energetic", dict(bpm=136, key="A", prog="drive", drums="backbeat", bass="eighths", lead="arp16", pad=0.07), 13),
+    ("02", "calm", dict(bpm=76, bars=12, key="C", prog="lift", drums="soft", bass="whole", lead="arp8", pad=0.18), 17),
+    ("02", "cinematic", dict(bpm=100, bars=12, key="D", prog="drive", drums="toms", bass="drone", lead="arp4", pad=0.18), 19),
+]
 
-def synth(mood: str, seed: int = 7) -> tuple[np.ndarray, list[float], float]:
-    st = STYLES[mood]
+
+def write_wav(path: Path, y: np.ndarray) -> None:
+    if sf is not None:
+        sf.write(path, y, SR, subtype="PCM_16")
+        return
+    pcm = (np.clip(y, -1, 1) * 32767).astype("<i2")
+    with wave.open(str(path), "wb") as w:
+        w.setnchannels(pcm.shape[1])
+        w.setsampwidth(2)
+        w.setframerate(SR)
+        w.writeframes(pcm.tobytes())
+
+
+def synth(mood: str, seed: int = 7, overrides: dict | None = None) -> tuple[np.ndarray, list[float], float]:
+    st = {**STYLES[mood], **(overrides or {})}
     rng = np.random.default_rng(seed)
     bpm, bars = st["bpm"], st["bars"]
     beat = 60.0 / bpm
@@ -197,15 +232,19 @@ def save_manifest(m: dict) -> None:
     MANIFEST.write_text(json.dumps(m, indent=2) + "\n", encoding="utf8")
 
 
-def cmd_generate() -> None:
+def cmd_generate(regenerate_all: bool = False) -> None:
     m = load_manifest()
-    m["tracks"] = [t for t in m["tracks"] if t.get("source") != "procedural"]
-    for mood, st in STYLES.items():
-        y, grid, total = synth(mood)
-        tid = f"sitereel-{mood}-01"
+    known = {t["id"]: t for t in m["tracks"]}
+    for number, mood, overrides, seed in TRACKS:
+        st = {**STYLES[mood], **overrides}
+        tid = f"sitereel-{mood}-{number}"
         wav_path = HERE / f"{tid}.wav"
         mp3_path = HERE / f"{tid}.mp3"
-        sf.write(wav_path, y, SR, subtype="PCM_16")
+        if not regenerate_all and tid in known and mp3_path.exists():
+            continue  # keep the committed file byte-for-byte
+        m["tracks"] = [t for t in m["tracks"] if t["id"] != tid]
+        y, grid, total = synth(mood, seed, overrides)
+        write_wav(wav_path, y)
         encode_mp3(wav_path, mp3_path)
         wav_path.unlink()
         detected, _ = detect_bpm(mp3_path)
@@ -213,7 +252,7 @@ def cmd_generate() -> None:
             {
                 "id": tid,
                 "file": mp3_path.name,
-                "title": f"SiteReel {mood.title()} 01",
+                "title": f"SiteReel {mood.title()} {number}",
                 "mood": mood,
                 "bpm": st["bpm"],
                 "detectedBpm": detected,
@@ -264,7 +303,8 @@ def cmd_ingest(args: argparse.Namespace) -> None:
 def main() -> None:
     p = argparse.ArgumentParser()
     sub = p.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("generate")
+    gen = sub.add_parser("generate")
+    gen.add_argument("--all", action="store_true", help="re-synthesize tracks that already exist too")
     ing = sub.add_parser("ingest")
     ing.add_argument("file")
     ing.add_argument("--id", required=True)
@@ -272,7 +312,7 @@ def main() -> None:
     ing.add_argument("--license", required=True)
     ing.add_argument("--title")
     a = p.parse_args()
-    cmd_generate() if a.cmd == "generate" else cmd_ingest(a)
+    cmd_generate(a.all) if a.cmd == "generate" else cmd_ingest(a)
 
 
 if __name__ == "__main__":

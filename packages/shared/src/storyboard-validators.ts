@@ -65,6 +65,24 @@ export const TEMPLATE_PROP_SCHEMAS: Record<TemplateId, z.ZodType> = {
     sourcePageUrl: z.string().url(),
     caption: z.string().min(1),
   }),
+  DeviceMockup: z.object({
+    sourcePageUrl: z.string().url(),
+    caption: z.string().min(1),
+  }),
+  ZoomDetail: z.object({
+    sourcePageUrl: z.string().url(),
+    caption: z.string().min(1),
+  }),
+  SplitCompare: z.object({
+    left: z.string().min(1),
+    right: z.string().min(1),
+    leftLabel: z.string().optional(),
+    rightLabel: z.string().optional(),
+  }),
+  LogoWall: z.object({
+    title: z.string().min(1),
+    names: z.array(z.string().min(1)).min(3).max(10),
+  }),
 };
 
 /**
@@ -87,7 +105,14 @@ export function visibleTextFor(templateId: TemplateId, props: unknown): string[]
     case "SectionShowcase":
     case "UIFlowCursor":
     case "ScreenCollage":
+    case "DeviceMockup":
+    case "ZoomDetail":
       return [p.caption as string];
+    case "SplitCompare":
+      return [p.left as string, p.right as string];
+    case "LogoWall":
+      // The names are checked for grounding like any prop, but aren't "lines to read": only the title counts toward reading time.
+      return [p.title as string];
     case "CTAEndCard":
       return [p.ctaText as string];
     case "LogoReveal":
@@ -120,6 +145,9 @@ export function syncOnScreenText<S extends { templateId: TemplateId; props: unkn
     return visible ? { ...scene, onScreenText: visible } : scene;
   });
 }
+
+/** Templates that show a crawled page and so must point at one (`sourcePageUrl`). */
+export const SCREENSHOT_TEMPLATES: ReadonlySet<string> = new Set(["SectionShowcase", "UIFlowCursor", "ScreenCollage", "DeviceMockup", "ZoomDetail"]);
 
 /** Appendix C — phrases the planner must never use, enforced in code, not just asked for in the prompt. */
 export const BANNED_PHRASES = ["streamline your workflow", "supercharge", "unlock", "elevate"] as const;
@@ -168,6 +196,80 @@ export function endsDangling(text: string): boolean {
   const words = text.trim().split(/\s+/).filter(Boolean);
   if (words.length < 4) return false;
   return DANGLING_ENDINGS.has(words[words.length - 1]!.toLowerCase().replace(/[^\p{L}&]+$/u, "")) && !/[.!?…]$/.test(text.trim());
+}
+
+const UNIT_WORDS: Record<string, number> = Object.fromEntries(
+  "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split(" ").map((w, i) => [w, i]),
+);
+const TENS_WORDS: Record<string, number> = Object.fromEntries("twenty thirty forty fifty sixty seventy eighty ninety".split(" ").map((w, i) => [w, (i + 2) * 10]));
+const SCALE_WORDS: Record<string, number> = { thousand: 1e3, million: 1e6, billion: 1e9, trillion: 1e12 };
+
+/**
+ * Numbers written out in English words ("one hundred thirty five", "ten
+ * thousand") — a voiceover states them just as firmly as digits on screen, so
+ * they get the same grounding check. Only values of 10 or more are returned:
+ * "one platform" and "three steps" are phrasing, not claims. Vague plurals
+ * ("millions of users") are not numbers and are left alone.
+ */
+export function spokenNumbersIn(text: string): number[] {
+  const out: number[] = [];
+  let total = 0;
+  let current = 0;
+  let open = false;
+  let lastWasTensOrUnit = false;
+  const close = () => {
+    if (open && total + current >= 10) out.push(total + current);
+    total = 0;
+    current = 0;
+    open = false;
+    lastWasTensOrUnit = false;
+  };
+  const tokens = text.toLowerCase().split(/[^a-z]+/).filter(Boolean);
+  for (const [i, tok] of tokens.entries()) {
+    if (tok in UNIT_WORDS) {
+      // "twenty four" continues a number; "four seven" is two numbers.
+      if (open && lastWasTensOrUnit && !(current % 100 >= 20 && current % 10 === 0 && UNIT_WORDS[tok]! < 10)) close();
+      current += UNIT_WORDS[tok]!;
+      open = true;
+      lastWasTensOrUnit = true;
+    } else if (tok in TENS_WORDS) {
+      if (open && lastWasTensOrUnit) close();
+      current += TENS_WORDS[tok]!;
+      open = true;
+      lastWasTensOrUnit = true;
+    } else if (tok === "hundred" && (open || tokens[i - 1] === "a")) {
+      current = (current || 1) * 100;
+      open = true;
+      lastWasTensOrUnit = false;
+    } else if (tok in SCALE_WORDS && (open || tokens[i - 1] === "a")) {
+      total += (current || 1) * SCALE_WORDS[tok]!;
+      current = 0;
+      open = true;
+      lastWasTensOrUnit = false;
+    } else if (tok === "and" && open && !lastWasTensOrUnit) {
+      // "one hundred and five"
+    } else {
+      close();
+    }
+  }
+  close();
+  return out;
+}
+
+/** Every value the digits in `sourceText` can stand for: "24/7" -> 24 and 7, "11k+" -> 11 and 11000, "10,000" -> 10000. */
+function numericValuesIn(sourceText: string): Set<number> {
+  const values = new Set<number>();
+  const scale: Record<string, number> = { k: 1e3, m: 1e6, b: 1e9 };
+  for (const n of numbersIn(sourceText)) {
+    for (const part of n.core.replace(/,/g, "").split(/[/:]/)) {
+      const v = Number(part);
+      if (!Number.isFinite(v)) continue;
+      values.add(v);
+      const mult = scale[n.suffix.replace("+", "")];
+      if (mult) values.add(v * mult);
+    }
+  }
+  return values;
 }
 
 export function findBannedPhrases(text: string): string[] {
@@ -271,6 +373,26 @@ export function validateStoryboard(input: unknown, facts: FactLedger, opts: Vali
       }
     }
 
+    // The same gate for numbers written out in words (English only: the word list is English).
+    if (storyboard.language === "en") {
+      const citedValues = numericValuesIn(citedTexts);
+      for (const text of sceneStrings) {
+        for (const value of spokenNumbersIn(text)) {
+          const key = `words:${value}`;
+          if (reported.has(key) || citedValues.has(value)) continue;
+          // A fact may itself spell the number out.
+          if (spokenNumbersIn(citedTexts).includes(value)) continue;
+          reported.add(key);
+          issues.push({
+            code: "ungrounded_number",
+            message: `Scene ${scene.id} states the number ${value.toLocaleString("en-US")} in words, which doesn't appear in any fact this scene cites`,
+            sceneId: scene.id,
+            severity: "error",
+          });
+        }
+      }
+    }
+
     // Banned phrases (Appendix C) anywhere a viewer would see or hear them.
     for (const text of sceneStrings) {
       for (const phrase of findBannedPhrases(text)) {
@@ -361,7 +483,7 @@ export function validateStoryboard(input: unknown, facts: FactLedger, opts: Vali
       }
     }
 
-    if ((scene.templateId === "SectionShowcase" || scene.templateId === "UIFlowCursor" || scene.templateId === "ScreenCollage") && pageUrls) {
+    if (SCREENSHOT_TEMPLATES.has(scene.templateId) && pageUrls) {
       const src = String(props.sourcePageUrl);
       if (!pageUrls.has(normalizeUrl(src))) {
         issues.push({

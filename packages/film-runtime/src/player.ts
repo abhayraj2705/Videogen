@@ -188,13 +188,26 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
 
   const mounted: MountedScene[] = manifest.scenes.map((scene, sceneIndex) => {
     const root = document.createElement("div");
+    const template = createTemplate(scene.templateId);
     root.dataset.sceneId = scene.id;
     root.dataset.templateId = scene.templateId;
-    // Shared motion helpers (util/ui.ts styleOf) read the film's look from here.
+    // Shared motion helpers (util/ui.ts) read the film's look and the scene's exit window from here.
     root.dataset.style = style.id;
+    // Content exits only into a dissolving cut — a hard cut swaps frames and push/wipe carry the
+    // scene off whole — and never before the scene has settled (QA reads its text there).
+    const nextScene = manifest.scenes[sceneIndex + 1];
+    const nextIn = nextScene?.transitionInSec ?? 0;
+    if (nextScene && nextIn > 0 && !["cut", "push", "wipe"].includes(resolveTransition(style, sceneIndex + 1, nextScene.transition))) {
+      const length = scene.end - scene.start;
+      const settle = Math.max(0, ...template.marks(scene.props).filter((m) => m.type === "settle").map((m) => m.t));
+      const exitAt = Math.max(length - nextIn, settle + 0.3);
+      if (exitAt < length - 0.1) {
+        root.dataset.exitAt = exitAt.toFixed(4);
+        root.dataset.exitSec = (length - exitAt).toFixed(4);
+      }
+    }
     stage.appendChild(root);
 
-    const template = createTemplate(scene.templateId);
     const ctx: FilmContext = {
       palette,
       fonts: manifest.fonts,

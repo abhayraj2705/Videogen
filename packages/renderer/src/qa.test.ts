@@ -89,6 +89,36 @@ describe("QA seeded defects", () => {
     }
   }, 120_000);
 
+  it("passes the product, comparison and name-wall templates in all three formats", async () => {
+    // A tall stand-in "page" (1280x2400), so scrolling and zooming have somewhere to go.
+    const page = `data:image/svg+xml;charset=utf-8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="2400"><rect width="1280" height="2400" fill="#f4f4f8"/><rect x="80" y="160" width="620" height="70" fill="#222"/><rect x="80" y="900" width="1120" height="500" fill="#c9c2ff"/></svg>')}`;
+    for (const [w, h] of [
+      [640, 360],
+      [360, 640],
+      [480, 480],
+    ] as const) {
+      const m = manifestWith(
+        [
+          { id: "device", templateId: "DeviceMockup", props: { screenshotUrl: page, caption: "Your whole workspace in one tab" } },
+          { id: "zoom", templateId: "ZoomDetail", props: { screenshotUrl: page, caption: "Pricing that scales with you", focus: { x: 0.0625, y: 0.125, w: 0.4844, h: 0.0547 }, pageLabel: "acme.com/pricing" } },
+          { id: "collage", templateId: "ScreenCollage", props: { screenshotUrls: [page, page, page], caption: "Everything in one place" } },
+          { id: "split", templateId: "SplitCompare", props: { left: "Five tools and a spreadsheet", right: "One shared workspace" } },
+          { id: "wall", templateId: "LogoWall", props: { title: "Works with the tools you use", names: ["Slack", "GitHub", "Figma", "Linear", "Notion", "Google Drive"] } },
+        ],
+        w,
+        h,
+      );
+      const r = await qa(`r4-${w}x${h}`, m, {
+        device: ["Your whole workspace in one tab"],
+        zoom: ["Pricing that scales with you"],
+        collage: ["Everything in one place"],
+        split: ["Five tools and a spreadsheet", "One shared workspace"],
+        wall: ["Works with the tools you use", "Slack", "Google Drive"],
+      });
+      expect(r.issues.filter((i) => i.severity === "error").map((i) => `${w}x${h} ${i.message}`)).toEqual([]);
+    }
+  }, 180_000);
+
   it("catches Math.random in seek() (100% of runs)", async () => {
     for (let run = 0; run < 3; run++) {
       const r = await qa(`rand-seek-${run}`, manifestWith([{ id: "bad", templateId: "__SeededRandomSeek", props: { text: "Jitter" } }]));

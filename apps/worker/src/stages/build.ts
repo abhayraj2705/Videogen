@@ -87,6 +87,17 @@ export function listCues(items: string[], words: { word: string; startSec: numbe
 
 /** Resolves a scene's props for its template, swapping sourcePageUrl references for real asset refs. */
 function resolveProps(templateId: string, props: Record<string, unknown>, crawlOutput: CrawlOutput, factIds: string[] = []): Record<string, unknown> {
+  if (templateId === "DeviceMockup" || templateId === "ZoomDetail") {
+    const page = crawlOutput.pages.find((p) => p.url === props.sourcePageUrl) ?? crawlOutput.pages[0];
+    const { sourcePageUrl: _drop, ...rest } = props;
+    const focus = templateId === "ZoomDetail" && page ? factIds.map((id) => crawlOutput.facts.find((f) => f.id === id)).find((f) => f?.rect && f.sourceUrl === page.url)?.rect : undefined;
+    return {
+      ...rest,
+      screenshotUrl: page?.screenshotKey ? assetRef("assets", page.screenshotKey) : "",
+      ...(templateId === "ZoomDetail" && page ? { pageLabel: pageLabel(page.url) } : {}),
+      ...(focus ? { focus } : {}),
+    };
+  }
   if (templateId === "SectionShowcase" || templateId === "UIFlowCursor") {
     const sourcePageUrl = props.sourcePageUrl as string | undefined;
     const page = crawlOutput.pages.find((p) => p.url === sourcePageUrl) ?? crawlOutput.pages[0];
@@ -163,6 +174,8 @@ export function buildFilmManifest(opts: {
       ...(opts.transitionSec !== undefined ? { transitionSec: opts.transitionSec } : { transitionSecs: transitions.map((k) => TRANSITION_DURATION[k]) }),
       beatGrid: opts.music?.beatGrid ?? null,
       loopSec: opts.music?.loopSec ?? null,
+      // Our own tracks are written in 4/4 from beat 0; a licensed track's detected grid has no known bar phase.
+      ...(opts.music?.source === "procedural" ? { beatsPerBar: 4 } : {}),
     },
   );
 

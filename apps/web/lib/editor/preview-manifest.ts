@@ -83,7 +83,7 @@ function pageLabel(url: unknown): string {
 }
 
 export function previewProps(templateId: string, props: Record<string, unknown>, brand: PreviewBrand): Record<string, unknown> {
-  if (templateId === "SectionShowcase" || templateId === "UIFlowCursor") {
+  if (templateId === "SectionShowcase" || templateId === "UIFlowCursor" || templateId === "DeviceMockup" || templateId === "ZoomDetail") {
     const { sourcePageUrl, ...rest } = props;
     const existing = typeof props.screenshotUrl === "string" && /^(https?:|data:)/.test(props.screenshotUrl) ? props.screenshotUrl : null;
     return { ...rest, screenshotUrl: existing ?? screenshotPlaceholder(pageLabel(sourcePageUrl), brand) };

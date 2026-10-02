@@ -22,3 +22,7 @@ export type { ChecklistRevealProps } from "./templates/checklist-reveal.js";
 export type { BigStatementProps } from "./templates/big-statement.js";
 export type { BentoGridProps } from "./templates/bento-grid.js";
 export type { ScreenCollageProps } from "./templates/screen-collage.js";
+export type { DeviceMockupProps } from "./templates/device-mockup.js";
+export type { ZoomDetailProps } from "./templates/zoom-detail.js";
+export type { SplitCompareProps } from "./templates/split-compare.js";
+export type { LogoWallProps } from "./templates/logo-wall.js";

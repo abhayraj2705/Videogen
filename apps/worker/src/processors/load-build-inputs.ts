@@ -81,7 +81,7 @@ export async function loadBuildInputs(deps: WorkerDeps, jobId: string, opts: { s
     voiceScenes,
     jobOptions: jobRow.options,
     userPlan: userRow?.plan ?? "free",
-    music: selectMusicTrack(deps.repoRoot, { musicOn: jobRow.options.musicOn ?? true, musicMood: jobRow.options.musicMood ?? "upbeat" }),
+    music: selectMusicTrack(deps.repoRoot, { musicOn: jobRow.options.musicOn ?? true, musicMood: jobRow.options.musicMood ?? "upbeat", seed: jobRow.id }),
     audioHashes,
     watermark: decideWatermark({ snapshot: getJobWatermarkSnapshot(jobRow), currentPlan: userRow?.plan ?? "free" }),
     brandKitId: kit ? kit.id : null,

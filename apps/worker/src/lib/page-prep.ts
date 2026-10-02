@@ -166,14 +166,14 @@ export async function captureSectionScreenshots(page: Page, maxSections: number,
 }
 
 /** A "full page" screenshot capped at `maxHeightCss` so very long pages at deviceScaleFactor 2 stay within Chromium/R2 limits. */
-export async function captureCappedFullPage(page: Page, maxHeightCss: number): Promise<Buffer> {
+export async function captureCappedFullPage(page: Page, maxHeightCss: number, scale: "css" | "device" = "device"): Promise<Buffer> {
   const dims = await page.evaluate(() => ({ w: document.documentElement.clientWidth || window.innerWidth, h: document.body.scrollHeight }));
   return page.screenshot({
     type: "png",
     fullPage: true,
-    // The overview shot is CSS-pixel scale (half the pixels at DPR 2) — encoding a 2x
-    // 8000px-tall PNG costs seconds; the per-section shots keep full device resolution.
-    scale: "css",
+    // Device scale (2x) keeps the page sharp when a screenshot scene zooms into one region of it;
+    // "css" halves the pixels and the encode time (SITEREEL_FULLPAGE_SCALE=css) at the cost of soft close-ups.
+    scale,
     clip: { x: 0, y: 0, width: dims.w, height: Math.max(1, Math.min(dims.h, maxHeightCss)) },
     timeout: 15_000,
   });

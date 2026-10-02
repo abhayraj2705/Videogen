@@ -83,7 +83,7 @@ export function createCTAEndCard(): SceneTemplate<CTAEndCardProps> {
         maxWidth: `${maxButton}px`,
         padding: `${L.pick({ landscape: 22, portrait: 28, square: 20 }) * u}px ${padX}px`,
         borderRadius: `${60 * u}px`,
-        background: `linear-gradient(120deg, ${ctx.palette.accent}, ${ctx.palette.accentAlt})`,
+        background: `${ctx.palette.accent} linear-gradient(120deg, ${ctx.palette.accent}, ${ctx.palette.accentAlt})`,
         flexShrink: "0",
       });
       const domainNode = el("span", "cta-domain", props.domain);

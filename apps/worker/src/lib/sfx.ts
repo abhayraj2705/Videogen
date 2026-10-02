@@ -10,8 +10,12 @@ export interface SfxEvent {
 
 const SAMPLE_RATE = 48000;
 
-/** Linear gain of each sound in the mix: present, but well under the voice. */
-export const SFX_GAIN: Record<SfxKind, number> = { whoosh: 0.16, hit: 0.22, pop: 0.14, rise: 0.12 };
+/**
+ * Linear gain of each sound (every sound is synthesized to a 0.8 peak). The
+ * music bed peaks around 0.23 before ducking and speech around 0.7, so these
+ * sit just above the music and clearly under the voice.
+ */
+export const SFX_GAIN: Record<SfxKind, number> = { whoosh: 0.3, hit: 0.4, pop: 0.26, rise: 0.22 };
 
 /**
  * Where the film wants a sound: a whoosh under every moving cut, a hit on a

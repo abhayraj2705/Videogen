@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   numbersIn,
+  spokenNumbersIn,
   validateStoryboard,
   formatValidationErrorsForRetry,
   findBannedPhrases,
@@ -199,5 +200,15 @@ describe("visibleTextFor / syncOnScreenText", () => {
     const broken = { templateId: "QuoteCard" as const, props: {}, onScreenText: ["keep me"] };
     expect(visibleTextFor(broken.templateId, broken.props)).toBeNull();
     expect(syncOnScreenText([broken])[0]!.onScreenText).toEqual(["keep me"]);
+  });
+});
+
+describe("numbers written as words", () => {
+  it("reads compound numbers and ignores small counts and vague plurals", () => {
+    expect(spokenNumbersIn("over one hundred thirty five capabilities")).toEqual([135]);
+    expect(spokenNumbersIn("ten thousand teams and forty-two countries")).toEqual([10000, 42]);
+    expect(spokenNumbersIn("a hundred and five ways, twenty four seven")).toEqual([105, 24]);
+    expect(spokenNumbersIn("one platform, three steps, millions of users")).toEqual([]);
+    expect(spokenNumbersIn("two million developers")).toEqual([2000000]);
   });
 });

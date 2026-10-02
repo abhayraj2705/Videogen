@@ -125,7 +125,7 @@ async function capturePage(
 ): Promise<void> {
   // Fills `entry` in place as each capture lands, so a budget cut-off keeps whatever finished.
   const fullKey = screenshotKey(jobId, label);
-  const full = await captureCappedFullPage(page, FULLPAGE_MAX_CSS_HEIGHT);
+  const full = await captureCappedFullPage(page, FULLPAGE_MAX_CSS_HEIGHT, process.env.SITEREEL_FULLPAGE_SCALE === "css" ? "css" : "device");
   await storage.putObject("assets", fullKey, full, "image/png");
   entry.screenshotKey = fullKey;
   if (DEBUG) console.error(`[crawl] ${label} full-page shot ${full.byteLength} bytes`);

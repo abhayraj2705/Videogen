@@ -12,6 +12,10 @@ const TEMPLATE_CATALOG = `- KineticHook: opening hook (2-3s). props: { productNa
 - BigStatement: one line set poster-size, for the differentiator or strongest claim (2-4s). props: { text (3-8 words), highlight? (1-3 consecutive words copied exactly from text, shown in the accent color) }.
 - BentoGrid: a lead line on a large accent tile beside three supporting points (4-5s). props: { title (2-6 words), items: [string, string, string] } — exactly 3 items, 2-5 words each, each from a cited fact. Use instead of FeatureTriplet when one idea frames the three.
 - ScreenCollage: three parts of the same page at once, as tilted overlapping cards with depth (3-5s). props: { sourcePageUrl (a screenshot asset's url), caption }. Use for breadth ("everything in one place", a tour) — and as the second product scene instead of repeating SectionShowcase.
+- DeviceMockup: the site on a device — a laptop in wide video, a phone in vertical — turning slowly while the page scrolls (4-5s). props: { sourcePageUrl, caption }. A strong reveal right after the hook.
+- ZoomDetail: a close-up of one element of the page as a big floating card with an outline around it (3-5s). props: { sourcePageUrl, caption }. The close-up is of the scene's first cited fact, so cite the fact the caption is about first, and point sourcePageUrl at the page that fact came from. Use for a specific feature, price or number that is visible on the page.
+- SplitCompare: before and after, side by side — the old way in muted ink, then the product's way in the accent (4-5s). props: { left (the problem or old way, 2-7 words), right (the product's answer, 2-7 words), leftLabel?, rightLabel? } (labels default to "Before" / "After"; 1-2 words each). Both sides must come from cited facts; don't invent a "before".
+- LogoWall: a wall of name chips — customers, integrations or supported platforms (3-4s). props: { title (2-6 words, e.g. the fact's own heading), names: string[] } (3-10 names, 1-3 words each, every one copied from a cited fact). Only use when the ledger actually lists such names.
 - CTAEndCard: closing scene (2-4s). props: { productName, ctaText, domain }. Use once, last scene.`;
 
 const KIND_PRIORITY: Record<string, number> = { hero: 0, feature: 1, stat: 2, testimonial: 3, cta: 4, heading: 5, other: 6 };
@@ -47,7 +51,7 @@ export function buildAssetList(crawlOutput: CrawlOutput): string {
     p.sectionScreenshotKeys?.forEach((_, s) => lines.push(`  - [screenshot-${i}-section-${s}] section ${s + 1} of the ${pageLabel(p.url, i)} (scrolled ${s} viewport(s) down)`));
   });
   if (crawlOutput.brand.logoUrl) lines.push(`- [logo] type=logo — the site's logo (${crawlOutput.brand.logoUrl.startsWith("data:") ? "inline SVG" : crawlOutput.brand.logoUrl})`);
-  return lines.length > 0 ? lines.join("\n") : "- (no screenshots available — do not use SectionShowcase, UIFlowCursor or ScreenCollage)";
+  return lines.length > 0 ? lines.join("\n") : "- (no screenshots available — do not use SectionShowcase, UIFlowCursor, ScreenCollage, DeviceMockup or ZoomDetail)";
 }
 
 export function buildBrandBlock(crawlOutput: CrawlOutput): string {
@@ -79,11 +83,11 @@ export function buildPlannerPrompt(opts: { crawlOutput: CrawlOutput; options: Jo
 - One idea per scene. Model the viewer: list what they must understand, one read at a time.
 - Narration and on-screen text do different jobs. Narration is one conversational sentence a person would say aloud; on-screen text is the 2-6 word title of that sentence. Never make the narration a read-out of the on-screen text, and never repeat a full sentence in both.
 - Narration flows across scenes like one script: each line picks up from the last. No scene is longer than 6s; split a long thought into two scenes with different templates.
-- Every number shown or spoken must appear verbatim in a fact cited by that scene's factIds. No rounding, no new numbers.
+- Every number shown or spoken must appear verbatim in a fact cited by that scene's factIds. No rounding, no new numbers. This includes numbers written as words ("over one hundred") — if a fact doesn't give it, don't say it.
 - Prefer showing the product in use (UIFlowCursor, SectionShowcase) over describing it.
 - Every on-screen line is a complete phrase that reads on its own: never end on a comma or on a word like "and", "to", "of", "with", "on". Shorten by rewriting, not by cutting off.
 - Text animates in word by word, so short punchy lines land best: hook headline 3-7 words, feature labels 2-5 words, captions 3-8 words.
-- Pacing: never use the same template for two scenes in a row; alternate text scenes with product (screenshot) scenes.
+- Pacing: never use the same template for two scenes in a row; alternate text scenes with product (screenshot) scenes. There are five ways to show the product (SectionShowcase, UIFlowCursor, ScreenCollage, DeviceMockup, ZoomDetail) — use a different one each time.
 - Each scene after the first may set "transition" (how it cuts in): "zoom" for a reveal or a big number, "push" between parallel points, "wipe" into a screenshot scene, "cut" (hard cut, lands on the beat) for a punchy change, "whip" for a fast energetic jump, "fade" for a calm change of topic, "slide-left"/"slide-up" as gentler alternatives. Vary them; leave it out to let the renderer choose from the tone's own set.
 - Screenshot scenes scroll the real page inside a browser window — give them at least 4s, and point two screenshot scenes at two different pages when more than one screenshot asset exists.
 - Use only these templates:

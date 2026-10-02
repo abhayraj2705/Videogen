@@ -256,19 +256,24 @@
     });
     return { wrap, lines, words, fontSize, height: lines.length * fontSize * lineHeight };
   }
-  var styleCache = /* @__PURE__ */ new WeakMap();
-  function styleOf(node) {
-    let pack = styleCache.get(node);
-    if (!pack) {
+  var sceneCache = /* @__PURE__ */ new WeakMap();
+  function sceneOf(node) {
+    let info = sceneCache.get(node);
+    if (!info) {
       const host = node.closest("[data-style]");
-      pack = stylePackFor(host?.dataset.style);
-      if (host) styleCache.set(node, pack);
+      info = { pack: stylePackFor(host?.dataset.style), exitAt: Number(host?.dataset.exitAt ?? 0), exitSec: Number(host?.dataset.exitSec ?? 0) };
+      if (host) sceneCache.set(node, info);
     }
-    return pack;
+    return info;
+  }
+  function exitAmount(info, t, delay = 0) {
+    if (info.exitSec <= 0 || t <= info.exitAt) return 0;
+    return easeInCubic(clamp01((t - info.exitAt - delay * info.exitSec) / (info.exitSec * (1 - delay))));
   }
   function wordsIn(words, t, start, each = 0.05, dur = 0.5, riseEm = 0.55) {
     if (words.length === 0) return;
-    const reveal = styleOf(words[0]).reveal;
+    const scene = sceneOf(words[0]);
+    const reveal = scene.pack.reveal;
     for (let i = 0; i < words.length; i++) {
       const lin = clamp01((t - start - i * each) / dur);
       const w = words[i];
@@ -291,6 +296,11 @@
         const s = spring(lin, 0.72, 1.1);
         w.style.transform = done ? "none" : `translateY(${((1 - s) * riseEm).toFixed(4)}em)`;
       }
+      const out = exitAmount(scene, t, 0.4 * i / words.length);
+      if (out > 0) {
+        w.style.opacity = String(1 - out);
+        w.style.transform = `translateY(${(-0.4 * out).toFixed(4)}em)`;
+      }
     }
   }
   function wordsSettle(count, start, each = 0.05, dur = 0.5) {
@@ -298,10 +308,17 @@
   }
   function enter(node, t, start, dur, o = {}, extra = "") {
     const lin = clamp01((t - start) / dur);
-    const { damping, freq } = styleOf(node).spring;
+    const scene = sceneOf(node);
+    const { damping, freq } = scene.pack.spring;
     const inv = 1 - (o.ease ? o.ease(lin) : spring(lin, damping, freq));
     node.style.opacity = String(clamp01(lin * 2.2));
     if (lin >= 1) {
+      const out = exitAmount(scene, t);
+      if (out > 0) {
+        node.style.opacity = String(1 - out);
+        node.style.transform = `translateY(${(-5 * out).toFixed(3)}%) scale(${(1 - 0.05 * out).toFixed(4)}) ${extra}`.trim();
+        return;
+      }
       node.style.transform = extra || "none";
       return;
     }
@@ -631,7 +648,7 @@
       const pageHeight = width * image.naturalHeight / image.naturalWidth;
       const r = { x: rect.x * width, y: rect.y * width, w: rect.w * width, h: rect.h * width };
       if (r.w < 4 || r.h < 4 || r.y + r.h > pageHeight || r.x + r.w > width + 1) return focusPose = null;
-      const scale = Math.max(1, Math.min(2, 2 * image.naturalWidth / width, width * 0.7 / r.w, viewportHeight * 0.7 / r.h));
+      const scale = Math.max(1, Math.min(2.6, 2 * image.naturalWidth / width, width * 0.7 / r.w, viewportHeight * 0.7 / r.h));
       const tx = Math.min(0, Math.max(width - scale * width, width / 2 - scale * (r.x + r.w / 2)));
       const ty = Math.min(0, Math.max(viewportHeight - scale * pageHeight, viewportHeight / 2 - scale * (r.y + r.h / 2)));
       const pad = 10 * u;
@@ -782,7 +799,7 @@
           maxWidth: `${maxButton}px`,
           padding: `${L.pick({ landscape: 22, portrait: 28, square: 20 }) * u}px ${padX}px`,
           borderRadius: `${60 * u}px`,
-          background: `linear-gradient(120deg, ${ctx.palette.accent}, ${ctx.palette.accentAlt})`,
+          background: `${ctx.palette.accent} linear-gradient(120deg, ${ctx.palette.accent}, ${ctx.palette.accentAlt})`,
           flexShrink: "0"
         });
         const domainNode = el("span", "cta-domain", props.domain);
@@ -1477,7 +1494,7 @@
           alignItems: "flex-start",
           padding: `${pad * 1.2}px`,
           borderRadius: `${36 * u}px`,
-          background: `linear-gradient(140deg, ${ctx.palette.accent}, ${ctx.palette.accentAlt})`,
+          background: `${ctx.palette.accent} linear-gradient(140deg, ${ctx.palette.accent}, ${ctx.palette.accentAlt})`,
           boxShadow: `0 ${30 * u}px ${80 * u}px -${30 * u}px ${ctx.palette.glow}`,
           minWidth: "0",
           minHeight: "0"
@@ -1638,6 +1655,396 @@
     };
   }
 
+  // ../film-runtime/src/templates/device-mockup.ts
+  var DEVICE_ENTER = 1;
+  var CAPTION_START4 = 0.5;
+  var WORD_EACH7 = 0.05;
+  var WORD_DUR8 = 0.5;
+  var countWords7 = (s) => s.trim().split(/\s+/).filter(Boolean).length;
+  function createDeviceMockup() {
+    let instance;
+    return {
+      id: "DeviceMockup",
+      mount(root, props, ctx) {
+        const L = layoutFor(ctx);
+        const u = L.u;
+        const gap = L.pick({ landscape: 40, portrait: 56, square: 32 }) * u;
+        sceneRoot(root, L, { gap: `${gap}px`, fontFamily: ctx.fonts.body });
+        const caption = textBlock(props.caption, {
+          className: "dm-caption",
+          width: L.safe.width * L.pick({ landscape: 0.84, portrait: 1, square: 0.96 }),
+          maxSize: L.pick({ landscape: 54, portrait: 64, square: 48 }) * u,
+          minSize: 22 * u,
+          maxLines: L.pick({ landscape: 2, portrait: 3, square: 2 }),
+          color: ctx.palette.fg,
+          family: ctx.fonts.display,
+          weight: "700",
+          lineHeight: 1.2
+        });
+        const laptop = L.orientation === "landscape";
+        const room = L.safe.height - gap - caption.height - 8 * u;
+        const bezel = (laptop ? 16 : 14) * u;
+        const baseHeight = laptop ? 26 * u : 0;
+        const screenHeight = laptop ? Math.min(room - 2 * bezel - baseHeight, L.safe.width * 0.72 / 1.6) : Math.min(room - 2 * bezel, L.safe.width * 0.6 * 19 / 9);
+        const screenWidth = laptop ? screenHeight * 1.6 : screenHeight * 9 / 19;
+        const shell = ctx.palette.isDark ? "rgb(38, 38, 42)" : "rgb(24, 24, 28)";
+        const device = el("div", "dm-device");
+        setStyle(device, { position: "relative", flexShrink: "0", display: "flex", flexDirection: "column", alignItems: "center", transformOrigin: "50% 60%" });
+        const body = el("div", "dm-body");
+        setStyle(body, {
+          boxSizing: "content-box",
+          width: `${screenWidth}px`,
+          height: `${screenHeight}px`,
+          padding: `${bezel}px`,
+          borderRadius: `${(laptop ? 22 : 54) * u}px`,
+          background: shell,
+          boxShadow: `0 ${50 * u}px ${110 * u}px -${40 * u}px ${ctx.palette.glow}, 0 ${30 * u}px ${70 * u}px -${30 * u}px rgba(0,0,0,${ctx.palette.isDark ? 0.75 : 0.4}), inset 0 0 0 ${Math.max(1, 1.5 * u)}px rgba(255,255,255,0.14)`
+        });
+        const screen = el("div", "dm-screen");
+        setStyle(screen, { position: "relative", width: "100%", height: "100%", overflow: "hidden", borderRadius: `${(laptop ? 8 : 40) * u}px`, background: ctx.palette.surface });
+        const imageWidth = laptop ? screenWidth : screenWidth * 2.3;
+        const image = el("img");
+        image.src = props.screenshotUrl;
+        setStyle(image, { display: "block", width: `${imageWidth}px`, maxWidth: "none", height: "auto" });
+        screen.appendChild(image);
+        if (!laptop) {
+          const island = el("div", "dm-island");
+          setStyle(island, { position: "absolute", left: "50%", top: `${12 * u}px`, width: `${screenWidth * 0.3}px`, height: `${24 * u}px`, marginLeft: `${-screenWidth * 0.15}px`, borderRadius: `${12 * u}px`, background: shell });
+          screen.appendChild(island);
+        }
+        body.appendChild(screen);
+        device.appendChild(body);
+        if (laptop) {
+          const base = el("div", "dm-base");
+          setStyle(base, { width: `${(screenWidth + 2 * bezel) * 1.16}px`, height: `${baseHeight}px`, borderRadius: `${4 * u}px ${4 * u}px ${18 * u}px ${18 * u}px`, background: `linear-gradient(${shell}, rgb(60, 60, 66))` });
+          device.appendChild(base);
+        }
+        root.appendChild(device);
+        root.appendChild(caption.wrap);
+        instance = { device, image, screenWidth, screenHeight, imageWidth, words: caption.words, durationSec: ctx.durationSec, u };
+      },
+      seek(localT) {
+        if (!instance) return;
+        const { device, image, screenHeight, imageWidth, durationSec, u } = instance;
+        const lin = clamp01(localT / DEVICE_ENTER);
+        const inv = 1 - spring(lin, 0.82, 1);
+        const turn = -7 + 14 * clamp01(localT / Math.max(1e-3, durationSec));
+        device.style.opacity = String(clamp01(lin * 2.4));
+        device.style.transform = `perspective(${1800 * u}px) translateY(${(90 * u * inv).toFixed(2)}px) rotateX(${(4 + 14 * inv).toFixed(3)}deg) rotateY(${(turn - 16 * inv).toFixed(3)}deg) scale(${(1 - 0.1 * inv).toFixed(4)})`;
+        const pageHeight = image.naturalWidth > 0 ? imageWidth * image.naturalHeight / image.naturalWidth : screenHeight;
+        const travel = Math.min(Math.max(0, pageHeight - screenHeight), screenHeight * 0.8);
+        const offset = travel * easeInOutCubic(clamp01((localT - 1.1) / Math.max(0.8, durationSec - 1.6)));
+        image.style.transform = offset < 5e-3 ? "none" : `translateY(${(-offset).toFixed(2)}px)`;
+        wordsIn(instance.words, localT, CAPTION_START4, WORD_EACH7, WORD_DUR8);
+      },
+      marks(props) {
+        return [
+          { t: 0, type: "start" },
+          { t: Math.max(DEVICE_ENTER, wordsSettle(countWords7(props.caption), CAPTION_START4, WORD_EACH7, WORD_DUR8)), type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
+  // ../film-runtime/src/templates/zoom-detail.ts
+  var CARD_ENTER2 = 0.8;
+  var CAPTION_START5 = 0.4;
+  var WORD_EACH8 = 0.05;
+  var WORD_DUR9 = 0.5;
+  var DEFAULT_FOCUS = { x: 0.04, y: 0.08, w: 0.5, h: 0.18 };
+  var countWords8 = (s) => s.trim().split(/\s+/).filter(Boolean).length;
+  function createZoomDetail() {
+    let instance;
+    return {
+      id: "ZoomDetail",
+      mount(root, props, ctx) {
+        const L = layoutFor(ctx);
+        const u = L.u;
+        const gap = L.pick({ landscape: 36, portrait: 52, square: 30 }) * u;
+        sceneRoot(root, L, { gap: `${gap}px`, fontFamily: ctx.fonts.body });
+        const caption = textBlock(props.caption, {
+          className: "zd-caption",
+          width: L.safe.width * L.pick({ landscape: 0.84, portrait: 1, square: 0.96 }),
+          maxSize: L.pick({ landscape: 56, portrait: 66, square: 50 }) * u,
+          minSize: 22 * u,
+          maxLines: L.pick({ landscape: 2, portrait: 3, square: 2 }),
+          color: ctx.palette.fg,
+          family: ctx.fonts.display,
+          weight: "700",
+          lineHeight: 1.2
+        });
+        const cardWidth = L.safe.width * L.pick({ landscape: 0.8, portrait: 1, square: 0.96 });
+        const cardHeight = Math.min(L.safe.height - gap - caption.height - 8 * u, cardWidth * L.pick({ landscape: 0.46, portrait: 0.9, square: 0.62 }));
+        const focus = props.focus ?? DEFAULT_FOCUS;
+        const shownFraction = Math.max(focus.w * 1.35, focus.h * 1.6 * cardWidth / cardHeight, 0.34);
+        const imageWidth = cardWidth / Math.min(1, shownFraction);
+        const cx = (focus.x + focus.w / 2) * imageWidth;
+        const cy = (focus.y + focus.h / 2) * imageWidth;
+        const left = Math.min(0, Math.max(cardWidth - imageWidth, cardWidth / 2 - cx));
+        const top = Math.min(0, cardHeight / 2 - cy);
+        const card = el("div", "zd-card");
+        setStyle(card, {
+          position: "relative",
+          width: `${cardWidth}px`,
+          height: `${cardHeight}px`,
+          flexShrink: "0",
+          overflow: "hidden",
+          borderRadius: `${26 * ctx.style.radius * u}px`,
+          background: ctx.palette.surface,
+          boxShadow: `0 ${50 * u}px ${110 * u}px -${40 * u}px ${ctx.palette.glow}, 0 ${30 * u}px ${60 * u}px -${30 * u}px rgba(0,0,0,${ctx.palette.isDark ? 0.7 : 0.35}), 0 0 0 ${Math.max(1, 1.5 * u)}px ${ctx.palette.border}`
+        });
+        const image = el("img");
+        image.src = props.screenshotUrl;
+        setStyle(image, { position: "absolute", left: `${left}px`, top: `${top}px`, width: `${imageWidth}px`, maxWidth: "none", height: "auto", transformOrigin: `${cx}px ${cy}px` });
+        card.appendChild(image);
+        const pad = 12 * u;
+        const ring = el("div", "zd-ring");
+        setStyle(ring, {
+          position: "absolute",
+          boxSizing: "border-box",
+          left: `${left + focus.x * imageWidth - pad}px`,
+          top: `${top + focus.y * imageWidth - pad}px`,
+          width: `${focus.w * imageWidth + 2 * pad}px`,
+          height: `${focus.h * imageWidth + 2 * pad}px`,
+          border: `${4 * u}px solid ${ctx.palette.accent}`,
+          borderRadius: `${14 * u}px`,
+          boxShadow: `0 0 0 ${6 * u}px ${ctx.palette.accentSoft}, 0 0 ${40 * u}px ${ctx.palette.glow}`,
+          opacity: "0",
+          transformOrigin: "50% 50%"
+        });
+        if (props.focus) card.appendChild(ring);
+        let tag = null;
+        if (props.pageLabel) {
+          tag = el("div", "zd-tag", props.pageLabel);
+          setStyle(tag, {
+            position: "absolute",
+            left: `${20 * u}px`,
+            bottom: `${20 * u}px`,
+            padding: `${7 * u}px ${18 * u}px`,
+            borderRadius: `${20 * u}px`,
+            background: ctx.palette.fg,
+            color: ctx.palette.bg,
+            fontFamily: ctx.fonts.body,
+            fontSize: `${20 * u}px`,
+            fontWeight: "600",
+            whiteSpace: "nowrap"
+          });
+          card.appendChild(tag);
+        }
+        root.appendChild(card);
+        root.appendChild(caption.wrap);
+        instance = { card, image, ring, tag, words: caption.words, durationSec: ctx.durationSec, u };
+      },
+      seek(localT) {
+        if (!instance) return;
+        const { card, image, ring, tag, durationSec, u } = instance;
+        enter(card, localT, 0, CARD_ENTER2, { y: 90 * u, scale: 0.86 });
+        image.style.transform = `scale(${(1.001 + 0.07 * clamp01(localT / Math.max(1e-3, durationSec))).toFixed(4)})`;
+        const ringP = progress(localT, 0.7, 1.15, easeOutCubic);
+        ring.style.opacity = String(ringP);
+        ring.style.transform = ringP >= 1 ? "none" : `scale(${(1.12 - 0.12 * ringP).toFixed(4)})`;
+        if (tag) tag.style.opacity = String(progress(localT, 0.6, 1));
+        wordsIn(instance.words, localT, CAPTION_START5, WORD_EACH8, WORD_DUR9);
+      },
+      marks(props) {
+        return [
+          { t: 0, type: "start" },
+          { t: Math.max(1.15, wordsSettle(countWords8(props.caption), CAPTION_START5, WORD_EACH8, WORD_DUR9)), type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
+  // ../film-runtime/src/templates/split-compare.ts
+  var LEFT_WORDS = 0.3;
+  var RIGHT_START = 1.1;
+  var WORD_EACH9 = 0.05;
+  var WORD_DUR10 = 0.45;
+  var countWords9 = (s) => s.trim().split(/\s+/).filter(Boolean).length;
+  var rightSettle = (props) => wordsSettle(countWords9(props.right), RIGHT_START + 0.3, WORD_EACH9, WORD_DUR10);
+  function createSplitCompare() {
+    let instance;
+    return {
+      id: "SplitCompare",
+      mount(root, props, ctx) {
+        const L = layoutFor(ctx);
+        const u = L.u;
+        const row = L.orientation === "landscape";
+        const gap = L.pick({ landscape: 56, portrait: 60, square: 44 }) * u;
+        sceneRoot(root, L, { flexDirection: row ? "row" : "column", gap: `${gap}px`, fontFamily: ctx.fonts.body });
+        const pad = L.pick({ landscape: 52, portrait: 48, square: 36 }) * u;
+        const cardWidth = row ? (L.safe.width - gap) / 2 : L.safe.width;
+        const cardHeight = row ? L.safe.height * 0.68 : (L.safe.height - gap) / 2;
+        const side = (text, label, accent) => {
+          const card = el("div", accent ? "sp-after" : "sp-before");
+          setStyle(card, {
+            ...cardStyle(ctx, u, 32),
+            position: "relative",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            justifyContent: "center",
+            gap: `${pad * 0.5}px`,
+            width: `${cardWidth}px`,
+            height: `${cardHeight}px`,
+            padding: `${pad}px`,
+            ...accent ? { background: `${ctx.palette.accent} linear-gradient(140deg, ${ctx.palette.accent}, ${ctx.palette.accentAlt})`, border: "none" } : {}
+          });
+          const chip = el("div", "sp-chip", label);
+          setStyle(chip, {
+            padding: `${8 * u}px ${22 * u}px`,
+            borderRadius: `${24 * u}px`,
+            background: accent ? ctx.palette.onAccent : ctx.palette.accentSoft,
+            color: accent ? ctx.palette.accent : ctx.palette.muted,
+            fontFamily: ctx.fonts.body,
+            fontSize: `${L.pick({ landscape: 26, portrait: 30, square: 24 }) * u}px`,
+            fontWeight: "700",
+            letterSpacing: "0.04em",
+            textTransform: "uppercase",
+            whiteSpace: "nowrap"
+          });
+          card.appendChild(chip);
+          const block = textBlock(text, {
+            className: accent ? "sp-after-text" : "sp-before-text",
+            width: cardWidth - 2 * pad,
+            maxSize: L.pick({ landscape: 88, portrait: 84, square: 64 }) * u,
+            minSize: 24 * u,
+            maxLines: 4,
+            color: accent ? ctx.palette.onAccent : ctx.palette.muted,
+            family: ctx.fonts.display,
+            weight: "800",
+            align: "left",
+            lineHeight: 1.12
+          });
+          card.appendChild(block.wrap);
+          root.appendChild(card);
+          return { card, block };
+        };
+        const before = side(props.left, props.leftLabel ?? "Before", false);
+        const after = side(props.right, props.rightLabel ?? "After", true);
+        const arrowSize = L.pick({ landscape: 84, portrait: 92, square: 72 }) * u;
+        const arrow = el("div", "sp-arrow", row ? "\u2192" : "\u2193");
+        setStyle(arrow, {
+          position: "absolute",
+          left: `${ctx.width / 2 - arrowSize / 2}px`,
+          top: `${(L.safe.top + L.safe.bottom) / 2 - arrowSize / 2}px`,
+          width: `${arrowSize}px`,
+          height: `${arrowSize}px`,
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: ctx.palette.fg,
+          color: ctx.palette.bg,
+          fontSize: `${arrowSize * 0.5}px`,
+          fontWeight: "800",
+          lineHeight: "1",
+          boxShadow: `0 ${10 * u}px ${30 * u}px -${10 * u}px rgba(0,0,0,0.5)`,
+          zIndex: "2"
+        });
+        root.appendChild(arrow);
+        instance = { leftCard: before.card, rightCard: after.card, arrow, left: before.block, right: after.block, u, horizontal: row };
+      },
+      seek(localT) {
+        if (!instance) return;
+        const { leftCard, rightCard, arrow, left, right, u, horizontal } = instance;
+        enter(leftCard, localT, 0, 0.75, horizontal ? { x: -120 * u, scale: 0.94 } : { y: -100 * u, scale: 0.94 });
+        wordsIn(left.words, localT, LEFT_WORDS, WORD_EACH9, WORD_DUR10);
+        enter(rightCard, localT, RIGHT_START, 0.8, horizontal ? { x: 160 * u, scale: 0.9 } : { y: 140 * u, scale: 0.9 });
+        wordsIn(right.words, localT, RIGHT_START + 0.3, WORD_EACH9, WORD_DUR10);
+        const dim = progress(localT, RIGHT_START + 0.2, RIGHT_START + 0.8, easeOutCubic);
+        left.wrap.style.opacity = String(1 - 0.45 * dim);
+        const pop = clamp01((localT - RIGHT_START - 0.25) / 0.5);
+        arrow.style.opacity = String(clamp01(pop * 3));
+        arrow.style.transform = pop >= 1 ? "none" : `scale(${(0.3 + 0.7 * easeSpring(pop)).toFixed(4)})`;
+      },
+      marks(props) {
+        return [
+          { t: 0, type: "start" },
+          { t: Math.max(RIGHT_START + 0.8, rightSettle(props)), type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
+  // ../film-runtime/src/templates/logo-wall.ts
+  var CHIPS_START = 0.5;
+  var CHIP_STAGGER = 0.08;
+  var CHIP_ENTER = 0.6;
+  var settleFor3 = (count) => CHIPS_START + Math.max(0, count - 1) * CHIP_STAGGER + CHIP_ENTER;
+  function createLogoWall() {
+    let instance;
+    return {
+      id: "LogoWall",
+      mount(root, props, ctx) {
+        const L = layoutFor(ctx);
+        const u = L.u;
+        sceneRoot(root, L, { gap: `${L.pick({ landscape: 56, portrait: 72, square: 44 }) * u}px`, fontFamily: ctx.fonts.body });
+        const title = textBlock(props.title, {
+          className: "lw-title",
+          width: L.safe.width * L.pick({ landscape: 0.8, portrait: 1, square: 0.96 }),
+          maxSize: L.pick({ landscape: 92, portrait: 88, square: 68 }) * u,
+          minSize: 24 * u,
+          maxLines: L.pick({ landscape: 2, portrait: 3, square: 2 }),
+          color: ctx.palette.fg,
+          family: ctx.fonts.display,
+          weight: "800",
+          lineHeight: 1.12
+        });
+        root.appendChild(title.wrap);
+        const names = props.names.slice(0, 10);
+        const chipGap = L.pick({ landscape: 22, portrait: 24, square: 18 }) * u;
+        const wall = el("div", "lw-wall");
+        setStyle(wall, { display: "flex", flexWrap: "wrap", justifyContent: "center", gap: `${chipGap}px`, maxWidth: `${L.safe.width * L.pick({ landscape: 0.9, portrait: 1, square: 1 })}px` });
+        const size = L.pick({ landscape: 58, portrait: 56, square: 44 }) * u * (names.length <= 4 ? 1.45 : names.length <= 6 ? 1.2 : 1);
+        const chips = names.map((name) => {
+          const chip = el("div", "lw-chip", name);
+          setStyle(chip, {
+            ...cardStyle(ctx, u, 22),
+            padding: `${size * 0.42}px ${size * 0.8}px`,
+            fontFamily: ctx.fonts.display,
+            fontSize: `${size}px`,
+            fontWeight: "700",
+            letterSpacing: "-0.02em",
+            lineHeight: "1.1",
+            color: ctx.palette.fg,
+            whiteSpace: "nowrap"
+          });
+          wall.appendChild(chip);
+          return chip;
+        });
+        root.appendChild(wall);
+        instance = { titleWords: title.words, chips, u };
+      },
+      seek(localT) {
+        if (!instance) return;
+        const { u } = instance;
+        wordsIn(instance.titleWords, localT, 0.15, 0.06, 0.5);
+        instance.chips.forEach((chip, i) => {
+          enter(chip, localT, CHIPS_START + i * CHIP_STAGGER, CHIP_ENTER, { y: 50 * u, scale: 0.6, rotate: i % 2 === 0 ? -6 : 6 });
+        });
+      },
+      marks(props) {
+        return [
+          { t: 0, type: "start" },
+          { t: settleFor3(Math.min(10, props.names?.length ?? 0)), type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
   // ../film-runtime/src/registry.ts
   var TEMPLATE_REGISTRY = {
     KineticHook: createKineticHook,
@@ -1652,7 +2059,11 @@
     ChecklistReveal: createChecklistReveal,
     BigStatement: createBigStatement,
     BentoGrid: createBentoGrid,
-    ScreenCollage: createScreenCollage
+    ScreenCollage: createScreenCollage,
+    DeviceMockup: createDeviceMockup,
+    ZoomDetail: createZoomDetail,
+    SplitCompare: createSplitCompare,
+    LogoWall: createLogoWall
   };
   function createTemplate(templateId) {
     const factory = TEMPLATE_REGISTRY[templateId];
@@ -2056,11 +2467,22 @@
     const insetBottom = burnCaptions ? captionBand(manifest.width, manifest.height).reserve : 0;
     const mounted = manifest.scenes.map((scene, sceneIndex) => {
       const root = document.createElement("div");
+      const template = createTemplate(scene.templateId);
       root.dataset.sceneId = scene.id;
       root.dataset.templateId = scene.templateId;
       root.dataset.style = style.id;
+      const nextScene = manifest.scenes[sceneIndex + 1];
+      const nextIn = nextScene?.transitionInSec ?? 0;
+      if (nextScene && nextIn > 0 && !["cut", "push", "wipe"].includes(resolveTransition(style, sceneIndex + 1, nextScene.transition))) {
+        const length = scene.end - scene.start;
+        const settle = Math.max(0, ...template.marks(scene.props).filter((m) => m.type === "settle").map((m) => m.t));
+        const exitAt = Math.max(length - nextIn, settle + 0.3);
+        if (exitAt < length - 0.1) {
+          root.dataset.exitAt = exitAt.toFixed(4);
+          root.dataset.exitSec = (length - exitAt).toFixed(4);
+        }
+      }
       stage.appendChild(root);
-      const template = createTemplate(scene.templateId);
       const ctx = {
         palette,
         fonts: manifest.fonts,

@@ -1,5 +1,5 @@
 import type { FilmContext } from "../contract.js";
-import { clamp01, easeOutCubic, easeOutQuint, spring } from "./easing.js";
+import { clamp01, easeInCubic, easeOutCubic, easeOutQuint, spring } from "./easing.js";
 import { stylePackFor, type StylePack } from "../style.js";
 import { el, setStyle } from "./dom.js";
 import { wrapText } from "./text-fit.js";
@@ -96,22 +96,41 @@ export function textBlock(text: string, o: TextBlockOptions): TextBlock {
   return { wrap, lines, words, fontSize, height: lines.length * fontSize * lineHeight };
 }
 
-const styleCache = new WeakMap<HTMLElement, StylePack>();
+interface SceneInfo {
+  pack: StylePack;
+  /** Local time (s) the scene's content starts leaving, and how long it takes. exitSec 0 = it stays put. */
+  exitAt: number;
+  exitSec: number;
+}
+
+const sceneCache = new WeakMap<HTMLElement, SceneInfo>();
 
 /**
- * The style pack of the film a mounted node belongs to. The player stamps the
- * pack id on every scene root (`data-style`), so shared motion helpers pick up
- * the film's look without each template threading it through.
+ * What the player stamped on the scene root a mounted node belongs to
+ * (`data-style`, `data-exit-at`, `data-exit-sec`), so shared motion helpers
+ * pick up the film's look and the scene's exit window without each template
+ * threading them through.
  */
-export function styleOf(node: HTMLElement): StylePack {
-  let pack = styleCache.get(node);
-  if (!pack) {
+function sceneOf(node: HTMLElement): SceneInfo {
+  let info = sceneCache.get(node);
+  if (!info) {
     const host = node.closest<HTMLElement>("[data-style]");
-    pack = stylePackFor(host?.dataset.style);
-    // Only cache once attached: before that the lookup would wrongly pin the default.
-    if (host) styleCache.set(node, pack);
+    info = { pack: stylePackFor(host?.dataset.style), exitAt: Number(host?.dataset.exitAt ?? 0), exitSec: Number(host?.dataset.exitSec ?? 0) };
+    // Only cache once attached: before that the lookup would wrongly pin the defaults.
+    if (host) sceneCache.set(node, info);
   }
-  return pack;
+  return info;
+}
+
+/** The style pack of the film a mounted node belongs to. */
+export function styleOf(node: HTMLElement): StylePack {
+  return sceneOf(node).pack;
+}
+
+/** 0 before the scene's exit window, easing to 1 across it; `delay` (0-1 of the window) staggers siblings. */
+function exitAmount(info: SceneInfo, t: number, delay = 0): number {
+  if (info.exitSec <= 0 || t <= info.exitAt) return 0;
+  return easeInCubic(clamp01((t - info.exitAt - delay * info.exitSec) / (info.exitSec * (1 - delay))));
 }
 
 /**
@@ -121,7 +140,8 @@ export function styleOf(node: HTMLElement): StylePack {
  */
 export function wordsIn(words: HTMLElement[], t: number, start: number, each = 0.05, dur = 0.5, riseEm = 0.55): void {
   if (words.length === 0) return;
-  const reveal = styleOf(words[0]!).reveal;
+  const scene = sceneOf(words[0]!);
+  const reveal = scene.pack.reveal;
   for (let i = 0; i < words.length; i++) {
     const lin = clamp01((t - start - i * each) / dur);
     const w = words[i]!;
@@ -143,6 +163,12 @@ export function wordsIn(words: HTMLElement[], t: number, start: number, each = 0
     } else {
       const s = spring(lin, 0.72, 1.1);
       w.style.transform = done ? "none" : `translateY(${((1 - s) * riseEm).toFixed(4)}em)`;
+    }
+    // Exit: as the next scene dissolves in, the words lift away one after another instead of fading as a slab.
+    const out = exitAmount(scene, t, (0.4 * i) / words.length);
+    if (out > 0) {
+      w.style.opacity = String(1 - out);
+      w.style.transform = `translateY(${(-0.4 * out).toFixed(4)}em)`;
     }
   }
 }
@@ -169,10 +195,18 @@ export interface EnterOptions {
  */
 export function enter(node: HTMLElement, t: number, start: number, dur: number, o: EnterOptions = {}, extra = ""): void {
   const lin = clamp01((t - start) / dur);
-  const { damping, freq } = styleOf(node).spring;
+  const scene = sceneOf(node);
+  const { damping, freq } = scene.pack.spring;
   const inv = 1 - (o.ease ? o.ease(lin) : spring(lin, damping, freq));
   node.style.opacity = String(clamp01(lin * 2.2));
   if (lin >= 1) {
+    // Exit: blocks sink back and fade as the next scene dissolves in.
+    const out = exitAmount(scene, t);
+    if (out > 0) {
+      node.style.opacity = String(1 - out);
+      node.style.transform = `translateY(${(-5 * out).toFixed(3)}%) scale(${(1 - 0.05 * out).toFixed(4)}) ${extra}`.trim();
+      return;
+    }
     node.style.transform = extra || "none";
     return;
   }
