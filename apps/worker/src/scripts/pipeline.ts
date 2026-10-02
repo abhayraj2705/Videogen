@@ -4,15 +4,15 @@ import fsp from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
-import { CrawlOutput, JobOptions, ffprobe, formatSlug, runFfmpegQuiet, type AspectFormat } from "@sitereel/shared";
+import { CrawlOutput, JobOptions, Storyboard, ffprobe, formatSlug, runFfmpegQuiet, validateStoryboard, type AspectFormat } from "@sitereel/shared";
 import { createLocalStorageClient, type StorageClient } from "@sitereel/storage";
 import { createAnthropicProvider, createGeminiProvider, type LlmProvider } from "@sitereel/llm";
 import { createGeminiTtsProvider } from "@sitereel/tts";
-import { parseColor } from "@sitereel/film-runtime";
+import { parseColor, type FilmManifest } from "@sitereel/film-runtime";
 import { bundleFilmEntry, startFilmServer } from "@sitereel/renderer";
 import { runCrawlStage } from "../stages/crawl.js";
 import { runPlanStage } from "../stages/plan.js";
-import { runVoiceStage } from "../stages/voice.js";
+import { runVoiceStage, type VoiceSceneResult } from "../stages/voice.js";
 import { buildFilmManifest } from "../stages/build.js";
 import { runQaStage, createLlmVisionReviewer, skippedVisionReviewer } from "../stages/qa.js";
 import { publishManifest, runRenderStage } from "../stages/render.js";
@@ -20,6 +20,8 @@ import { assembleNarrationTrack, mixFinalAudio } from "../lib/audio-mix.js";
 import { buildVtt } from "../lib/vtt.js";
 import { getAudioSidecarFromEnv } from "../lib/audio-sidecar.js";
 import { selectMusicTrack } from "../lib/music.js";
+import { screenshotPageUrls } from "../lib/storyboard-fallback.js";
+import { buildStageHash, decideVoiceScenes, manifestHash, qaStageHash, renderStageHash, sha16, voiceSceneHashes } from "../lib/input-hash.js";
 
 /**
  * End-to-end local pipeline (Phase 4 "pnpm pipeline run <url>"): crawl -> plan
@@ -30,8 +32,16 @@ import { selectMusicTrack } from "../lib/music.js";
  *
  *   pnpm pipeline run benchmark/fixtures/<id>.json [--out DIR] [--formats 16:9,9:16,1:1]
  *                     [--music upbeat|calm|energetic|cinematic|off] [--no-voice] [--plan free|pro]
- *                     [--concurrency N] [--chunks N] [--force]
+ *                     [--concurrency N] [--chunks N] [--force] [--edit storyboard.json]
  *   pnpm pipeline run https://example.com            (live crawl; needs network)
+ *
+ * Phase 6 downstream-only re-runs: every run records per-stage input hashes
+ * in <out>/stage-cache.json (same pure hash functions the queue processors
+ * use). Re-running into the same --out skips any stage whose inputs are
+ * unchanged and reuses its outputs. `--edit <storyboard.json>` replaces the
+ * plan stage with an edited storyboard (e.g. <out>/storyboard.json with one
+ * scene's narration changed): only the edited scenes are re-voiced, and
+ * build / QA / render re-run only if their inputs actually changed.
  */
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -83,10 +93,23 @@ async function ensureScreenshots(crawl: CrawlOutput, storage: StorageClient, sto
   return generated;
 }
 
+/** Per-stage input hashes + reusable outputs from the previous run into the same --out dir. */
+interface StageCache {
+  jobId: string;
+  plan?: { hash: string };
+  voice?: Record<string, { hash: string; result: VoiceSceneResult }>;
+  build?: { hash: string };
+  mix?: { hash: string };
+  qa?: Record<string, { hash: string; passed: boolean }>;
+  render?: Record<string, { hash: string }>;
+}
+
 async function main() {
   const [, , cmd, target, ...rest] = process.argv;
   if (cmd !== "run" || !target) {
-    console.error("usage: pnpm pipeline run <url-or-crawl-fixture.json> [--out DIR] [--formats 16:9,9:16,1:1] [--music MOOD|off] [--no-voice] [--plan free|pro] [--force]");
+    console.error(
+      "usage: pnpm pipeline run <url-or-crawl-fixture.json> [--out DIR] [--formats 16:9,9:16,1:1] [--music MOOD|off] [--no-voice] [--plan free|pro] [--force] [--edit storyboard.json]",
+    );
     process.exit(2);
   }
   const cwd = process.env.INIT_CWD ?? process.cwd();
@@ -113,6 +136,19 @@ async function main() {
   });
   const plan = (flag(rest, "plan") ?? "free") as "free" | "creator" | "pro";
   const force = rest.includes("--force");
+  const editArg = flag(rest, "edit");
+  const editPath = editArg ? [path.resolve(cwd, editArg), path.resolve(REPO_ROOT, editArg)].find((p) => fs.existsSync(p)) : undefined;
+  if (editArg && !editPath) throw new Error(`--edit storyboard not found: ${editArg}`);
+
+  // Stage cache: reused across runs into the same --out (and the same jobId, so storage keys line up).
+  const cachePath = path.join(outDir, "stage-cache.json");
+  const cache: StageCache = fs.existsSync(cachePath) ? (JSON.parse(await fsp.readFile(cachePath, "utf8")) as StageCache) : { jobId: randomUUID() };
+  const saveCache = () => fsp.writeFile(cachePath, JSON.stringify(cache, null, 2));
+  const reuseLog: { stage: string; action: "ran" | "skipped" | "partial"; detail?: string }[] = [];
+  const note = (stage: string, action: "ran" | "skipped" | "partial", detail?: string) => {
+    reuseLog.push({ stage, action, detail });
+    if (action !== "ran") console.log(`  ${action === "skipped" ? "SKIPPED" : "PARTIAL"} ${stage}${detail ? `: ${detail}` : ""}`);
+  };
 
   const storage = createLocalStorageClient(storageDir);
   const env = { STORAGE_DRIVER: "local" as const, STORAGE_LOCAL_DIR: storageDir };
@@ -120,7 +156,7 @@ async function main() {
   const anthropic: LlmProvider | null = process.env.ANTHROPIC_API_KEY ? createAnthropicProvider({ apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL ?? "claude-sonnet-5-5" }) : null;
   const tts = process.env.GEMINI_API_KEY ? createGeminiTtsProvider({ apiKey: process.env.GEMINI_API_KEY }) : null;
   const sidecar = getAudioSidecarFromEnv((m) => console.warn(`  [sidecar] ${m}`));
-  const jobId = randomUUID();
+  const jobId = cache.jobId;
   const timings: Record<string, number> = {};
   const t = async <T>(stage: string, fn: () => Promise<T>): Promise<T> => {
     const s = Date.now();
@@ -131,7 +167,7 @@ async function main() {
     return r;
   };
 
-  console.log(`SiteReel pipeline  job=${jobId}`);
+  console.log(`SiteReel pipeline  job=${jobId}${editPath ? `  (edit run: ${editPath})` : ""}`);
   console.log(`  input=${isUrl ? target : fixturePath}  out=${outDir}`);
   console.log(`  llm=${gemini?.id ?? anthropic?.id ?? "fallback"}  tts=${tts?.id ?? "fallback:silence"}  sidecar=${sidecar?.baseUrl ?? "off (ffmpeg fallback)"}  plan=${plan}  music=${music}`);
   const started = Date.now();
@@ -149,26 +185,92 @@ async function main() {
     if (r.outcome !== "ok") throw new Error(`crawl needs input: ${r.reason} — ${r.message}`);
     return r.crawlOutput;
   });
+  note("crawl", fixturePath ? "skipped" : "ran", fixturePath ? "saved fixture" : undefined);
 
-  // 2. Plan
-  const planned = await t("plan", () => runPlanStage(crawl, options, { primaryProvider: gemini, escalationProvider: anthropic }));
-  await fsp.writeFile(path.join(outDir, "storyboard.json"), JSON.stringify(planned.storyboard, null, 2));
-
-  // 3. Voice
-  const voice = await t("voice", () => runVoiceStage(jobId, planned.storyboard, options, { storage, ttsProvider: tts, aligner: sidecar, repoRoot: REPO_ROOT, log: (m) => console.warn(`  [voice] ${m}`) }));
-
-  // 4. Music + audio mix (format-independent: every format shares one timeline)
-  const track = selectMusicTrack(REPO_ROOT, options);
-  const baseManifest = buildFilmManifest({ storyboard: planned.storyboard, crawlOutput: crawl, voiceScenes: voice.scenes, format: formats[0]!, music: track });
-  const mix = await t("mix", async () => {
-    if (!voice.scenes.some((v) => v.audioKey) && !track) return null;
-    const narration = await assembleNarrationTrack({ manifest: baseManifest, voiceScenes: voice.scenes, storage, repoRoot: REPO_ROOT });
-    return mixFinalAudio({ narration, music: track, durationSec: baseManifest.duration, sidecar, repoRoot: REPO_ROOT });
-  });
-  if (mix) {
-    await fsp.writeFile(path.join(outDir, "audio.wav"), mix.audio);
-    console.log(`  audio: ${mix.path}, music=${track?.id ?? "none"}, ${mix.lufs?.toFixed(1) ?? "n/a"} LUFS, TP ${mix.truePeakDbtp?.toFixed(1) ?? "n/a"} dBTP`);
+  // 2. Plan — or the edited storyboard (W6 editor save), which replaces it.
+  const planHash = sha16(["plan-v1", crawl, options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, gemini?.id ?? null, anthropic?.id ?? null]);
+  const plannedPath = path.join(outDir, "storyboard.planned.json");
+  let storyboard: Storyboard;
+  if (editPath) {
+    storyboard = Storyboard.parse(JSON.parse(await fsp.readFile(editPath, "utf8")));
+    storyboard = { ...storyboard, version: storyboard.version + 1 };
+    const report = validateStoryboard(storyboard, crawl.facts, { pageUrls: screenshotPageUrls(crawl) });
+    if (!report.valid) console.log(`  edited storyboard has ${report.issues.filter((i) => i.severity === "error").length} validation error(s) (rendering anyway)`);
+    note("plan", "skipped", `edited storyboard v${storyboard.version} (${path.basename(editPath)})`);
+  } else if (!force && cache.plan?.hash === planHash && fs.existsSync(plannedPath)) {
+    storyboard = Storyboard.parse(JSON.parse(await fsp.readFile(plannedPath, "utf8")));
+    note("plan", "skipped", "inputs unchanged — reused storyboard.planned.json");
+  } else {
+    const planned = await t("plan", () => runPlanStage(crawl, options, { primaryProvider: gemini, escalationProvider: anthropic }));
+    storyboard = planned.storyboard;
+    await fsp.writeFile(plannedPath, JSON.stringify(storyboard, null, 2));
+    cache.plan = { hash: planHash };
+    note("plan", "ran");
   }
+  // storyboard.json is always the version that was voiced/rendered — edit a copy of it for the next --edit run.
+  await fsp.writeFile(path.join(outDir, "storyboard.json"), JSON.stringify(storyboard, null, 2));
+
+  // 3. Voice — per-scene input hashes; only changed scenes are synthesized.
+  const sceneHashes = voiceSceneHashes(storyboard, options);
+  const prevVoice = force ? {} : (cache.voice ?? {});
+  const decision = decideVoiceScenes(sceneHashes, new Map(Object.entries(prevVoice).map(([id, v]) => [id, v.hash])));
+  const reuse = new Map(decision.reuse.map((id) => [id, prevVoice[id]!.result]));
+  const voice = await t("voice", () =>
+    runVoiceStage(jobId, storyboard, options, { storage, ttsProvider: tts, aligner: sidecar, repoRoot: REPO_ROOT, log: (m) => console.warn(`  [voice] ${m}`), reuse, sceneHashes }),
+  );
+  cache.voice = Object.fromEntries(voice.scenes.map((s) => [s.sceneId, { hash: sceneHashes.get(s.sceneId)!, result: s }]));
+  if (voice.synthesized.length === 0) note("voice", "skipped", `all ${voice.reused.length} scenes unchanged`);
+  else if (voice.reused.length > 0) note("voice", "partial", `re-voiced [${voice.synthesized.join(", ")}], reused [${voice.reused.join(", ")}]`);
+  else note("voice", "ran", `${voice.synthesized.length} scenes`);
+  await saveCache();
+
+  // 4. Build — skip when storyboard content, audio, brand, music and formats are unchanged.
+  const track = selectMusicTrack(REPO_ROOT, options);
+  const audioHashes = Object.fromEntries(voice.scenes.map((s) => [s.sceneId, `${sceneHashes.get(s.sceneId)}:${s.audioKey ?? ""}`]));
+  const buildHash = buildStageHash({ storyboard, audioHashes, brand: crawl.brand, musicId: track?.id ?? null, formats });
+  const manifests = new Map<AspectFormat, FilmManifest>();
+  const buildSkipped = !force && cache.build?.hash === buildHash && formats.every((f) => fs.existsSync(path.join(outDir, `manifest-${formatSlug(f)}.json`)));
+  if (buildSkipped) {
+    for (const f of formats) manifests.set(f, JSON.parse(await fsp.readFile(path.join(outDir, `manifest-${formatSlug(f)}.json`), "utf8")) as FilmManifest);
+    note("build", "skipped", "inputs unchanged — reused manifests");
+  } else {
+    await t("build", async () => {
+      for (const f of formats) {
+        const m = buildFilmManifest({ storyboard, crawlOutput: crawl, voiceScenes: voice.scenes, format: f, music: track });
+        manifests.set(f, m);
+        await fsp.writeFile(path.join(outDir, `manifest-${formatSlug(f)}.json`), JSON.stringify(m, null, 2));
+      }
+    });
+    cache.build = { hash: buildHash };
+    note("build", "ran");
+  }
+  await saveCache();
+
+  // 5. Audio mix (format-independent: every format shares one timeline)
+  const baseManifest = manifests.get(formats[0]!)!;
+  const mixHash = sha16(["mix-v1", manifestHash({ ...baseManifest, width: 0, height: 0 }), audioHashes, track?.id ?? null]);
+  const audioPath = path.join(outDir, "audio.wav");
+  let mixAudio: Buffer | null = null;
+  let mixInfo: { path: string; lufs: number | null; truePeakDbtp: number | null } | null = null;
+  if (!force && cache.mix?.hash === mixHash && fs.existsSync(audioPath)) {
+    mixAudio = await fsp.readFile(audioPath);
+    note("mix", "skipped", "narration + music unchanged — reused audio.wav");
+  } else {
+    const mix = await t("mix", async () => {
+      if (!voice.scenes.some((v) => v.audioKey) && !track) return null;
+      const narration = await assembleNarrationTrack({ manifest: baseManifest, voiceScenes: voice.scenes, storage, repoRoot: REPO_ROOT });
+      return mixFinalAudio({ narration, music: track, durationSec: baseManifest.duration, sidecar, repoRoot: REPO_ROOT });
+    });
+    if (mix) {
+      await fsp.writeFile(audioPath, mix.audio);
+      mixAudio = mix.audio;
+      mixInfo = { path: mix.path, lufs: mix.lufs ?? null, truePeakDbtp: mix.truePeakDbtp ?? null };
+      console.log(`  audio: ${mix.path}, music=${track?.id ?? "none"}, ${mix.lufs?.toFixed(1) ?? "n/a"} LUFS, TP ${mix.truePeakDbtp?.toFixed(1) ?? "n/a"} dBTP`);
+    }
+    cache.mix = { hash: mixHash };
+    note("mix", "ran");
+  }
+  await saveCache();
 
   await bundleFilmEntry();
   const server = await startFilmServer(storageDir, 0);
@@ -177,33 +279,51 @@ async function main() {
   try {
     for (const format of formats) {
       const slug = formatSlug(format);
-      const manifest = buildFilmManifest({ storyboard: planned.storyboard, crawlOutput: crawl, voiceScenes: voice.scenes, format, music: track });
-      await fsp.writeFile(path.join(outDir, `manifest-${slug}.json`), JSON.stringify(manifest, null, 2));
+      const manifest = manifests.get(format)!;
+      const mHash = manifestHash(manifest);
 
-      // 5. QA (hard gate)
-      const { report, contactSheet } = await t(`qa ${format}`, async () => {
-        const { resolved, manifestUrl } = await publishManifest({ manifest, storage, env, serverUrl: server.url, key: `jobs/${jobId}/qa/manifest-${slug}.json` });
-        const llm = gemini ?? anthropic;
-        return runQaStage({ manifest: resolved, filmHost: server.url, manifestUrl, storyboard: planned.storyboard, facts: crawl.facts, vision: llm ? createLlmVisionReviewer(llm) : skippedVisionReviewer });
-      });
-      if (contactSheet) await fsp.writeFile(path.join(outDir, `contact-${slug}.jpg`), contactSheet);
-      await fsp.writeFile(path.join(outDir, `qa-${slug}.json`), JSON.stringify(report, null, 2));
-      const warnings = report.issues.filter((i) => i.severity === "warning").length;
-      console.log(`  QA ${format}: ${report.passed ? "PASSED" : "FAILED"} (${report.blocking.length} blocking, ${warnings} warnings; vision: ${report.vision.status})`);
-      for (const i of report.blocking) console.log(`    BLOCKING ${i.code}: ${i.message}`);
-      if (!report.passed && !force) {
-        failed = true;
-        results.push({ format, qa: "failed", blocking: report.blocking });
-        continue;
+      // 6. QA (hard gate) — skipped when this exact manifest already passed.
+      const qaHash = qaStageHash(mHash, format);
+      let passed: boolean;
+      if (!force && cache.qa?.[format]?.hash === qaHash && cache.qa[format]!.passed) {
+        passed = true;
+        note(`qa ${format}`, "skipped", "manifest unchanged — previous pass reused");
+      } else {
+        const { report, contactSheet } = await t(`qa ${format}`, async () => {
+          const { resolved, manifestUrl } = await publishManifest({ manifest, storage, env, serverUrl: server.url, key: `jobs/${jobId}/qa/manifest-${slug}.json` });
+          const llm = gemini ?? anthropic;
+          return runQaStage({ manifest: resolved, filmHost: server.url, manifestUrl, storyboard, facts: crawl.facts, vision: llm ? createLlmVisionReviewer(llm) : skippedVisionReviewer });
+        });
+        if (contactSheet) await fsp.writeFile(path.join(outDir, `contact-${slug}.jpg`), contactSheet);
+        await fsp.writeFile(path.join(outDir, `qa-${slug}.json`), JSON.stringify(report, null, 2));
+        const warnings = report.issues.filter((i) => i.severity === "warning").length;
+        console.log(`  QA ${format}: ${report.passed ? "PASSED" : "FAILED"} (${report.blocking.length} blocking, ${warnings} warnings; vision: ${report.vision.status})`);
+        for (const i of report.blocking) console.log(`    BLOCKING ${i.code}: ${i.message}`);
+        passed = report.passed;
+        cache.qa = { ...(cache.qa ?? {}), [format]: { hash: qaHash, passed } };
+        await saveCache();
+        note(`qa ${format}`, "ran");
+        if (!passed && !force) {
+          failed = true;
+          results.push({ format, qa: "failed", blocking: report.blocking });
+          continue;
+        }
       }
 
-      // 6. Render + encode
+      // 7. Render + encode — skipped when manifest, audio and watermark are unchanged and the MP4 exists.
+      const mp4 = path.join(outDir, `${slug}.mp4`);
+      const renderHash = renderStageHash({ manifestHash: mHash, format, watermark: plan === "free", audioHash: mixHash });
+      if (!force && cache.render?.[format]?.hash === renderHash && fs.existsSync(mp4)) {
+        note(`render ${format}`, "skipped", `inputs unchanged — reused ${slug}.mp4`);
+        results.push({ format, qa: passed ? "passed" : "forced", file: mp4, reused: true });
+        continue;
+      }
       const r = await t(`render ${format}`, () =>
         runRenderStage({
           jobId,
           format,
           manifest,
-          audioBuffer: mix?.audio ?? null,
+          audioBuffer: mixAudio,
           storage,
           env,
           watermark: plan === "free",
@@ -214,10 +334,12 @@ async function main() {
           },
         }),
       );
-      const mp4 = path.join(outDir, `${slug}.mp4`);
       await fsp.writeFile(mp4, r.videoBuffer);
       await fsp.writeFile(path.join(outDir, `${slug}.png`), r.posterBuffer);
       await fsp.writeFile(path.join(outDir, `${slug}.vtt`), buildVtt(manifest));
+      cache.render = { ...(cache.render ?? {}), [format]: { hash: renderHash } };
+      await saveCache();
+      note(`render ${format}`, "ran");
       const probe = await ffprobe(mp4);
       const v = probe.streams.find((s) => s.codec_type === "video");
       const a = probe.streams.find((s) => s.codec_type === "audio");
@@ -225,7 +347,7 @@ async function main() {
         `  ${slug}.mp4: ${v?.codec_name} ${v?.width}x${v?.height} ${v?.nb_frames} frames ${probe.durationSec.toFixed(2)}s, audio=${a ? `${a.codec_name}` : "none"}, ${(r.bytes / 1024 / 1024).toFixed(2)} MB, ` +
           `${r.chunked.chunks} chunks x ${r.chunked.concurrency} (reused ${r.chunked.chunksReused}), captions=${manifest.captions.length}`,
       );
-      results.push({ format, qa: report.passed ? "passed" : "forced", file: mp4, probe: { video: v, audio: a ?? null, durationSec: probe.durationSec }, chunked: r.chunked });
+      results.push({ format, qa: passed ? "passed" : "forced", file: mp4, probe: { video: v, audio: a ?? null, durationSec: probe.durationSec }, chunked: r.chunked });
     }
   } finally {
     await server.close();
@@ -234,18 +356,24 @@ async function main() {
   const summary = {
     jobId,
     input: isUrl ? target : fixturePath,
-    storyboardSource: planned.storyboard.source,
-    scenes: planned.storyboard.scenes.map((s) => s.templateId),
+    edit: editPath ?? null,
+    storyboardVersion: storyboard.version,
+    storyboardSource: storyboard.source,
+    scenes: storyboard.scenes.map((s) => s.templateId),
     durationSec: baseManifest.duration,
     beatLocked: Boolean(track),
     music: track?.id ?? null,
-    voice: { providerIds: [...new Set(voice.scenes.map((s) => s.provider))], cacheHits: voice.cacheHits, aligned: voice.aligned },
-    audio: mix ? { path: mix.path, lufs: mix.lufs, truePeakDbtp: mix.truePeakDbtp } : null,
+    voice: { providerIds: [...new Set(voice.scenes.map((s) => s.provider))], cacheHits: voice.cacheHits, aligned: voice.aligned, synthesized: voice.synthesized, reused: voice.reused },
+    audio: mixInfo,
+    stageReuse: reuseLog,
     timingsMs: timings,
     totalMs: Date.now() - started,
     results,
   };
   await fsp.writeFile(path.join(outDir, "summary.json"), JSON.stringify(summary, null, 2));
+
+  console.log("\nStage reuse:");
+  for (const r of reuseLog) console.log(`  ${r.stage.padEnd(12)} ${r.action.toUpperCase().padEnd(8)} ${r.detail ?? ""}`);
   console.log(`\nDone in ${(summary.totalMs / 1000).toFixed(1)}s -> ${outDir}`);
   if (failed) process.exitCode = 1;
 }
