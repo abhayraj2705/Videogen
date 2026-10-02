@@ -107,7 +107,7 @@ export function memoryStorage(): StorageClient & { objects: Map<string, Buffer> 
 export const silentLogger = pino({ level: "silent" }) as unknown as Logger;
 
 export function newApp(): FastifyInstance {
-  return Fastify();
+  return Fastify({ maxParamLength: 1024 });
 }
 
 export async function seedUser(db: Db, opts: { credits?: number; role?: "user" | "admin"; plan?: "free" | "pro" | "business" } = {}) {

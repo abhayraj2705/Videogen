@@ -35,7 +35,8 @@ async function main() {
   const events = new JobEventBus(env.REDIS_URL, { replayMaxEvents: env.SSE_REPLAY_MAX_EVENTS, replayTtlSec: env.SSE_REPLAY_TTL_SEC });
   const verifyAuth = createAuthVerifier(env.SUPABASE_URL);
 
-  const app = Fastify({ loggerInstance: logger as any, trustProxy: env.TRUST_PROXY });
+  // maxParamLength: signed local-upload tokens (PUT /api/uploads/local/:token) exceed the 100-char default.
+  const app = Fastify({ loggerInstance: logger as any, trustProxy: env.TRUST_PROXY, maxParamLength: 1024 });
 
   if (sentryEnabled) Sentry.setupFastifyErrorHandler(app);
 
