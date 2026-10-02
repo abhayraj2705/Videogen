@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { SiteBrief, type FactLedger } from "@sitereel/shared";
-import type { LlmProvider } from "@sitereel/llm";
+import { costOfError, type LlmProvider } from "@sitereel/llm";
 
 const LlmSiteBriefShape = z.object({
   productName: z.string(),
@@ -42,6 +42,7 @@ export async function buildSiteBrief(opts: {
   domain: string;
   facts: FactLedger;
   provider: LlmProvider | null;
+  timeoutMs?: number;
 }): Promise<SiteBriefResult> {
   const { domain, facts, provider } = opts;
 
@@ -67,7 +68,7 @@ Return a JSON object with exactly these fields:
 - strongestClaimFactId: the id (string) of the single most compelling fact above, or null if none stand out`;
 
   try {
-    const result = await provider.generateJson({ system, prompt, schema: LlmSiteBriefShape, maxOutputTokens: 500 });
+    const result = await provider.generateJson({ system, prompt, schema: LlmSiteBriefShape, schemaName: "site_brief", maxOutputTokens: 500, timeoutMs: opts.timeoutMs });
     const factIdSet = new Set(facts.map((f) => f.id));
     const strongestClaimFactId =
       result.data.strongestClaimFactId && factIdSet.has(result.data.strongestClaimFactId)
@@ -83,10 +84,11 @@ Return a JSON object with exactly these fields:
       },
       costUsd: result.costUsd,
     };
-  } catch {
+  } catch (err) {
     // Any LLM failure (timeout, invalid JSON after retry, quota) falls back
     // rather than failing the whole crawl — a crawl with a plain-heuristic
     // brief is still useful; a crawl that dies on a flaky LLM call is not.
-    return { brief: buildFallbackBrief(domain, facts), costUsd: 0 };
+    // The failed attempts were still billed, so their cost is kept.
+    return { brief: buildFallbackBrief(domain, facts), costUsd: costOfError(err) };
   }
 }
