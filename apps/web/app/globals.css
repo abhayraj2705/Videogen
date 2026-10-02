@@ -3,7 +3,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:root, .dark {
+/* §3.2 — dark-only product. Same values in :root and .dark so nothing ever renders light. */
+:root,
+.dark {
   --radius: 0.75rem;
 
   --background: oklch(0.14 0.005 270);
@@ -18,7 +20,7 @@
   --secondary: oklch(0.24 0.008 270);
   --secondary-foreground: var(--foreground);
   --muted: oklch(0.22 0.006 270);
-  --muted-foreground: oklch(0.70 0.01 270);
+  --muted-foreground: oklch(0.7 0.01 270);
   --accent: oklch(0.26 0.02 295);
   --accent-foreground: var(--foreground);
 
@@ -30,11 +32,20 @@
   --input: oklch(1 0 0 / 12%);
   --ring: oklch(0.72 0.19 295 / 60%);
 
+  --chart-1: oklch(0.72 0.19 295);
+  --chart-2: oklch(0.74 0.15 200);
+  --chart-3: oklch(0.8 0.15 80);
+  --chart-4: oklch(0.7 0.18 20);
+  --chart-5: oklch(0.74 0.17 155);
+
   --sidebar: oklch(0.16 0.006 270);
   --sidebar-foreground: var(--foreground);
   --sidebar-border: var(--border);
   --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
   --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-ring: var(--ring);
 }
 
 @theme inline {
@@ -58,12 +69,96 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* next/font exposes these CSS variables on <body> (see app/layout.tsx). */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* Magic UI-style effects (components/magic/*) */
+  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+  --animate-marquee-vertical: marquee-vertical var(--marquee-duration, 40s) linear infinite;
+  --animate-shimmer-slide: shimmer-slide var(--shimmer-speed, 3s) ease-in-out infinite alternate;
+  --animate-spin-around: spin-around calc(var(--shimmer-speed, 3s) * 2) infinite linear;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--marquee-gap, 1rem)));
+    }
+  }
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--marquee-gap, 1rem)));
+    }
+  }
+  @keyframes shimmer-slide {
+    to {
+      transform: translate(calc(100cqw - 100%), 0);
+    }
+  }
+  @keyframes spin-around {
+    0% {
+      transform: translateZ(0) rotate(0);
+    }
+    15%,
+    35% {
+      transform: translateZ(0) rotate(90deg);
+    }
+    65%,
+    85% {
+      transform: translateZ(0) rotate(270deg);
+    }
+    100% {
+      transform: translateZ(0) rotate(360deg);
+    }
+  }
 }
 
-body {
-  @apply bg-background text-foreground antialiased;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+}
+
+/* §3.9 — under reduced motion: no ambient effects, motion collapses to quick fades. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.15s !important;
+    scroll-behavior: auto !important;
+  }
 }

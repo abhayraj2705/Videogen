@@ -18,7 +18,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar email={user.email ?? null} />
-        <main className="flex-1 overflow-y-auto px-6 py-8 pb-20 md:pb-8">{children}</main>
+        <main id="main" className="flex-1 overflow-y-auto px-4 py-8 pb-24 sm:px-6 md:pb-8">{children}</main>
       </div>
       <MobileTabbar />
       <CommandMenu />

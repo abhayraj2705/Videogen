@@ -20,6 +20,13 @@ const mediaOrigins = (process.env.NEXT_PUBLIC_MEDIA_ORIGINS ?? "")
   .map((s) => originOf(s.trim()))
   .filter((s): s is string => Boolean(s));
 
+// Client-side analytics / error reporting endpoints (no-ops when unset).
+const posthogOrigin = process.env.NEXT_PUBLIC_POSTHOG_KEY
+  ? originOf(process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com")
+  : undefined;
+// The DSN's host is the ingest origin (https://<key>@oNNN.ingest.sentry.io/<project>).
+const sentryOrigin = originOf(process.env.NEXT_PUBLIC_SENTRY_DSN);
+
 function src(...values: (string | undefined | false)[]): string {
   return [...new Set(values.filter((v): v is string => Boolean(v)))].join(" ");
 }
@@ -29,47 +36,70 @@ function src(...values: (string | undefined | false)[]): string {
  * script-src needs 'unsafe-inline' until we move to nonce-based CSP in
  * middleware; 'unsafe-eval' is dev-only (React Refresh).
  */
-const csp = [
-  `default-src 'self'`,
-  `script-src ${src("'self'", "'unsafe-inline'", isDev && "'unsafe-eval'")}`,
-  `style-src 'self' 'unsafe-inline'`,
-  // URL preview shows arbitrary sites' favicons / OG images, hence https:.
-  `img-src ${src("'self'", "data:", "blob:", "https:", apiOrigin, supabaseOrigin, ...mediaOrigins)}`,
-  `media-src ${src("'self'", "blob:", apiOrigin, ...mediaOrigins)}`,
-  `font-src 'self' data:`,
-  `connect-src ${src(
-    "'self'",
-    apiOrigin,
-    supabaseOrigin,
-    supabaseOrigin?.replace(/^http/, "ws"),
-    isDev && "ws://localhost:*",
-  )}`,
-  `worker-src 'self' blob:`,
-  // Billing (Razorpay / Stripe checkout) will need its hosts added to script-src / frame-src / connect-src.
-  `frame-src 'self'`,
-  `frame-ancestors 'none'`,
-  `object-src 'none'`,
-  `base-uri 'self'`,
-  `form-action 'self'`,
-  !isDev && "upgrade-insecure-requests",
-]
-  .filter(Boolean)
-  .join("; ");
+function buildCsp({ embeddable }: { embeddable: boolean }): string {
+  return [
+    `default-src 'self'`,
+    `script-src ${src("'self'", "'unsafe-inline'", isDev && "'unsafe-eval'")}`,
+    `style-src 'self' 'unsafe-inline'`,
+    // URL preview shows arbitrary sites' favicons / OG images, hence https:.
+    `img-src ${src("'self'", "data:", "blob:", "https:", apiOrigin, supabaseOrigin, ...mediaOrigins)}`,
+    `media-src ${src("'self'", "blob:", apiOrigin, ...mediaOrigins)}`,
+    `font-src 'self' data:`,
+    `connect-src ${src(
+      "'self'",
+      apiOrigin,
+      supabaseOrigin,
+      supabaseOrigin?.replace(/^http/, "ws"),
+      isDev && "ws://localhost:*",
+      posthogOrigin,
+      posthogOrigin?.replace("://", "://*."),
+      sentryOrigin,
+    )}`,
+    `worker-src 'self' blob:`,
+    // Billing (Razorpay / Stripe checkout) will need its hosts added to script-src / frame-src / connect-src.
+    `frame-src 'self'`,
+    // The share embed player (/v/:shareId/embed) is meant to be iframed anywhere.
+    embeddable ? `frame-ancestors *` : `frame-ancestors 'none'`,
+    `object-src 'none'`,
+    `base-uri 'self'`,
+    `form-action 'self'`,
+    !isDev && "upgrade-insecure-requests",
+  ]
+    .filter(Boolean)
+    .join("; ");
+}
 
-const securityHeaders = [
-  { key: "Content-Security-Policy", value: csp },
+const commonHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "X-Frame-Options", value: "DENY" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
 ];
+
+const EMBED_PATH = "/v/:shareId/embed";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@sitereel/shared"],
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      {
+        // Everything except the embed player: no framing at all.
+        source: "/((?!v/[^/]+/embed$).*)",
+        headers: [
+          ...commonHeaders,
+          { key: "Content-Security-Policy", value: buildCsp({ embeddable: false }) },
+          { key: "X-Frame-Options", value: "DENY" },
+        ],
+      },
+      {
+        source: EMBED_PATH,
+        headers: [
+          ...commonHeaders,
+          { key: "Content-Security-Policy", value: buildCsp({ embeddable: true }) },
+        ],
+      },
+    ];
   },
 };
 
