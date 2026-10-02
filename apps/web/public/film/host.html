@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SiteReel live preview</title>
+    <style>
+      html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #0b0b0f; }
+      #frame { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+      #stage { position: relative; }
+    </style>
+  </head>
+  <body>
+    <div id="frame"><div id="stage"></div></div>
+    <script>
+      /*
+       * Live-preview host for the script-review editor (apps/web/components/editor/film-preview.tsx).
+       *
+       * film-bundle.js (copied from packages/renderer/public by scripts/copy-film-bundle.mjs) is
+       * the same IIFE the renderer captures frames from. It boots by fetching the manifest named
+       * in ?manifest= and then publishes window.__film { duration, seek(t) }. Nothing goes over
+       * the network: the parent window postMessages the manifest, we point ?manifest= at a
+       * sentinel and answer that one fetch from memory, then inject the bundle.
+       *
+       * Protocol (same-origin only):
+       *   parent -> host  { type: "load", manifest }   (once per iframe instance)
+       *   parent -> host  { type: "seek", t }
+       *   host -> parent  { type: "host-ready" } | { type: "ready", duration } | { type: "error", message }
+       */
+      (function () {
+        var SENTINEL = "sitereel-inline-manifest.json";
+        var manifest = null;
+        var loaded = false;
+        var origin = window.location.origin;
+
+        function post(msg) {
+          if (window.parent && window.parent !== window) window.parent.postMessage(msg, origin);
+        }
+
+        function fit() {
+          if (!manifest) return;
+          var s = Math.min(window.innerWidth / manifest.width, window.innerHeight / manifest.height);
+          var frame = document.getElementById("frame");
+          var dx = (window.innerWidth - manifest.width * s) / 2;
+          var dy = (window.innerHeight - manifest.height * s) / 2;
+          frame.style.transform = "translate(" + dx + "px," + dy + "px) scale(" + s + ")";
+        }
+
+        var realFetch = window.fetch.bind(window);
+        window.fetch = function (input, init) {
+          var url = typeof input === "string" ? input : input && input.url;
+          if (url && String(url).indexOf(SENTINEL) !== -1 && manifest) {
+            return Promise.resolve(new Response(JSON.stringify(manifest), { headers: { "Content-Type": "application/json" } }));
+          }
+          return realFetch(input, init);
+        };
+
+        window.addEventListener("film:ready", function () {
+          fit();
+          post({ type: "ready", duration: window.__film.duration });
+        });
+        window.addEventListener("resize", fit);
+        window.addEventListener("error", function (e) {
+          post({ type: "error", message: String((e && e.message) || "Preview failed") });
+        });
+        window.addEventListener("unhandledrejection", function (e) {
+          post({ type: "error", message: String((e && e.reason && e.reason.message) || "Preview failed") });
+        });
+
+        window.addEventListener("message", function (e) {
+          if (e.origin !== origin || !e.data || typeof e.data !== "object") return;
+          var msg = e.data;
+          if (msg.type === "load" && !loaded && msg.manifest) {
+            loaded = true;
+            manifest = msg.manifest;
+            history.replaceState(null, "", "?manifest=" + SENTINEL);
+            fit();
+            var s = document.createElement("script");
+            s.src = "/film/film-bundle.js";
+            s.onerror = function () {
+              post({ type: "error", message: "film-bundle.js is missing. Run `node scripts/copy-film-bundle.mjs` in apps/web." });
+            };
+            document.body.appendChild(s);
+          } else if (msg.type === "seek" && window.__film && window.__film.ready) {
+            window.__film.seek(Math.max(0, Math.min(window.__film.duration, Number(msg.t) || 0)));
+          }
+        });
+
+        post({ type: "host-ready" });
+      })();
+    </script>
+  </body>
+</html>
