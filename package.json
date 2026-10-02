@@ -30,7 +30,7 @@
     "loadtest": "pnpm --filter @sitereel/worker exec tsx src/scripts/load-test.ts"
   },
   "devDependencies": {
-    "@eslint/js": "9.17.0",
+    "@eslint/js": "9.39.5",
     "eslint": "9.17.0",
     "globals": "17.13.0",
     "supabase": "2.118.0",
