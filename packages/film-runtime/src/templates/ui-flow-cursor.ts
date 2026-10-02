@@ -41,6 +41,12 @@ const CURSOR_START = 0.7;
 /** Seconds to travel to each waypoint; the click lands on arrival. */
 const LEG_SEC = 0.85;
 
+/** When the pointer clicks (seconds from the scene start), for the sound design. */
+export function cursorClickTimes(props: Pick<UIFlowCursorProps, "cursorPath" | "cursorTargets">): number[] {
+  const stops = props.cursorTargets?.length || props.cursorPath?.length || DEFAULT_PATH.length;
+  return Array.from({ length: stops }, (_, i) => CURSOR_START + (i + 1) * LEG_SEC);
+}
+
 const countWords = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
 
 const CURSOR_SVG =

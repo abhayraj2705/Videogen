@@ -90,6 +90,22 @@ export const TEMPLATE_PROP_SCHEMAS: Record<TemplateId, z.ZodType> = {
   Montage: z.object({
     caption: z.string().min(1),
   }),
+  FeatureCallouts: z.object({
+    sourcePageUrl: z.string().url(),
+    caption: z.string().min(1),
+    items: z.array(z.string().min(1)).min(2).max(3),
+  }),
+  MetricsRow: z.object({
+    metrics: z.array(z.object({ value: z.string().min(1), label: z.string().min(1) })).min(2).max(3),
+  }),
+  PhotoShowcase: z.object({
+    sourcePageUrl: z.string().url(),
+    caption: z.string().min(1),
+  }),
+  IsoStack: z.object({
+    sourcePageUrl: z.string().url(),
+    caption: z.string().min(1),
+  }),
   LogoWall: z.object({
     title: z.string().min(1),
     names: z.array(z.string().min(1)).min(3).max(10),
@@ -120,7 +136,14 @@ export function visibleTextFor(templateId: TemplateId, props: unknown): string[]
     case "ZoomDetail":
     case "StepByStep":
     case "Montage":
+    case "PhotoShowcase":
+    case "IsoStack":
       return [p.caption as string];
+    case "FeatureCallouts":
+      return [p.caption as string, ...(p.items as string[])];
+    case "MetricsRow":
+      // Like StatCounter, the figures count up and are re-formatted; the labels are what must be readable.
+      return (p.metrics as { label: string }[]).map((m) => m.label);
     case "KineticType":
       return [p.text as string];
     case "SplitCompare":
@@ -162,7 +185,7 @@ export function syncOnScreenText<S extends { templateId: TemplateId; props: unkn
 }
 
 /** Templates that show a crawled page and so must point at one (`sourcePageUrl`). */
-export const SCREENSHOT_TEMPLATES: ReadonlySet<string> = new Set(["SectionShowcase", "UIFlowCursor", "ScreenCollage", "DeviceMockup", "ZoomDetail", "StepByStep"]);
+export const SCREENSHOT_TEMPLATES: ReadonlySet<string> = new Set(["SectionShowcase", "UIFlowCursor", "ScreenCollage", "DeviceMockup", "ZoomDetail", "StepByStep", "FeatureCallouts", "PhotoShowcase", "IsoStack"]);
 
 /** Appendix C — phrases the planner must never use, enforced in code, not just asked for in the prompt. */
 export const BANNED_PHRASES = ["streamline your workflow", "supercharge", "unlock", "elevate"] as const;

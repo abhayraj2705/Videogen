@@ -21,6 +21,10 @@ const TEMPLATE_CATALOG = `- KineticHook: opening hook (2-3s). props: { productNa
 - StepByStep: one step of a walkthrough — a big step number and title beside the screen it happens on, with progress dots (4-6s). props: { sourcePageUrl, caption (what the user does or sees, 2-6 words), step (1, 2, 3 ... in order) }. Walkthrough films only; number the steps consecutively.
 - KineticType: one strong line set as a full-frame typographic poster, building row by row (2-3s). props: { text (3-7 words) }. Use for the boldest claim, as a hook alternative or a punchline between product scenes. At most once.
 - Montage: a fast cut through the product's screens, several per second, with a flash on each cut (2-4s). props: { caption (2-6 words) }. Needs at least three screenshot assets. Use for energy: teasers, or "everything in one place".
+- FeatureCallouts: the page with two or three things pointed out on it — labelled outlines appearing one by one on the real elements (4-6s). props: { sourcePageUrl, caption, items: string[] } (2-3 labels, 1-4 words each). items[i] labels the scene's i-th cited fact, so cite one on-page fact per item, in the same order, all from the page shown.
+- MetricsRow: two or three numbers counting up side by side (3-4s). props: { metrics: [{ value, label }] } (value is the exact number text from a cited fact, e.g. "40,000+"; label 1-4 words). Use instead of StatCounter when the ledger has several good numbers.
+- PhotoShowcase: one image filling the whole frame with the caption on a plate over it (3-5s). props: { sourcePageUrl, caption }. Best for an uploaded photo or a striking screen.
+- IsoStack: three parts of a page as layers stacked in 3D, seen at an angle and drifting apart (3-5s). props: { sourcePageUrl, caption }. A showier alternative to ScreenCollage; use one or the other.
 - CTAEndCard: closing scene (2-4s). props: { productName, ctaText, domain }. Use once, last scene.`;
 
 const KIND_PRIORITY: Record<string, number> = { hero: 0, feature: 1, stat: 2, testimonial: 3, cta: 4, heading: 5, other: 6 };
@@ -61,7 +65,7 @@ export function buildAssetList(crawlOutput: CrawlOutput): string {
     p.sectionScreenshotKeys?.forEach((_, s) => lines.push(`  - [screenshot-${i}-section-${s}] section ${s + 1} of the ${pageLabel(p.url, i)} (scrolled ${s} viewport(s) down)`));
   });
   if (crawlOutput.brand.logoUrl) lines.push(`- [logo] type=logo — the site's logo (${crawlOutput.brand.logoUrl.startsWith("data:") ? "inline SVG" : crawlOutput.brand.logoUrl})`);
-  return lines.length > 0 ? lines.join("\n") : "- (no screenshots available — do not use SectionShowcase, UIFlowCursor, ScreenCollage, DeviceMockup, ZoomDetail, StepByStep or Montage)";
+  return lines.length > 0 ? lines.join("\n") : "- (no screenshots available — do not use SectionShowcase, UIFlowCursor, ScreenCollage, DeviceMockup, ZoomDetail, StepByStep, Montage, FeatureCallouts, PhotoShowcase or IsoStack)";
 }
 
 export function buildBrandBlock(crawlOutput: CrawlOutput): string {
@@ -101,7 +105,7 @@ ${recipe.rules.map((r) => `- ${r}`).join("\n")}
 - Prefer showing the product in use (UIFlowCursor, SectionShowcase) over describing it.
 - Every on-screen line is a complete phrase that reads on its own: never end on a comma or on a word like "and", "to", "of", "with", "on". Shorten by rewriting, not by cutting off.
 - Text animates in word by word, so short punchy lines land best: hook headline 3-7 words, feature labels 2-5 words, captions 3-8 words.
-- Pacing: never use the same template for two scenes in a row; alternate text scenes with product (screenshot) scenes. There are five ways to show the product (SectionShowcase, UIFlowCursor, ScreenCollage, DeviceMockup, ZoomDetail) — use a different one each time.
+- Pacing: never use the same template for two scenes in a row; alternate text scenes with product (screenshot) scenes. There are many ways to show the product (SectionShowcase, UIFlowCursor, ScreenCollage, IsoStack, DeviceMockup, ZoomDetail, FeatureCallouts, PhotoShowcase, Montage) — use a different one each time.
 - Each scene may set "emphasis": one or two words copied exactly from that scene's on-screen text — the words that carry its point. They light up in the accent colour as the voice says them, so choose words the narration also says.
 - Facts marked "on-page" have a known position on a screenshot. A product scene whose FIRST cited fact is on-page (and from the page it shows) gets a camera move onto that fact; SectionShowcase visits up to three on-page facts in turn. Prefer them for product scenes.
 - Each scene after the first may set "transition" (how it cuts in): "zoom" for a reveal or a big number, "push" between parallel points, "wipe" into a screenshot scene, "cut" (hard cut, lands on the beat) for a punchy change, "whip" for a fast energetic jump, "fade" for a calm change of topic, "slide-left"/"slide-up" as gentler alternatives. Vary them; leave it out to let the renderer choose from the tone's own set.

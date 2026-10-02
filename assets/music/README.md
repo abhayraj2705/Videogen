@@ -16,7 +16,7 @@ longer than the track.
 
 ## Bundled tracks are placeholders
 
-The eight `sitereel-*.mp3` files (two per mood) are **procedurally synthesized** by
+The twelve `sitereel-*.mp3` files (three per mood) are **procedurally synthesized** by
 `build_library.py generate` (numpy oscillators + noise drums), so they carry no
 third-party rights. They exist so the pipeline has real music with real beat
 grids offline; they are not production-quality music.
@@ -31,6 +31,10 @@ grids offline; they are not production-quality music.
 | sitereel-energetic-02 | energetic | 136 |
 | sitereel-calm-02 | calm | 76 |
 | sitereel-cinematic-02 | cinematic | 100 |
+| sitereel-upbeat-03 | upbeat | 126 |
+| sitereel-energetic-03 | energetic | 120 |
+| sitereel-calm-03 | calm | 92 |
+| sitereel-cinematic-03 | cinematic | 80 |
 
 Their beat grids are exact (we wrote the notes); `detectedBpm` is what
 librosa's tracker hears, recorded as a sanity check (it locks onto a metrical

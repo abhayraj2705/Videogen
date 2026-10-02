@@ -15,7 +15,7 @@ import { Tone } from "./job.js";
  * assets only by fact id / role, not by final URL.
  */
 
-/** Full 20-template catalog — must stay in lockstep with film-runtime's TEMPLATE_REGISTRY. */
+/** Full 24-template catalog — must stay in lockstep with film-runtime's TEMPLATE_REGISTRY. */
 export const TemplateId = z.enum([
   "KineticHook",
   "FeatureTriplet",
@@ -38,6 +38,10 @@ export const TemplateId = z.enum([
   "StepByStep",
   "KineticType",
   "Montage",
+  "FeatureCallouts",
+  "MetricsRow",
+  "PhotoShowcase",
+  "IsoStack",
 ]);
 export type TemplateId = z.infer<typeof TemplateId>;
 
@@ -118,6 +122,7 @@ export const LlmSceneProps = z.object({
   rightLabel: z.string().optional(),
   names: z.array(z.string()).optional(),
   step: z.number().optional(),
+  metrics: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
 });
 
 /** Drops the props a model left empty (null, "", []), so optional template props stay absent rather than blank. */

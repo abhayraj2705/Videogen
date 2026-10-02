@@ -22,6 +22,10 @@ export const TEMPLATE_IDS: TemplateId[] = [
   "StepByStep",
   "KineticType",
   "Montage",
+  "FeatureCallouts",
+  "MetricsRow",
+  "PhotoShowcase",
+  "IsoStack",
 ];
 
 const LABELS: Record<string, string> = {
@@ -45,7 +49,23 @@ const LABELS: Record<string, string> = {
   StepByStep: "Walkthrough step",
   KineticType: "Type poster",
   Montage: "Montage",
+  FeatureCallouts: "Callouts",
+  MetricsRow: "Metrics",
+  PhotoShowcase: "Full-frame image",
+  IsoStack: "3D stack",
 };
+
+/** Mirror of shared's SceneTransition enum, with the words an editor would use. */
+export const SCENE_TRANSITIONS: { value: "cut" | "push" | "wipe" | "whip" | "zoom" | "fade" | "slide-left" | "slide-up"; label: string }[] = [
+  { value: "cut", label: "Hard cut" },
+  { value: "push", label: "Push" },
+  { value: "wipe", label: "Wipe" },
+  { value: "whip", label: "Whip pan" },
+  { value: "zoom", label: "Zoom through" },
+  { value: "fade", label: "Dissolve" },
+  { value: "slide-left", label: "Slide left" },
+  { value: "slide-up", label: "Slide up" },
+];
 
 export function templateLabel(id: string): string {
   return LABELS[id] ?? id;

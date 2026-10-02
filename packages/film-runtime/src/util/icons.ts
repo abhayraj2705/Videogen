@@ -28,8 +28,11 @@ const PATHS: Record<string, string> = {
   gear: "M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1",
 };
 
-/** The names the planner may use for a feature's `icon`. */
-export const ICON_NAMES = Object.keys(PATHS);
+/**
+ * The names the planner may use for a feature's `icon`. Marked pure so the
+ * film bundle, which never reads it, drops it instead of carrying an unused constant.
+ */
+export const ICON_NAMES = /* @__PURE__ */ Object.keys(PATHS);
 
 /** Inline SVG markup for a named icon, or null when the name isn't one of ours. */
 export function iconSvg(name: string | undefined): string | null {

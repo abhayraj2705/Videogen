@@ -2,8 +2,8 @@ import type { FilmContext, FilmManifest, FontFaceSpec, Mark, Palette, ResolvedPa
 import { createSceneRng } from "./util/rng.js";
 import { createTemplate } from "./registry.js";
 import { bestContrast, contrastRatio, mixRgb, parseColor, relativeLuminance, rgbString, rgbaString, shiftHue, type Rgb } from "./util/color.js";
-import { clamp01, easeInCubic, easeInOutQuart, easeOutQuint } from "./util/easing.js";
-import { captionBand } from "./util/layout.js";
+import { clamp01, easeInCubic, easeInOutCubic, easeInOutQuart, easeOutQuint } from "./util/easing.js";
+import { captionBand, safeRect } from "./util/layout.js";
 import { createBackdrop } from "./backdrop.js";
 import { createCaptionLayer } from "./captions.js";
 import { resolveTransition, stylePackFor } from "./style.js";
@@ -191,6 +191,8 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
   const burnCaptions = manifest.captionStyle === "burned" && manifest.captions.some((c) => c.burn !== false);
   const insetBottom = burnCaptions ? captionBand(manifest.width, manifest.height).reserve : 0;
 
+  // Held in an object: it is set inside the mount callback, which TypeScript cannot see through for a plain variable.
+  const openingLogo: { rect: { src: string; x: number; y: number; w: number; h: number } | null } = { rect: null };
   const mounted: MountedScene[] = manifest.scenes.map((scene, sceneIndex) => {
     const root = document.createElement("div");
     const template = createTemplate(scene.templateId);
@@ -225,6 +227,16 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
       rng: createSceneRng(scene.id),
     };
     template.mount(root, scene.props, ctx);
+    // Where the opening scene puts the logo (measured now, while the scene is laid out and before any entrance moves it):
+    // the brand mark that stays on screen for the rest of the film takes off from here.
+    if (sceneIndex === 0) {
+      const logo = root.querySelector<HTMLImageElement>('[class$="-logo"] img');
+      const frame = stage.getBoundingClientRect();
+      const box = logo?.getBoundingClientRect();
+      // The stage may be shown scaled (the web preview fits it to its panel); measure in film pixels.
+      const k = frame.width > 0 ? manifest.width / frame.width : 1;
+      if (logo && box && box.width > 0) openingLogo.rect = { src: logo.src, x: (box.left - frame.left) * k, y: (box.top - frame.top) * k, w: box.width * k, h: box.height * k };
+    }
     // Remember the display mode the template chose (flex, grid, ...) so
     // showing the scene again restores it instead of falling back to block.
     const shownDisplay = root.style.display;
@@ -240,6 +252,34 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
     const emphasis = scene.emphasis && nodes.length > 0 ? { nodes, at: scene.emphasis.at } : null;
     return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0, transition, emphasis };
   });
+
+  // Continuity: once the opening scene ends, its logo doesn't vanish — it travels up into the top margin
+  // (outside the title-safe area, so it never sits on a scene's content) and stays there as a small brand
+  // mark until the closing scene, which shows the logo large again. Films of three scenes or more only.
+  let brand: { node: HTMLImageElement; from: { x: number; y: number; w: number; h: number }; to: { x: number; y: number; w: number; h: number }; t0: number; t1: number; out0: number; out1: number } | null = null;
+  const second = manifest.scenes[1];
+  const closing = manifest.scenes[manifest.scenes.length - 1];
+  const opening = openingLogo.rect;
+  if (opening && second && closing && manifest.scenes.length >= 3) {
+    const safe = safeRect(manifest.width, manifest.height);
+    const h = Math.min(44 * u, safe.top * 0.6);
+    const w = (h * opening.w) / Math.max(1, opening.h);
+    const node = document.createElement("img");
+    node.className = "brand-mark";
+    node.src = opening.src;
+    Object.assign(node.style, { position: "absolute", left: "0", top: "0", width: `${opening.w}px`, height: `${opening.h}px`, objectFit: "contain", transformOrigin: "0 0", opacity: "0", pointerEvents: "none" });
+    stage.appendChild(node);
+    const lift = Math.max(0.45, second.transitionInSec ?? 0);
+    brand = {
+      node,
+      from: opening,
+      to: { x: manifest.width / 2 - w / 2, y: safe.top / 2 - h / 2, w, h },
+      t0: second.start,
+      t1: second.start + lift,
+      out0: closing.start,
+      out1: closing.start + Math.max(0.25, (closing.transitionInSec ?? 0) / 2),
+    };
+  }
 
   // Finish: film grain over the whole picture (under the captions). The noise tile is drawn once
   // from a seeded generator and only shifted per frame, so it is the same on every render.
@@ -295,6 +335,15 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
   function seek(t: number): void {
     backdrop.seek(t);
     captionLayer?.seek(t);
+    if (brand) {
+      const { node, from, to } = brand;
+      const e = easeInOutCubic(clamp01((t - brand.t0) / (brand.t1 - brand.t0)));
+      const x = from.x + (to.x - from.x) * e;
+      const y = from.y + (to.y - from.y) * e;
+      const s = 1 + (to.w / from.w - 1) * e;
+      node.style.opacity = t < brand.t0 ? "0" : String(1 - clamp01((t - brand.out0) / (brand.out1 - brand.out0)));
+      node.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${s.toFixed(4)})`;
+    }
     if (grain) {
       // Grain moves every third frame (10 fps): still alive to the eye, far cheaper to encode. Pure in t.
       const frame = Math.floor(Math.round(t * manifest.fps) / 3);

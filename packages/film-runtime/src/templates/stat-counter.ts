@@ -27,7 +27,7 @@ const COUNT_END = 1.2;
 const LABEL_START = 0.55;
 
 /** Parses "10,000+" -> {numeric: 10000, prefix: "", suffix: "+"} so the number itself can count up; non-numeric values just fade in as-is. */
-function parseStatValue(value: string): { numeric: number | null; prefix: string; suffix: string; decimals: number } {
+export function parseStatValue(value: string): { numeric: number | null; prefix: string; suffix: string; decimals: number } {
   const match = /^([^\d]*)([\d,]+(?:\.\d+)?)([^\d]*)$/.exec(value.trim());
   if (!match) return { numeric: null, prefix: "", suffix: "", decimals: 0 };
   const [, prefix, numStr, suffix] = match;
@@ -37,7 +37,7 @@ function parseStatValue(value: string): { numeric: number | null; prefix: string
   return { numeric, prefix: prefix ?? "", suffix: suffix ?? "", decimals };
 }
 
-function formatCounted(n: number, decimals: number): string {
+export function formatCounted(n: number, decimals: number): string {
   return n.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
 }
 

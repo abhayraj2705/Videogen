@@ -55,7 +55,8 @@ function repeatsScreenText(scene: Storyboard["scenes"][number]): boolean {
 /** The list a template reveals item by item, if it has one. */
 function listItems(templateId: string, props: Record<string, unknown>): string[] | null {
   if (templateId === "FeatureTriplet" && Array.isArray(props.features)) return (props.features as { label?: unknown }[]).map((f) => String(f.label ?? ""));
-  if ((templateId === "ChecklistReveal" || templateId === "BentoGrid") && Array.isArray(props.items)) return (props.items as unknown[]).map(String);
+  if ((templateId === "ChecklistReveal" || templateId === "BentoGrid" || templateId === "FeatureCallouts") && Array.isArray(props.items)) return (props.items as unknown[]).map(String);
+  if (templateId === "MetricsRow" && Array.isArray(props.metrics)) return (props.metrics as { label?: unknown }[]).map((m) => String(m.label ?? ""));
   return null;
 }
 
@@ -135,6 +136,23 @@ function emphasisMoment(scene: Storyboard["scenes"][number], voice: VoiceSceneRe
 
 /** Resolves a scene's props for its template, swapping sourcePageUrl references for real asset refs. */
 function resolveProps(templateId: string, props: Record<string, unknown>, crawlOutput: CrawlOutput, factIds: string[] = []): Record<string, unknown> {
+  if (templateId === "FeatureCallouts") {
+    const page = crawlOutput.pages.find((p) => p.url === props.sourcePageUrl) ?? crawlOutput.pages[0];
+    const { sourcePageUrl: _drop, items, ...rest } = props;
+    // items[i] labels the i-th cited fact; it gets a pointer when that fact has a place on this page's screenshot.
+    const callouts = (Array.isArray(items) ? items : []).map((label, i) => {
+      const rect = page && factIds[i] ? focusRectFor([factIds[i]!], { ...crawlOutput, pages: [] }, page.url) : undefined;
+      return { label: String(label), ...(rect ? { rect } : {}) };
+    });
+    return { ...rest, callouts, screenshotUrl: page?.screenshotKey ? assetRef("assets", page.screenshotKey) : "" };
+  }
+  if (templateId === "PhotoShowcase") {
+    const page = crawlOutput.pages.find((p) => p.url === props.sourcePageUrl) ?? crawlOutput.pages[0];
+    const { sourcePageUrl: _drop, ...rest } = props;
+    // A crawled page is shown by its first screenful (sharp, and composed like a hero image); an upload as it is.
+    const key = page?.origin === "upload" ? page.screenshotKey : (page?.sectionScreenshotKeys?.[0] ?? page?.screenshotKey);
+    return { ...rest, screenshotUrl: key ? assetRef("assets", key) : "" };
+  }
   if (templateId === "Montage") {
     // Cut through the product: the user's own uploads first, then the top of every crawled page, then further sections.
     const shot = crawlOutput.pages.filter((p) => p.screenshotKey);
@@ -192,7 +210,7 @@ function resolveProps(templateId: string, props: Record<string, unknown>, crawlO
       ...(targets.length > 0 ? { cursorTargets: targets } : {}),
     };
   }
-  if (templateId === "ScreenCollage") {
+  if (templateId === "ScreenCollage" || templateId === "IsoStack") {
     const page = crawlOutput.pages.find((p) => p.url === props.sourcePageUrl) ?? crawlOutput.pages[0];
     const { sourcePageUrl: _drop, ...rest } = props;
     // Viewport-sized section captures make the cards; a page with fewer than two falls back to its full-page shot.

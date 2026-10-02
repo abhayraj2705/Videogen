@@ -16,8 +16,7 @@ export interface FilmQaIssue {
     | "overflow"
     | "safe_area"
     | "text_clipped"
-    | "low_contrast"
-    | "qa_crashed";
+    | "low_contrast" | "low_fill" | "qa_crashed";
   message: string;
   severity: "error" | "warning";
   sceneId?: string;
@@ -124,7 +123,15 @@ interface ProbeOutput {
   found: boolean;
   textItems: { text: string; opacity: number; rect: [number, number, number, number]; color: string; bg: string; fontSize: number; fontWeight: number; clipped: boolean }[];
   overflowEls: { tag: string; cls: string; rect: [number, number, number, number] }[];
+  /** Bounding box of everything the scene draws at its settle frame; null when it draws nothing. */
+  content?: [number, number, number, number] | null;
 }
+
+/**
+ * A settled scene should use at least this share of the title-safe area; less reads as a small thing lost in
+ * the frame. Set below a centred end card (logo, line, button: about 20%), which is small by design.
+ */
+const MIN_FILL = 0.18;
 
 /**
  * §4.6 "QA" browser probes — everything that needs real pixels/layout:
@@ -217,6 +224,14 @@ export async function runFilmQa(opts: FilmQaOptions): Promise<FilmQaResult> {
             sceneId,
             message: `Scene ${sceneId}: expected on-screen text "${expected}" not fully visible at settle (saw "${visibleText.slice(0, 120)}")`,
           });
+        }
+      }
+
+      if (probe.content) {
+        const [cl, ct, cr, cb] = probe.content;
+        const fill = (Math.max(0, Math.min(cr, safe.right) - Math.max(cl, safe.left)) * Math.max(0, Math.min(cb, safe.bottom) - Math.max(ct, safe.top))) / (safe.width * safe.height);
+        if (fill < MIN_FILL) {
+          issues.push({ code: "low_fill", severity: "warning", sceneId, message: `Scene ${sceneId}: content covers ${Math.round(fill * 100)}% of the title-safe area at its settled frame (under ${MIN_FILL * 100}%)`, details: { content: probe.content.map(Math.round) } });
         }
       }
 

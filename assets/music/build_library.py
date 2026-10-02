@@ -123,6 +123,10 @@ TRACKS = [
     ("02", "energetic", dict(bpm=136, key="A", prog="drive", drums="backbeat", bass="eighths", lead="arp16", pad=0.07), 13),
     ("02", "calm", dict(bpm=76, bars=12, key="C", prog="lift", drums="soft", bass="whole", lead="arp8", pad=0.18), 17),
     ("02", "cinematic", dict(bpm=100, bars=12, key="D", prog="drive", drums="toms", bass="drone", lead="arp4", pad=0.18), 19),
+    ("03", "upbeat", dict(bpm=126, key="A", prog="pop", drums="four", bass="eighths", lead="arp16", pad=0.09), 23),
+    ("03", "energetic", dict(bpm=120, key="C", prog="lift", drums="four", bass="offbeat", lead="arp8", pad=0.1), 29),
+    ("03", "calm", dict(bpm=92, bars=12, key="G", prog="minor", drums="soft", bass="whole", lead="arp4", pad=0.2), 31),
+    ("03", "cinematic", dict(bpm=80, bars=12, key="E", prog="lift", drums="toms", bass="whole", lead="none", pad=0.24), 37),
 ]
 
 

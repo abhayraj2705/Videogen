@@ -83,16 +83,21 @@ function pageLabel(url: unknown): string {
 }
 
 export function previewProps(templateId: string, props: Record<string, unknown>, brand: PreviewBrand): Record<string, unknown> {
-  if (templateId === "SectionShowcase" || templateId === "UIFlowCursor" || templateId === "DeviceMockup" || templateId === "ZoomDetail" || templateId === "StepByStep") {
+  if (templateId === "SectionShowcase" || templateId === "UIFlowCursor" || templateId === "DeviceMockup" || templateId === "ZoomDetail" || templateId === "StepByStep" || templateId === "PhotoShowcase") {
     const { sourcePageUrl, ...rest } = props;
     const existing = typeof props.screenshotUrl === "string" && /^(https?:|data:)/.test(props.screenshotUrl) ? props.screenshotUrl : null;
     return { ...rest, screenshotUrl: existing ?? screenshotPlaceholder(pageLabel(sourcePageUrl), brand) };
+  }
+  if (templateId === "FeatureCallouts") {
+    // The preview has no element positions: the labels are listed in the card's corner, as they are in a render without them.
+    const { sourcePageUrl, items, ...rest } = props;
+    return { ...rest, callouts: (Array.isArray(items) ? items : []).map((label) => ({ label: String(label) })), screenshotUrl: screenshotPlaceholder(pageLabel(sourcePageUrl), brand) };
   }
   if (templateId === "Montage") {
     const placeholder = screenshotPlaceholder("your site", brand);
     return { ...props, screenshotUrls: [placeholder, placeholder, placeholder] };
   }
-  if (templateId === "ScreenCollage") {
+  if (templateId === "ScreenCollage" || templateId === "IsoStack") {
     const { sourcePageUrl, ...rest } = props;
     const placeholder = screenshotPlaceholder(pageLabel(sourcePageUrl), brand);
     return { ...rest, screenshotUrls: [placeholder, placeholder, placeholder] };
