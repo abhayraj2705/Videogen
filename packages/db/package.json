@@ -18,7 +18,7 @@
     "postgres": "3.4.5"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "0.5.8",
+    "@sitereel/test-pglite": "workspace:^",
     "@types/node": "22.10.5",
     "dotenv": "16.4.7",
     "drizzle-kit": "0.30.1",

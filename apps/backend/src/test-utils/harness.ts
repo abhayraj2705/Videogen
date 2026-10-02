@@ -3,9 +3,7 @@ import { fileURLToPath } from "node:url";
 import Fastify, { type FastifyInstance, type FastifyReply, type FastifyRequest } from "fastify";
 import { pino } from "pino";
 import { eq } from "drizzle-orm";
-import { PGlite } from "@electric-sql/pglite";
-import { drizzle } from "drizzle-orm/pglite";
-import { migrate } from "drizzle-orm/pglite/migrator";
+import { createMigratedPglite } from "@sitereel/test-pglite";
 import { schema, crawls, jobs, storyboards, users, type Db } from "@sitereel/db";
 import type { FactLedger, JobOptions, JobStatus, Storyboard } from "@sitereel/shared";
 import type { Bucket, StorageClient } from "@sitereel/storage";
@@ -21,10 +19,8 @@ import type { Logger } from "../lib/logger.js";
 const MIGRATIONS_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..", "packages", "db", "migrations");
 
 export async function createTestDb(): Promise<{ db: Db; close: () => Promise<void> }> {
-  const client = new PGlite();
-  const pdb = drizzle(client, { schema });
-  await migrate(pdb, { migrationsFolder: MIGRATIONS_DIR });
-  return { db: pdb as unknown as Db, close: () => client.close() };
+  const { db, close } = await createMigratedPglite(schema, MIGRATIONS_DIR);
+  return { db: db as Db, close };
 }
 
 export function fakeAuth(): AuthVerifier {

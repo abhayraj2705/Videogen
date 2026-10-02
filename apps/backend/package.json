@@ -29,7 +29,7 @@
     "zod": "3.24.1"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "0.5.8",
+    "@sitereel/test-pglite": "workspace:^",
     "@types/node": "22.10.5",
     "dotenv": "16.4.7",
     "tsx": "4.19.2",
