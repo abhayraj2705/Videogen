@@ -103,6 +103,12 @@ create policy payments_owner_select on payments
 
 -- webhook_events: service role only (RLS enabled + no policies = no access).
 
+-- Wave B: users_self_update must not let a client mint credits, change its
+-- plan or promote itself to admin through PostgREST. Column-level grants limit
+-- direct updates to profile fields; plan/credits/role only change server-side.
+revoke update on users from anon, authenticated;
+grant update (name, settings) on users to authenticated;
+
 drop policy if exists deletion_requests_owner_select on deletion_requests;
 create policy deletion_requests_owner_select on deletion_requests
   for select using (auth.uid() = user_id);

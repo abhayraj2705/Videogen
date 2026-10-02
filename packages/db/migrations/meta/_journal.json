@@ -29,6 +29,13 @@
       "when": 1790888857839,
       "tag": "0003_wave_a_shares_billing",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790914317773,
+      "tag": "0004_wave_b_phase6",
+      "breakpoints": true
     }
   ]
 }

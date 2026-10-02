@@ -73,7 +73,7 @@ export type CreateJobWithChargeResult =
  */
 export async function createJobWithCharge(
   db: Db,
-  input: { userId: string; url: string; domain: string; options: JobOptions; maxActiveJobs: number },
+  input: { userId: string; url: string; domain: string; options: JobOptions; maxActiveJobs: number; brandKitId?: string | null },
 ): Promise<CreateJobWithChargeResult> {
   const cost = computeJobCost(input.options);
 
@@ -102,6 +102,7 @@ export async function createJobWithCharge(
         domain: input.domain,
         status: "queued",
         options: input.options,
+        brandKitId: input.brandKitId ?? null,
         creditsCharged: cost,
       })
       .returning();
