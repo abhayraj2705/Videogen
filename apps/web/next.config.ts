@@ -27,6 +27,15 @@ const posthogOrigin = process.env.NEXT_PUBLIC_POSTHOG_KEY
 // The DSN's host is the ingest origin (https://<key>@oNNN.ingest.sentry.io/<project>).
 const sentryOrigin = originOf(process.env.NEXT_PUBLIC_SENTRY_DSN);
 
+// W11 billing: Razorpay Checkout.js (modal iframe + API calls) and Stripe
+// (Checkout is a full-page redirect, but Stripe.js / its frames may be used).
+const razorpayScript = "https://checkout.razorpay.com";
+const razorpayFrames = ["https://api.razorpay.com", "https://checkout.razorpay.com"];
+const razorpayConnect = ["https://api.razorpay.com", "https://lumberjack.razorpay.com"];
+const stripeScript = "https://js.stripe.com";
+const stripeFrames = ["https://js.stripe.com", "https://hooks.stripe.com", "https://checkout.stripe.com"];
+const stripeConnect = ["https://api.stripe.com"];
+
 function src(...values: (string | undefined | false)[]): string {
   return [...new Set(values.filter((v): v is string => Boolean(v)))].join(" ");
 }
@@ -39,7 +48,7 @@ function src(...values: (string | undefined | false)[]): string {
 function buildCsp({ embeddable }: { embeddable: boolean }): string {
   return [
     `default-src 'self'`,
-    `script-src ${src("'self'", "'unsafe-inline'", isDev && "'unsafe-eval'")}`,
+    `script-src ${src("'self'", "'unsafe-inline'", isDev && "'unsafe-eval'", razorpayScript, stripeScript)}`,
     `style-src 'self' 'unsafe-inline'`,
     // URL preview shows arbitrary sites' favicons / OG images, hence https:.
     `img-src ${src("'self'", "data:", "blob:", "https:", apiOrigin, supabaseOrigin, ...mediaOrigins)}`,
@@ -54,15 +63,17 @@ function buildCsp({ embeddable }: { embeddable: boolean }): string {
       posthogOrigin,
       posthogOrigin?.replace("://", "://*."),
       sentryOrigin,
+      ...razorpayConnect,
+      ...stripeConnect,
     )}`,
     `worker-src 'self' blob:`,
-    // Billing (Razorpay / Stripe checkout) will need its hosts added to script-src / frame-src / connect-src.
-    `frame-src 'self'`,
+    `frame-src ${src("'self'", ...razorpayFrames, ...stripeFrames)}`,
     // The share embed player (/v/:shareId/embed) is meant to be iframed anywhere.
     embeddable ? `frame-ancestors *` : `frame-ancestors 'none'`,
     `object-src 'none'`,
     `base-uri 'self'`,
-    `form-action 'self'`,
+    // Razorpay Checkout may submit to its own origin (UPI / netbanking redirects).
+    `form-action ${src("'self'", ...razorpayFrames)}`,
     !isDev && "upgrade-insecure-requests",
   ]
     .filter(Boolean)

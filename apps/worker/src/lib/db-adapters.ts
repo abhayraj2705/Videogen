@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { and, desc, eq, inArray, like, sql } from "drizzle-orm";
-import { brandKits, jobs, stageRuns, storyboards, users, type Db } from "@sitereel/db";
+import { brandKits, jobs, stageRuns, storyboards, users, type BrandKitColors, type BrandKitFonts, type Db } from "@sitereel/db";
 import type { ServerEnv, Storyboard, ValidationReport } from "@sitereel/shared";
 import type { StorageClient } from "@sitereel/storage";
 import { UserSettings, type StoryboardRowSource } from "./phase6-contracts.js";
@@ -10,40 +10,24 @@ import { nextStoryboardVersion } from "./job-policy.js";
 import type { PriorRun } from "./input-hash.js";
 
 /**
- * MERGE SEAMS — every DB access that depends on Wave B schema additions made
- * by the parallel backend agent lives here, behind small functions, so the
- * coordinator can switch them to the typed schema after merge:
+ * Worker DB access for the Wave B (Phase 6) schema, behind small functions:
  *
- *   - getUserSettings      reads `users.settings` (jsonb)  — raw SQL, tolerates the column not existing yet
- *   - getJobBrandKitId     reads `jobs.brand_kit_id`       — raw SQL, falls back to jobs.options.brandKitId
- *   - getJobWatermarkSnapshot reads jobs.options.watermark — switch if the backend stores it elsewhere
- *   - stage-run "meta"     contract says `meta.inputHash`; stage_runs has no meta column in the Wave A
- *                          schema, so the hash is written to the `inputs_hash` column AND `outputs.inputHash`
- *   - storyboards.source   already exists in schema (llm|llm-escalated|fallback|user); written via typed insert
+ *   - getUserSettings         users.settings (jsonb)
+ *   - getJobBrandKitId        jobs.brand_kit_id, falling back to jobs.options.brandKitId
+ *   - getJobWatermarkSnapshot jobs.options.watermark (set server-side at job creation)
+ *   - stage-run input hashes  stored in stage_runs.inputs_hash AND outputs.inputHash
+ *   - storyboards.source      llm|llm-escalated|fallback|user
  */
-
-type RawRow = Record<string, unknown>;
-
-async function rawRows(db: Db, query: ReturnType<typeof sql>): Promise<RawRow[]> {
-  const res = (await db.execute(query)) as unknown;
-  if (Array.isArray(res)) return res as RawRow[];
-  const rows = (res as { rows?: RawRow[] })?.rows;
-  return Array.isArray(rows) ? rows : [];
-}
 
 // ---------------------------------------------------------------------------
 // users.settings / contact
 // ---------------------------------------------------------------------------
 
 export async function getUserSettings(db: Db, userId: string): Promise<UserSettings | null> {
-  try {
-    const rows = await rawRows(db, sql`select settings from users where id = ${userId} limit 1`);
-    const parsed = UserSettings.safeParse(rows[0]?.settings ?? {});
-    return parsed.success ? parsed.data : null;
-  } catch {
-    // Column not migrated yet (pre-merge) — behave as "no preferences set".
-    return null;
-  }
+  const [row] = await db.select({ settings: users.settings }).from(users).where(eq(users.id, userId)).limit(1);
+  if (!row) return null;
+  const parsed = UserSettings.safeParse(row.settings ?? {});
+  return parsed.success ? parsed.data : null;
 }
 
 export interface UserContact {
@@ -64,14 +48,8 @@ export async function getUserContact(db: Db, userId: string): Promise<UserContac
 // ---------------------------------------------------------------------------
 
 export async function getJobBrandKitId(db: Db, job: { id: string; options: { brandKitId?: string } }): Promise<string | null> {
-  try {
-    const rows = await rawRows(db, sql`select brand_kit_id from jobs where id = ${job.id} limit 1`);
-    const v = rows[0]?.brand_kit_id;
-    if (typeof v === "string" && v) return v;
-  } catch {
-    // column not migrated yet
-  }
-  return job.options.brandKitId ?? null;
+  const [row] = await db.select({ brandKitId: jobs.brandKitId }).from(jobs).where(eq(jobs.id, job.id)).limit(1);
+  return row?.brandKitId ?? job.options.brandKitId ?? null;
 }
 
 /** Watermark decision captured at job creation, if the backend recorded one (jobs.options.watermark). */
@@ -95,10 +73,23 @@ export async function listUserBrandKits(db: Db, userId: string): Promise<BrandKi
   return db.select().from(brandKits).where(eq(brandKits.userId, userId));
 }
 
-export async function insertBrandKit(db: Db, values: { userId: string; name: string; colors: Record<string, string>; fonts: Record<string, string>; sourceUrl: string; isDefault: boolean }): Promise<BrandKitRow | null> {
+/**
+ * Inserts an auto-created kit. `colors`/`fonts` must carry the contract keys
+ * (primary/background/foreground, heading/body — see brandKitFromCrawl); extra
+ * legacy keys are kept in the jsonb for older readers.
+ */
+export async function insertBrandKit(
+  db: Db,
+  values: { userId: string; name: string; colors: Record<string, string>; fonts: Record<string, string>; sourceUrl: string; isDefault: boolean },
+): Promise<BrandKitRow | null> {
+  const { primary, background, foreground } = values.colors;
+  const { heading, body } = values.fonts;
+  if (!primary || !background || !foreground || !heading || !body) throw new Error("insertBrandKit: colors/fonts missing contract keys");
+  const colors = values.colors as unknown as BrandKitColors;
+  const fonts = values.fonts as unknown as BrandKitFonts;
   const [row] = await db
     .insert(brandKits)
-    .values({ ...values, colors: values.colors, fonts: values.fonts })
+    .values({ ...values, colors, fonts })
     .returning();
   return row ?? null;
 }
@@ -232,7 +223,8 @@ export async function deleteStoragePrefix(
   storage: StorageClient,
   prefix: string,
 ): Promise<number> {
-  if (!/^jobs\/[0-9a-f-]{36}\/$/i.test(prefix)) throw new Error(`refusing to delete unexpected prefix: ${prefix}`);
+  // jobs/{jobId}/ (pipeline artifacts, uploads) or users/{userId}/ (brand-kit logos).
+  if (!/^(jobs|users)\/[0-9a-f-]{36}\/$/i.test(prefix)) throw new Error(`refusing to delete unexpected prefix: ${prefix}`);
   const s = storage as StorageWithDelete;
   let deleted = 0;
   for (const bucket of ["assets", "renders"] as const) {

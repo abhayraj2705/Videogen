@@ -52,7 +52,8 @@ export type Tone = z.infer<typeof Tone>;
 /** §3.6 W4 "Create video" form. */
 export const JobOptions = z.object({
   formats: z.array(AspectFormat).min(1).max(3),
-  lengthSec: z.union([z.literal(15), z.literal(20), z.literal(30)]),
+  // 45/60 added in Phase 6 (quick-change lengths); the W4 create form offers 15/20/30.
+  lengthSec: z.union([z.literal(15), z.literal(20), z.literal(30), z.literal(45), z.literal(60)]),
   tone: Tone,
   voiceLanguage: z.enum(["en", "hi"]).default("en"),
   voiceId: z.string().default("default"),
@@ -62,6 +63,11 @@ export const JobOptions = z.object({
   brandKitId: z.string().uuid().optional(),
   reviewBeforeRender: z.boolean().default(true),
   focusPage: z.string().optional(),
+  /**
+   * Server-set at job creation (users.plan === "free"); any client-sent value is
+   * overwritten. The worker turns it off if the user has since upgraded.
+   */
+  watermark: z.boolean().optional(),
 });
 export type JobOptions = z.infer<typeof JobOptions>;
 
