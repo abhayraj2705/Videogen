@@ -2,10 +2,11 @@ import type { FilmContext, FilmManifest, FontFaceSpec, Mark, Palette, ResolvedPa
 import { createSceneRng } from "./util/rng.js";
 import { createTemplate } from "./registry.js";
 import { bestContrast, contrastRatio, mixRgb, parseColor, relativeLuminance, rgbString, rgbaString, shiftHue, type Rgb } from "./util/color.js";
-import { clamp01, easeInCubic, easeOutQuint } from "./util/easing.js";
+import { clamp01, easeInCubic, easeInOutQuart, easeOutQuint } from "./util/easing.js";
 import { captionBand } from "./util/layout.js";
 import { createBackdrop } from "./backdrop.js";
 import { createCaptionLayer } from "./captions.js";
+import { resolveTransition, stylePackFor } from "./style.js";
 
 /**
  * Normalizes any CSS color (oklch(), named colors, ...) to rgb() via a canvas
@@ -93,16 +94,41 @@ async function loadFontStylesheets(urls: string[] | undefined): Promise<void> {
   await Promise.race([Promise.all(loads), new Promise((resolve) => setTimeout(resolve, 4000))]);
 }
 
-/** Cut styles cycled when a scene doesn't name one, so consecutive cuts differ but a re-render never does. */
-const AUTO_TRANSITIONS: TransitionKind[] = ["zoom", "slide-left", "fade", "slide-up"];
+interface CutStyle {
+  opacity: number;
+  transform: string;
+  clipPath?: string;
+  filter?: string;
+}
 
 /**
  * Style for a scene root partway through a cut. Scene roots are transparent
- * over a shared backdrop, so the outgoing scene clears out during the first
- * half while the incoming one arrives during the second — two layouts are
- * never legible on top of each other.
+ * over a shared backdrop, so for the dissolving kinds the outgoing scene
+ * clears out during the first half while the incoming one arrives during the
+ * second — two layouts are never legible on top of each other. "push" and
+ * "wipe" keep both at full strength and separate them in space instead;
+ * "whip" smears both sideways; "cut" swaps them at the midpoint.
  */
-function cutStyle(kind: TransitionKind, role: "in" | "out", p: number, width: number, height: number): { opacity: number; transform: string } {
+function cutStyle(kind: TransitionKind, role: "in" | "out", p: number, width: number, height: number, u: number): CutStyle {
+  if (kind === "cut") return { opacity: (role === "in") === p >= 0.5 ? 1 : 0, transform: "" };
+  if (kind === "push") {
+    const e = easeInOutQuart(p);
+    const x = role === "in" ? (1 - e) * width : -e * width;
+    return { opacity: 1, transform: `translateX(${x.toFixed(2)}px)` };
+  }
+  if (kind === "wipe") {
+    // A vertical edge sweeps right-to-left: the incoming scene is uncovered on the right of it, the outgoing one remains on the left.
+    const edge = ((1 - easeInOutQuart(p)) * 100).toFixed(3);
+    return role === "in" ? { opacity: 1, transform: "", clipPath: `inset(0 0 0 ${edge}%)` } : { opacity: 1, transform: "", clipPath: `inset(0 ${(100 - Number(edge)).toFixed(3)}% 0 0)` };
+  }
+  if (kind === "whip") {
+    if (role === "in") {
+      const inv = 1 - easeOutQuint(p);
+      return { opacity: clamp01((p - 0.3) / 0.3), transform: `translateX(${(inv * 0.6 * width).toFixed(2)}px)`, filter: `blur(${(inv * 40 * u).toFixed(2)}px)` };
+    }
+    const e = easeInCubic(p);
+    return { opacity: 1 - clamp01((p - 0.2) / 0.3), transform: `translateX(${(-e * 0.6 * width).toFixed(2)}px)`, filter: `blur(${(e * 40 * u).toFixed(2)}px)` };
+  }
   if (role === "in") {
     const inv = 1 - easeOutQuint(p);
     const opacity = clamp01((p - 0.15) / 0.6);
@@ -151,17 +177,21 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
     background: manifest.palette.bg,
   });
   const palette = resolvePalette(manifest.palette);
+  const style = stylePackFor(manifest.style);
+  const u = Math.min(manifest.width, manifest.height) / 1080;
   // Fonts first: templates fit and wrap text at mount.
   await Promise.all([loadFontFaces(manifest.fontFaces), loadFontStylesheets(manifest.fontCssUrls)]);
 
   const backdrop = createBackdrop(stage, manifest, palette, toRgbString);
-  const burnCaptions = manifest.captionStyle === "burned" && manifest.captions.length > 0;
+  const burnCaptions = manifest.captionStyle === "burned" && manifest.captions.some((c) => c.burn !== false);
   const insetBottom = burnCaptions ? captionBand(manifest.width, manifest.height).reserve : 0;
 
   const mounted: MountedScene[] = manifest.scenes.map((scene, sceneIndex) => {
     const root = document.createElement("div");
     root.dataset.sceneId = scene.id;
     root.dataset.templateId = scene.templateId;
+    // Shared motion helpers (util/ui.ts styleOf) read the film's look from here.
+    root.dataset.style = style.id;
     stage.appendChild(root);
 
     const template = createTemplate(scene.templateId);
@@ -173,6 +203,7 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
       durationSec: scene.end - scene.start,
       sceneIndex,
       insetBottom,
+      style,
       rng: createSceneRng(scene.id),
     };
     template.mount(root, scene.props, ctx);
@@ -184,7 +215,7 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
     root.style.position = "absolute";
     root.style.inset = "0";
 
-    const transition = scene.transition ?? AUTO_TRANSITIONS[Math.max(0, sceneIndex - 1) % AUTO_TRANSITIONS.length]!;
+    const transition = resolveTransition(style, sceneIndex, scene.transition);
     return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0, transition };
   });
 
@@ -219,19 +250,32 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
         const localT = t - scene.start;
         // Cut in over the previous scene, and out under the next one. Pure function of t.
         let opacity = 1;
+        let clipPath = "none";
+        let filter = "none";
         const transforms: string[] = [];
-        if (scene.transitionIn > 0 && localT < scene.transitionIn) {
-          const c = cutStyle(scene.transition, "in", clamp01(localT / scene.transitionIn), manifest.width, manifest.height);
+        const apply = (c: CutStyle) => {
           opacity *= c.opacity;
-          transforms.push(c.transform);
+          if (c.transform) transforms.push(c.transform);
+          if (c.clipPath) clipPath = c.clipPath;
+          if (c.filter) filter = c.filter;
+        };
+        if (scene.transitionIn > 0 && localT < scene.transitionIn) {
+          apply(cutStyle(scene.transition, "in", clamp01(localT / scene.transitionIn), manifest.width, manifest.height, u));
         }
         const next = mounted[i + 1];
         if (next && next.transitionIn > 0 && t >= next.start) {
-          const c = cutStyle(next.transition, "out", clamp01((t - next.start) / next.transitionIn), manifest.width, manifest.height);
-          opacity *= c.opacity;
-          transforms.push(c.transform);
+          apply(cutStyle(next.transition, "out", clamp01((t - next.start) / next.transitionIn), manifest.width, manifest.height, u));
+        }
+        // Camera: a slow push in (odd scenes pull out) across the whole scene. It only ever
+        // shrinks the frame — never past 1x — so nothing drifts out of the title-safe area.
+        if (style.camera > 0) {
+          const p = clamp01(localT / Math.max(0.001, scene.end - scene.start));
+          const shrink = style.camera * (i % 2 === 0 ? 1 - p : p);
+          if (shrink > 0.00005) transforms.push(`scale(${(1 - shrink).toFixed(5)})`);
         }
         scene.root.style.opacity = String(opacity);
+        scene.root.style.clipPath = clipPath;
+        scene.root.style.filter = filter;
         scene.root.style.transform = transforms.length > 0 ? transforms.join(" ") : "none";
         scene.template.seek(localT);
       } else if (activeIds.has(scene.id) && scene.root.style.display !== "none") {

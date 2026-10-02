@@ -23,7 +23,7 @@ export interface PreviewScene {
   end: number;
   props: Record<string, unknown>;
   transitionInSec?: number;
-  transition?: "fade" | "slide-left" | "slide-up" | "zoom";
+  transition?: "fade" | "slide-left" | "slide-up" | "zoom" | "cut" | "push" | "wipe" | "whip";
   audioStart?: number;
 }
 
@@ -38,6 +38,8 @@ export interface PreviewManifest {
   captions: { t0: number; t1: number; text: string }[];
   /** Brand font stylesheets the player links before mounting (the render embeds the same families). */
   fontCssUrls?: string[];
+  /** Style pack id — the storyboard's tone, as in the render. */
+  style?: string;
 }
 
 export interface PreviewBrand {
@@ -85,6 +87,11 @@ export function previewProps(templateId: string, props: Record<string, unknown>,
     const { sourcePageUrl, ...rest } = props;
     const existing = typeof props.screenshotUrl === "string" && /^(https?:|data:)/.test(props.screenshotUrl) ? props.screenshotUrl : null;
     return { ...rest, screenshotUrl: existing ?? screenshotPlaceholder(pageLabel(sourcePageUrl), brand) };
+  }
+  if (templateId === "ScreenCollage") {
+    const { sourcePageUrl, ...rest } = props;
+    const placeholder = screenshotPlaceholder(pageLabel(sourcePageUrl), brand);
+    return { ...rest, screenshotUrls: [placeholder, placeholder, placeholder] };
   }
   if ((templateId === "KineticHook" || templateId === "CTAEndCard" || templateId === "LogoReveal") && brand.logoUrl) {
     return { ...props, logoUrl: brand.logoUrl };
@@ -156,6 +163,7 @@ export function buildPreviewManifest(
     },
     scenes,
     captions,
+    style: storyboard.tone,
     fontCssUrls: [googleFontsCssUrl([brand.fontDisplay ?? "Inter", brand.fontBody ?? "Inter"])],
   };
 }

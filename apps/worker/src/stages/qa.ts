@@ -3,8 +3,9 @@ import type { FilmManifest } from "@sitereel/film-runtime";
 import { runFilmQa, type ContrastSample, type FilmQaIssue } from "@sitereel/renderer";
 import type { LlmProvider } from "@sitereel/llm";
 import { validateStoryboard, visibleTextFor, type FactLedger, type Storyboard, type ValidationIssue } from "@sitereel/shared";
+import { editorialIssues, type EditorialIssue } from "../lib/editorial-qa.js";
 
-export type QaIssue = (ValidationIssue | FilmQaIssue) & { source: "grounding" | "probe" | "vision" };
+export type QaIssue = (ValidationIssue | FilmQaIssue | EditorialIssue) & { source: "grounding" | "probe" | "vision" | "editorial" };
 
 export interface VisionReview {
   status: "ok" | "skipped" | "failed";
@@ -113,6 +114,9 @@ export async function runQaStage(opts: {
   const expectedText = Object.fromEntries(storyboard.scenes.map((s) => [s.id, visibleTextFor(s.templateId, s.props) ?? s.onScreenText]));
   const probe = await runFilmQa({ manifest, filmHost: opts.filmHost, manifestUrl: opts.manifestUrl, expectedText, ...(opts.secondary ? { puritySamples: SECONDARY_PURITY_SAMPLES } : {}) });
   issues.push(...probe.issues.map((i) => ({ ...i, source: "probe" as const })));
+
+  // The cut is the same in every format, so judge it once.
+  if (!opts.secondary) issues.push(...editorialIssues(manifest).map((i) => ({ ...i, source: "editorial" as const })));
 
   const vision: VisionReview = opts.secondary
     ? { status: "skipped", notes: ["Vision review runs once per job, on the first format."] }

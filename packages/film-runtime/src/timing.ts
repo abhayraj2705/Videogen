@@ -30,6 +30,8 @@ export interface TimingOptions {
   fps?: number;
   /** Crossfade between consecutive scenes; 0 = hard cuts. */
   transitionSec?: number;
+  /** Per-cut override: entry i is the crossfade into scene i (entry 0 is ignored). Missing entries use transitionSec. */
+  transitionSecs?: number[];
   leadInSec?: number;
   tailSec?: number;
   /** One loop of the music's beat grid, in seconds from track start. */
@@ -85,14 +87,15 @@ const roundToFrame = (t: number, fps: number) => Math.round(t * fps) / fps;
 export function computeTimeline(scenes: TimingSceneInput[], options: TimingOptions = {}): Timeline {
   const o = { ...DEFAULTS, ...options };
   const fps = o.fps;
-  const d = scenes.length > 1 ? Math.max(0, o.transitionSec) : 0;
+  /** Crossfade into scene i (0 for the first scene and for hard cuts), a whole number of frames each side of the cut. */
+  const dIn = scenes.map((_, i) => (i === 0 ? 0 : roundToFrame(Math.max(0, options.transitionSecs?.[i] ?? o.transitionSec) / 2, fps) * 2));
 
   // 1. Required slot length per scene.
-  const required = scenes.map((s) => {
+  const required = scenes.map((s, i) => {
     const voice = s.voiceDurationSec ?? 0;
     const voiceNeed = voice > 0 ? o.leadInSec + voice + o.tailSec : 0;
     // A slot also has to be long enough to contain its own crossfade halves.
-    return Math.max(s.minDurationSec, voiceNeed, d + 0.2);
+    return Math.max(s.minDurationSec, voiceNeed, (dIn[i]! + (dIn[i + 1] ?? 0)) / 2 + 0.2);
   });
 
   // 2. Cut points, optionally beat-locked (only ever moved *later*, so no slot shrinks below its requirement).
@@ -118,19 +121,18 @@ export function computeTimeline(scenes: TimingSceneInput[], options: TimingOptio
   }
 
   const duration = cuts[cuts.length - 1]!;
-  const half = roundToFrame(d / 2, fps);
   const out: TimelineScene[] = scenes.map((s, i) => {
     const slotStart = cuts[i]!;
     const slotEnd = cuts[i + 1]!;
-    const start = i === 0 ? 0 : slotStart - half;
-    const end = i === scenes.length - 1 ? duration : slotEnd + half;
+    const start = i === 0 ? 0 : slotStart - dIn[i]! / 2;
+    const end = i === scenes.length - 1 ? duration : slotEnd + dIn[i + 1]! / 2;
     return {
       id: s.id,
       start: roundToFrame(start, fps),
       end: roundToFrame(end, fps),
       slotStart,
       slotEnd,
-      transitionInSec: i === 0 ? 0 : roundToFrame(half * 2, fps),
+      transitionInSec: dIn[i]!,
       audioStart: roundToFrame(slotStart + (s.voiceDurationSec ? o.leadInSec : 0), fps),
       onBeat: onBeat[i]!,
     };

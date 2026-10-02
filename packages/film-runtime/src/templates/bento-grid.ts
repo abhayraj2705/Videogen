@@ -9,6 +9,8 @@ export interface BentoGridProps {
   title: string;
   /** Exactly three short grounded supporting points, one per tile. */
   items: [string, string, string];
+  /** Seconds from the scene start at which each item is spoken; tiles arrive on them. Added by Build. */
+  cues?: number[];
 }
 
 interface Instance {
@@ -18,13 +20,17 @@ interface Instance {
   dots: HTMLElement[];
   horizontal: boolean;
   u: number;
+  cues?: number[];
 }
 
 const TILE_START = 0.35;
 const TILE_STAGGER = 0.13;
 const TILE_ENTER = 0.7;
 
-const settleFor = (count: number) => TILE_START + (count - 1) * TILE_STAGGER + TILE_ENTER;
+/** Tiles follow the lead tile on a stagger, or wait for their spoken cue when that comes later. */
+const tileStart = (i: number, cues?: number[]) => Math.max(TILE_START + i * TILE_STAGGER, (cues?.[i] ?? 0) - 0.25);
+
+const settleFor = (count: number, cues?: number[]) => tileStart(count - 1, cues) + TILE_ENTER;
 
 /**
  * A bento layout: one large accent tile carrying the lead line next to three
@@ -116,16 +122,16 @@ export function createBentoGrid(): SceneTemplate<BentoGridProps> {
         return tile;
       });
 
-      instance = { lead, titleWords: title.words, tiles, dots, horizontal: row, u };
+      instance = { lead, titleWords: title.words, tiles, dots, horizontal: row, u, cues: props.cues };
     },
 
     seek(localT) {
       if (!instance) return;
-      const { u, horizontal } = instance;
+      const { u, horizontal, cues } = instance;
       enter(instance.lead, localT, 0, 0.8, { scale: 0.86, y: 40 * u });
       wordsIn(instance.titleWords, localT, 0.25, 0.06, 0.5);
       instance.tiles.forEach((tile, i) => {
-        const start = TILE_START + i * TILE_STAGGER;
+        const start = tileStart(i, cues);
         enter(tile, localT, start, TILE_ENTER, horizontal ? { x: 120 * u, scale: 0.94 } : { y: 90 * u, scale: 0.94 });
         const pop = Math.min(1, Math.max(0, (localT - start - 0.25) / 0.45));
         instance!.dots[i]!.style.transform = pop >= 1 ? "none" : `scale(${(0.2 + 0.8 * easeSpring(pop)).toFixed(4)})`;
@@ -135,7 +141,7 @@ export function createBentoGrid(): SceneTemplate<BentoGridProps> {
     marks(props): Mark[] {
       return [
         { t: 0, type: "start" },
-        { t: settleFor(props.items.length), type: "settle" },
+        { t: settleFor(props.items.length, props.cues), type: "settle" },
       ];
     },
 

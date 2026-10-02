@@ -1,6 +1,14 @@
 import type { FilmContext } from "../contract.js";
-import { clamp01, easeInOutCubic, spring } from "./easing.js";
+import { clamp01, easeInOutCubic, easeInOutQuart, spring } from "./easing.js";
 import { el, setStyle } from "./dom.js";
+
+/** A region of the captured page, in fractions of the page width (see FactRect in @sitereel/shared). */
+export interface PageRect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
 
 export interface BrowserFrame {
   wrap: HTMLElement;
@@ -18,6 +26,13 @@ export interface BrowserFrame {
    * Returns the pixel offset applied.
    */
   scroll(p: number, maxViewports?: number): number;
+  /**
+   * Camera move onto one region of the page: p in [0, 1] eases from the top of
+   * the page to the region centred and enlarged in the window, and `ring` in
+   * [0, 1] fades in an accent outline around it. Returns false (and does
+   * nothing) when the region lies outside the captured image — fall back to scroll().
+   */
+  focus(rect: PageRect, p: number, ring: number): boolean;
 }
 
 /**
@@ -86,8 +101,42 @@ export function browserFrame(opts: { className: string; width: number; height: n
   const image = el("img");
   image.src = opts.screenshotUrl;
   setStyle(image, { display: "block", width: "100%", height: "auto", minHeight: "100%", objectFit: "cover", objectPosition: "top", transformOrigin: "top center" });
-  viewport.appendChild(image);
+  // The page layer is what scrolls and zooms; the highlight rides on it so it stays glued to the region.
+  const pageLayer = el("div", `${opts.className}-page`);
+  setStyle(pageLayer, { position: "relative", width: "100%", minHeight: "100%" });
+  pageLayer.appendChild(image);
+  const highlight = el("div", `${opts.className}-highlight`);
+  setStyle(highlight, { position: "absolute", boxSizing: "border-box", opacity: "0", pointerEvents: "none" });
+  pageLayer.appendChild(highlight);
+  viewport.appendChild(pageLayer);
   wrap.appendChild(viewport);
+
+  /** Resolved once the image has decoded: the end pose of a focus move, or null when the region is off the image. */
+  let focusPose: { rectKey: string; scale: number; tx: number; ty: number } | null | undefined;
+  const poseFor = (rect: PageRect) => {
+    const key = `${rect.x},${rect.y},${rect.w},${rect.h}`;
+    if (focusPose !== undefined && (focusPose === null || focusPose.rectKey === key)) return focusPose;
+    if (image.naturalWidth <= 0) return null;
+    const pageHeight = (width * image.naturalHeight) / image.naturalWidth;
+    const r = { x: rect.x * width, y: rect.y * width, w: rect.w * width, h: rect.h * width };
+    if (r.w < 4 || r.h < 4 || r.y + r.h > pageHeight || r.x + r.w > width + 1) return (focusPose = null);
+    // Enlarge until the region fills ~70% of the window, without magnifying the capture past 2x its pixels.
+    const scale = Math.max(1, Math.min(2, (2 * image.naturalWidth) / width, (width * 0.7) / r.w, (viewportHeight * 0.7) / r.h));
+    const tx = Math.min(0, Math.max(width - scale * width, width / 2 - scale * (r.x + r.w / 2)));
+    const ty = Math.min(0, Math.max(viewportHeight - scale * pageHeight, viewportHeight / 2 - scale * (r.y + r.h / 2)));
+    const pad = 10 * u;
+    setStyle(highlight, {
+      left: `${r.x - pad}px`,
+      top: `${r.y - pad}px`,
+      width: `${r.w + 2 * pad}px`,
+      height: `${r.h + 2 * pad}px`,
+      // Sized in page units, so divide by the zoom to keep the line weight constant on screen.
+      border: `${(4 * u) / scale}px solid ${ctx.palette.accent}`,
+      borderRadius: `${(14 * u) / scale}px`,
+      boxShadow: `0 0 0 ${(6 * u) / scale}px ${ctx.palette.accentSoft}, 0 0 ${(40 * u) / scale}px ${ctx.palette.glow}`,
+    });
+    return (focusPose = { rectKey: key, scale, tx, ty });
+  };
 
   return {
     wrap,
@@ -108,12 +157,23 @@ export function browserFrame(opts: { className: string; width: number; height: n
       if (travel < 1) {
         // Nothing below the fold (a single-section still): drift in slowly instead of scrolling.
         const zoom = 0.06 * clamp01(p);
-        image.style.transform = zoom < 0.0001 ? "none" : `scale(${(1 + zoom).toFixed(4)})`;
+        pageLayer.style.transformOrigin = "top center";
+        pageLayer.style.transform = zoom < 0.0001 ? "none" : `scale(${(1 + zoom).toFixed(4)})`;
         return 0;
       }
       const offset = travel * easeInOutCubic(clamp01(p));
-      image.style.transform = offset < 0.005 ? "none" : `translateY(${(-offset).toFixed(2)}px)`;
+      pageLayer.style.transform = offset < 0.005 ? "none" : `translateY(${(-offset).toFixed(2)}px)`;
       return offset;
+    },
+    focus(rect, p, ring) {
+      const pose = poseFor(rect);
+      if (!pose) return false;
+      const e = easeInOutQuart(clamp01(p));
+      const scale = 1 + (pose.scale - 1) * e;
+      pageLayer.style.transformOrigin = "0 0";
+      pageLayer.style.transform = e < 0.0001 ? "none" : `translate(${(pose.tx * e).toFixed(2)}px, ${(pose.ty * e).toFixed(2)}px) scale(${scale.toFixed(4)})`;
+      highlight.style.opacity = String(clamp01(ring));
+      return true;
     },
   };
 }

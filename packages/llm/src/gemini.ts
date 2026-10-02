@@ -19,7 +19,7 @@ interface GeminiResponse {
 }
 
 export function createGeminiProvider(opts: GeminiProviderOptions): LlmProvider {
-  const model = opts.model ?? "gemini-2.0-flash-lite";
+  const model = opts.model ?? "gemini-3.5-flash-lite";
   const fetchImpl = opts.fetch ?? fetch;
   const baseUrl = opts.baseUrl ?? "https://generativelanguage.googleapis.com/v1beta";
   const schemaField = opts.schemaField ?? "responseSchema";

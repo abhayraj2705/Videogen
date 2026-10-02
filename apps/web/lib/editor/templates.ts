@@ -14,6 +14,7 @@ export const TEMPLATE_IDS: TemplateId[] = [
   "ChecklistReveal",
   "BigStatement",
   "BentoGrid",
+  "ScreenCollage",
 ];
 
 const LABELS: Record<string, string> = {
@@ -29,6 +30,7 @@ const LABELS: Record<string, string> = {
   ChecklistReveal: "Checklist",
   BigStatement: "Statement",
   BentoGrid: "Bento grid",
+  ScreenCollage: "Screen collage",
 };
 
 export function templateLabel(id: string): string {

@@ -3,6 +3,8 @@
  * through this same contract, so what a user approves is exactly what gets rendered.
  */
 
+import type { StylePack } from "./style.js";
+
 export interface Palette {
   bg: string;
   fg: string;
@@ -60,10 +62,12 @@ export interface Caption {
   text: string;
   /** Word-level timings (absolute seconds) for burned-in captions; absent = the cue shows as one block. */
   words?: CaptionWord[];
+  /** False keeps the cue out of the picture (it only repeats text the scene already shows); the .vtt still carries it. */
+  burn?: boolean;
 }
 
 /** How a scene enters over its predecessor. Absent = the player picks one deterministically per cut. */
-export type TransitionKind = "fade" | "slide-left" | "slide-up" | "zoom";
+export type TransitionKind = "fade" | "slide-left" | "slide-up" | "zoom" | "cut" | "push" | "wipe" | "whip";
 
 export interface Mark {
   t: number;
@@ -117,6 +121,8 @@ export interface FilmManifest {
   captionStyle?: "burned" | "none";
   /** Absolute beat times (s) of the music bed; the backdrop pulses on them. */
   beats?: number[];
+  /** Style pack id (see style.ts) — the job's tone. Absent = "clean". */
+  style?: string;
 }
 
 export interface FilmContext {
@@ -130,6 +136,8 @@ export interface FilmContext {
   sceneIndex: number;
   /** Pixels at the bottom of the safe area reserved for burned-in captions. */
   insetBottom: number;
+  /** The film's look: motion and surface choices shared by every template. */
+  style: StylePack;
   /** Seeded RNG scoped to this scene instance; never use Math.random in template code. */
   rng: (seedKey: string) => number;
 }

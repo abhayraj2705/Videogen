@@ -31,7 +31,7 @@ export const ServerEnv = z.object({
   // non-LLM brief when this is unset, so the crawl stage works with zero
   // cloud accounts configured.
   GEMINI_API_KEY: z.string().optional(),
-  GEMINI_MODEL: z.string().default("gemini-2.0-flash-lite"),
+  GEMINI_MODEL: z.string().default("gemini-3.5-flash-lite"),
 
   // Optional local-dev LLM: any OpenAI-compatible /chat/completions endpoint
   // (e.g. WebAI-to-API at http://localhost:6969/v1). When set it is the primary

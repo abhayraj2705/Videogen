@@ -11,10 +11,11 @@ import { createQuoteCard } from "./templates/quote-card.js";
 import { createChecklistReveal } from "./templates/checklist-reveal.js";
 import { createBigStatement } from "./templates/big-statement.js";
 import { createBentoGrid } from "./templates/bento-grid.js";
+import { createScreenCollage } from "./templates/screen-collage.js";
 
 export type TemplateFactory = () => SceneTemplate<any>;
 
-/** Full 12-template catalog (Phase 0: first 4; Phase 4: next 6; then BigStatement + BentoGrid). */
+/** Full 13-template catalog (Phase 0: first 4; Phase 4: next 6; then BigStatement + BentoGrid; then ScreenCollage). */
 export const TEMPLATE_REGISTRY: Record<string, TemplateFactory> = {
   KineticHook: createKineticHook,
   FeatureTriplet: createFeatureTriplet,
@@ -28,6 +29,7 @@ export const TEMPLATE_REGISTRY: Record<string, TemplateFactory> = {
   ChecklistReveal: createChecklistReveal,
   BigStatement: createBigStatement,
   BentoGrid: createBentoGrid,
+  ScreenCollage: createScreenCollage,
 };
 
 /**

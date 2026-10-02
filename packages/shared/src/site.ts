@@ -15,12 +15,18 @@ export type BrandTokens = z.infer<typeof BrandTokens>;
 export const FactKind = z.enum(["heading", "hero", "feature", "stat", "testimonial", "cta", "other"]);
 export type FactKind = z.infer<typeof FactKind>;
 
+/** Where an element sat on its page, in fractions of the page WIDTH (so it maps onto the full-page screenshot at any size). */
+export const FactRect = z.object({ x: z.number(), y: z.number(), w: z.number(), h: z.number() });
+export type FactRect = z.infer<typeof FactRect>;
+
 export const FactLedgerEntry = z.object({
   id: z.string(),
   kind: FactKind,
   text: z.string().min(1),
   sourceUrl: z.string().url(),
   selector: z.string(),
+  /** Additive, optional: absent for plain-fetch crawls, hidden elements and rows written before it existed. */
+  rect: FactRect.optional(),
 });
 export type FactLedgerEntry = z.infer<typeof FactLedgerEntry>;
 

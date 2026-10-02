@@ -97,10 +97,10 @@ export function createRenderProcessor(deps: WorkerDeps) {
     if (hasVoice || inputs.music) {
       // Every format shares one timeline, so the mix is identical across them: the first
       // format's render stores it, the others read it back instead of re-running ffmpeg.
-      const mixKey = `jobs/${jobId}/audio/mix-${sha16(["mix-v1", manifestHash({ ...manifest, width: 0, height: 0 }), inputs.audioHashes, inputs.music?.id ?? null])}`;
+      const mixKey = `jobs/${jobId}/audio/mix-${sha16(["mix-v2", manifestHash({ ...manifest, width: 0, height: 0 }), inputs.audioHashes, inputs.music?.id ?? null])}`;
       mix = await loadCachedMix(deps, mixKey);
       if (!mix) {
-        const narration = await assembleNarrationTrack({ manifest, voiceScenes: inputs.voiceScenes, storage: deps.storage, repoRoot: deps.repoRoot });
+        const narration = await assembleNarrationTrack({ manifest, voiceScenes: inputs.voiceScenes, storage: deps.storage, repoRoot: deps.repoRoot, sfx: Boolean(inputs.music) });
         mix = await mixFinalAudio({ narration, music: inputs.music, durationSec: manifest.duration, sidecar: sidecarFor(deps), repoRoot: deps.repoRoot });
         const { audio, ...meta } = mix;
         await Promise.all([

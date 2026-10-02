@@ -1,12 +1,13 @@
 import type { Page } from "playwright";
 import { nanoid } from "nanoid";
 import type { HTMLElement as ParsedElement } from "node-html-parser";
-import type { FactLedger, FactLedgerEntry, FactKind } from "@sitereel/shared";
+import type { FactLedger, FactLedgerEntry, FactKind, FactRect } from "@sitereel/shared";
 
 export interface RawFact {
   kind: FactKind;
   text: string;
   selector: string;
+  rect?: FactRect;
 }
 
 export const CTA_WORDS = [
@@ -42,7 +43,7 @@ export const CTA_WORDS = [
  * helper doesn't exist inside the page realm).
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function collectRawFacts(input: { ctaWords: string[]; root?: any }): { kind: string; text: string; selector: string }[] {
+export function collectRawFacts(input: { ctaWords: string[]; root?: any }): { kind: string; text: string; selector: string; rect?: { x: number; y: number; w: number; h: number } }[] {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   type El = any;
   const root: El = input.root ?? document;
@@ -105,7 +106,17 @@ export function collectRawFacts(input: { ctaWords: string[]; root?: any }): { ki
     return false;
   };
 
-  const results: { kind: string; text: string; selector: string }[] = [];
+  const results: { kind: string; text: string; selector: string; rect?: { x: number; y: number; w: number; h: number } }[] = [];
+  // Where the element sits on the page, as fractions of the page width — lets a screenshot
+  // scene zoom to the thing its caption is about. Browser only (the parsed-HTML fallback has no layout).
+  const rectOf = (el: El): { x: number; y: number; w: number; h: number } | undefined => {
+    if (typeof window === "undefined" || typeof el?.getBoundingClientRect !== "function") return undefined;
+    const r = el.getBoundingClientRect();
+    const pageWidth = document.documentElement.clientWidth;
+    if (!pageWidth || r.width < 8 || r.height < 8) return undefined;
+    const round = (n: number) => Math.round((n / pageWidth) * 10000) / 10000;
+    return { x: round(r.left + window.scrollX), y: round(r.top + window.scrollY), w: round(r.width), h: round(r.height) };
+  };
   const seen = new Set<string>();
   // "X Y X Y" -> "X Y": responsive markup and screen-reader-only copies repeat a
   // headline inside one element, and innerText still includes visible-to-AT copies.
@@ -126,7 +137,8 @@ export function collectRawFacts(input: { ctaWords: string[]; root?: any }): { ki
     const key = kind + ":" + clean.toLowerCase();
     if (seen.has(key)) return;
     seen.add(key);
-    results.push({ kind, text: clean, selector: cssPath(el) });
+    const rect = rectOf(el);
+    results.push({ kind, text: clean, selector: cssPath(el), ...(rect ? { rect } : {}) });
   };
 
   // Hero: first h1 plus its nearest following paragraph.
@@ -195,7 +207,7 @@ export function collectRawFacts(input: { ctaWords: string[]; root?: any }): { ki
   return results;
 }
 
-function toLedger(raw: { kind: string; text: string; selector: string }[], pageUrl: string): FactLedger {
+function toLedger(raw: { kind: string; text: string; selector: string; rect?: FactRect }[], pageUrl: string): FactLedger {
   return raw.map(
     (r): FactLedgerEntry => ({
       id: nanoid(10),
@@ -203,6 +215,7 @@ function toLedger(raw: { kind: string; text: string; selector: string }[], pageU
       text: r.text,
       sourceUrl: pageUrl,
       selector: r.selector,
+      ...(r.rect ? { rect: r.rect } : {}),
     }),
   );
 }

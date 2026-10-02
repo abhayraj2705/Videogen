@@ -23,6 +23,10 @@
     const x = clamp01(t);
     return x * x * x;
   };
+  var easeInOutQuart = (t) => {
+    const x = clamp01(t);
+    return x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2;
+  };
   function spring(t, damping = 0.62, freq = 1.4) {
     const x = clamp01(t);
     if (x === 0) return 0;
@@ -32,7 +36,6 @@
     return 1 - Math.exp(-damping * w0 * x) * (Math.cos(wd * x) + damping * w0 / wd * Math.sin(wd * x));
   }
   var easeSpring = (t) => spring(t);
-  var easeSpringSoft = (t) => spring(t, 0.78, 1.1);
   function progress(localT, start, end, ease = linear) {
     if (end <= start) return localT >= end ? 1 : 0;
     return ease(clamp01((localT - start) / (end - start)));
@@ -131,6 +134,57 @@
     minWidth: "0"
   };
 
+  // ../film-runtime/src/style.ts
+  var CLEAN = {
+    id: "clean",
+    reveal: "rise",
+    spring: { damping: 0.78, freq: 1.1 },
+    card: "soft",
+    radius: 1,
+    backdrop: { glow: 1, grid: true, vignette: 0 },
+    transitions: ["push", "zoom", "wipe", "slide-up"],
+    camera: 0.025
+  };
+  var STYLE_PACKS = {
+    clean: CLEAN,
+    playful: {
+      id: "playful",
+      reveal: "pop",
+      spring: { damping: 0.52, freq: 1.5 },
+      card: "solid",
+      radius: 1.6,
+      backdrop: { glow: 1.7, grid: false, vignette: 0 },
+      transitions: ["whip", "zoom", "push", "slide-up"],
+      camera: 0.035
+    },
+    cinematic: {
+      id: "cinematic",
+      reveal: "blur",
+      spring: { damping: 0.95, freq: 0.8 },
+      card: "glass",
+      radius: 0.5,
+      backdrop: { glow: 1.3, grid: false, vignette: 0.55 },
+      transitions: ["fade", "zoom", "cut", "fade"],
+      camera: 0.05
+    },
+    "app-store": {
+      id: "app-store",
+      reveal: "mask",
+      spring: { damping: 0.7, freq: 1.2 },
+      card: "outline",
+      radius: 1.3,
+      backdrop: { glow: 0.8, grid: true, vignette: 0 },
+      transitions: ["cut", "push", "wipe", "zoom"],
+      camera: 0.02
+    }
+  };
+  function stylePackFor(style) {
+    return style && STYLE_PACKS[style] || CLEAN;
+  }
+  function resolveTransition(pack, sceneIndex, explicit) {
+    return explicit ?? pack.transitions[Math.max(0, sceneIndex - 1) % pack.transitions.length];
+  }
+
   // ../film-runtime/src/util/text-fit.ts
   function wrapText(text, maxCharsPerLine, maxLines = 3) {
     const words = text.trim().split(/\s+/).filter(Boolean);
@@ -202,13 +256,41 @@
     });
     return { wrap, lines, words, fontSize, height: lines.length * fontSize * lineHeight };
   }
+  var styleCache = /* @__PURE__ */ new WeakMap();
+  function styleOf(node) {
+    let pack = styleCache.get(node);
+    if (!pack) {
+      const host = node.closest("[data-style]");
+      pack = stylePackFor(host?.dataset.style);
+      if (host) styleCache.set(node, pack);
+    }
+    return pack;
+  }
   function wordsIn(words, t, start, each = 0.05, dur = 0.5, riseEm = 0.55) {
+    if (words.length === 0) return;
+    const reveal = styleOf(words[0]).reveal;
     for (let i = 0; i < words.length; i++) {
       const lin = clamp01((t - start - i * each) / dur);
-      const s = spring(lin, 0.72, 1.1);
       const w = words[i];
+      const done = lin >= 1;
       w.style.opacity = String(clamp01(lin * 2.5));
-      w.style.transform = lin >= 1 ? "none" : `translateY(${((1 - s) * riseEm).toFixed(4)}em)`;
+      if (reveal === "mask") {
+        const e = easeOutQuint(lin);
+        w.style.opacity = lin > 0 ? "1" : "0";
+        w.style.clipPath = done ? "none" : `inset(0 0 ${((1 - e) * 100).toFixed(2)}% 0)`;
+        w.style.transform = done ? "none" : `translateY(${((1 - e) * 0.9).toFixed(4)}em)`;
+      } else if (reveal === "pop") {
+        const s = spring(lin, 0.5, 1.3);
+        w.style.transform = done ? "none" : `scale(${(0.5 + 0.5 * s).toFixed(4)})`;
+      } else if (reveal === "blur") {
+        const e = easeOutCubic(lin);
+        w.style.opacity = String(e);
+        w.style.filter = done ? "none" : `blur(${((1 - e) * 0.28).toFixed(4)}em)`;
+        w.style.transform = done ? "none" : `translateY(${((1 - e) * 0.18).toFixed(4)}em)`;
+      } else {
+        const s = spring(lin, 0.72, 1.1);
+        w.style.transform = done ? "none" : `translateY(${((1 - s) * riseEm).toFixed(4)}em)`;
+      }
     }
   }
   function wordsSettle(count, start, each = 0.05, dur = 0.5) {
@@ -216,7 +298,8 @@
   }
   function enter(node, t, start, dur, o = {}, extra = "") {
     const lin = clamp01((t - start) / dur);
-    const inv = 1 - (o.ease ?? easeSpringSoft)(lin);
+    const { damping, freq } = styleOf(node).spring;
+    const inv = 1 - (o.ease ? o.ease(lin) : spring(lin, damping, freq));
     node.style.opacity = String(clamp01(lin * 2.2));
     if (lin >= 1) {
       node.style.transform = extra || "none";
@@ -224,6 +307,10 @@
     }
     const scale = 1 - (1 - (o.scale ?? 1)) * inv;
     node.style.transform = `translate(${((o.x ?? 0) * inv).toFixed(2)}px, ${((o.y ?? 0) * inv).toFixed(2)}px) scale(${scale.toFixed(4)}) rotate(${((o.rotate ?? 0) * inv).toFixed(3)}deg) ${extra}`.trim();
+  }
+  function cueStart(cues, i, stagger, lead = 0.25) {
+    const cue = cues?.[i];
+    return cue === void 0 ? i * stagger : Math.max(i * stagger, cue - lead);
   }
   function scaleXTo(p) {
     return p >= 1 ? "none" : `scaleX(${p.toFixed(4)})`;
@@ -247,13 +334,19 @@
     return marker;
   }
   function cardStyle(ctx, u, radius = 28) {
-    return {
-      boxSizing: "border-box",
-      background: ctx.palette.surface,
-      border: `${Math.max(1, 1.5 * u)}px solid ${ctx.palette.border}`,
-      borderRadius: `${radius * u}px`,
-      boxShadow: `0 ${24 * u}px ${60 * u}px -${28 * u}px ${ctx.palette.glow}, 0 ${2 * u}px ${6 * u}px rgba(0,0,0,${ctx.palette.isDark ? 0.4 : 0.06})`
-    };
+    const p = ctx.palette;
+    const base = { boxSizing: "border-box", borderRadius: `${radius * ctx.style.radius * u}px` };
+    const hairline = `${Math.max(1, 1.5 * u)}px solid ${p.border}`;
+    switch (ctx.style.card) {
+      case "outline":
+        return { ...base, background: p.surface, border: `${Math.max(2, 3 * u)}px solid ${p.accentSoft}`, boxShadow: "none" };
+      case "glass":
+        return { ...base, background: `linear-gradient(160deg, ${p.border}, transparent 60%), ${p.surface}`, border: hairline, boxShadow: `0 ${30 * u}px ${80 * u}px -${40 * u}px rgba(0,0,0,${p.isDark ? 0.7 : 0.25})` };
+      case "solid":
+        return { ...base, background: p.surface, border: `${Math.max(2, 3 * u)}px solid ${p.fg}`, boxShadow: `${8 * u}px ${10 * u}px 0 ${p.accent}` };
+      default:
+        return { ...base, background: p.surface, border: hairline, boxShadow: `0 ${24 * u}px ${60 * u}px -${28 * u}px ${p.glow}, 0 ${2 * u}px ${6 * u}px rgba(0,0,0,${p.isDark ? 0.4 : 0.06})` };
+    }
   }
   function logoMark(opts) {
     const { size, ctx } = opts;
@@ -346,7 +439,7 @@
   // ../film-runtime/src/templates/feature-triplet.ts
   var CARD_STAGGER = 0.14;
   var CARD_ENTER = 0.75;
-  var settleFor = (count) => (count - 1) * CARD_STAGGER + CARD_ENTER;
+  var settleFor = (count, cues) => cueStart(cues, count - 1, CARD_STAGGER) + CARD_ENTER;
   function createFeatureTriplet() {
     let instance;
     return {
@@ -362,7 +455,7 @@
         const badge = L.pick({ landscape: 84, portrait: 88, square: 64 }) * u;
         const labelWidth = row ? cardWidth - 2 * pad : cardWidth - 2 * pad - badge - pad * 0.8;
         const longest = props.features.reduce((a, f) => f.label.length > a.length ? f.label : a, "");
-        const labelSize = fitFontSize(longest, labelWidth, L.pick({ landscape: 52, portrait: 52, square: 40 }) * u, row ? 3 : 2, 22 * u);
+        const labelSize = fitFontSize(longest, labelWidth, L.pick({ landscape: 60, portrait: 58, square: 44 }) * u, 3, 22 * u);
         const cards = props.features.map((feature, i) => {
           const node = el("div", "ft-card");
           setStyle(node, {
@@ -374,7 +467,7 @@
             justifyContent: row ? "center" : "flex-start",
             gap: `${row ? pad * 0.7 : pad * 0.8}px`,
             width: `${cardWidth}px`,
-            minHeight: row ? `${L.safe.height * 0.52}px` : "0",
+            minHeight: `${L.safe.height * L.pick({ landscape: 0.62, portrait: 0.17, square: 0.2 })}px`,
             padding: `${pad}px`
           });
           const bar = el("div", "ft-bar");
@@ -433,17 +526,19 @@
           root.appendChild(node);
           return { node, ring, bar };
         });
-        instance = { cards, horizontal: row, u, durationSec: ctx.durationSec };
+        instance = { cards, horizontal: row, u, durationSec: ctx.durationSec, cues: props.cues };
       },
       seek(localT) {
         if (!instance) return;
-        const { horizontal, u, cards, durationSec } = instance;
+        const { horizontal, u, cards, durationSec, cues } = instance;
         const settled = settleFor(cards.length);
         const turn = Math.max(0.5, (durationSec - settled - 0.5) / cards.length);
         cards.forEach((card, i) => {
-          const start = i * CARD_STAGGER;
-          const local = localT - settled - 0.1 - i * turn;
-          const spot = clamp01(local / 0.25) * clamp01((turn - local) / 0.25);
+          const start = cueStart(cues, i, CARD_STAGGER);
+          const litFrom = cues ? Math.max(start + 0.3, cues[i]) : settled + 0.1 + i * turn;
+          const litFor = cues ? Math.max(0.6, (cues[i + 1] ?? durationSec - 0.5) - litFrom) : turn;
+          const local = localT - litFrom;
+          const spot = clamp01(local / 0.25) * clamp01((litFor - local) / 0.25);
           card.ring.style.opacity = String(spot);
           const lift = spot > 0 ? `translateY(${(-10 * u * spot).toFixed(2)}px)` : "";
           enter(card.node, localT, start, CARD_ENTER, horizontal ? { y: 90 * u, scale: 0.9, rotate: (i - 1) * 4 } : { x: -110 * u, scale: 0.96 }, lift);
@@ -453,7 +548,7 @@
       marks(props) {
         return [
           { t: 0, type: "start" },
-          { t: settleFor(props.features.length), type: "settle" }
+          { t: settleFor(props.features.length, props.cues), type: "settle" }
         ];
       },
       unmount() {
@@ -520,8 +615,38 @@
     const image = el("img");
     image.src = opts.screenshotUrl;
     setStyle(image, { display: "block", width: "100%", height: "auto", minHeight: "100%", objectFit: "cover", objectPosition: "top", transformOrigin: "top center" });
-    viewport.appendChild(image);
+    const pageLayer = el("div", `${opts.className}-page`);
+    setStyle(pageLayer, { position: "relative", width: "100%", minHeight: "100%" });
+    pageLayer.appendChild(image);
+    const highlight = el("div", `${opts.className}-highlight`);
+    setStyle(highlight, { position: "absolute", boxSizing: "border-box", opacity: "0", pointerEvents: "none" });
+    pageLayer.appendChild(highlight);
+    viewport.appendChild(pageLayer);
     wrap.appendChild(viewport);
+    let focusPose;
+    const poseFor = (rect) => {
+      const key = `${rect.x},${rect.y},${rect.w},${rect.h}`;
+      if (focusPose !== void 0 && (focusPose === null || focusPose.rectKey === key)) return focusPose;
+      if (image.naturalWidth <= 0) return null;
+      const pageHeight = width * image.naturalHeight / image.naturalWidth;
+      const r = { x: rect.x * width, y: rect.y * width, w: rect.w * width, h: rect.h * width };
+      if (r.w < 4 || r.h < 4 || r.y + r.h > pageHeight || r.x + r.w > width + 1) return focusPose = null;
+      const scale = Math.max(1, Math.min(2, 2 * image.naturalWidth / width, width * 0.7 / r.w, viewportHeight * 0.7 / r.h));
+      const tx = Math.min(0, Math.max(width - scale * width, width / 2 - scale * (r.x + r.w / 2)));
+      const ty = Math.min(0, Math.max(viewportHeight - scale * pageHeight, viewportHeight / 2 - scale * (r.y + r.h / 2)));
+      const pad = 10 * u;
+      setStyle(highlight, {
+        left: `${r.x - pad}px`,
+        top: `${r.y - pad}px`,
+        width: `${r.w + 2 * pad}px`,
+        height: `${r.h + 2 * pad}px`,
+        // Sized in page units, so divide by the zoom to keep the line weight constant on screen.
+        border: `${4 * u / scale}px solid ${ctx.palette.accent}`,
+        borderRadius: `${14 * u / scale}px`,
+        boxShadow: `0 0 0 ${6 * u / scale}px ${ctx.palette.accentSoft}, 0 0 ${40 * u / scale}px ${ctx.palette.glow}`
+      });
+      return focusPose = { rectKey: key, scale, tx, ty };
+    };
     return {
       wrap,
       viewport,
@@ -539,12 +664,23 @@
         const travel = Math.min(Math.max(0, pageHeight - viewportHeight), viewportHeight * maxViewports);
         if (travel < 1) {
           const zoom = 0.06 * clamp01(p);
-          image.style.transform = zoom < 1e-4 ? "none" : `scale(${(1 + zoom).toFixed(4)})`;
+          pageLayer.style.transformOrigin = "top center";
+          pageLayer.style.transform = zoom < 1e-4 ? "none" : `scale(${(1 + zoom).toFixed(4)})`;
           return 0;
         }
         const offset = travel * easeInOutCubic(clamp01(p));
-        image.style.transform = offset < 5e-3 ? "none" : `translateY(${(-offset).toFixed(2)}px)`;
+        pageLayer.style.transform = offset < 5e-3 ? "none" : `translateY(${(-offset).toFixed(2)}px)`;
         return offset;
+      },
+      focus(rect, p, ring) {
+        const pose = poseFor(rect);
+        if (!pose) return false;
+        const e = easeInOutQuart(clamp01(p));
+        const scale = 1 + (pose.scale - 1) * e;
+        pageLayer.style.transformOrigin = "0 0";
+        pageLayer.style.transform = e < 1e-4 ? "none" : `translate(${(pose.tx * e).toFixed(2)}px, ${(pose.ty * e).toFixed(2)}px) scale(${scale.toFixed(4)})`;
+        highlight.style.opacity = String(clamp01(ring));
+        return true;
       }
     };
   }
@@ -580,12 +716,14 @@
         const frame = browserFrame({ className: "ss-frame", width: frameWidth, height: frameHeight, screenshotUrl: props.screenshotUrl, pageLabel: props.pageLabel, ctx, u });
         root.appendChild(frame.wrap);
         root.appendChild(caption.wrap);
-        instance = { frame, words: caption.words, durationSec: ctx.durationSec };
+        instance = { frame, words: caption.words, durationSec: ctx.durationSec, focus: props.focus };
       },
       seek(localT) {
         if (!instance) return;
         instance.frame.enter(localT, 0, FRAME_ENTER);
-        instance.frame.scroll(progress(localT, 1, Math.max(1.8, instance.durationSec - 0.5)));
+        const focusEnd = Math.min(2.3, Math.max(1.6, instance.durationSec - 1.2));
+        const focused = instance.focus ? instance.frame.focus(instance.focus, progress(localT, 0.9, focusEnd), progress(localT, focusEnd - 0.2, focusEnd + 0.25)) : false;
+        if (!focused) instance.frame.scroll(progress(localT, 1, Math.max(1.8, instance.durationSec - 0.5)));
         wordsIn(instance.words, localT, CAPTION_START, WORD_EACH2, WORD_DUR2);
       },
       marks(props) {
@@ -1185,13 +1323,13 @@
           list.appendChild(node);
           return { node, check, tick: check.querySelector("path") };
         });
-        instance = { rows, u };
+        instance = { rows, u, cues: props.cues };
       },
       seek(localT) {
         if (!instance) return;
-        const { u } = instance;
+        const { u, cues } = instance;
         instance.rows.forEach(({ node, check, tick }, i) => {
-          const start = i * ROW_STAGGER;
+          const start = cueStart(cues, i, ROW_STAGGER);
           enter(node, localT, start, ROW_DURATION, { x: -90 * u, scale: 0.96 });
           const pop = progress(localT, start + 0.2, start + 0.7, easeSpring);
           check.style.transform = localT >= start + 0.7 ? "none" : `scale(${(0.3 + 0.7 * pop).toFixed(4)})`;
@@ -1199,7 +1337,7 @@
         });
       },
       marks(props) {
-        const lastStart = (props.items.length - 1) * ROW_STAGGER;
+        const lastStart = cueStart(props.cues, props.items.length - 1, ROW_STAGGER);
         return [
           { t: 0, type: "start" },
           { t: lastStart + 0.8, type: "settle" }
@@ -1303,7 +1441,8 @@
   var TILE_START = 0.35;
   var TILE_STAGGER = 0.13;
   var TILE_ENTER = 0.7;
-  var settleFor2 = (count) => TILE_START + (count - 1) * TILE_STAGGER + TILE_ENTER;
+  var tileStart = (i, cues) => Math.max(TILE_START + i * TILE_STAGGER, (cues?.[i] ?? 0) - 0.25);
+  var settleFor2 = (count, cues) => tileStart(count - 1, cues) + TILE_ENTER;
   function createBentoGrid() {
     let instance;
     return {
@@ -1377,15 +1516,15 @@
           grid.appendChild(tile);
           return tile;
         });
-        instance = { lead, titleWords: title.words, tiles, dots, horizontal: row, u };
+        instance = { lead, titleWords: title.words, tiles, dots, horizontal: row, u, cues: props.cues };
       },
       seek(localT) {
         if (!instance) return;
-        const { u, horizontal } = instance;
+        const { u, horizontal, cues } = instance;
         enter(instance.lead, localT, 0, 0.8, { scale: 0.86, y: 40 * u });
         wordsIn(instance.titleWords, localT, 0.25, 0.06, 0.5);
         instance.tiles.forEach((tile, i) => {
-          const start = TILE_START + i * TILE_STAGGER;
+          const start = tileStart(i, cues);
           enter(tile, localT, start, TILE_ENTER, horizontal ? { x: 120 * u, scale: 0.94 } : { y: 90 * u, scale: 0.94 });
           const pop = Math.min(1, Math.max(0, (localT - start - 0.25) / 0.45));
           instance.dots[i].style.transform = pop >= 1 ? "none" : `scale(${(0.2 + 0.8 * easeSpring(pop)).toFixed(4)})`;
@@ -1394,7 +1533,103 @@
       marks(props) {
         return [
           { t: 0, type: "start" },
-          { t: settleFor2(props.items.length), type: "settle" }
+          { t: settleFor2(props.items.length, props.cues), type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
+  // ../film-runtime/src/templates/screen-collage.ts
+  var SHOT_STAGGER = 0.14;
+  var SHOT_ENTER = 0.8;
+  var CAPTION_START3 = 0.45;
+  var WORD_EACH6 = 0.05;
+  var WORD_DUR7 = 0.5;
+  var SHOT_ASPECT = 1.6;
+  var countWords6 = (s) => s.trim().split(/\s+/).filter(Boolean).length;
+  function createScreenCollage() {
+    let instance;
+    return {
+      id: "ScreenCollage",
+      mount(root, props, ctx) {
+        const L = layoutFor(ctx);
+        const u = L.u;
+        const gap = L.pick({ landscape: 36, portrait: 48, square: 30 }) * u;
+        sceneRoot(root, L, { gap: `${gap}px`, fontFamily: ctx.fonts.body });
+        const caption = textBlock(props.caption, {
+          className: "sg-caption",
+          width: L.safe.width * L.pick({ landscape: 0.84, portrait: 1, square: 0.96 }),
+          maxSize: L.pick({ landscape: 54, portrait: 64, square: 48 }) * u,
+          minSize: 22 * u,
+          maxLines: L.pick({ landscape: 2, portrait: 3, square: 2 }),
+          color: ctx.palette.fg,
+          family: ctx.fonts.display,
+          weight: "700",
+          lineHeight: 1.2
+        });
+        const stageWidth = L.safe.width;
+        const stageHeight = L.safe.height - gap - caption.height - 8 * u;
+        const stage = el("div", "sg-stage");
+        setStyle(stage, { position: "relative", width: `${stageWidth}px`, height: `${stageHeight}px`, flexShrink: "0" });
+        const stacked = L.orientation !== "landscape";
+        const urls = props.screenshotUrls.slice(0, L.orientation === "square" ? 2 : 3);
+        const leadWidth = stacked ? Math.min(stageWidth * 0.86, stageHeight / (1 + 0.72 * (urls.length - 1)) * SHOT_ASPECT) : Math.min(stageWidth * 0.45, stageHeight * 0.94 * SHOT_ASPECT);
+        const leadHeight = leadWidth / SHOT_ASPECT;
+        const shots = urls.map((url, i) => {
+          const side = i === 0 ? 0 : i === 1 ? -1 : 1;
+          const scale = stacked || i === 0 ? 1 : 0.8;
+          const width = leadWidth * scale;
+          const height = leadHeight * scale;
+          const cx = stacked ? stageWidth / 2 + (i % 2 === 0 ? -1 : 1) * stageWidth * 0.05 : stageWidth / 2 + side * leadWidth * 0.66;
+          const cy = stacked ? leadHeight / 2 + i * leadHeight * 0.72 + (stageHeight - leadHeight * (1 + 0.72 * (urls.length - 1))) / 2 : stageHeight / 2;
+          const tilt = stacked ? i % 2 === 0 ? -2.5 : 2.5 : side * 5;
+          const node = el("div", "sg-shot");
+          setStyle(node, {
+            position: "absolute",
+            left: `${cx - width / 2}px`,
+            top: `${cy - height / 2}px`,
+            width: `${width}px`,
+            height: `${height}px`,
+            borderRadius: `${18 * ctx.style.radius * u}px`,
+            overflow: "hidden",
+            background: ctx.palette.surface,
+            boxShadow: `0 ${40 * u}px ${90 * u}px -${36 * u}px ${ctx.palette.glow}, 0 ${24 * u}px ${50 * u}px -${24 * u}px rgba(0,0,0,${ctx.palette.isDark ? 0.7 : 0.35}), 0 0 0 ${Math.max(1, 1.5 * u)}px ${ctx.palette.border}`,
+            // The lead card overlaps its neighbours.
+            zIndex: String(i === 0 ? 3 : 1)
+          });
+          const img = el("img");
+          img.src = url;
+          setStyle(img, { display: "block", width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" });
+          node.appendChild(img);
+          stage.appendChild(node);
+          const driftAxis = stacked ? "translateX" : "translateY";
+          const driftSign = i === 0 ? -1 : 1;
+          return {
+            node,
+            rest: (drift) => `${driftAxis}(${(drift * driftSign * 22 * u).toFixed(2)}px) rotate(${tilt}deg)`,
+            // Neighbours first, the lead card last so it lands on top.
+            start: i === 0 ? SHOT_STAGGER * (urls.length - 1) : SHOT_STAGGER * (i - 1),
+            from: stacked ? { x: (i % 2 === 0 ? -1 : 1) * 160 * u, scale: 0.86, rotate: tilt * 2 } : { y: 140 * u, scale: 0.8, rotate: side * 8 }
+          };
+        });
+        root.appendChild(stage);
+        root.appendChild(caption.wrap);
+        instance = { shots, words: caption.words, durationSec: ctx.durationSec };
+      },
+      seek(localT) {
+        if (!instance) return;
+        const drift = Math.min(1, Math.max(0, localT / Math.max(1e-3, instance.durationSec)));
+        for (const shot of instance.shots) enter(shot.node, localT, shot.start, SHOT_ENTER, shot.from, shot.rest(drift));
+        wordsIn(instance.words, localT, CAPTION_START3, WORD_EACH6, WORD_DUR7);
+      },
+      marks(props) {
+        const shotsLanded = SHOT_STAGGER * (Math.min(3, props.screenshotUrls?.length ?? 1) - 1) + SHOT_ENTER;
+        return [
+          { t: 0, type: "start" },
+          { t: Math.max(shotsLanded, wordsSettle(countWords6(props.caption), CAPTION_START3, WORD_EACH6, WORD_DUR7)), type: "settle" }
         ];
       },
       unmount() {
@@ -1416,7 +1651,8 @@
     QuoteCard: createQuoteCard,
     ChecklistReveal: createChecklistReveal,
     BigStatement: createBigStatement,
-    BentoGrid: createBentoGrid
+    BentoGrid: createBentoGrid,
+    ScreenCollage: createScreenCollage
   };
   function createTemplate(templateId) {
     const factory = TEMPLATE_REGISTRY[templateId];
@@ -1538,7 +1774,8 @@
     const accent = parseColor(normalize(palette.accent)) ?? [124, 92, 255];
     const alt = parseColor(normalize(palette.accentAlt)) ?? accent;
     const fg = parseColor(normalize(palette.fg)) ?? [17, 17, 17];
-    const strength = palette.isDark ? 1.5 : 1;
+    const look = stylePackFor(manifest.style).backdrop;
+    const strength = (palette.isDark ? 1.5 : 1) * look.glow;
     const layer = el("div", "backdrop");
     setStyle(layer, { position: "absolute", inset: "0", overflow: "hidden", background: `linear-gradient(155deg, ${palette.bg} 30%, ${rgbaString(accent, 0.07 * strength)} 100%), ${palette.bg}` });
     const rng = createSceneRng("backdrop");
@@ -1578,7 +1815,13 @@
       maskImage: "radial-gradient(ellipse at 50% 50%, transparent 30%, black 100%)",
       webkitMaskImage: "radial-gradient(ellipse at 50% 50%, transparent 30%, black 100%)"
     });
-    layer.appendChild(grid);
+    if (look.grid) layer.appendChild(grid);
+    if (look.vignette > 0) {
+      const edge = palette.isDark ? rgbaString([0, 0, 0], look.vignette) : rgbaString(accent, look.vignette * 0.22);
+      const vignette = el("div", "backdrop-vignette");
+      setStyle(vignette, { position: "absolute", inset: "0", background: `radial-gradient(ellipse at 50% 50%, transparent 45%, ${edge} 100%)` });
+      layer.appendChild(vignette);
+    }
     stage.appendChild(layer);
     const scenes = manifest.scenes;
     const beats = manifest.beats ?? [];
@@ -1639,7 +1882,7 @@
       justifyContent: "center",
       pointerEvents: "none"
     });
-    const cues = manifest.captions.map((cue) => {
+    const cues = manifest.captions.filter((cue) => cue.burn !== false).map((cue) => {
       const node = el("div", "caption");
       const fontSize = fitFontSize(cue.text, band.width - 56 * u, band.fontSize, band.maxLines, band.fontSize * 0.6);
       setStyle(node, {
@@ -1761,8 +2004,25 @@
     );
     await Promise.race([Promise.all(loads), new Promise((resolve) => setTimeout(resolve, 4e3))]);
   }
-  var AUTO_TRANSITIONS = ["zoom", "slide-left", "fade", "slide-up"];
-  function cutStyle(kind, role, p, width, height) {
+  function cutStyle(kind, role, p, width, height, u) {
+    if (kind === "cut") return { opacity: role === "in" === p >= 0.5 ? 1 : 0, transform: "" };
+    if (kind === "push") {
+      const e2 = easeInOutQuart(p);
+      const x = role === "in" ? (1 - e2) * width : -e2 * width;
+      return { opacity: 1, transform: `translateX(${x.toFixed(2)}px)` };
+    }
+    if (kind === "wipe") {
+      const edge = ((1 - easeInOutQuart(p)) * 100).toFixed(3);
+      return role === "in" ? { opacity: 1, transform: "", clipPath: `inset(0 0 0 ${edge}%)` } : { opacity: 1, transform: "", clipPath: `inset(0 ${(100 - Number(edge)).toFixed(3)}% 0 0)` };
+    }
+    if (kind === "whip") {
+      if (role === "in") {
+        const inv = 1 - easeOutQuint(p);
+        return { opacity: clamp01((p - 0.3) / 0.3), transform: `translateX(${(inv * 0.6 * width).toFixed(2)}px)`, filter: `blur(${(inv * 40 * u).toFixed(2)}px)` };
+      }
+      const e2 = easeInCubic(p);
+      return { opacity: 1 - clamp01((p - 0.2) / 0.3), transform: `translateX(${(-e2 * 0.6 * width).toFixed(2)}px)`, filter: `blur(${(e2 * 40 * u).toFixed(2)}px)` };
+    }
     if (role === "in") {
       const inv = 1 - easeOutQuint(p);
       const opacity2 = clamp01((p - 0.15) / 0.6);
@@ -1788,14 +2048,17 @@
       background: manifest.palette.bg
     });
     const palette = resolvePalette(manifest.palette);
+    const style = stylePackFor(manifest.style);
+    const u = Math.min(manifest.width, manifest.height) / 1080;
     await Promise.all([loadFontFaces(manifest.fontFaces), loadFontStylesheets(manifest.fontCssUrls)]);
     const backdrop = createBackdrop(stage, manifest, palette, toRgbString);
-    const burnCaptions = manifest.captionStyle === "burned" && manifest.captions.length > 0;
+    const burnCaptions = manifest.captionStyle === "burned" && manifest.captions.some((c) => c.burn !== false);
     const insetBottom = burnCaptions ? captionBand(manifest.width, manifest.height).reserve : 0;
     const mounted = manifest.scenes.map((scene, sceneIndex) => {
       const root = document.createElement("div");
       root.dataset.sceneId = scene.id;
       root.dataset.templateId = scene.templateId;
+      root.dataset.style = style.id;
       stage.appendChild(root);
       const template = createTemplate(scene.templateId);
       const ctx = {
@@ -1806,6 +2069,7 @@
         durationSec: scene.end - scene.start,
         sceneIndex,
         insetBottom,
+        style,
         rng: createSceneRng(scene.id)
       };
       template.mount(root, scene.props, ctx);
@@ -1814,7 +2078,7 @@
       root.style.display = "none";
       root.style.position = "absolute";
       root.style.inset = "0";
-      const transition = scene.transition ?? AUTO_TRANSITIONS[Math.max(0, sceneIndex - 1) % AUTO_TRANSITIONS.length];
+      const transition = resolveTransition(style, sceneIndex, scene.transition);
       return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0, transition };
     });
     const captionLayer = burnCaptions ? createCaptionLayer(stage, manifest, palette) : null;
@@ -1840,19 +2104,30 @@
           if (scene.root.style.display === "none") scene.root.style.display = scene.root.dataset.display ?? "";
           const localT = t - scene.start;
           let opacity = 1;
+          let clipPath = "none";
+          let filter = "none";
           const transforms = [];
-          if (scene.transitionIn > 0 && localT < scene.transitionIn) {
-            const c = cutStyle(scene.transition, "in", clamp01(localT / scene.transitionIn), manifest.width, manifest.height);
+          const apply = (c) => {
             opacity *= c.opacity;
-            transforms.push(c.transform);
+            if (c.transform) transforms.push(c.transform);
+            if (c.clipPath) clipPath = c.clipPath;
+            if (c.filter) filter = c.filter;
+          };
+          if (scene.transitionIn > 0 && localT < scene.transitionIn) {
+            apply(cutStyle(scene.transition, "in", clamp01(localT / scene.transitionIn), manifest.width, manifest.height, u));
           }
           const next = mounted[i + 1];
           if (next && next.transitionIn > 0 && t >= next.start) {
-            const c = cutStyle(next.transition, "out", clamp01((t - next.start) / next.transitionIn), manifest.width, manifest.height);
-            opacity *= c.opacity;
-            transforms.push(c.transform);
+            apply(cutStyle(next.transition, "out", clamp01((t - next.start) / next.transitionIn), manifest.width, manifest.height, u));
+          }
+          if (style.camera > 0) {
+            const p = clamp01(localT / Math.max(1e-3, scene.end - scene.start));
+            const shrink = style.camera * (i % 2 === 0 ? 1 - p : p);
+            if (shrink > 5e-5) transforms.push(`scale(${(1 - shrink).toFixed(5)})`);
           }
           scene.root.style.opacity = String(opacity);
+          scene.root.style.clipPath = clipPath;
+          scene.root.style.filter = filter;
           scene.root.style.transform = transforms.length > 0 ? transforms.join(" ") : "none";
           scene.template.seek(localT);
         } else if (activeIds.has(scene.id) && scene.root.style.display !== "none") {

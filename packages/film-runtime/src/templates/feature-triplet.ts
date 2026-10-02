@@ -2,7 +2,7 @@ import type { FilmContext, Mark, SceneTemplate } from "../contract.js";
 import { clamp01, easeOutCubic, progress } from "../util/easing.js";
 import { el, setStyle } from "../util/dom.js";
 import { WRAP_SAFE, fitFontSize, layoutFor } from "../util/layout.js";
-import { cardStyle, enter, scaleXTo, sceneRoot } from "../util/ui.js";
+import { cardStyle, cueStart, enter, scaleXTo, sceneRoot } from "../util/ui.js";
 
 export interface Feature {
   /** Grounded fact: short label, e.g. "Sync across 4 devices". Must cite a factId upstream. */
@@ -13,6 +13,8 @@ export interface Feature {
 
 export interface FeatureTripletProps {
   features: [Feature, Feature, Feature];
+  /** Seconds from the scene start at which each feature is spoken; cards arrive and take the spotlight on them. Added by Build. */
+  cues?: number[];
 }
 
 interface Card {
@@ -26,12 +28,13 @@ interface Instance {
   horizontal: boolean;
   u: number;
   durationSec: number;
+  cues?: number[];
 }
 
 const CARD_STAGGER = 0.14;
 const CARD_ENTER = 0.75;
 
-const settleFor = (count: number) => (count - 1) * CARD_STAGGER + CARD_ENTER;
+const settleFor = (count: number, cues?: number[]) => cueStart(cues, count - 1, CARD_STAGGER) + CARD_ENTER;
 
 /**
  * Three grounded feature facts as cards that spring in one after another,
@@ -59,7 +62,7 @@ export function createFeatureTriplet(): SceneTemplate<FeatureTripletProps> {
       const badge = L.pick({ landscape: 84, portrait: 88, square: 64 }) * u;
       const labelWidth = row ? cardWidth - 2 * pad : cardWidth - 2 * pad - badge - pad * 0.8;
       const longest = props.features.reduce((a, f) => (f.label.length > a.length ? f.label : a), "");
-      const labelSize = fitFontSize(longest, labelWidth, L.pick({ landscape: 52, portrait: 52, square: 40 }) * u, row ? 3 : 2, 22 * u);
+      const labelSize = fitFontSize(longest, labelWidth, L.pick({ landscape: 60, portrait: 58, square: 44 }) * u, 3, 22 * u);
 
       const cards = props.features.map((feature, i): Card => {
         const node = el("div", "ft-card");
@@ -72,7 +75,7 @@ export function createFeatureTriplet(): SceneTemplate<FeatureTripletProps> {
           justifyContent: row ? "center" : "flex-start",
           gap: `${row ? pad * 0.7 : pad * 0.8}px`,
           width: `${cardWidth}px`,
-          minHeight: row ? `${L.safe.height * 0.52}px` : "0",
+          minHeight: `${L.safe.height * L.pick({ landscape: 0.62, portrait: 0.17, square: 0.2 })}px`,
           padding: `${pad}px`,
         });
 
@@ -137,19 +140,22 @@ export function createFeatureTriplet(): SceneTemplate<FeatureTripletProps> {
         return { node, ring, bar };
       });
 
-      instance = { cards, horizontal: row, u, durationSec: ctx.durationSec };
+      instance = { cards, horizontal: row, u, durationSec: ctx.durationSec, cues: props.cues };
     },
 
     seek(localT) {
       if (!instance) return;
-      const { horizontal, u, cards, durationSec } = instance;
+      const { horizontal, u, cards, durationSec, cues } = instance;
       const settled = settleFor(cards.length);
       // Spotlight: after the cards land, the rest of the scene is split into one turn per card.
       const turn = Math.max(0.5, (durationSec - settled - 0.5) / cards.length);
       cards.forEach((card, i) => {
-        const start = i * CARD_STAGGER;
-        const local = localT - settled - 0.1 - i * turn;
-        const spot = clamp01(local / 0.25) * clamp01((turn - local) / 0.25);
+        const start = cueStart(cues, i, CARD_STAGGER);
+        // With voice cues each card holds the spotlight while its line is spoken.
+        const litFrom = cues ? Math.max(start + 0.3, cues[i]!) : settled + 0.1 + i * turn;
+        const litFor = cues ? Math.max(0.6, (cues[i + 1] ?? durationSec - 0.5) - litFrom) : turn;
+        const local = localT - litFrom;
+        const spot = clamp01(local / 0.25) * clamp01((litFor - local) / 0.25);
         card.ring.style.opacity = String(spot);
         const lift = spot > 0 ? `translateY(${(-10 * u * spot).toFixed(2)}px)` : "";
         enter(card.node, localT, start, CARD_ENTER, horizontal ? { y: 90 * u, scale: 0.9, rotate: (i - 1) * 4 } : { x: -110 * u, scale: 0.96 }, lift);
@@ -160,7 +166,7 @@ export function createFeatureTriplet(): SceneTemplate<FeatureTripletProps> {
     marks(props): Mark[] {
       return [
         { t: 0, type: "start" },
-        { t: settleFor(props.features.length), type: "settle" },
+        { t: settleFor(props.features.length, props.cues), type: "settle" },
       ];
     },
 

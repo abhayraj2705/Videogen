@@ -2,11 +2,13 @@ import type { FilmContext, Mark, SceneTemplate } from "../contract.js";
 import { easeOutCubic, easeSpring, progress } from "../util/easing.js";
 import { el, setStyle } from "../util/dom.js";
 import { WRAP_SAFE, fitFontSize, layoutFor } from "../util/layout.js";
-import { cardStyle, enter, sceneRoot } from "../util/ui.js";
+import { cardStyle, cueStart, enter, sceneRoot } from "../util/ui.js";
 
 export interface ChecklistRevealProps {
   /** 2-4 short grounded items, each a fact's text (validated upstream). */
   items: string[];
+  /** Seconds from the scene start at which each item is spoken; rows arrive on them. Added by Build. */
+  cues?: number[];
 }
 
 interface Row {
@@ -18,6 +20,7 @@ interface Row {
 interface Instance {
   rows: Row[];
   u: number;
+  cues?: number[];
 }
 
 const ROW_STAGGER = 0.24;
@@ -88,14 +91,14 @@ export function createChecklistReveal(): SceneTemplate<ChecklistRevealProps> {
         return { node, check, tick: check.querySelector("path") };
       });
 
-      instance = { rows, u };
+      instance = { rows, u, cues: props.cues };
     },
 
     seek(localT) {
       if (!instance) return;
-      const { u } = instance;
+      const { u, cues } = instance;
       instance.rows.forEach(({ node, check, tick }, i) => {
-        const start = i * ROW_STAGGER;
+        const start = cueStart(cues, i, ROW_STAGGER);
         enter(node, localT, start, ROW_DURATION, { x: -90 * u, scale: 0.96 });
         const pop = progress(localT, start + 0.2, start + 0.7, easeSpring);
         check.style.transform = localT >= start + 0.7 ? "none" : `scale(${(0.3 + 0.7 * pop).toFixed(4)})`;
@@ -104,7 +107,7 @@ export function createChecklistReveal(): SceneTemplate<ChecklistRevealProps> {
     },
 
     marks(props): Mark[] {
-      const lastStart = (props.items.length - 1) * ROW_STAGGER;
+      const lastStart = cueStart(props.cues, props.items.length - 1, ROW_STAGGER);
       return [
         { t: 0, type: "start" },
         { t: lastStart + 0.8, type: "settle" },

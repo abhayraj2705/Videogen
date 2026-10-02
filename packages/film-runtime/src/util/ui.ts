@@ -1,5 +1,6 @@
 import type { FilmContext } from "../contract.js";
-import { clamp01, easeSpringSoft, spring } from "./easing.js";
+import { clamp01, easeOutCubic, easeOutQuint, spring } from "./easing.js";
+import { stylePackFor, type StylePack } from "../style.js";
 import { el, setStyle } from "./dom.js";
 import { wrapText } from "./text-fit.js";
 import { charsPerLine, fitFontSize, type Layout } from "./layout.js";
@@ -95,14 +96,54 @@ export function textBlock(text: string, o: TextBlockOptions): TextBlock {
   return { wrap, lines, words, fontSize, height: lines.length * fontSize * lineHeight };
 }
 
-/** Staggered word entrance: each word springs up from below while fading in. */
+const styleCache = new WeakMap<HTMLElement, StylePack>();
+
+/**
+ * The style pack of the film a mounted node belongs to. The player stamps the
+ * pack id on every scene root (`data-style`), so shared motion helpers pick up
+ * the film's look without each template threading it through.
+ */
+export function styleOf(node: HTMLElement): StylePack {
+  let pack = styleCache.get(node);
+  if (!pack) {
+    const host = node.closest<HTMLElement>("[data-style]");
+    pack = stylePackFor(host?.dataset.style);
+    // Only cache once attached: before that the lookup would wrongly pin the default.
+    if (host) styleCache.set(node, pack);
+  }
+  return pack;
+}
+
+/**
+ * Staggered word entrance in the film's reveal style: rising on a spring
+ * (default), wiping up out of a mask, popping in at scale, or resolving out of
+ * a blur. Timing is the same for every style, so settle marks don't move.
+ */
 export function wordsIn(words: HTMLElement[], t: number, start: number, each = 0.05, dur = 0.5, riseEm = 0.55): void {
+  if (words.length === 0) return;
+  const reveal = styleOf(words[0]!).reveal;
   for (let i = 0; i < words.length; i++) {
     const lin = clamp01((t - start - i * each) / dur);
-    const s = spring(lin, 0.72, 1.1);
     const w = words[i]!;
+    const done = lin >= 1;
     w.style.opacity = String(clamp01(lin * 2.5));
-    w.style.transform = lin >= 1 ? "none" : `translateY(${((1 - s) * riseEm).toFixed(4)}em)`;
+    if (reveal === "mask") {
+      const e = easeOutQuint(lin);
+      w.style.opacity = lin > 0 ? "1" : "0";
+      w.style.clipPath = done ? "none" : `inset(0 0 ${((1 - e) * 100).toFixed(2)}% 0)`;
+      w.style.transform = done ? "none" : `translateY(${((1 - e) * 0.9).toFixed(4)}em)`;
+    } else if (reveal === "pop") {
+      const s = spring(lin, 0.5, 1.3);
+      w.style.transform = done ? "none" : `scale(${(0.5 + 0.5 * s).toFixed(4)})`;
+    } else if (reveal === "blur") {
+      const e = easeOutCubic(lin);
+      w.style.opacity = String(e);
+      w.style.filter = done ? "none" : `blur(${((1 - e) * 0.28).toFixed(4)}em)`;
+      w.style.transform = done ? "none" : `translateY(${((1 - e) * 0.18).toFixed(4)}em)`;
+    } else {
+      const s = spring(lin, 0.72, 1.1);
+      w.style.transform = done ? "none" : `translateY(${((1 - s) * riseEm).toFixed(4)}em)`;
+    }
   }
 }
 
@@ -128,7 +169,8 @@ export interface EnterOptions {
  */
 export function enter(node: HTMLElement, t: number, start: number, dur: number, o: EnterOptions = {}, extra = ""): void {
   const lin = clamp01((t - start) / dur);
-  const inv = 1 - (o.ease ?? easeSpringSoft)(lin);
+  const { damping, freq } = styleOf(node).spring;
+  const inv = 1 - (o.ease ? o.ease(lin) : spring(lin, damping, freq));
   node.style.opacity = String(clamp01(lin * 2.2));
   if (lin >= 1) {
     node.style.transform = extra || "none";
@@ -136,6 +178,17 @@ export function enter(node: HTMLElement, t: number, start: number, dur: number, 
   }
   const scale = 1 - (1 - (o.scale ?? 1)) * inv;
   node.style.transform = `translate(${((o.x ?? 0) * inv).toFixed(2)}px, ${((o.y ?? 0) * inv).toFixed(2)}px) scale(${scale.toFixed(4)}) rotate(${((o.rotate ?? 0) * inv).toFixed(3)}deg) ${extra}`.trim();
+}
+
+/**
+ * When list item `i` should start entering. With voice cues (seconds from the
+ * scene start at which each item is spoken, added by Build) an item arrives
+ * just ahead of its word; without them, or if a cue would come before the
+ * plain stagger, the stagger wins.
+ */
+export function cueStart(cues: number[] | undefined, i: number, stagger: number, lead = 0.25): number {
+  const cue = cues?.[i];
+  return cue === undefined ? i * stagger : Math.max(i * stagger, cue - lead);
 }
 
 /** `scaleX(p)` for a draw-on element, resting on `none` once fully drawn. */
@@ -165,13 +218,22 @@ export function addMarker(word: HTMLElement, color: string): HTMLElement {
 
 /** Card surface used across templates: opaque brand-tinted panel with a hairline and a soft, accent-tinted shadow. */
 export function cardStyle(ctx: FilmContext, u: number, radius = 28): Partial<CSSStyleDeclaration> {
-  return {
-    boxSizing: "border-box",
-    background: ctx.palette.surface,
-    border: `${Math.max(1, 1.5 * u)}px solid ${ctx.palette.border}`,
-    borderRadius: `${radius * u}px`,
-    boxShadow: `0 ${24 * u}px ${60 * u}px -${28 * u}px ${ctx.palette.glow}, 0 ${2 * u}px ${6 * u}px rgba(0,0,0,${ctx.palette.isDark ? 0.4 : 0.06})`,
-  };
+  const p = ctx.palette;
+  const base = { boxSizing: "border-box", borderRadius: `${radius * ctx.style.radius * u}px` };
+  const hairline = `${Math.max(1, 1.5 * u)}px solid ${p.border}`;
+  switch (ctx.style.card) {
+    case "outline":
+      // Flat panel, strong accent-tinted outline, no shadow.
+      return { ...base, background: p.surface, border: `${Math.max(2, 3 * u)}px solid ${p.accentSoft}`, boxShadow: "none" };
+    case "glass":
+      // The surface with a sheen of the foreground ink across one corner: reads as frosted without backdrop-filter.
+      return { ...base, background: `linear-gradient(160deg, ${p.border}, transparent 60%), ${p.surface}`, border: hairline, boxShadow: `0 ${30 * u}px ${80 * u}px -${40 * u}px rgba(0,0,0,${p.isDark ? 0.7 : 0.25})` };
+    case "solid":
+      // Sticker-like: opaque panel with a hard offset shadow in the accent.
+      return { ...base, background: p.surface, border: `${Math.max(2, 3 * u)}px solid ${p.fg}`, boxShadow: `${8 * u}px ${10 * u}px 0 ${p.accent}` };
+    default:
+      return { ...base, background: p.surface, border: hairline, boxShadow: `0 ${24 * u}px ${60 * u}px -${28 * u}px ${p.glow}, 0 ${2 * u}px ${6 * u}px rgba(0,0,0,${p.isDark ? 0.4 : 0.06})` };
+  }
 }
 
 /** The brand logo (image) or a lettered accent tile when the crawl found none. */

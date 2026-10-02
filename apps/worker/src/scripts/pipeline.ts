@@ -31,7 +31,8 @@ import { buildStageHash, decideVoiceScenes, manifestHash, qaStageHash, renderSta
  * no TTS key = silent fallback voice, no sidecar = local ffmpeg mix.
  *
  *   pnpm pipeline run benchmark/fixtures/<id>.json [--out DIR] [--formats 16:9,9:16,1:1]
- *                     [--music upbeat|calm|energetic|cinematic|off] [--no-voice] [--plan free|pro]
+ *                     [--music upbeat|calm|energetic|cinematic|off] [--tone clean|playful|cinematic|app-store]
+ *                     [--no-voice] [--plan free|pro]
  *                     [--concurrency N] [--chunks N] [--force] [--edit storyboard.json]
  *   pnpm pipeline run https://example.com            (live crawl; needs network)
  *
@@ -108,7 +109,7 @@ async function main() {
   const [, , cmd, target, ...rest] = process.argv;
   if (cmd !== "run" || !target) {
     console.error(
-      "usage: pnpm pipeline run <url-or-crawl-fixture.json> [--out DIR] [--formats 16:9,9:16,1:1] [--music MOOD|off] [--no-voice] [--plan free|pro] [--force] [--edit storyboard.json]",
+      "usage: pnpm pipeline run <url-or-crawl-fixture.json> [--out DIR] [--formats 16:9,9:16,1:1] [--music MOOD|off] [--tone clean|playful|cinematic|app-store] [--no-voice] [--plan free|pro] [--force] [--edit storyboard.json]",
     );
     process.exit(2);
   }
@@ -126,7 +127,7 @@ async function main() {
   const options = JobOptions.parse({
     formats,
     lengthSec: 20,
-    tone: "clean",
+    tone: flag(rest, "tone") ?? "clean",
     voiceLanguage: "en",
     voiceId: "default",
     noVoiceover: rest.includes("--no-voice"),
@@ -248,7 +249,7 @@ async function main() {
 
   // 5. Audio mix (format-independent: every format shares one timeline)
   const baseManifest = manifests.get(formats[0]!)!;
-  const mixHash = sha16(["mix-v1", manifestHash({ ...baseManifest, width: 0, height: 0 }), audioHashes, track?.id ?? null]);
+  const mixHash = sha16(["mix-v2", manifestHash({ ...baseManifest, width: 0, height: 0 }), audioHashes, track?.id ?? null]);
   const audioPath = path.join(outDir, "audio.wav");
   let mixAudio: Buffer | null = null;
   let mixInfo: { path: string; lufs: number | null; truePeakDbtp: number | null } | null = null;
@@ -258,7 +259,7 @@ async function main() {
   } else {
     const mix = await t("mix", async () => {
       if (!voice.scenes.some((v) => v.audioKey) && !track) return null;
-      const narration = await assembleNarrationTrack({ manifest: baseManifest, voiceScenes: voice.scenes, storage, repoRoot: REPO_ROOT });
+      const narration = await assembleNarrationTrack({ manifest: baseManifest, voiceScenes: voice.scenes, storage, repoRoot: REPO_ROOT, sfx: Boolean(track) });
       return mixFinalAudio({ narration, music: track, durationSec: baseManifest.duration, sidecar, repoRoot: REPO_ROOT });
     });
     if (mix) {

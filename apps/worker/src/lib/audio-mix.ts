@@ -8,6 +8,7 @@ import type { StorageClient } from "@sitereel/storage";
 import type { VoiceSceneResult } from "../stages/voice.js";
 import type { AudioSidecarClient } from "./audio-sidecar.js";
 import type { MusicTrack } from "./music.js";
+import { SFX_GAIN, sfxEvents, synthSfx, type SfxKind } from "./sfx.js";
 
 const SAMPLE_RATE = 48000;
 
@@ -16,12 +17,17 @@ const SAMPLE_RATE = 48000;
  * the timing engine chose for it (manifest scene.audioStart), so voice lines
  * stay in sync with crossfaded, beat-snapped scenes — plain concatenation
  * would drift as soon as scenes overlap. Output length = manifest.duration.
+ *
+ * With `sfx`, the film's sound effects (whooshes on cuts, pops as list items
+ * land — see sfx.ts) are laid onto the same track, so they reach the final
+ * mix by either path (sidecar or local ffmpeg) without a second input.
  */
 export async function assembleNarrationTrack(opts: {
   manifest: FilmManifest;
   voiceScenes: VoiceSceneResult[];
   storage: StorageClient;
   repoRoot?: string;
+  sfx?: boolean;
 }): Promise<Buffer> {
   const { manifest, voiceScenes, storage, repoRoot } = opts;
   const tmpDir = path.join(os.tmpdir(), `sitereel-narr-${randomUUID()}`);
@@ -40,9 +46,27 @@ export async function assembleNarrationTrack(opts: {
       const delayMs = Math.round((scene.audioStart ?? scene.start) * 1000);
       filters.push(`[${i + 1}:a]aresample=${SAMPLE_RATE},aformat=sample_fmts=fltp:channel_layouts=mono,adelay=${delayMs}:all=1[a${i}]`);
     }
+    // Sound effects: one input per kind, split and delayed once per event.
+    const sfxLabels: string[] = [];
+    const events = opts.sfx ? sfxEvents(manifest) : [];
+    const kinds = [...new Set(events.map((e) => e.kind))] as SfxKind[];
+    for (const [k, kind] of kinds.entries()) {
+      const p = path.join(tmpDir, `sfx-${kind}.wav`);
+      await fs.writeFile(p, synthSfx(kind));
+      inputs.push("-i", p);
+      const at = events.filter((e) => e.kind === kind);
+      const input = voiced.length + 1 + k;
+      const taps = at.map((_, j) => `[s${k}_${j}]`);
+      filters.push(`[${input}:a]volume=${SFX_GAIN[kind]},asplit=${at.length}${taps.join("")}`);
+      at.forEach((e, j) => {
+        filters.push(`${taps[j]}adelay=${Math.round(e.t * 1000)}:all=1[x${k}_${j}]`);
+        sfxLabels.push(`[x${k}_${j}]`);
+      });
+    }
+
     const outPath = path.join(tmpDir, "narration.wav");
-    const mixInputs = ["[0:a]", ...voiced.map((_, i) => `[a${i}]`)].join("");
-    filters.push(`${mixInputs}amix=inputs=${voiced.length + 1}:normalize=0:duration=first[out]`);
+    const mixInputs = ["[0:a]", ...voiced.map((_, i) => `[a${i}]`), ...sfxLabels].join("");
+    filters.push(`${mixInputs}amix=inputs=${voiced.length + 1 + sfxLabels.length}:normalize=0:duration=first[out]`);
     await runFfmpegQuiet(["-y", ...inputs, "-filter_complex", filters.join(";"), "-map", "[out]", "-t", manifest.duration.toFixed(3), "-ar", String(SAMPLE_RATE), outPath], repoRoot);
     return await fs.readFile(outPath);
   } finally {

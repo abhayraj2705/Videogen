@@ -3,6 +3,7 @@ import { clamp01, easeInOutCubic } from "./util/easing.js";
 import { el, setStyle } from "./util/dom.js";
 import { parseColor, rgbaString, type Rgb } from "./util/color.js";
 import { createSceneRng } from "./util/rng.js";
+import { stylePackFor } from "./style.js";
 
 export interface Backdrop {
   seek(t: number): void;
@@ -29,7 +30,8 @@ export function createBackdrop(stage: HTMLElement, manifest: FilmManifest, palet
   const accent: Rgb = parseColor(normalize(palette.accent)) ?? [124, 92, 255];
   const alt: Rgb = parseColor(normalize(palette.accentAlt)) ?? accent;
   const fg: Rgb = parseColor(normalize(palette.fg)) ?? [17, 17, 17];
-  const strength = palette.isDark ? 1.5 : 1;
+  const look = stylePackFor(manifest.style).backdrop;
+  const strength = (palette.isDark ? 1.5 : 1) * look.glow;
 
   const layer = el("div", "backdrop");
   setStyle(layer, { position: "absolute", inset: "0", overflow: "hidden", background: `linear-gradient(155deg, ${palette.bg} 30%, ${rgbaString(accent, 0.07 * strength)} 100%), ${palette.bg}` });
@@ -73,7 +75,14 @@ export function createBackdrop(stage: HTMLElement, manifest: FilmManifest, palet
     maskImage: "radial-gradient(ellipse at 50% 50%, transparent 30%, black 100%)",
     webkitMaskImage: "radial-gradient(ellipse at 50% 50%, transparent 30%, black 100%)",
   });
-  layer.appendChild(grid);
+  if (look.grid) layer.appendChild(grid);
+  if (look.vignette > 0) {
+    // Frame edges fall off toward black on dark brands, toward the accent on light ones.
+    const edge = palette.isDark ? rgbaString([0, 0, 0], look.vignette) : rgbaString(accent, look.vignette * 0.22);
+    const vignette = el("div", "backdrop-vignette");
+    setStyle(vignette, { position: "absolute", inset: "0", background: `radial-gradient(ellipse at 50% 50%, transparent 45%, ${edge} 100%)` });
+    layer.appendChild(vignette);
+  }
   stage.appendChild(layer);
 
   const scenes = manifest.scenes;

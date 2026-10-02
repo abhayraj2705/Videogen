@@ -61,6 +61,10 @@ export const TEMPLATE_PROP_SCHEMAS: Record<TemplateId, z.ZodType> = {
     title: z.string().min(1),
     items: z.array(z.string().min(1)).length(3),
   }),
+  ScreenCollage: z.object({
+    sourcePageUrl: z.string().url(),
+    caption: z.string().min(1),
+  }),
 };
 
 /**
@@ -82,6 +86,7 @@ export function visibleTextFor(templateId: TemplateId, props: unknown): string[]
       return (p.features as { label: string }[]).map((f) => f.label);
     case "SectionShowcase":
     case "UIFlowCursor":
+    case "ScreenCollage":
       return [p.caption as string];
     case "CTAEndCard":
       return [p.ctaText as string];
@@ -127,7 +132,7 @@ export interface NumberToken {
   raw: string;
   /** Digits and inner separators only, e.g. "10,000" */
   core: string;
-  /** Unit suffix, lowercased and space-free: "%", "+", "x", "k", "m", "b" or "" */
+  /** Unit suffix, lowercased and space-free: "%", "+", "x", "k", "m", "b", a magnitude with a plus ("k+") or "" */
   suffix: string;
 }
 
@@ -135,7 +140,7 @@ export interface NumberToken {
 // "24/7", "9:41"), not glued to letters on either side ("1Password", "H2O",
 // "mp4" are names, not claims), plus an optional unit suffix. Trailing
 // punctuation ("in 2024.") is never part of the match.
-const NUMBER_RE = /(?<![\p{L}\p{N}_])(\d+(?:[.,:/]\d+)*)(?:\s?(%|\+|[kmbx])(?![\p{L}\p{N}]))?(?![\p{L}\p{N}_])/giu;
+const NUMBER_RE = /(?<![\p{L}\p{N}_])(\d+(?:[.,:/]\d+)*)(?:\s?(%|\+|[kmbx]\+?)(?![\p{L}\p{N}]))?(?![\p{L}\p{N}_])/giu;
 
 export function numbersIn(text: string): NumberToken[] {
   const out: NumberToken[] = [];
@@ -145,9 +150,24 @@ export function numbersIn(text: string): NumberToken[] {
   return out;
 }
 
-/** True when `token` appears among the numbers in `sourceText` (same digits; same unit if the claim states one). */
+/**
+ * True when `token` appears among the numbers in `sourceText` (same digits; same unit if the claim states one).
+ * A claim may drop the source's trailing plus ("11k" from "11k+") but never add one.
+ */
 export function isNumberGrounded(token: NumberToken, sourceText: string): boolean {
-  return numbersIn(sourceText).some((s) => s.core === token.core && (token.suffix === "" || token.suffix === s.suffix));
+  return numbersIn(sourceText).some((s) => s.core === token.core && (token.suffix === "" || token.suffix === s.suffix || `${token.suffix}+` === s.suffix));
+}
+
+/**
+ * Words an on-screen line of four or more words must not end on — it reads as cut off mid-sentence.
+ * Prepositions are left out on purpose: "Digital products people stick with" is a finished line.
+ */
+const DANGLING_ENDINGS = new Set(["and", "or", "but", "of", "the", "a", "an", "that", "which", "can", "will", "&"]);
+
+export function endsDangling(text: string): boolean {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  if (words.length < 4) return false;
+  return DANGLING_ENDINGS.has(words[words.length - 1]!.toLowerCase().replace(/[^\p{L}&]+$/u, "")) && !/[.!?…]$/.test(text.trim());
 }
 
 export function findBannedPhrases(text: string): string[] {
@@ -282,6 +302,18 @@ export function validateStoryboard(input: unknown, facts: FactLedger, opts: Vali
       }
     }
 
+    // Every line reads as a finished phrase ("…a consulting partner that can" is a cut-off sentence).
+    for (const text of scene.onScreenText) {
+      if (endsDangling(text)) {
+        issues.push({
+          code: "dangling_phrase",
+          message: `Scene ${scene.id} on-screen text ends mid-sentence: "${text}" — rewrite it as a complete phrase`,
+          sceneId: scene.id,
+          severity: "error",
+        });
+      }
+    }
+
     // Template prop requirements.
     const propSchema = TEMPLATE_PROP_SCHEMAS[scene.templateId];
     const propResult = propSchema.safeParse(scene.props);
@@ -329,7 +361,7 @@ export function validateStoryboard(input: unknown, facts: FactLedger, opts: Vali
       }
     }
 
-    if ((scene.templateId === "SectionShowcase" || scene.templateId === "UIFlowCursor") && pageUrls) {
+    if ((scene.templateId === "SectionShowcase" || scene.templateId === "UIFlowCursor" || scene.templateId === "ScreenCollage") && pageUrls) {
       const src = String(props.sourcePageUrl);
       if (!pageUrls.has(normalizeUrl(src))) {
         issues.push({

@@ -38,7 +38,7 @@ export function createCaptionLayer(stage: HTMLElement, manifest: FilmManifest, p
     pointerEvents: "none",
   });
 
-  const cues: MountedCue[] = manifest.captions.map((cue) => {
+  const cues: MountedCue[] = manifest.captions.filter((cue) => cue.burn !== false).map((cue) => {
     const node = el("div", "caption");
     const fontSize = fitFontSize(cue.text, band.width - 56 * u, band.fontSize, band.maxLines, band.fontSize * 0.6);
     setStyle(node, {

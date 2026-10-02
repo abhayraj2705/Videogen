@@ -19,7 +19,16 @@ export function screenshotPageUrls(crawlOutput: CrawlOutput): string[] {
 }
 
 /** Words a line must not end on — a cut that lands here reads as broken ("…online and", "…from Stripe on"). */
-const DANGLING_WORDS = new Set(["and", "or", "but", "to", "of", "the", "a", "an", "with", "for", "in", "on", "from", "by", "at", "as", "is", "are", "that", "your", "our", "their", "its", "&"]);
+const DANGLING_WORDS = new Set([
+  ...["and", "or", "but", "to", "of", "the", "a", "an", "with", "for", "in", "on", "from", "by", "at", "as", "is", "are", "that", "your", "our", "their", "its", "&"],
+  // Cuts that land just inside a clause: "…a partner that can", "…teams who will", "…faster than".
+  ...["can", "will", "would", "should", "could", "may", "must", "which", "who", "when", "where", "if", "than", "into", "how", "so", "not", "be", "has", "have", "this", "these"],
+]);
+
+/** Joins on-screen lines into one spoken line: each ends on exactly one full stop ("services." + "experts." never reads "services..experts."). */
+function spokenList(lines: string[]): string {
+  return lines.map((l) => `${l.replace(/[\s.,;:!?]+$/, "")}.`).join(" ");
+}
 
 /**
  * Shortens text to at most `maxWords` without cutting mid-thought: prefers the
@@ -329,7 +338,7 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
       id: "features",
       templateId: "FeatureTriplet",
       durationSec: durationFor(labels, 3.5),
-      narration: narrate(labels.join(". ")),
+      narration: narrate(spokenList(labels)),
       onScreenText: labels,
       factIds: featureFacts.map((f) => f.id),
       props: { features: labels.map((label) => ({ label })) },
@@ -376,7 +385,8 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
     const caption = truncateWords(showcaseFact.text);
     scenes.push({
       id: "showcase",
-      templateId: "SectionShowcase",
+      // A page with several section captures gets the collage, so the two product scenes don't look alike.
+      templateId: (showcasePage.sectionScreenshotKeys?.length ?? 0) >= 2 ? "ScreenCollage" : "SectionShowcase",
       durationSec: durationFor([caption], 4),
       narration: narrate(caption),
       onScreenText: [caption],
@@ -392,7 +402,7 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
     id: "cta",
     templateId: "CTAEndCard",
     durationSec: durationFor([ctaText], 2.5),
-    narration: narrate(`${productName}. ${ctaText}.`),
+    narration: narrate(spokenList([productName, ctaText])),
     onScreenText: [ctaText],
     factIds: cta ? [cta.id] : [],
     props: { productName, ctaText, domain: domain || "website" },
