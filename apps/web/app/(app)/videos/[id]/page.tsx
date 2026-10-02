@@ -4,7 +4,7 @@ import { use } from "react";
 import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { AlertTriangle, Bell, RotateCw, Upload, XCircle } from "lucide-react";
+import { AlertTriangle, Bell, PenLine, RotateCw, Upload, XCircle } from "lucide-react";
 import type { JobEvent, JobStatus } from "@sitereel/shared";
 import { approveJob, getJob, getJobRenders } from "@/lib/api/client";
 import { useJobEvents } from "@/hooks/use-job-events";
@@ -228,9 +228,9 @@ export default function VideoDetailPage({ params }: { params: Promise<{ id: stri
                     </Badge>
                   </span>
                   {status === "review" && (
-                    <Button size="sm" onClick={() => approveMutation.mutate()} disabled={approveMutation.isPending}>
-                      {approveMutation.isPending ? "Approving…" : "Approve & render"}
-                    </Button>
+                    <Link href={`/videos/${job.id}/review`} className={buttonVariants({ size: "sm" })}>
+                      <PenLine className="size-4" aria-hidden /> Review script
+                    </Link>
                   )}
                 </CardTitle>
               </CardHeader>
@@ -241,9 +241,17 @@ export default function VideoDetailPage({ params }: { params: Promise<{ id: stri
                   <span className="font-mono text-xs text-muted-foreground">{pct}%</span>
                 </div>
                 {status === "review" && (
-                  <p className="text-xs text-muted-foreground">
-                    The script is ready. Scene-by-scene editing ships with the script editor — for now, approve to continue to voice and render.
-                  </p>
+                  <div className="flex flex-col gap-2 rounded-lg border border-primary/30 bg-primary/5 p-3">
+                    <p className="text-sm">Your script is ready. Review it scene by scene — edit narration and on-screen text, preview it live, then render.</p>
+                    <div className="flex flex-wrap gap-2">
+                      <Link href={`/videos/${job.id}/review`} className={buttonVariants({ size: "sm" })}>
+                        <PenLine className="size-4" aria-hidden /> Open script editor
+                      </Link>
+                      <Button size="sm" variant="ghost" onClick={() => approveMutation.mutate()} disabled={approveMutation.isPending}>
+                        {approveMutation.isPending ? "Approving…" : "Approve as is"}
+                      </Button>
+                    </div>
+                  </div>
                 )}
               </CardContent>
             </Card>
