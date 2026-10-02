@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
 import { CrawlOutput, JobOptions, Storyboard, ffprobe, formatSlug, runFfmpegQuiet, validateStoryboard, type AspectFormat } from "@sitereel/shared";
 import { createLocalStorageClient, type StorageClient } from "@sitereel/storage";
-import { createAnthropicProvider, createGeminiProvider, type LlmProvider } from "@sitereel/llm";
+import { createAnthropicProvider, createGeminiProvider, createOpenAiCompatProvider, type LlmProvider } from "@sitereel/llm";
 import { createGeminiTtsProvider } from "@sitereel/tts";
 import { parseColor, type FilmManifest } from "@sitereel/film-runtime";
 import { bundleFilmEntry, startFilmServer } from "@sitereel/renderer";
@@ -152,7 +152,16 @@ async function main() {
 
   const storage = createLocalStorageClient(storageDir);
   const env = { STORAGE_DRIVER: "local" as const, STORAGE_LOCAL_DIR: storageDir };
-  const gemini: LlmProvider | null = process.env.GEMINI_API_KEY ? createGeminiProvider({ apiKey: process.env.GEMINI_API_KEY, model: process.env.GEMINI_MODEL ?? "gemini-2.0-flash-lite" }) : null;
+  const gemini: LlmProvider | null = process.env.OPENAI_COMPAT_BASE_URL
+    ? createOpenAiCompatProvider({
+        baseUrl: process.env.OPENAI_COMPAT_BASE_URL,
+        model: process.env.OPENAI_COMPAT_MODEL ?? "gemini-3-flash",
+        apiKey: process.env.OPENAI_COMPAT_API_KEY,
+      })
+    : process.env.GEMINI_API_KEY
+      ? createGeminiProvider({ apiKey: process.env.GEMINI_API_KEY, model: process.env.GEMINI_MODEL ?? "gemini-2.0-flash-lite" })
+      : null;
+  if (gemini) console.log(`  LLM: ${gemini.id}`);
   const anthropic: LlmProvider | null = process.env.ANTHROPIC_API_KEY ? createAnthropicProvider({ apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL ?? "claude-sonnet-5-5" }) : null;
   const tts = process.env.GEMINI_API_KEY ? createGeminiTtsProvider({ apiKey: process.env.GEMINI_API_KEY }) : null;
   const sidecar = getAudioSidecarFromEnv((m) => console.warn(`  [sidecar] ${m}`));

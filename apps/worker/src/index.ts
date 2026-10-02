@@ -6,7 +6,7 @@ import { Redis as IORedis } from "ioredis";
 import { pino } from "pino";
 import { createDb } from "@sitereel/db";
 import { createStorageClientFromEnv } from "@sitereel/storage";
-import { createGeminiProvider, createAnthropicProvider, type LlmProvider } from "@sitereel/llm";
+import { createGeminiProvider, createAnthropicProvider, createOpenAiCompatProvider, type LlmProvider } from "@sitereel/llm";
 import { createGeminiTtsProvider, type TtsProvider } from "@sitereel/tts";
 import { QUEUE_NAMES, jobEventStreamKey, loadServerEnv, type JobEvent } from "@sitereel/shared";
 import { createCrawlProcessor } from "./processors/crawl-processor.js";
@@ -35,11 +35,15 @@ const storage = createStorageClientFromEnv(env);
 const connection = new IORedis(env.REDIS_URL, { maxRetriesPerRequest: null });
 const publisher = new IORedis(env.REDIS_URL, { maxRetriesPerRequest: null });
 
-const primaryProvider: LlmProvider | null = env.GEMINI_API_KEY
-  ? createGeminiProvider({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL })
-  : null;
+const primaryProvider: LlmProvider | null = env.OPENAI_COMPAT_BASE_URL
+  ? createOpenAiCompatProvider({ baseUrl: env.OPENAI_COMPAT_BASE_URL, model: env.OPENAI_COMPAT_MODEL, apiKey: env.OPENAI_COMPAT_API_KEY })
+  : env.GEMINI_API_KEY
+    ? createGeminiProvider({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL })
+    : null;
 if (!primaryProvider) {
-  logger.warn("GEMINI_API_KEY not set — SiteBrief and planning will use deterministic fallbacks, not an LLM call");
+  logger.warn("No LLM configured (OPENAI_COMPAT_BASE_URL / GEMINI_API_KEY) — SiteBrief and planning will use deterministic fallbacks");
+} else {
+  logger.info({ provider: primaryProvider.id }, "primary LLM provider");
 }
 const escalationProvider: LlmProvider | null = env.ANTHROPIC_API_KEY
   ? createAnthropicProvider({ apiKey: env.ANTHROPIC_API_KEY, model: env.ANTHROPIC_MODEL })

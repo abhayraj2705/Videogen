@@ -33,6 +33,14 @@ export const ServerEnv = z.object({
   GEMINI_API_KEY: z.string().optional(),
   GEMINI_MODEL: z.string().default("gemini-2.0-flash-lite"),
 
+  // Optional local-dev LLM: any OpenAI-compatible /chat/completions endpoint
+  // (e.g. WebAI-to-API at http://localhost:6969/v1). When set it is the primary
+  // provider for SiteBrief + planning, taking precedence over GEMINI_API_KEY.
+  // It does not provide TTS — voice still needs GEMINI_API_KEY.
+  OPENAI_COMPAT_BASE_URL: z.string().url().optional(),
+  OPENAI_COMPAT_MODEL: z.string().default("gemini-3-flash"),
+  OPENAI_COMPAT_API_KEY: z.string().optional(),
+
   // Escalation provider (§4.6 "Plan"): used only after the default provider's
   // retries are exhausted. Unset means the planner skips straight to the
   // deterministic fallback storyboard instead of escalating.
