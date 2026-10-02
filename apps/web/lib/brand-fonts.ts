@@ -1,0 +1,23 @@
+/** Fonts offered in brand-kit selects. The film runtime falls back to a system stack if a font isn't available at render time. */
+export const BRAND_FONTS = [
+  "Inter",
+  "Geist",
+  "Roboto",
+  "Open Sans",
+  "Lato",
+  "Montserrat",
+  "Poppins",
+  "Nunito",
+  "Work Sans",
+  "DM Sans",
+  "Manrope",
+  "Space Grotesk",
+  "Playfair Display",
+  "Merriweather",
+  "Lora",
+  "Source Serif Pro",
+  "IBM Plex Sans",
+  "Noto Sans",
+  "Mukta",
+  "Hind",
+];

@@ -20,6 +20,8 @@ import { OptionCardGroup } from "@/components/ui/option-card-group";
 import { VoicePicker } from "@/components/create/voice-picker";
 import { CreateJobBlockAlert } from "@/components/create/create-job-block";
 import type { VoiceLanguage } from "@/lib/voices";
+import { BrandKitPicker } from "@/components/create/brand-kit-picker";
+import { usePrefDefaults } from "@/components/create/use-pref-defaults";
 
 function useDebounced<T>(value: T, delayMs: number): T {
   const [debounced, setDebounced] = useState(value);
@@ -85,6 +87,9 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
   const [focusPage, setFocusPage] = useState("");
   const [consent, setConsent] = useState(false);
   const [block, setBlock] = useState<CreateJobBlock | null>(null);
+  /** undefined = not chosen yet (the picker preselects the default kit); "" = site's own brand. */
+  const [brandKitId, setBrandKitId] = useState<string | undefined>(undefined);
+  usePrefDefaults({ setPrimaryFormat, setVoiceId });
 
   const normalized = normalizeUrl(url);
   const debouncedUrl = useDebounced(normalized, 600);
@@ -116,6 +121,7 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
         musicMood: "upbeat",
         reviewBeforeRender,
         ...(focusPage.trim() ? { focusPage: focusPage.trim() } : {}),
+        ...(brandKitId ? { brandKitId } : {}),
       };
       return createJobChecked({ url: normalized!, options });
     },
@@ -256,6 +262,10 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
             Background music
           </Label>
         </div>
+      </Section>
+
+      <Section n={4} title="Brand">
+        <BrandKitPicker value={brandKitId} onChange={setBrandKitId} />
       </Section>
 
       <Card>
