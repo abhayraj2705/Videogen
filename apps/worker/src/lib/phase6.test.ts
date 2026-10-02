@@ -124,7 +124,8 @@ describe("voice stage reuse (downstream-only re-voice)", () => {
     } finally {
       await fs.rm(dir, { recursive: true, force: true });
     }
-  });
+    // Synthesizes real (silent) audio via ffmpeg; slow when turbo runs every package's tests in parallel.
+  }, 30_000);
 });
 
 describe("storyboard versioning", () => {

@@ -7,6 +7,7 @@ import { Coins } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { getCreditBalance } from "@/lib/api/jobs";
 import { Button } from "@/components/ui/button";
+import { BILLING_ENABLED } from "@/lib/features";
 
 export function Topbar({ email }: { email: string | null }) {
   const router = useRouter();
@@ -28,7 +29,7 @@ export function Topbar({ email }: { email: string | null }) {
       <div className="flex min-w-0 items-center gap-3">
         {typeof credits.data === "number" && (
           <Link
-            href="/billing"
+            href={BILLING_ENABLED ? "/billing" : "/settings"}
             className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs text-muted-foreground hover:text-foreground"
           >
             <Coins className="size-3.5 text-primary" aria-hidden /> {credits.data} credit{credits.data === 1 ? "" : "s"}

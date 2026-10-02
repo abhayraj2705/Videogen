@@ -4,11 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Film, LayoutGrid, Palette, CreditCard, Settings, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BILLING_ENABLED } from "@/lib/features";
 
 const NAV = [
   { href: "/dashboard", label: "Videos", icon: LayoutGrid },
   { href: "/brand-kits", label: "Brand kits", icon: Palette },
-  { href: "/billing", label: "Billing", icon: CreditCard },
+  ...(BILLING_ENABLED ? [{ href: "/billing", label: "Billing", icon: CreditCard }] : []),
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 

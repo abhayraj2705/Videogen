@@ -3,6 +3,7 @@ import { Clock, CreditCard, Layers } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { buttonVariants } from "@/components/ui/button";
 import type { CreateJobBlock } from "@/lib/api/jobs";
+import { BILLING_ENABLED } from "@/lib/features";
 
 /** Dedicated UI for POST /api/jobs 402 / 429 responses on /new. */
 export function CreateJobBlockAlert({ block }: { block: CreateJobBlock }) {
@@ -13,9 +14,11 @@ export function CreateJobBlockAlert({ block }: { block: CreateJobBlock }) {
         <AlertTitle>You&apos;re out of credits</AlertTitle>
         <AlertDescription>
           <p>This video needs more credits than you have left. Top up or upgrade to keep going — your settings stay as they are.</p>
-          <Link href="/billing" className={buttonVariants({ size: "sm", className: "mt-2" })}>
-            Get more credits
-          </Link>
+          {BILLING_ENABLED && (
+            <Link href="/billing" className={buttonVariants({ size: "sm", className: "mt-2" })}>
+              Get more credits
+            </Link>
+          )}
         </AlertDescription>
       </Alert>
     );

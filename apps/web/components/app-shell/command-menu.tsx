@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Command } from "cmdk";
 import { Plus, LayoutGrid, Settings, CreditCard } from "lucide-react";
+import { BILLING_ENABLED } from "@/lib/features";
 
 export function CommandMenu() {
   const [open, setOpen] = useState(false);
@@ -53,12 +54,14 @@ export function CommandMenu() {
           >
             <LayoutGrid className="h-4 w-4" /> Dashboard
           </Command.Item>
-          <Command.Item
-            onSelect={() => go("/billing")}
-            className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm aria-selected:bg-accent"
-          >
-            <CreditCard className="h-4 w-4" /> Billing
-          </Command.Item>
+          {BILLING_ENABLED && (
+            <Command.Item
+              onSelect={() => go("/billing")}
+              className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm aria-selected:bg-accent"
+            >
+              <CreditCard className="h-4 w-4" /> Billing
+            </Command.Item>
+          )}
           <Command.Item
             onSelect={() => go("/settings")}
             className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm aria-selected:bg-accent"

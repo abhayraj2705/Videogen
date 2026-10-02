@@ -13,6 +13,7 @@ import { getCreditBalance } from "@/lib/api/jobs";
 import { isApiError } from "@/lib/api/http";
 import { quickChange, quickChangeCost, type QuickChangeBody, type QuickChangeLength, type QuickChangeTone } from "@/lib/api/phase6";
 import { VOICES } from "@/lib/voices";
+import { BILLING_ENABLED } from "@/lib/features";
 
 const TONES: { value: QuickChangeTone; label: string }[] = [
   { value: "clean", label: "Clean" },
@@ -110,7 +111,7 @@ export function QuickChanges({ job }: { job: Job }) {
             {typeof credits.data === "number" && <span className="font-mono text-xs">({credits.data} left)</span>}
           </p>
           <div className="flex items-center gap-2">
-            {short && (
+            {short && BILLING_ENABLED && (
               <Link href="/billing" className="text-sm text-primary underline-offset-4 hover:underline">
                 Buy credits
               </Link>
