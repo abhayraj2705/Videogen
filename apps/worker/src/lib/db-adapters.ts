@@ -266,7 +266,6 @@ async function deleteS3Prefix(
   const bucketName = bucket === "assets" ? env.R2_BUCKET_ASSETS : env.R2_BUCKET_RENDERS;
   if (!env.R2_ENDPOINT || !env.R2_ACCESS_KEY_ID || !env.R2_SECRET_ACCESS_KEY || !bucketName) throw new Error("S3 storage not configured for deletion");
   const req = createRequire(createRequire(import.meta.url).resolve("@sitereel/storage/package.json"));
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const s3 = req("@aws-sdk/client-s3") as any;
   const client = new s3.S3Client({ region: "auto", endpoint: env.R2_ENDPOINT, credentials: { accessKeyId: env.R2_ACCESS_KEY_ID, secretAccessKey: env.R2_SECRET_ACCESS_KEY }, forcePathStyle: true });
   let deleted = 0;
