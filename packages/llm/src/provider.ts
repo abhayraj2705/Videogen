@@ -1,19 +1,30 @@
 import type { z } from "zod";
 
-export interface LlmCallResult<T> {
-  data: T;
-  costUsd: number;
+export interface LlmUsage {
   inputTokens: number;
   outputTokens: number;
+  costUsd: number;
+  /** HTTP requests actually sent, including failed ones (429/5xx/network/invalid output). */
+  attempts: number;
+}
+
+export interface LlmCallResult<T> extends LlmUsage {
+  data: T;
+  provider: string;
+  latencyMs: number;
 }
 
 export interface GenerateJsonOptions<T> {
   system: string;
   prompt: string;
   schema: z.ZodType<T>;
+  /** Name for the structured-output schema/tool (letters, digits, underscores). */
+  schemaName?: string;
   maxOutputTokens?: number;
-  /** On a validation failure, retried once with this appended to the prompt plus the validator's error text. */
+  /** On an invalid-output failure, the re-prompt appends this plus the parse/zod error text. */
   retryHint?: string;
+  /** Overrides the provider's default per-request timeout. */
+  timeoutMs?: number;
 }
 
 /**
@@ -34,4 +45,49 @@ export class LlmValidationError extends Error {
     super(message);
     this.name = "LlmValidationError";
   }
+}
+
+/** HTTP-level failure from a provider. `retryable` marks 408/429/5xx. */
+export class LlmHttpError extends Error {
+  constructor(
+    public readonly status: number,
+    message: string,
+    public readonly retryAfterMs?: number,
+  ) {
+    super(message);
+    this.name = "LlmHttpError";
+  }
+  get retryable(): boolean {
+    return this.status === 408 || this.status === 429 || this.status >= 500;
+  }
+}
+
+/**
+ * Thrown when a call ultimately fails. Carries the usage of every attempt
+ * that was made — including the failed ones — so callers can still bill /
+ * log what the failure cost (§8.3: cost_usd must never be silently zero).
+ */
+export class LlmCallError extends Error implements LlmUsage {
+  public readonly inputTokens: number;
+  public readonly outputTokens: number;
+  public readonly costUsd: number;
+  public readonly attempts: number;
+  constructor(
+    message: string,
+    public readonly provider: string,
+    usage: LlmUsage,
+    cause?: unknown,
+  ) {
+    super(message, { cause });
+    this.name = "LlmCallError";
+    this.inputTokens = usage.inputTokens;
+    this.outputTokens = usage.outputTokens;
+    this.costUsd = usage.costUsd;
+    this.attempts = usage.attempts;
+  }
+}
+
+/** Extracts accumulated cost from anything a provider threw (0 for foreign errors). */
+export function costOfError(err: unknown): number {
+  return err instanceof LlmCallError ? err.costUsd : 0;
 }

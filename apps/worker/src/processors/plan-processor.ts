@@ -52,7 +52,15 @@ export function createPlanProcessor(deps: WorkerDeps) {
         status: "ok",
         endedAt: new Date(),
         costUsd: String(result.costUsd),
-        outputs: { source: result.storyboard.source, attempts: result.attempts, valid: result.validation.valid, sceneCount: result.storyboard.scenes.length },
+        outputs: {
+          source: result.storyboard.source,
+          attempts: result.attempts,
+          valid: result.validation.valid,
+          sceneCount: result.storyboard.scenes.length,
+          latencyMs: result.latencyMs,
+          // Per-call cost/latency (including failed calls) so cost per plan is auditable (§8.3).
+          llmCalls: result.calls,
+        },
       })
       .where(eq(stageRuns.id, planRun!.id));
 
@@ -69,7 +77,10 @@ export function createPlanProcessor(deps: WorkerDeps) {
 
     await deps.db.update(jobs).set({ currentStoryboardId: storyboardRow!.id, updatedAt: new Date() }).where(eq(jobs.id, jobId));
 
-    log.info({ source: result.storyboard.source, attempts: result.attempts, valid: result.validation.valid, costUsd: result.costUsd }, "plan completed");
+    log.info(
+      { source: result.storyboard.source, attempts: result.attempts, valid: result.validation.valid, costUsd: result.costUsd, latencyMs: result.latencyMs },
+      "plan completed",
+    );
 
     // reviewBeforeRender=true stops here — the job waits at "review" until
     // POST /api/jobs/:id/approve enqueues voice (§3.6 W6 script review screen,

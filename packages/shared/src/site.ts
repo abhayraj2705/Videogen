@@ -41,9 +41,16 @@ export type SiteBrief = z.infer<typeof SiteBrief>;
 
 export const CrawledPage = z.object({
   url: z.string().url(),
+  /** Full-page (or first-viewport) screenshot. Empty string when the page came from the plain-fetch fallback. */
   screenshotKey: z.string(),
+  /** Per-section screenshots (one per viewport-height slice, top to bottom). Additive, optional. */
+  sectionScreenshotKeys: z.array(z.string()).optional(),
 });
 export type CrawledPage = z.infer<typeof CrawledPage>;
+
+/** How the crawl material was obtained: a real browser, or the plain-HTTP fallback (no screenshots, no computed styles). */
+export const CrawlMode = z.enum(["browser", "plain-fetch"]);
+export type CrawlMode = z.infer<typeof CrawlMode>;
 
 export const CrawlOutput = z.object({
   domain: z.string(),
@@ -51,6 +58,8 @@ export const CrawlOutput = z.object({
   brand: BrandTokens,
   facts: FactLedger,
   siteBrief: SiteBrief,
+  /** Additive, optional; absent means "browser" for rows written before it existed. */
+  mode: CrawlMode.optional(),
 });
 export type CrawlOutput = z.infer<typeof CrawlOutput>;
 

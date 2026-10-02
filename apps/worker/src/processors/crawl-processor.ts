@@ -61,12 +61,18 @@ export function createCrawlProcessor(deps: WorkerDeps) {
         status: "ok",
         endedAt: new Date(),
         costUsd: String(costUsd),
-        outputs: { domain: crawlOutput.domain, pageCount: crawlOutput.pages.length, factCount: crawlOutput.facts.length },
+        outputs: {
+          domain: crawlOutput.domain,
+          mode: crawlOutput.mode ?? "browser",
+          pageCount: crawlOutput.pages.length,
+          factCount: crawlOutput.facts.length,
+          featureCount: crawlOutput.facts.filter((f) => f.kind === "feature").length,
+        },
       })
       .where(eq(stageRuns.id, crawlRun!.id));
 
     log.info(
-      { facts: crawlOutput.facts.length, pages: crawlOutput.pages.length, briefSource: crawlOutput.siteBrief.source },
+      { facts: crawlOutput.facts.length, pages: crawlOutput.pages.length, mode: crawlOutput.mode ?? "browser", briefSource: crawlOutput.siteBrief.source },
       "crawl + extract completed",
     );
 
