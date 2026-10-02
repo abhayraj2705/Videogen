@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@sitereel/shared": "workspace:*",
-    "@aws-sdk/client-s3": "3.716.0",
-    "@aws-sdk/s3-request-presigner": "3.716.0"
+    "@aws-sdk/client-s3": "3.1143.0",
+    "@aws-sdk/s3-request-presigner": "3.1143.0"
   },
   "devDependencies": {
     "typescript": "5.7.3",

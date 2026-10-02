@@ -14,15 +14,15 @@
   },
   "dependencies": {
     "@sitereel/shared": "workspace:*",
-    "drizzle-orm": "0.38.3",
-    "postgres": "3.4.5"
+    "drizzle-orm": "0.45.3",
+    "postgres": "3.4.9"
   },
   "devDependencies": {
     "@sitereel/test-pglite": "workspace:^",
     "@types/node": "22.10.5",
     "dotenv": "16.4.7",
-    "drizzle-kit": "0.30.1",
-    "tsx": "4.19.2",
+    "drizzle-kit": "0.31.11",
+    "tsx": "4.23.15",
     "typescript": "5.7.3",
     "vitest": "2.1.8"
   }
