@@ -293,6 +293,45 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
     props: { productName, headline },
   });
 
+  const videoType = options.videoType ?? "launch";
+  if (videoType !== "launch") {
+    // Walkthrough / feature / teaser: the middle of the film is product scenes built from what each page says about itself.
+    const shotPages = pages.filter((p) => p.screenshotKey);
+    const stepFacts: FactLedgerEntry[] = [];
+    const productScene = (id: string, templateId: StoryboardScene["templateId"], page: (typeof pages)[number], line: string, floorSec: number): string | null => {
+      const fact = take(facts.find((f) => !used.has(f.id) && f.sourceUrl === page.url && ["hero", "heading", "feature"].includes(f.kind) && wordCount(f.text) >= 2));
+      if (!fact) return null;
+      const caption = truncateWords(fact.text);
+      stepFacts.push(fact);
+      scenes.push({ id, templateId, durationSec: durationFor([caption], floorSec), narration: frame(line, caption), onScreenText: [caption], factIds: [fact.id], props: { sourcePageUrl: page.url, caption } });
+      return caption;
+    };
+    const home = shotPages[0];
+    if (videoType === "walkthrough") {
+      const maxSteps = Math.max(2, Math.min(shotPages.length, Math.round(options.lengthSec / 8)));
+      const stepTemplates: StoryboardScene["templateId"][] = ["StepByStep"];
+      const stepLines = [`Here is ${productName}.`, "Next, take a closer look.", "Then, see what comes after.", "And there is more."];
+      const steps: string[] = [];
+      shotPages.slice(0, maxSteps).forEach((page, i) => {
+        const template = stepTemplates[i % stepTemplates.length]!;
+        const caption = productScene(`step-${i + 1}`, template, page, stepLines[i % stepLines.length]!, 4);
+        if (caption) {
+          steps.push(truncateWords(caption, 5));
+          // Steps are numbered by the order they made it into the film.
+          (scenes[scenes.length - 1]!.props as Record<string, unknown>).step = steps.length;
+        }
+      });
+      if (steps.length >= 2) {
+        const items = steps.slice(0, 4);
+        scenes.push({ id: "recap", templateId: "ChecklistReveal", durationSec: durationFor(items, 3), narration: frame("That is the whole flow.", spokenList(items)), onScreenText: items, factIds: stepFacts.slice(0, 4).map((f) => f.id), props: { items } });
+      }
+    } else if (home && videoType === "feature") {
+      productScene("closeup", "ZoomDetail", home, "Here is how it works.", 4);
+      productScene("more", (home.sectionScreenshotKeys?.length ?? 0) >= 2 ? "ScreenCollage" : "SectionShowcase", home, "And it goes further.", 3.5);
+    } else if (home) {
+      productScene("look", (home.sectionScreenshotKeys?.length ?? 0) >= 2 ? "ScreenCollage" : "DeviceMockup", home, `Meet ${productName}.`, 2.5);
+    }
+  } else {
   // Reveal — a real screenshot of the product, captioned by a second hero/heading fact.
   // (Plain-fetch crawls have no screenshots, so they skip both screenshot scenes.)
   const revealPage = pages.find((p) => p.screenshotKey);
@@ -397,6 +436,8 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
       factIds: [showcaseFact.id],
       props: { sourcePageUrl: showcasePage.url, caption },
     });
+  }
+
   }
 
   // CTA

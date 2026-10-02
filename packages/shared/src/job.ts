@@ -49,11 +49,40 @@ export function parseFormatSlug(slug: string): AspectFormat {
 export const Tone = z.enum(["clean", "playful", "cinematic", "app-store"]);
 export type Tone = z.infer<typeof Tone>;
 
+/** What kind of film to make; each has its own structure (see the worker's recipes.ts). */
+export const VideoType = z.enum(["launch", "walkthrough", "feature", "teaser"]);
+export type VideoType = z.infer<typeof VideoType>;
+
+/** What an uploaded image is, so the planner knows how to use it. */
+export const MediaRole = z.enum(["screen", "photo", "other"]);
+export type MediaRole = z.infer<typeof MediaRole>;
+
+/** One image the user uploaded when creating the video, in the order they want it shown. */
+export const JobMedia = z.object({
+  /** Storage key in the assets bucket (under the user's draft-upload prefix). */
+  key: z.string().min(1).max(300),
+  role: MediaRole.default("screen"),
+  /** The user's own words for what this shows; used on screen and as a fact. */
+  caption: z.string().trim().max(160).optional(),
+});
+export type JobMedia = z.infer<typeof JobMedia>;
+
+export const JOB_MEDIA_MAX = 20;
+
+/** Draft uploads live under the uploading user's own prefix until (and after) a job references them. */
+export function userUploadPrefix(userId: string): string {
+  return `users/${userId}/uploads/`;
+}
+
 /** §3.6 W4 "Create video" form. */
 export const JobOptions = z.object({
   formats: z.array(AspectFormat).min(1).max(3),
-  // 45/60 added in Phase 6 (quick-change lengths); the W4 create form offers 15/20/30.
-  lengthSec: z.union([z.literal(15), z.literal(20), z.literal(30), z.literal(45), z.literal(60)]),
+  // 45/60 added in Phase 6 (quick-change lengths); 6/10 are teaser lengths and 90 a long walkthrough.
+  lengthSec: z.union([z.literal(6), z.literal(10), z.literal(15), z.literal(20), z.literal(30), z.literal(45), z.literal(60), z.literal(90)]),
+  /** Additive, optional in stored rows: absent = "launch". */
+  videoType: VideoType.default("launch"),
+  /** The user's own screenshots/photos, shown alongside (or instead of) what the crawl captured. */
+  media: z.array(JobMedia).max(JOB_MEDIA_MAX).optional(),
   tone: Tone,
   voiceLanguage: z.enum(["en", "hi"]).default("en"),
   voiceId: z.string().default("default"),

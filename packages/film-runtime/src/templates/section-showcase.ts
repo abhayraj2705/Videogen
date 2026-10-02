@@ -13,6 +13,8 @@ export interface SectionShowcaseProps {
   pageLabel?: string;
   /** Where the thing the caption is about sits on the page; the window zooms to it instead of scrolling. Added by Build. */
   focus?: PageRect;
+  /** Two or three regions to visit in turn — several shots inside the one scene. Added by Build; takes over from `focus`. */
+  focusStops?: PageRect[];
 }
 
 interface Instance {
@@ -20,6 +22,7 @@ interface Instance {
   words: HTMLElement[];
   durationSec: number;
   focus?: PageRect;
+  focusStops?: PageRect[];
 }
 
 const FRAME_ENTER = 0.9;
@@ -67,7 +70,7 @@ export function createSectionShowcase(): SceneTemplate<SectionShowcaseProps> {
 
       root.appendChild(frame.wrap);
       root.appendChild(caption.wrap);
-      instance = { frame, words: caption.words, durationSec: ctx.durationSec, focus: props.focus };
+      instance = { frame, words: caption.words, durationSec: ctx.durationSec, focus: props.focus, focusStops: props.focusStops };
     },
 
     seek(localT) {
@@ -75,6 +78,10 @@ export function createSectionShowcase(): SceneTemplate<SectionShowcaseProps> {
       instance.frame.enter(localT, 0, FRAME_ENTER);
       // With a focus region: hold the top of the page for a beat, push in on the region, ring it, hold.
       const focusEnd = Math.min(2.3, Math.max(1.6, instance.durationSec - 1.2));
+      if (instance.focusStops && instance.frame.tour(instance.focusStops, localT, instance.durationSec)) {
+        wordsIn(instance.words, localT, CAPTION_START, WORD_EACH, WORD_DUR);
+        return;
+      }
       const focused = instance.focus ? instance.frame.focus(instance.focus, progress(localT, 0.9, focusEnd), progress(localT, focusEnd - 0.2, focusEnd + 0.25)) : false;
       if (!focused) instance.frame.scroll(progress(localT, 1.0, Math.max(1.8, instance.durationSec - 0.5)));
       wordsIn(instance.words, localT, CAPTION_START, WORD_EACH, WORD_DUR);

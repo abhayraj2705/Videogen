@@ -7,6 +7,7 @@ import {
   QUEUE_NAMES,
   Tone,
   jobUploadPrefix,
+  userUploadPrefix,
   type CrawlJobDataP6,
   type JobStatus,
   type PlanJobDataP6,
@@ -200,6 +201,25 @@ export function registerJobActionRoutes(app: FastifyInstance, deps: JobActionRou
 
     log.info({ removed, refunded }, "job cancelled");
     return reply.code(202).send({ ok: true, refunded });
+  });
+
+  /**
+   * POST /api/uploads/presign { files } → { uploads }
+   * Images for a video that doesn't exist yet (the create form's "your own screenshots"). Keys are
+   * issued under the caller's own prefix; POST /api/jobs only accepts media keys from that prefix.
+   */
+  app.post("/api/uploads/presign", async (req, reply) => {
+    const user = await deps.verifyAuth(req, reply);
+    if (!user) return;
+    const parsed = PresignRequest.safeParse(req.body);
+    if (!parsed.success) return sendInvalidBody(reply, parsed.error);
+    if (parsed.data.files.some((f) => f.type === "image/svg+xml")) {
+      return sendError(reply, 400, "unsupported_type", "Upload screenshots or photos as PNG, JPEG or WebP.");
+    }
+    const uploads = await Promise.all(
+      parsed.data.files.map((f) => deps.uploads.presign("assets", `${userUploadPrefix(user.id)}${randomKeyId()}.${IMAGE_TYPES[f.type]}`, f.type, f.size)),
+    );
+    return reply.send({ uploads });
   });
 
   /** POST /api/jobs/:id/uploads/presign { files } → { uploads } (W8; needs_input only). */

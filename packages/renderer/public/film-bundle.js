@@ -143,7 +143,8 @@
     radius: 1,
     backdrop: { glow: 1, grid: true, vignette: 0 },
     transitions: ["push", "zoom", "wipe", "slide-up"],
-    camera: 0.025
+    camera: 0.025,
+    grain: 0
   };
   var STYLE_PACKS = {
     clean: CLEAN,
@@ -155,7 +156,8 @@
       radius: 1.6,
       backdrop: { glow: 1.7, grid: false, vignette: 0 },
       transitions: ["whip", "zoom", "push", "slide-up"],
-      camera: 0.035
+      camera: 0.035,
+      grain: 0
     },
     cinematic: {
       id: "cinematic",
@@ -165,7 +167,8 @@
       radius: 0.5,
       backdrop: { glow: 1.3, grid: false, vignette: 0.55 },
       transitions: ["fade", "zoom", "cut", "fade"],
-      camera: 0.05
+      camera: 0.05,
+      grain: 0
     },
     "app-store": {
       id: "app-store",
@@ -175,7 +178,8 @@
       radius: 1.3,
       backdrop: { glow: 0.8, grid: true, vignette: 0 },
       transitions: ["cut", "push", "wipe", "zoom"],
-      camera: 0.02
+      camera: 0.02,
+      grain: 0
     }
   };
   function stylePackFor(style) {
@@ -453,6 +457,38 @@
     };
   }
 
+  // ../film-runtime/src/util/icons.ts
+  var PATHS = {
+    bolt: "M13 2 4 14h7l-1 8 9-12h-7z",
+    shield: "M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6z",
+    chart: "M4 20V10M10 20V4M16 20v-7M22 20H2",
+    users: "M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 7M22 21a6 6 0 0 0-4-5.6",
+    clock: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 6v6l4 2",
+    globe: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM2 12h20M12 2c3 3 3 17 0 20M12 2c-3 3-3 17 0 20",
+    lock: "M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4",
+    code: "M8 6 2 12l6 6M16 6l6 6-6 6M14 4l-4 16",
+    layers: "M12 2 2 7l10 5 10-5zM2 12l10 5 10-5M2 17l10 5 10-5",
+    check: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM8 12l3 3 5-6",
+    star: "M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z",
+    rocket: "M12 2c4 2 6 6 6 11l-3 3H9l-3-3c0-5 2-9 6-11zM12 9a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9 16l-2 5 5-2 5 2-2-5",
+    search: "M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.3-4.3",
+    bell: "M6 17v-6a6 6 0 0 1 12 0v6l2 2H4zM10 21a2 2 0 0 0 4 0",
+    card: "M2 6h20v12H2zM2 10h20M6 15h4",
+    cloud: "M7 19a5 5 0 0 1-.5-10A6 6 0 0 1 18 10a4.5 4.5 0 0 1 0 9z",
+    link: "M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1",
+    sparkle: "M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z",
+    chat: "M4 5h16v11H9l-5 4z",
+    calendar: "M4 6h16v15H4zM4 10h16M8 3v5M16 3v5",
+    heart: "M12 21C5 15 2 12 2 8.5A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 10 2.5C22 12 19 15 12 21z",
+    gear: "M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"
+  };
+  var ICON_NAMES = Object.keys(PATHS);
+  function iconSvg(name) {
+    const d = name ? PATHS[name.trim().toLowerCase()] : void 0;
+    if (!d) return null;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
+  }
+
   // ../film-runtime/src/templates/feature-triplet.ts
   var CARD_STAGGER = 0.14;
   var CARD_ENTER = 0.75;
@@ -499,7 +535,10 @@
             transformOrigin: "left center"
           });
           node.appendChild(bar);
-          const badgeNode = el("div", "ft-icon", feature.icon ?? String(i + 1).padStart(2, "0"));
+          const drawn = iconSvg(feature.icon);
+          const glyph = feature.icon && !/^[a-z][a-z -]*$/i.test(feature.icon.trim()) ? feature.icon : void 0;
+          const badgeNode = el("div", "ft-icon", drawn ? void 0 : glyph ?? String(i + 1).padStart(2, "0"));
+          if (drawn) badgeNode.innerHTML = `<div style="width:56%;height:56%;display:flex">${drawn}</div>`;
           setStyle(badgeNode, {
             width: `${badge}px`,
             height: `${badge}px`,
@@ -511,7 +550,7 @@
             background: ctx.palette.accentSoft,
             color: ctx.palette.accentText,
             fontFamily: ctx.fonts.display,
-            fontSize: `${badge * (feature.icon ? 0.56 : 0.4)}px`,
+            fontSize: `${badge * (glyph ? 0.56 : 0.4)}px`,
             fontWeight: "800",
             lineHeight: "1",
             letterSpacing: "-0.02em"
@@ -635,24 +674,32 @@
     const pageLayer = el("div", `${opts.className}-page`);
     setStyle(pageLayer, { position: "relative", width: "100%", minHeight: "100%" });
     pageLayer.appendChild(image);
-    const highlight = el("div", `${opts.className}-highlight`);
-    setStyle(highlight, { position: "absolute", boxSizing: "border-box", opacity: "0", pointerEvents: "none" });
-    pageLayer.appendChild(highlight);
     viewport.appendChild(pageLayer);
     wrap.appendChild(viewport);
-    let focusPose;
+    const poses = /* @__PURE__ */ new Map();
     const poseFor = (rect) => {
       const key = `${rect.x},${rect.y},${rect.w},${rect.h}`;
-      if (focusPose !== void 0 && (focusPose === null || focusPose.rectKey === key)) return focusPose;
+      const known = poses.get(key);
+      if (known !== void 0) return known;
       if (image.naturalWidth <= 0) return null;
+      const store = (pose) => {
+        poses.set(key, pose);
+        return pose;
+      };
       const pageHeight = width * image.naturalHeight / image.naturalWidth;
       const r = { x: rect.x * width, y: rect.y * width, w: rect.w * width, h: rect.h * width };
-      if (r.w < 4 || r.h < 4 || r.y + r.h > pageHeight || r.x + r.w > width + 1) return focusPose = null;
+      if (r.w < 4 || r.h < 4 || r.y + r.h > pageHeight || r.x + r.w > width + 1) return store(null);
       const scale = Math.max(1, Math.min(2.6, 2 * image.naturalWidth / width, width * 0.7 / r.w, viewportHeight * 0.7 / r.h));
       const tx = Math.min(0, Math.max(width - scale * width, width / 2 - scale * (r.x + r.w / 2)));
       const ty = Math.min(0, Math.max(viewportHeight - scale * pageHeight, viewportHeight / 2 - scale * (r.y + r.h / 2)));
       const pad = 10 * u;
+      const highlight = el("div", `${opts.className}-highlight`);
+      pageLayer.appendChild(highlight);
       setStyle(highlight, {
+        position: "absolute",
+        boxSizing: "border-box",
+        opacity: "0",
+        pointerEvents: "none",
         left: `${r.x - pad}px`,
         top: `${r.y - pad}px`,
         width: `${r.w + 2 * pad}px`,
@@ -662,7 +709,7 @@
         borderRadius: `${14 * u / scale}px`,
         boxShadow: `0 0 0 ${6 * u / scale}px ${ctx.palette.accentSoft}, 0 0 ${40 * u / scale}px ${ctx.palette.glow}`
       });
-      return focusPose = { rectKey: key, scale, tx, ty };
+      return store({ scale, tx, ty, highlight });
     };
     return {
       wrap,
@@ -696,7 +743,29 @@
         const scale = 1 + (pose.scale - 1) * e;
         pageLayer.style.transformOrigin = "0 0";
         pageLayer.style.transform = e < 1e-4 ? "none" : `translate(${(pose.tx * e).toFixed(2)}px, ${(pose.ty * e).toFixed(2)}px) scale(${scale.toFixed(4)})`;
-        highlight.style.opacity = String(clamp01(ring));
+        pose.highlight.style.opacity = String(clamp01(ring));
+        return true;
+      },
+      tour(rects, t, durationSec) {
+        const stops = rects.map(poseFor).filter((p) => p !== null);
+        if (stops.length === 0) return false;
+        const HOLD = 0.9;
+        const per = Math.max(0.8, (durationSec - HOLD - 0.4) / stops.length);
+        const move = Math.min(0.9, per * 0.45);
+        const k = Math.min(stops.length - 1, Math.max(0, Math.floor((t - HOLD) / per)));
+        const from = k === 0 ? { scale: 1, tx: 0, ty: 0 } : stops[k - 1];
+        const to = stops[k];
+        const e = easeInOutQuart(clamp01((t - HOLD - k * per) / move));
+        const scale = from.scale + (to.scale - from.scale) * e;
+        const tx = from.tx + (to.tx - from.tx) * e;
+        const ty = from.ty + (to.ty - from.ty) * e;
+        pageLayer.style.transformOrigin = "0 0";
+        pageLayer.style.transform = scale < 1.0001 && Math.abs(tx) < 0.01 && Math.abs(ty) < 0.01 ? "none" : `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px) scale(${scale.toFixed(4)})`;
+        stops.forEach((stop, i) => {
+          const arrive = HOLD + i * per + move;
+          const leave = i < stops.length - 1 ? HOLD + (i + 1) * per : Infinity;
+          stop.highlight.style.opacity = String(clamp01((t - arrive + 0.2) / 0.3) * clamp01((leave + 0.15 - t) / 0.2));
+        });
         return true;
       }
     };
@@ -733,12 +802,16 @@
         const frame = browserFrame({ className: "ss-frame", width: frameWidth, height: frameHeight, screenshotUrl: props.screenshotUrl, pageLabel: props.pageLabel, ctx, u });
         root.appendChild(frame.wrap);
         root.appendChild(caption.wrap);
-        instance = { frame, words: caption.words, durationSec: ctx.durationSec, focus: props.focus };
+        instance = { frame, words: caption.words, durationSec: ctx.durationSec, focus: props.focus, focusStops: props.focusStops };
       },
       seek(localT) {
         if (!instance) return;
         instance.frame.enter(localT, 0, FRAME_ENTER);
         const focusEnd = Math.min(2.3, Math.max(1.6, instance.durationSec - 1.2));
+        if (instance.focusStops && instance.frame.tour(instance.focusStops, localT, instance.durationSec)) {
+          wordsIn(instance.words, localT, CAPTION_START, WORD_EACH2, WORD_DUR2);
+          return;
+        }
         const focused = instance.focus ? instance.frame.focus(instance.focus, progress(localT, 0.9, focusEnd), progress(localT, focusEnd - 0.2, focusEnd + 0.25)) : false;
         if (!focused) instance.frame.scroll(progress(localT, 1, Math.max(1.8, instance.durationSec - 0.5)));
         wordsIn(instance.words, localT, CAPTION_START, WORD_EACH2, WORD_DUR2);
@@ -1028,7 +1101,8 @@
         const width = L.safe.width * L.pick({ landscape: 0.84, portrait: 1, square: 0.98 });
         const height = Math.min(L.safe.height - gap - caption.height - 8 * u, L.pick({ landscape: 0.66, portrait: 0.58, square: 0.62 }) * ctx.height);
         const frame = browserFrame({ className: "uf-frame", width, height, screenshotUrl: props.screenshotUrl, pageLabel: props.pageLabel, ctx, u });
-        const path = props.cursorPath && props.cursorPath.length > 0 ? props.cursorPath : DEFAULT_PATH;
+        const targetPath = (props.cursorTargets ?? []).map((r) => [r.x + r.w / 2, (r.y + r.h / 2) * frame.viewportWidth / frame.viewportHeight]).filter(([x, y]) => x > 0.02 && x < 0.98 && y > 0.04 && y < 0.94);
+        const path = targetPath.length > 0 ? targetPath : props.cursorPath && props.cursorPath.length > 0 ? props.cursorPath : DEFAULT_PATH;
         const rippleSize = 96 * u;
         const ripples = path.map(() => {
           const ripple = el("div", "uf-ripple");
@@ -1054,14 +1128,14 @@
         frame.viewport.appendChild(cursor);
         root.appendChild(frame.wrap);
         root.appendChild(caption.wrap);
-        instance = { frame, cursor, ripples, words: caption.words, path, durationSec: ctx.durationSec };
+        instance = { frame, cursor, ripples, words: caption.words, path, durationSec: ctx.durationSec, pinned: targetPath.length > 0 };
       },
       seek(localT) {
         if (!instance) return;
         const { frame, cursor, ripples, path } = instance;
         frame.enter(localT, 0, FRAME_ENTER2);
         wordsIn(instance.words, localT, CAPTION_START2, WORD_EACH4, WORD_DUR5);
-        frame.scroll(progress(localT, CURSOR_START + LEG_SEC + 0.3, Math.max(2.4, instance.durationSec - 0.6)), 0.45);
+        if (!instance.pinned) frame.scroll(progress(localT, CURSOR_START + LEG_SEC + 0.3, Math.max(2.4, instance.durationSec - 0.6)), 0.45);
         const w = frame.viewportWidth;
         const h = frame.viewportHeight;
         const leg = Math.max(0, (localT - CURSOR_START) / LEG_SEC);
@@ -2045,6 +2119,270 @@
     };
   }
 
+  // ../film-runtime/src/templates/step-by-step.ts
+  var FRAME_START = 0.15;
+  var FRAME_ENTER3 = 0.9;
+  var CAPTION_START6 = 0.35;
+  var WORD_EACH10 = 0.05;
+  var WORD_DUR11 = 0.5;
+  var countWords10 = (s) => s.trim().split(/\s+/).filter(Boolean).length;
+  function createStepByStep() {
+    let instance;
+    return {
+      id: "StepByStep",
+      mount(root, props, ctx) {
+        const L = layoutFor(ctx);
+        const u = L.u;
+        const side = L.orientation === "landscape";
+        const gap = L.pick({ landscape: 64, portrait: 48, square: 30 }) * u;
+        sceneRoot(root, L, { flexDirection: side ? "row" : "column", gap: `${gap}px`, fontFamily: ctx.fonts.body });
+        const panelWidth = side ? L.safe.width * 0.3 : L.safe.width;
+        const panel = el("div", "sb-panel");
+        setStyle(panel, { display: "flex", flexDirection: "column", alignItems: side ? "flex-start" : "center", gap: `${L.pick({ landscape: 26, portrait: 22, square: 14 }) * u}px`, width: `${panelWidth}px`, flexShrink: "0" });
+        const step = Math.max(1, Math.round(props.step || 1));
+        const badgeSize = L.pick({ landscape: 190, portrait: 150, square: 104 }) * u;
+        const badge = el("div", "sb-step", String(step).padStart(2, "0"));
+        const gradient = ctx.palette.accentText === ctx.palette.accent;
+        setStyle(badge, {
+          fontFamily: ctx.fonts.display,
+          fontSize: `${badgeSize}px`,
+          fontWeight: "800",
+          lineHeight: "0.95",
+          letterSpacing: "-0.05em",
+          color: ctx.palette.accentText,
+          fontVariantNumeric: "tabular-nums",
+          ...gradient ? { backgroundImage: `linear-gradient(120deg, ${ctx.palette.accent}, ${ctx.palette.accentAlt})`, backgroundClip: "text", webkitBackgroundClip: "text", webkitTextFillColor: "transparent" } : {}
+        });
+        panel.appendChild(badge);
+        const caption = textBlock(props.caption, {
+          className: "sb-caption",
+          width: panelWidth,
+          maxSize: L.pick({ landscape: 62, portrait: 64, square: 46 }) * u,
+          minSize: 24 * u,
+          maxLines: L.pick({ landscape: 5, portrait: 2, square: 2 }),
+          color: ctx.palette.fg,
+          family: ctx.fonts.display,
+          weight: "800",
+          align: side ? "left" : "center",
+          lineHeight: 1.1
+        });
+        panel.appendChild(caption.wrap);
+        const total = Math.max(step, Math.min(8, Math.round(props.total ?? step)));
+        const dotRow = el("div", "sb-dots");
+        const dot = L.pick({ landscape: 16, portrait: 16, square: 12 }) * u;
+        setStyle(dotRow, { display: "flex", gap: `${dot * 0.7}px`, marginTop: `${6 * u}px` });
+        const dots = Array.from({ length: total }, (_, i) => {
+          const node = el("div", "sb-dot");
+          setStyle(node, { width: `${i === step - 1 ? dot * 2.6 : dot}px`, height: `${dot}px`, borderRadius: `${dot}px`, background: i < step ? ctx.palette.accent : ctx.palette.border });
+          dotRow.appendChild(node);
+          return node;
+        });
+        if (total > 1) panel.appendChild(dotRow);
+        const frameWidth = side ? L.safe.width - panelWidth - gap : L.safe.width;
+        const panelHeight = badgeSize * 0.95 + caption.height + (total > 1 ? dot + 30 * u : 0) + 2 * L.pick({ landscape: 26, portrait: 22, square: 14 }) * u;
+        const frameHeight = side ? Math.min(L.safe.height * 0.82, frameWidth * 0.68) : Math.max(120 * u, L.safe.height - gap - panelHeight - 70 * u);
+        const frame = browserFrame({ className: "sb-frame", width: frameWidth, height: frameHeight, screenshotUrl: props.screenshotUrl, pageLabel: props.pageLabel, ctx, u });
+        root.appendChild(panel);
+        root.appendChild(frame.wrap);
+        instance = { badge, dots, step, frame, words: caption.words, focus: props.focus, durationSec: ctx.durationSec, u, side };
+      },
+      seek(localT) {
+        if (!instance) return;
+        const { badge, dots, step, frame, focus, durationSec, u, side } = instance;
+        enter(badge, localT, 0, 0.7, side ? { x: -80 * u, scale: 0.7 } : { y: -60 * u, scale: 0.7 });
+        wordsIn(instance.words, localT, CAPTION_START6, WORD_EACH10, WORD_DUR11);
+        const current = dots[step - 1];
+        if (current) {
+          const p = progress(localT, 0.4, 0.9, easeOutCubic);
+          current.style.transformOrigin = "left center";
+          current.style.transform = p >= 1 ? "none" : `scaleX(${Math.max(0.38, p).toFixed(4)})`;
+        }
+        frame.enter(localT, FRAME_START, FRAME_ENTER3);
+        const focusEnd = Math.min(2.6, Math.max(1.9, durationSec - 1.2));
+        const focused = focus ? frame.focus(focus, progress(localT, 1.2, focusEnd), progress(localT, focusEnd - 0.2, focusEnd + 0.25)) : false;
+        if (!focused) frame.scroll(progress(localT, 1.3, Math.max(2.1, durationSec - 0.5)));
+      },
+      marks(props) {
+        return [
+          { t: 0, type: "start" },
+          { t: Math.max(FRAME_START + FRAME_ENTER3, wordsSettle(countWords10(props.caption), CAPTION_START6, WORD_EACH10, WORD_DUR11)), type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
+  // ../film-runtime/src/templates/kinetic-type.ts
+  var FIRST_LINE = 0.1;
+  var LINE_EACH = 0.26;
+  var WORD_EACH11 = 0.06;
+  var WORD_DUR12 = 0.45;
+  var ADVANCE_EM = 0.64;
+  function linesOf(text, maxLines) {
+    const words = text.trim().split(/\s+/).filter(Boolean);
+    const target = Math.max(1, Math.min(maxLines, Math.ceil(words.length / 2)));
+    const ideal = words.join(" ").length / target;
+    const rows = [];
+    let row = "";
+    for (const word of words) {
+      const grown = row ? `${row} ${word}` : word;
+      if (row && rows.length < target - 1 && grown.length - ideal > ideal - row.length) {
+        rows.push(row);
+        row = word;
+      } else row = grown;
+    }
+    if (row) rows.push(row);
+    return rows;
+  }
+  var settleOf = (text) => {
+    const lines = linesOf(text, 5);
+    const last = lines[lines.length - 1] ?? "";
+    return wordsSettle(last.split(" ").length, FIRST_LINE + (lines.length - 1) * LINE_EACH, WORD_EACH11, WORD_DUR12);
+  };
+  function createKineticType() {
+    let instance;
+    return {
+      id: "KineticType",
+      mount(root, props, ctx) {
+        const L = layoutFor(ctx);
+        const u = L.u;
+        sceneRoot(root, L, { alignItems: "flex-start", fontFamily: ctx.fonts.display });
+        const rows = linesOf(props.text, L.pick({ landscape: 3, portrait: 5, square: 4 }));
+        const lineHeight = 1;
+        const tallest = L.safe.height * 0.94 / rows.length / lineHeight;
+        const block = el("div", "kt-block");
+        setStyle(block, { display: "flex", flexDirection: "column", alignItems: "flex-start", width: `${L.safe.width}px` });
+        const lines = rows.map((row, i) => {
+          const size = Math.max(28 * u, Math.min(tallest, L.safe.width / (row.length * ADVANCE_EM)));
+          const line = el("div", "kt-line");
+          setStyle(line, {
+            display: "flex",
+            columnGap: "0.24em",
+            whiteSpace: "nowrap",
+            fontSize: `${size}px`,
+            fontWeight: "800",
+            lineHeight: String(lineHeight),
+            letterSpacing: "-0.045em",
+            color: ctx.palette.fg
+          });
+          const words = row.split(" ").map((word) => {
+            const node = el("span", "kt-word", word);
+            setStyle(node, { display: "inline-block" });
+            line.appendChild(node);
+            return node;
+          });
+          block.appendChild(line);
+          return { words, start: FIRST_LINE + i * LINE_EACH };
+        });
+        root.appendChild(block);
+        instance = { lines };
+      },
+      seek(localT) {
+        if (!instance) return;
+        for (const line of instance.lines) wordsIn(line.words, localT, line.start, WORD_EACH11, WORD_DUR12, 0.5);
+      },
+      marks(props) {
+        return [
+          { t: 0, type: "start" },
+          { t: settleOf(props.text), type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
+  // ../film-runtime/src/templates/montage.ts
+  var CARD_ENTER3 = 0.5;
+  var CAPTION_START7 = 0.2;
+  var WORD_EACH12 = 0.05;
+  var WORD_DUR13 = 0.45;
+  var countWords11 = (s) => s.trim().split(/\s+/).filter(Boolean).length;
+  function montageCuts(count, durationSec) {
+    const n = Math.max(1, Math.min(6, count));
+    const per = Math.max(0.42, (durationSec - 0.7) / n);
+    return Array.from({ length: n }, (_, i) => Math.round((i === 0 ? 0 : 0.25 + i * per) * 1e3) / 1e3);
+  }
+  function createMontage() {
+    let instance;
+    return {
+      id: "Montage",
+      mount(root, props, ctx) {
+        const L = layoutFor(ctx);
+        const u = L.u;
+        const gap = L.pick({ landscape: 36, portrait: 52, square: 30 }) * u;
+        sceneRoot(root, L, { gap: `${gap}px`, fontFamily: ctx.fonts.body });
+        const caption = textBlock(props.caption, {
+          className: "mg-caption",
+          width: L.safe.width * L.pick({ landscape: 0.84, portrait: 1, square: 0.96 }),
+          maxSize: L.pick({ landscape: 58, portrait: 68, square: 50 }) * u,
+          minSize: 22 * u,
+          maxLines: L.pick({ landscape: 2, portrait: 3, square: 2 }),
+          color: ctx.palette.fg,
+          family: ctx.fonts.display,
+          weight: "800",
+          lineHeight: 1.15
+        });
+        const room = L.safe.height - gap - caption.height - 8 * u;
+        const width = Math.min(L.safe.width * L.pick({ landscape: 0.82, portrait: 1, square: 0.98 }), room * L.pick({ landscape: 1.7, portrait: 0.85, square: 1.5 }));
+        const height = Math.min(room, width / L.pick({ landscape: 1.7, portrait: 0.85, square: 1.5 }));
+        const card = el("div", "mg-card");
+        setStyle(card, {
+          position: "relative",
+          width: `${width}px`,
+          height: `${height}px`,
+          flexShrink: "0",
+          overflow: "hidden",
+          borderRadius: `${26 * ctx.style.radius * u}px`,
+          background: ctx.palette.surface,
+          boxShadow: `0 ${50 * u}px ${110 * u}px -${40 * u}px ${ctx.palette.glow}, 0 ${30 * u}px ${60 * u}px -${30 * u}px rgba(0,0,0,${ctx.palette.isDark ? 0.7 : 0.35}), 0 0 0 ${Math.max(1, 1.5 * u)}px ${ctx.palette.border}`
+        });
+        const shots = props.screenshotUrls.slice(0, 6).map((url) => {
+          const img = el("img");
+          img.src = url;
+          setStyle(img, { position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", opacity: "0", transformOrigin: "50% 40%" });
+          card.appendChild(img);
+          return img;
+        });
+        const flash = el("div", "mg-flash");
+        setStyle(flash, { position: "absolute", inset: "0", background: ctx.palette.isDark ? "rgb(255,255,255)" : ctx.palette.accent, opacity: "0", pointerEvents: "none" });
+        card.appendChild(flash);
+        root.appendChild(card);
+        root.appendChild(caption.wrap);
+        instance = { card, shots, flash, cuts: montageCuts(shots.length, ctx.durationSec), words: caption.words, durationSec: ctx.durationSec, u };
+      },
+      seek(localT) {
+        if (!instance) return;
+        const { card, shots, flash, cuts, durationSec, u } = instance;
+        enter(card, localT, 0, CARD_ENTER3, { y: 70 * u, scale: 0.9 });
+        let current = 0;
+        for (let i = 0; i < cuts.length; i++) if (localT >= cuts[i]) current = i;
+        const since = localT - cuts[current];
+        const hold = (cuts[current + 1] ?? durationSec) - cuts[current];
+        shots.forEach((img, i) => {
+          img.style.opacity = i === current ? "1" : "0";
+          if (i !== current) return;
+          const p = clamp01(since / Math.max(1e-3, hold));
+          img.style.transform = `scale(${(1.1 - 0.07 * p).toFixed(4)}) translateX(${((i % 2 === 0 ? 1 : -1) * (1 - p) * 1.2).toFixed(3)}%)`;
+        });
+        flash.style.opacity = current > 0 ? String(0.55 * clamp01(1 - since / 0.14)) : "0";
+        wordsIn(instance.words, localT, CAPTION_START7, WORD_EACH12, WORD_DUR13);
+      },
+      marks(props) {
+        return [
+          { t: 0, type: "start" },
+          { t: Math.max(CARD_ENTER3, wordsSettle(countWords11(props.caption), CAPTION_START7, WORD_EACH12, WORD_DUR13)), type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
   // ../film-runtime/src/registry.ts
   var TEMPLATE_REGISTRY = {
     KineticHook: createKineticHook,
@@ -2063,7 +2401,10 @@
     DeviceMockup: createDeviceMockup,
     ZoomDetail: createZoomDetail,
     SplitCompare: createSplitCompare,
-    LogoWall: createLogoWall
+    LogoWall: createLogoWall,
+    StepByStep: createStepByStep,
+    KineticType: createKineticType,
+    Montage: createMontage
   };
   function createTemplate(templateId) {
     const factory = TEMPLATE_REGISTRY[templateId];
@@ -2449,6 +2790,7 @@
     if (kind === "zoom") return { opacity, transform: `scale(${(1 + 0.22 * e).toFixed(4)})` };
     return { opacity, transform: `scale(${(1 + 0.03 * e).toFixed(4)})` };
   }
+  var wordKey = (s) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
   async function mountFilm(stage, manifest) {
     stage.innerHTML = "";
     Object.assign(stage.style, {
@@ -2501,8 +2843,40 @@
       root.style.position = "absolute";
       root.style.inset = "0";
       const transition = resolveTransition(style, sceneIndex, scene.transition);
-      return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0, transition };
+      const stress = new Set((scene.emphasis?.words ?? []).flatMap((w) => w.split(/\s+/)).map(wordKey).filter(Boolean));
+      const nodes = stress.size > 0 ? Array.from(root.querySelectorAll('[class$="-word"]')).filter((n) => stress.has(wordKey(n.textContent ?? ""))) : [];
+      const emphasis = scene.emphasis && nodes.length > 0 ? { nodes, at: scene.emphasis.at } : null;
+      return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0, transition, emphasis };
     });
+    let grain = null;
+    const GRAIN_TILE = 192;
+    if (style.grain > 0) {
+      const tile = document.createElement("canvas");
+      tile.width = tile.height = GRAIN_TILE;
+      const g = tile.getContext("2d");
+      if (g) {
+        const rng = createSceneRng("grain");
+        const px = g.createImageData(GRAIN_TILE, GRAIN_TILE);
+        for (let i = 0; i < px.data.length; i += 4) {
+          const v = Math.floor(rng(`n`) * 256);
+          px.data[i] = px.data[i + 1] = px.data[i + 2] = v;
+          px.data[i + 3] = 255;
+        }
+        g.putImageData(px, 0, 0);
+        grain = document.createElement("div");
+        grain.className = "film-grain";
+        Object.assign(grain.style, {
+          position: "absolute",
+          inset: `-${GRAIN_TILE}px`,
+          backgroundImage: `url(${tile.toDataURL("image/png")})`,
+          backgroundSize: `${GRAIN_TILE * u * 3}px ${GRAIN_TILE * u * 3}px`,
+          opacity: String(style.grain),
+          mixBlendMode: "overlay",
+          pointerEvents: "none"
+        });
+        stage.appendChild(grain);
+      }
+    }
     const captionLayer = burnCaptions ? createCaptionLayer(stage, manifest, palette) : null;
     const images = Array.from(stage.querySelectorAll("img"));
     await Promise.all([
@@ -2518,6 +2892,10 @@
     function seek(t) {
       backdrop.seek(t);
       captionLayer?.seek(t);
+      if (grain) {
+        const frame = Math.floor(Math.round(t * manifest.fps) / 3);
+        grain.style.transform = `translate(${frame * 73 % GRAIN_TILE}px, ${frame * 131 % GRAIN_TILE}px)`;
+      }
       const nextActive = /* @__PURE__ */ new Set();
       for (const [i, scene] of mounted.entries()) {
         const isActive = t >= scene.start && t < scene.end;
@@ -2552,6 +2930,14 @@
           scene.root.style.filter = filter;
           scene.root.style.transform = transforms.length > 0 ? transforms.join(" ") : "none";
           scene.template.seek(localT);
+          if (scene.emphasis) {
+            const since = localT - scene.emphasis.at;
+            const pulse = since < 0 ? 0 : since < 0.1 ? since / 0.1 : Math.max(0, 1 - (since - 0.1) / 0.4);
+            for (const node of scene.emphasis.nodes) {
+              node.style.color = since >= 0 ? palette.accentText : "";
+              if (pulse > 1e-3) node.style.transform = `scale(${(1 + 0.14 * pulse).toFixed(4)})`;
+            }
+          }
         } else if (activeIds.has(scene.id) && scene.root.style.display !== "none") {
           scene.root.style.display = "none";
         }

@@ -110,3 +110,23 @@ describe("brand kits", () => {
     expect(queues.crawl.added).toHaveLength(1);
   });
 });
+
+describe("POST /api/jobs with uploaded media", () => {
+  it("accepts the caller's own upload keys and rejects anyone else's", async () => {
+    const user = await seedUser(db, { credits: 5 });
+    const other = await seedUser(db);
+    const { app } = build();
+    const post = (key: string) =>
+      app.inject({ method: "POST", url: "/api/jobs", headers: { "x-test-user": user.id }, payload: { url: "https://acme.test/", options: { ...DEFAULT_OPTIONS, media: [{ key, role: "screen", caption: "Dashboard" }] } } });
+
+    for (const key of [`users/${other.id}/uploads/abc.png`, `jobs/x/crawl/home.png`, `users/${user.id}/uploads/../../secret.png`, `users/${user.id}/uploads/a.svg`]) {
+      const denied = await post(key);
+      expect(denied.statusCode).toBe(400);
+      expect(denied.json().error).toBe("invalid_media");
+    }
+
+    const ok = await post(`users/${user.id}/uploads/abc123.png`);
+    expect(ok.statusCode).toBe(201);
+    expect(ok.json().options.media).toEqual([{ key: `users/${user.id}/uploads/abc123.png`, role: "screen", caption: "Dashboard" }]);
+  });
+});

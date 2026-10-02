@@ -83,10 +83,14 @@ function pageLabel(url: unknown): string {
 }
 
 export function previewProps(templateId: string, props: Record<string, unknown>, brand: PreviewBrand): Record<string, unknown> {
-  if (templateId === "SectionShowcase" || templateId === "UIFlowCursor" || templateId === "DeviceMockup" || templateId === "ZoomDetail") {
+  if (templateId === "SectionShowcase" || templateId === "UIFlowCursor" || templateId === "DeviceMockup" || templateId === "ZoomDetail" || templateId === "StepByStep") {
     const { sourcePageUrl, ...rest } = props;
     const existing = typeof props.screenshotUrl === "string" && /^(https?:|data:)/.test(props.screenshotUrl) ? props.screenshotUrl : null;
     return { ...rest, screenshotUrl: existing ?? screenshotPlaceholder(pageLabel(sourcePageUrl), brand) };
+  }
+  if (templateId === "Montage") {
+    const placeholder = screenshotPlaceholder("your site", brand);
+    return { ...props, screenshotUrls: [placeholder, placeholder, placeholder] };
   }
   if (templateId === "ScreenCollage") {
     const { sourcePageUrl, ...rest } = props;

@@ -15,7 +15,7 @@ import { Tone } from "./job.js";
  * assets only by fact id / role, not by final URL.
  */
 
-/** Full 17-template catalog — must stay in lockstep with film-runtime's TEMPLATE_REGISTRY. */
+/** Full 20-template catalog — must stay in lockstep with film-runtime's TEMPLATE_REGISTRY. */
 export const TemplateId = z.enum([
   "KineticHook",
   "FeatureTriplet",
@@ -35,6 +35,9 @@ export const TemplateId = z.enum([
   "ZoomDetail",
   "SplitCompare",
   "LogoWall",
+  "StepByStep",
+  "KineticType",
+  "Montage",
 ]);
 export type TemplateId = z.infer<typeof TemplateId>;
 
@@ -56,6 +59,8 @@ export const StoryboardScene = z.object({
   props: z.record(z.unknown()),
   /** Cut into this scene. Additive, optional: absent = the player picks one per cut. Ignored on the first scene. */
   transition: SceneTransition.optional(),
+  /** One or two words from this scene's on-screen text that carry the point; they take the accent as the voice reaches them. Additive, optional. */
+  emphasis: z.array(z.string()).max(3).optional(),
 });
 export type StoryboardScene = z.infer<typeof StoryboardScene>;
 
@@ -112,6 +117,7 @@ export const LlmSceneProps = z.object({
   leftLabel: z.string().optional(),
   rightLabel: z.string().optional(),
   names: z.array(z.string()).optional(),
+  step: z.number().optional(),
 });
 
 /** Drops the props a model left empty (null, "", []), so optional template props stay absent rather than blank. */

@@ -2,7 +2,7 @@ import type { FilmContext, Mark, SceneTemplate } from "../contract.js";
 import { clamp01, easeInOutCubic, easeOutCubic, lerp, progress } from "../util/easing.js";
 import { el, setStyle } from "../util/dom.js";
 import { layoutFor } from "../util/layout.js";
-import { browserFrame, type BrowserFrame } from "../util/browser-frame.js";
+import { browserFrame, type BrowserFrame, type PageRect } from "../util/browser-frame.js";
 import { sceneRoot, textBlock, wordsIn, wordsSettle } from "../util/ui.js";
 
 export interface UIFlowCursorProps {
@@ -10,6 +10,8 @@ export interface UIFlowCursorProps {
   caption: string;
   /** Normalized (0-1) waypoints the cursor visits and clicks, e.g. [[0.3,0.4],[0.7,0.6]]. Defaults to a gentle diagonal sweep. */
   cursorPath?: [number, number][];
+  /** Real things to click near the top of the page (buttons, the cited element), as page regions. Added by Build; takes over from cursorPath, and the page then stays put so the clicks land on them. */
+  cursorTargets?: PageRect[];
   /** Short display address for the browser toolbar. Added by Build. */
   pageLabel?: string;
 }
@@ -21,6 +23,8 @@ interface Instance {
   words: HTMLElement[];
   path: [number, number][];
   durationSec: number;
+  /** True when the pointer is aimed at real page elements, so the page must not scroll. */
+  pinned: boolean;
 }
 
 const DEFAULT_PATH: [number, number][] = [
@@ -76,7 +80,11 @@ export function createUIFlowCursor(): SceneTemplate<UIFlowCursorProps> {
       const height = Math.min(L.safe.height - gap - caption.height - 8 * u, L.pick({ landscape: 0.66, portrait: 0.58, square: 0.62 }) * ctx.height);
       const frame = browserFrame({ className: "uf-frame", width, height, screenshotUrl: props.screenshotUrl, pageLabel: props.pageLabel, ctx, u });
 
-      const path = props.cursorPath && props.cursorPath.length > 0 ? props.cursorPath : DEFAULT_PATH;
+      // Targets are page regions (fractions of the page width); the window shows the top of the page at full width.
+      const targetPath = (props.cursorTargets ?? [])
+        .map((r): [number, number] => [r.x + r.w / 2, ((r.y + r.h / 2) * frame.viewportWidth) / frame.viewportHeight])
+        .filter(([x, y]) => x > 0.02 && x < 0.98 && y > 0.04 && y < 0.94);
+      const path = targetPath.length > 0 ? targetPath : props.cursorPath && props.cursorPath.length > 0 ? props.cursorPath : DEFAULT_PATH;
       const rippleSize = 96 * u;
       const ripples = path.map(() => {
         const ripple = el("div", "uf-ripple");
@@ -104,7 +112,7 @@ export function createUIFlowCursor(): SceneTemplate<UIFlowCursorProps> {
 
       root.appendChild(frame.wrap);
       root.appendChild(caption.wrap);
-      instance = { frame, cursor, ripples, words: caption.words, path, durationSec: ctx.durationSec };
+      instance = { frame, cursor, ripples, words: caption.words, path, durationSec: ctx.durationSec, pinned: targetPath.length > 0 };
     },
 
     seek(localT) {
@@ -112,7 +120,8 @@ export function createUIFlowCursor(): SceneTemplate<UIFlowCursorProps> {
       const { frame, cursor, ripples, path } = instance;
       frame.enter(localT, 0, FRAME_ENTER);
       wordsIn(instance.words, localT, CAPTION_START, WORD_EACH, WORD_DUR);
-      frame.scroll(progress(localT, CURSOR_START + LEG_SEC + 0.3, Math.max(2.4, instance.durationSec - 0.6)), 0.45);
+      // With real click targets the page holds still (a scroll would slide them out from under the pointer).
+      if (!instance.pinned) frame.scroll(progress(localT, CURSOR_START + LEG_SEC + 0.3, Math.max(2.4, instance.durationSec - 0.6)), 0.45);
 
       // The pointer starts off the bottom-right corner and visits each waypoint in turn.
       const w = frame.viewportWidth;

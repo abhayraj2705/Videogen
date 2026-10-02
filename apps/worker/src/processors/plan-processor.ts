@@ -44,7 +44,7 @@ export function createPlanProcessor(deps: WorkerDeps) {
     }
 
     const crawlOutput: CrawlOutput = { domain: crawlRow.domain, pages: crawlRow.pages, brand: crawlRow.brand, facts: crawlRow.facts, siteBrief: crawlRow.siteBrief };
-    const inputsHash = sha16(["plan-v1", crawlRow.id, options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, data.reason ?? null]);
+    const inputsHash = sha16(["plan-v1", crawlRow.id, options.videoType ?? "launch", options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, data.reason ?? null]);
     const runId = await startStageRun(deps.db, { jobId, stage: "plan", inputsHash });
 
     const result = await runPlanStage(crawlOutput, options, { primaryProvider: deps.llm.primary, escalationProvider: deps.llm.escalation });

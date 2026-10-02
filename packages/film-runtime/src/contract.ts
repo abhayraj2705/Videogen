@@ -90,6 +90,8 @@ export interface ResolvedScene<P = Record<string, unknown>> {
   transition?: TransitionKind;
   /** Absolute time (s) the scene's narration starts; used by the audio mix, ignored by the player. */
   audioStart?: number;
+  /** On-screen words to stress, and the moment (s from the scene start) to do it — when the voice says them. */
+  emphasis?: { words: string[]; at: number };
 }
 
 export interface FilmManifest {

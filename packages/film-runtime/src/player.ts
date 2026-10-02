@@ -145,6 +145,9 @@ function cutStyle(kind: TransitionKind, role: "in" | "out", p: number, width: nu
   return { opacity, transform: `scale(${(1 + 0.03 * e).toFixed(4)})` };
 }
 
+/** Lowercased letters and digits only: "Revenue." and "revenue" are the same word. */
+const wordKey = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+
 interface MountedScene {
   id: string;
   start: number;
@@ -153,6 +156,8 @@ interface MountedScene {
   root: HTMLElement;
   transitionIn: number;
   transition: TransitionKind;
+  /** The word nodes to stress and when. */
+  emphasis: { nodes: HTMLElement[]; at: number } | null;
 }
 
 export interface PlayerHandle {
@@ -229,8 +234,44 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
     root.style.inset = "0";
 
     const transition = resolveTransition(style, sceneIndex, scene.transition);
-    return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0, transition };
+    // Every text block is built from "-word" spans (util/ui.ts textBlock); the ones matching the scene's emphasis words get stressed.
+    const stress = new Set((scene.emphasis?.words ?? []).flatMap((w) => w.split(/\s+/)).map(wordKey).filter(Boolean));
+    const nodes = stress.size > 0 ? Array.from(root.querySelectorAll<HTMLElement>('[class$="-word"]')).filter((n) => stress.has(wordKey(n.textContent ?? ""))) : [];
+    const emphasis = scene.emphasis && nodes.length > 0 ? { nodes, at: scene.emphasis.at } : null;
+    return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0, transition, emphasis };
   });
+
+  // Finish: film grain over the whole picture (under the captions). The noise tile is drawn once
+  // from a seeded generator and only shifted per frame, so it is the same on every render.
+  let grain: HTMLElement | null = null;
+  const GRAIN_TILE = 192;
+  if (style.grain > 0) {
+    const tile = document.createElement("canvas");
+    tile.width = tile.height = GRAIN_TILE;
+    const g = tile.getContext("2d");
+    if (g) {
+      const rng = createSceneRng("grain");
+      const px = g.createImageData(GRAIN_TILE, GRAIN_TILE);
+      for (let i = 0; i < px.data.length; i += 4) {
+        const v = Math.floor(rng(`n`) * 256);
+        px.data[i] = px.data[i + 1] = px.data[i + 2] = v;
+        px.data[i + 3] = 255;
+      }
+      g.putImageData(px, 0, 0);
+      grain = document.createElement("div");
+      grain.className = "film-grain";
+      Object.assign(grain.style, {
+        position: "absolute",
+        inset: `-${GRAIN_TILE}px`,
+        backgroundImage: `url(${tile.toDataURL("image/png")})`,
+        backgroundSize: `${GRAIN_TILE * u * 3}px ${GRAIN_TILE * u * 3}px`,
+        opacity: String(style.grain),
+        mixBlendMode: "overlay",
+        pointerEvents: "none",
+      });
+      stage.appendChild(grain);
+    }
+  }
 
   const captionLayer = burnCaptions ? createCaptionLayer(stage, manifest, palette) : null;
 
@@ -254,6 +295,11 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
   function seek(t: number): void {
     backdrop.seek(t);
     captionLayer?.seek(t);
+    if (grain) {
+      // Grain moves every third frame (10 fps): still alive to the eye, far cheaper to encode. Pure in t.
+      const frame = Math.floor(Math.round(t * manifest.fps) / 3);
+      grain.style.transform = `translate(${(frame * 73) % GRAIN_TILE}px, ${(frame * 131) % GRAIN_TILE}px)`;
+    }
     const nextActive = new Set<string>();
     for (const [i, scene] of mounted.entries()) {
       const isActive = t >= scene.start && t < scene.end;
@@ -291,6 +337,15 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
         scene.root.style.filter = filter;
         scene.root.style.transform = transforms.length > 0 ? transforms.join(" ") : "none";
         scene.template.seek(localT);
+        if (scene.emphasis) {
+          // After the template has placed its words: the stressed ones take the accent from their moment on, and pop as it hits.
+          const since = localT - scene.emphasis.at;
+          const pulse = since < 0 ? 0 : since < 0.1 ? since / 0.1 : Math.max(0, 1 - (since - 0.1) / 0.4);
+          for (const node of scene.emphasis.nodes) {
+            node.style.color = since >= 0 ? palette.accentText : "";
+            if (pulse > 0.001) node.style.transform = `scale(${(1 + 0.14 * pulse).toFixed(4)})`;
+          }
+        }
       } else if (activeIds.has(scene.id) && scene.root.style.display !== "none") {
         scene.root.style.display = "none";
       }

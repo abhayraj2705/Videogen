@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { and, eq, desc } from "drizzle-orm";
 import { z } from "zod";
 import { brandKits, createJobWithCharge, jobs, refundJobCredits, type Db } from "@sitereel/db";
-import { CreateJobRequest, QUEUE_NAMES, SSE_EVENT_NAMES, parseLastEventId, type CrawlJobData } from "@sitereel/shared";
+import { CreateJobRequest, QUEUE_NAMES, SSE_EVENT_NAMES, parseLastEventId, userUploadPrefix, type CrawlJobData } from "@sitereel/shared";
 import type { AuthVerifier } from "../lib/auth.js";
 import type { Queues } from "../lib/queue.js";
 import type { JobEventBus } from "../lib/events.js";
@@ -35,7 +35,7 @@ export function registerJobRoutes(app: FastifyInstance, deps: JobRouteDeps): voi
 
   /**
    * POST /api/jobs → 201 Job
-   *   400 invalid_body | invalid_brand_kit (brandKitId not owned by the caller)
+   *   400 invalid_body | invalid_brand_kit (brandKitId not owned by the caller) | invalid_media (an upload key not issued to the caller)
    *   402 { error: "insufficient_credits", required, available }
    *   429 { error: "too_many_active_jobs", active, max }
    *   429 { error: "job_create_rate_limited" | "domain_throttled", retryAfterSec }
@@ -58,6 +58,10 @@ export function registerJobRoutes(app: FastifyInstance, deps: JobRouteDeps): voi
         .limit(1);
       if (!kit) return reply.code(400).send({ error: "invalid_brand_kit", message: "That brand kit doesn't exist." });
     }
+    // Uploaded images must be the caller's own (issued by POST /api/uploads/presign) — never another user's or a job's files.
+    const mediaPrefix = userUploadPrefix(user.id);
+    const badMedia = (parsed.data.options.media ?? []).find((m) => !m.key.startsWith(mediaPrefix) || !/^[A-Za-z0-9_-]+\.(png|jpg|webp)$/.test(m.key.slice(mediaPrefix.length)));
+    if (badMedia) return reply.code(400).send({ error: "invalid_media", message: "One of the uploaded images isn't available. Remove it and upload it again." });
     const options = { ...parsed.data.options, ...(brandKitId ? { brandKitId } : {}) };
 
     if (!(await limiters.checkJobCreate(req, reply))) return reply;

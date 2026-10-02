@@ -26,3 +26,8 @@ export type { DeviceMockupProps } from "./templates/device-mockup.js";
 export type { ZoomDetailProps } from "./templates/zoom-detail.js";
 export type { SplitCompareProps } from "./templates/split-compare.js";
 export type { LogoWallProps } from "./templates/logo-wall.js";
+export type { StepByStepProps } from "./templates/step-by-step.js";
+export type { KineticTypeProps } from "./templates/kinetic-type.js";
+export type { MontageProps } from "./templates/montage.js";
+export { montageCuts } from "./templates/montage.js";
+export { ICON_NAMES } from "./util/icons.js";

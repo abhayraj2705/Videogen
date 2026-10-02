@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CheckCircle2, Loader2, AlertTriangle, Coins } from "lucide-react";
-import type { AspectFormat, JobOptions, Tone } from "@sitereel/shared";
+import type { AspectFormat, JobOptions, Tone, VideoType } from "@sitereel/shared";
 import { previewUrl } from "@/lib/api/client";
 import { classifyCreateJobError, createJobChecked, getCreditBalance, type CreateJobBlock } from "@/lib/api/jobs";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ import { CreateJobBlockAlert } from "@/components/create/create-job-block";
 import type { VoiceLanguage } from "@/lib/voices";
 import { BrandKitPicker } from "@/components/create/brand-kit-picker";
 import { usePrefDefaults } from "@/components/create/use-pref-defaults";
+import { MediaUploader, type UploadedMedia } from "@/components/create/media-uploader";
 
 function useDebounced<T>(value: T, delayMs: number): T {
   const [debounced, setDebounced] = useState(value);
@@ -48,6 +49,14 @@ const FORMAT_OPTIONS: { value: AspectFormat; label: string; description: string 
   { value: "16:9", label: "16:9", description: "YouTube, landing page" },
   { value: "9:16", label: "9:16", description: "Reels, Shorts, Stories" },
   { value: "1:1", label: "1:1", description: "Feed post" },
+];
+
+/** Each video type with the lengths that suit it (the first is the default). */
+const VIDEO_TYPE_OPTIONS: { value: VideoType; label: string; description: string; lengths: JobOptions["lengthSec"][] }[] = [
+  { value: "launch", label: "Launch video", description: "Announce the product: hook, reveal, highlights, proof.", lengths: [20, 15, 30, 45] },
+  { value: "walkthrough", label: "Platform walkthrough", description: "How it works, one screen at a time.", lengths: [45, 30, 60, 90] },
+  { value: "feature", label: "Feature spotlight", description: "One feature, shown up close.", lengths: [20, 15, 30] },
+  { value: "teaser", label: "Social teaser", description: "A few seconds to stop the scroll.", lengths: [10, 6, 15] },
 ];
 
 const TONE_OPTIONS: { value: Tone; label: string; description: string }[] = [
@@ -77,7 +86,17 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
   const [url, setUrl] = useState(searchParams.get("url") ?? "");
   const [primaryFormat, setPrimaryFormat] = useState<AspectFormat>("16:9");
   const [alsoOtherFormats, setAlsoOtherFormats] = useState(false);
+  const [media, setMedia] = useState<UploadedMedia[]>([]);
+  const mediaUploading = media.some((m) => !m.key && !m.error);
+  const [videoType, setVideoType] = useState<VideoType>("launch");
   const [lengthSec, setLengthSec] = useState<JobOptions["lengthSec"]>(20);
+  const typeLengths = VIDEO_TYPE_OPTIONS.find((t) => t.value === videoType)!.lengths;
+  /** Switching type moves the length to that type's default when the current one doesn't suit it. */
+  const chooseVideoType = (next: VideoType) => {
+    setVideoType(next);
+    const lengths = VIDEO_TYPE_OPTIONS.find((t) => t.value === next)!.lengths;
+    if (!lengths.includes(lengthSec)) setLengthSec(lengths[0]!);
+  };
   const [tone, setTone] = useState<Tone>("clean");
   const [voiceLanguage, setVoiceLanguage] = useState<VoiceLanguage>("en");
   const [voiceId, setVoiceId] = useState("default");
@@ -113,6 +132,7 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
       const options: JobOptions = {
         formats,
         lengthSec,
+        videoType,
         tone,
         voiceLanguage,
         voiceId,
@@ -122,6 +142,7 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
         reviewBeforeRender,
         ...(focusPage.trim() ? { focusPage: focusPage.trim() } : {}),
         ...(brandKitId ? { brandKitId } : {}),
+        ...(media.some((m) => m.key) ? { media: media.filter((m) => m.key).map((m) => ({ key: m.key, role: "screen" as const, ...(m.caption.trim() ? { caption: m.caption.trim() } : {}) })) } : {}),
       };
       return createJobChecked({ url: normalized!, options });
     },
@@ -137,7 +158,7 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
     },
   });
 
-  const canSubmit = !!normalized && consent && !createJobMutation.isPending && !notEnoughCredits;
+  const canSubmit = !!normalized && consent && !createJobMutation.isPending && !notEnoughCredits && !mediaUploading;
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">
@@ -202,7 +223,15 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
         )}
       </Section>
 
-      <Section n={2} title="Format & length">
+      <Section n={2} title="Your own screenshots (optional)">
+        <MediaUploader value={media} onChange={setMedia} disabled={createJobMutation.isPending} />
+      </Section>
+
+      <Section n={3} title="Type, format & length">
+        <div className="flex flex-col gap-2">
+          <Label>What kind of video?</Label>
+          <OptionCardGroup options={VIDEO_TYPE_OPTIONS} value={videoType} onChange={chooseVideoType} columns={2} />
+        </div>
         <div className="flex flex-col gap-2">
           <Label>Format</Label>
           <OptionCardGroup options={FORMAT_OPTIONS} value={primaryFormat} onChange={setPrimaryFormat} />
@@ -216,18 +245,14 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
         <div className="flex flex-col gap-2">
           <Label>Length</Label>
           <OptionCardGroup
-            options={[
-              { value: "15", label: "15s" },
-              { value: "20", label: "20s" },
-              { value: "30", label: "30s" },
-            ]}
+            options={[...typeLengths].sort((a, b) => a - b).map((l) => ({ value: String(l), label: `${l}s` }))}
             value={String(lengthSec)}
             onChange={(v) => setLengthSec(Number(v) as JobOptions["lengthSec"])}
           />
         </div>
       </Section>
 
-      <Section n={3} title="Tone & voice">
+      <Section n={4} title="Tone & voice">
         <div className="flex flex-col gap-2">
           <Label>Tone</Label>
           <OptionCardGroup options={TONE_OPTIONS} value={tone} onChange={setTone} columns={2} />
@@ -264,7 +289,7 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
         </div>
       </Section>
 
-      <Section n={4} title="Brand">
+      <Section n={5} title="Brand">
         <BrandKitPicker value={brandKitId} onChange={setBrandKitId} />
       </Section>
 

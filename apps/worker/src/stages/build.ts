@@ -9,7 +9,7 @@ import {
   type FilmManifest,
   type ResolvedScene,
 } from "@sitereel/film-runtime";
-import { FORMAT_DIMENSIONS, type AspectFormat, type CrawlOutput, type Storyboard } from "@sitereel/shared";
+import { FORMAT_DIMENSIONS, FULLPAGE_CAPTURE_DEPTH, type AspectFormat, type CrawlOutput, type FactRect, type Storyboard } from "@sitereel/shared";
 import { assetRef } from "../lib/asset-ref.js";
 import { phraseCues } from "../lib/vtt.js";
 import type { MusicTrack } from "../lib/music.js";
@@ -85,12 +85,75 @@ export function listCues(items: string[], words: { word: string; startSec: numbe
   return cues[cues.length - 1]! <= sceneDurationSec - 1 ? cues : null;
 }
 
+/** Where to point the camera on a page: the first cited fact measured on that page and inside the captured screenshot. */
+function focusRectFor(factIds: string[], crawlOutput: CrawlOutput, pageUrl: string): FactRect | undefined {
+  for (const id of factIds) {
+    const fact = crawlOutput.facts.find((f) => f.id === id);
+    const r = fact?.rect;
+    if (r && fact.sourceUrl === pageUrl && r.x >= 0 && r.x + r.w <= 1.001 && r.y + r.h <= FULLPAGE_CAPTURE_DEPTH) return r;
+  }
+  // An uploaded image's regions were picked by the vision read as "worth a close-up": when the scene
+  // cites only the upload's caption, the first of them is still the right place to look.
+  if (crawlOutput.pages.find((p) => p.url === pageUrl)?.origin === "upload") {
+    return crawlOutput.facts.find((f) => f.sourceUrl === pageUrl && f.rect)?.rect;
+  }
+  return undefined;
+}
+
+/** All the distinct places the cited facts point at on a page, top to bottom — the stops of a camera tour. */
+function focusStopsFor(factIds: string[], crawlOutput: CrawlOutput, pageUrl: string): FactRect[] {
+  const stops: FactRect[] = [];
+  for (const id of factIds) {
+    const r = focusRectFor([id], { ...crawlOutput, pages: [] }, pageUrl);
+    // Skip a region that overlaps one already on the tour: moving a few pixels is not a new shot.
+    if (r && !stops.some((s) => Math.abs(s.y - r.y) < 0.12 && Math.abs(s.x - r.x) < 0.25)) stops.push(r);
+  }
+  return stops.sort((a, b) => a.y - b.y).slice(0, 3);
+}
+
+/**
+ * When to stress a scene's emphasis words (seconds from the scene start): as
+ * the voice says one of them, or — when the narration never does, or there is
+ * no voice — just after the scene's text has landed.
+ */
+function emphasisMoment(scene: Storyboard["scenes"][number], voice: VoiceSceneResult | undefined, audioOffsetSec: number, sceneDurationSec: number): number {
+  const wanted = new Set((scene.emphasis ?? []).flatMap(spokenWords));
+  const spoken = voice?.audioKey ? voice.words.find((w) => wanted.has(spokenWords(w.word)[0] ?? "")) : undefined;
+  let at: number;
+  if (spoken) at = audioOffsetSec + spoken.startSec;
+  else {
+    let settle = 1;
+    try {
+      settle = createTemplate(scene.templateId).marks(scene.props).find((m) => m.type === "settle")?.t ?? 1;
+    } catch {
+      settle = 1;
+    }
+    at = settle + 0.15;
+  }
+  return Math.round(Math.max(0.3, Math.min(at, sceneDurationSec - 0.8)) * 1000) / 1000;
+}
+
 /** Resolves a scene's props for its template, swapping sourcePageUrl references for real asset refs. */
 function resolveProps(templateId: string, props: Record<string, unknown>, crawlOutput: CrawlOutput, factIds: string[] = []): Record<string, unknown> {
+  if (templateId === "Montage") {
+    // Cut through the product: the user's own uploads first, then the top of every crawled page, then further sections.
+    const shot = crawlOutput.pages.filter((p) => p.screenshotKey);
+    const tops = shot.map((p) => (p.origin === "upload" ? p.screenshotKey : (p.sectionScreenshotKeys?.[0] ?? p.screenshotKey)));
+    const deeper = shot.flatMap((p) => (p.origin === "upload" ? [] : (p.sectionScreenshotKeys ?? []).slice(1)));
+    const ordered = [...shot.filter((p) => p.origin === "upload").map((p) => p.screenshotKey), ...tops, ...deeper];
+    const keys = ordered.filter((k, i) => ordered.indexOf(k) === i).slice(0, 6);
+    return { ...props, screenshotUrls: keys.map((k) => assetRef("assets", k)) };
+  }
+  if (templateId === "StepByStep") {
+    const page = crawlOutput.pages.find((p) => p.url === props.sourcePageUrl) ?? crawlOutput.pages[0];
+    const { sourcePageUrl: _drop, ...rest } = props;
+    const focus = page ? focusRectFor(factIds, crawlOutput, page.url) : undefined;
+    return { ...rest, screenshotUrl: page?.screenshotKey ? assetRef("assets", page.screenshotKey) : "", ...(page ? { pageLabel: pageLabel(page.url) } : {}), ...(focus ? { focus } : {}) };
+  }
   if (templateId === "DeviceMockup" || templateId === "ZoomDetail") {
     const page = crawlOutput.pages.find((p) => p.url === props.sourcePageUrl) ?? crawlOutput.pages[0];
     const { sourcePageUrl: _drop, ...rest } = props;
-    const focus = templateId === "ZoomDetail" && page ? factIds.map((id) => crawlOutput.facts.find((f) => f.id === id)).find((f) => f?.rect && f.sourceUrl === page.url)?.rect : undefined;
+    const focus = templateId === "ZoomDetail" && page ? focusRectFor(factIds, crawlOutput, page.url) : undefined;
     return {
       ...rest,
       screenshotUrl: page?.screenshotKey ? assetRef("assets", page.screenshotKey) : "",
@@ -106,18 +169,41 @@ function resolveProps(templateId: string, props: Record<string, unknown>, crawlO
     const sectionKey = typeof section === "number" ? page?.sectionScreenshotKeys?.[section - 1] : undefined;
     const key = sectionKey ?? page?.screenshotKey;
     // Full-page shots only: the first cited fact that was measured on this page tells the window where to zoom.
-    const focus =
-      !sectionKey && page && templateId === "SectionShowcase"
-        ? factIds.map((id) => crawlOutput.facts.find((f) => f.id === id)).find((f) => f?.rect && f.sourceUrl === page.url)?.rect
-        : undefined;
-    return { ...rest, screenshotUrl: key ? assetRef("assets", key) : "", ...(page ? { pageLabel: pageLabel(page.url) } : {}), ...(focus ? { focus } : {}) };
+    const focus = !sectionKey && page && templateId === "SectionShowcase" ? focusRectFor(factIds, crawlOutput, page.url) : undefined;
+    // The pointer clicks real things: what the scene cites, then the page's own buttons — whatever sits in the first screenful.
+    const inFirstScreen = (r: FactRect | undefined): r is FactRect => !!r && r.x >= 0 && r.x + r.w <= 1.001 && r.y + r.h <= 0.5;
+    const targets =
+      !sectionKey && page && templateId === "UIFlowCursor"
+        ? [...factIds.map((id) => crawlOutput.facts.find((f) => f.id === id)), ...crawlOutput.facts.filter((f) => f.kind === "cta")]
+            .filter((f) => f?.sourceUrl === page.url)
+            .map((f) => f?.rect)
+            .filter(inFirstScreen)
+            .filter((r, i, all) => all.findIndex((o) => Math.abs(o.x - r.x) < 0.05 && Math.abs(o.y - r.y) < 0.03) === i)
+            .slice(0, 2)
+        : [];
+    // Every further cited fact measured on this page is another stop for the camera (up to three).
+    const stops = !sectionKey && page && templateId === "SectionShowcase" ? focusStopsFor(factIds, crawlOutput, page.url) : [];
+    return {
+      ...rest,
+      screenshotUrl: key ? assetRef("assets", key) : "",
+      ...(page ? { pageLabel: pageLabel(page.url) } : {}),
+      ...(focus ? { focus } : {}),
+      ...(stops.length > 1 ? { focusStops: stops } : {}),
+      ...(targets.length > 0 ? { cursorTargets: targets } : {}),
+    };
   }
   if (templateId === "ScreenCollage") {
     const page = crawlOutput.pages.find((p) => p.url === props.sourcePageUrl) ?? crawlOutput.pages[0];
     const { sourcePageUrl: _drop, ...rest } = props;
     // Viewport-sized section captures make the cards; a page with fewer than two falls back to its full-page shot.
     const sections = page?.sectionScreenshotKeys ?? [];
-    const keys = sections.length >= 2 ? sections.slice(0, 3) : page?.screenshotKey ? [page.screenshotKey] : [];
+    let keys = sections.length >= 2 ? sections.slice(0, 3) : page?.screenshotKey ? [page.screenshotKey] : [];
+    // A collage of an upload shows it with its neighbouring uploads rather than one image alone.
+    if (page?.origin === "upload") {
+      const uploads = crawlOutput.pages.filter((p) => p.origin === "upload" && p.screenshotKey);
+      const at = uploads.indexOf(page);
+      keys = [page, ...uploads.slice(at + 1), ...uploads.slice(0, at)].slice(0, 3).map((p) => p.screenshotKey);
+    }
     return { ...rest, screenshotUrls: keys.map((k) => assetRef("assets", k)) };
   }
   if (templateId === "KineticHook" || templateId === "CTAEndCard" || templateId === "LogoReveal") {
@@ -174,6 +260,8 @@ export function buildFilmManifest(opts: {
       ...(opts.transitionSec !== undefined ? { transitionSec: opts.transitionSec } : { transitionSecs: transitions.map((k) => TRANSITION_DURATION[k]) }),
       beatGrid: opts.music?.beatGrid ?? null,
       loopSec: opts.music?.loopSec ?? null,
+      // The next line starts just before its picture arrives.
+      audioLeadSec: 0.2,
       // Our own tracks are written in 4/4 from beat 0; a licensed track's detected grid has no known bar phase.
       ...(opts.music?.source === "procedural" ? { beatsPerBar: 4 } : {}),
     },
@@ -184,6 +272,7 @@ export function buildFilmManifest(opts: {
     const items = listItems(scene.templateId, scene.props);
     const voice = voiceBySceneId.get(scene.id);
     const cues = items && voice?.audioKey ? listCues(items, voice.words, slot.audioStart - slot.start, slot.end - slot.start) : null;
+    const emphasis = scene.emphasis?.length ? { words: scene.emphasis, at: emphasisMoment(scene, voice, slot.audioStart - slot.start, slot.end - slot.start) } : null;
     return {
       id: scene.id,
       templateId: scene.templateId,
@@ -192,7 +281,13 @@ export function buildFilmManifest(opts: {
       transitionInSec: slot.transitionInSec,
       ...(i > 0 ? { transition: transitions[i]! } : {}),
       audioStart: slot.audioStart,
-      props: { ...resolveProps(scene.templateId, scene.props, crawlOutput, scene.factIds), ...(cues ? { cues } : {}) },
+      ...(emphasis ? { emphasis } : {}),
+      props: {
+        ...resolveProps(scene.templateId, scene.props, crawlOutput, scene.factIds),
+        ...(cues ? { cues } : {}),
+        // Every walkthrough step shows how many steps there are.
+        ...(scene.templateId === "StepByStep" ? { total: storyboard.scenes.filter((s) => s.templateId === "StepByStep").length } : {}),
+      },
     };
   });
 

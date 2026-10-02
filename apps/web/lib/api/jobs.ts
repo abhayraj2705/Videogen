@@ -70,6 +70,15 @@ export async function presignUploads(jobId: string, files: PresignFile[]): Promi
   return body.uploads;
 }
 
+/** POST /api/uploads/presign {files} — images for a video being created (keys go into options.media). */
+export async function presignMediaUploads(files: PresignFile[]): Promise<PresignedUpload[]> {
+  const body = await apiJson<{ uploads: PresignedUpload[] }>("/api/uploads/presign", { method: "POST", body: JSON.stringify({ files }) });
+  if (!Array.isArray(body.uploads) || body.uploads.length !== files.length) {
+    throw new ApiError(500, "bad_presign_response", "The upload service returned an unexpected response.");
+  }
+  return body.uploads;
+}
+
 /** PUTs a file straight to object storage (R2) with progress reporting. */
 export function uploadToPresignedUrl(upload: PresignedUpload, file: File, onProgress?: (fraction: number) => void): Promise<void> {
   return new Promise((resolve, reject) => {

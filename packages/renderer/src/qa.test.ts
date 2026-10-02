@@ -119,6 +119,35 @@ describe("QA seeded defects", () => {
     }
   }, 180_000);
 
+  it("passes the walkthrough step, type poster, montage and icon cards in all three formats", async () => {
+    const page = `data:image/svg+xml;charset=utf-8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="2400"><rect width="1280" height="2400" fill="#f4f4f8"/><rect x="80" y="160" width="620" height="70" fill="#222"/><rect x="80" y="900" width="1120" height="500" fill="#c9c2ff"/></svg>')}`;
+    for (const [w, h] of [
+      [640, 360],
+      [360, 640],
+      [480, 480],
+    ] as const) {
+      const m = manifestWith(
+        [
+          { id: "type", templateId: "KineticType", props: { text: "Ship your whole roadmap twice as fast" } },
+          { id: "step", templateId: "StepByStep", props: { screenshotUrl: page, caption: "Create your first project", step: 2, total: 4, focus: { x: 0.0625, y: 0.125, w: 0.4844, h: 0.0547 }, pageLabel: "acme.com/app" } },
+          { id: "montage", templateId: "Montage", props: { screenshotUrls: [page, page, page, page], caption: "Everything in one place" } },
+          { id: "cards", templateId: "FeatureTriplet", props: { features: [{ label: "Fast setup", icon: "bolt" }, { label: "Secure by default", icon: "shield" }, { label: "Live reports", icon: "chart" }], cues: [0.3, 0.9, 1.5] } },
+        ],
+        w,
+        h,
+      );
+      // Stress a word in the poster: the emphasis pass must not break determinism or hide the text.
+      m.scenes[0]!.emphasis = { words: ["roadmap"], at: 0.9 };
+      const r = await qa(`r5-${w}x${h}`, m, {
+        type: ["Ship your whole roadmap twice as fast"],
+        step: ["Create your first project", "02"],
+        montage: ["Everything in one place"],
+        cards: ["Fast setup", "Secure by default", "Live reports"],
+      });
+      expect(r.issues.filter((i) => i.severity === "error").map((i) => `${w}x${h} ${i.message}`)).toEqual([]);
+    }
+  }, 180_000);
+
   it("catches Math.random in seek() (100% of runs)", async () => {
     for (let run = 0; run < 3; run++) {
       const r = await qa(`rand-seek-${run}`, manifestWith([{ id: "bad", templateId: "__SeededRandomSeek", props: { text: "Jitter" } }]));

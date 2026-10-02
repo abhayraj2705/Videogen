@@ -147,6 +147,7 @@ export function validBoard(): Storyboard {
 export const DEFAULT_OPTIONS: JobOptions = {
   formats: ["16:9"],
   lengthSec: 15,
+  videoType: "launch",
   tone: "clean",
   voiceLanguage: "en",
   voiceId: "default",

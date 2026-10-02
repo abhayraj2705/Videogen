@@ -34,6 +34,13 @@ export interface TimingOptions {
   transitionSecs?: number[];
   leadInSec?: number;
   tailSec?: number;
+  /**
+   * J-cut: narration for every scene after the first starts this long BEFORE
+   * its picture cuts in, over the tail of the previous scene — the way an
+   * editor lets the next line pull the viewer across the cut. 0 = voice
+   * starts leadInSec after the cut. Must stay under tailSec, so two lines never overlap.
+   */
+  audioLeadSec?: number;
   /** One loop of the music's beat grid, in seconds from track start. */
   beatGrid?: number[] | null;
   /** Loop length of the music track (beat grid repeats every loopSec). */
@@ -97,9 +104,12 @@ export function computeTimeline(scenes: TimingSceneInput[], options: TimingOptio
   const dIn = scenes.map((_, i) => (i === 0 ? 0 : roundToFrame(Math.max(0, options.transitionSecs?.[i] ?? o.transitionSec) / 2, fps) * 2));
 
   // 1. Required slot length per scene.
+  const audioLead = Math.min(Math.max(0, options.audioLeadSec ?? 0), Math.max(0, o.tailSec - 0.1));
+  /** Where a scene's narration starts relative to its slot: after the cut, or (J-cut) just before it. */
+  const voiceOffset = (i: number) => (i > 0 && audioLead > 0 ? -audioLead : o.leadInSec);
   const required = scenes.map((s, i) => {
     const voice = s.voiceDurationSec ?? 0;
-    const voiceNeed = voice > 0 ? o.leadInSec + voice + o.tailSec : 0;
+    const voiceNeed = voice > 0 ? voiceOffset(i) + voice + o.tailSec : 0;
     // A slot also has to be long enough to contain its own crossfade halves.
     return Math.max(s.minDurationSec, voiceNeed, (dIn[i]! + (dIn[i + 1] ?? 0)) / 2 + 0.2);
   });
@@ -116,7 +126,9 @@ export function computeTimeline(scenes: TimingSceneInput[], options: TimingOptio
     let snapped = false;
     if (beats.length > 0) {
       const downbeat = bar > 1 ? beats.find((b, k) => k % bar === 0 && b >= raw - 1e-6) : undefined;
-      const next = downbeat !== undefined && downbeat - raw <= o.maxSnapSec + 1e-6 ? downbeat : beats.find((b) => b >= raw - 1e-6);
+      // The film's last cut is its ending: reach further for a bar line there, so the music resolves with the picture.
+      const reach = i === scenes.length - 1 ? Math.max(o.maxSnapSec, 1.5) : o.maxSnapSec;
+      const next = downbeat !== undefined && downbeat - raw <= reach + 1e-6 ? downbeat : beats.find((b) => b >= raw - 1e-6);
       if (next !== undefined) {
         cut = next;
         snapped = next - raw <= o.maxSnapSec + 1e-6;
@@ -141,7 +153,7 @@ export function computeTimeline(scenes: TimingSceneInput[], options: TimingOptio
       slotStart,
       slotEnd,
       transitionInSec: dIn[i]!,
-      audioStart: roundToFrame(slotStart + (s.voiceDurationSec ? o.leadInSec : 0), fps),
+      audioStart: roundToFrame(slotStart + (s.voiceDurationSec ? voiceOffset(i) : 0), fps),
       onBeat: onBeat[i]!,
     };
   });

@@ -30,6 +30,7 @@ const HUMAN_RATING_COUNT = 20;
 const DEFAULT_OPTIONS: JobOptions = {
   formats: ["16:9"],
   lengthSec: 20,
+  videoType: "launch",
   tone: "clean",
   voiceLanguage: "en",
   voiceId: "default",

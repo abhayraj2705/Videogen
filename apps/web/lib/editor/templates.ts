@@ -19,6 +19,9 @@ export const TEMPLATE_IDS: TemplateId[] = [
   "ZoomDetail",
   "SplitCompare",
   "LogoWall",
+  "StepByStep",
+  "KineticType",
+  "Montage",
 ];
 
 const LABELS: Record<string, string> = {
@@ -39,6 +42,9 @@ const LABELS: Record<string, string> = {
   ZoomDetail: "Close-up",
   SplitCompare: "Before / after",
   LogoWall: "Name wall",
+  StepByStep: "Walkthrough step",
+  KineticType: "Type poster",
+  Montage: "Montage",
 };
 
 export function templateLabel(id: string): string {

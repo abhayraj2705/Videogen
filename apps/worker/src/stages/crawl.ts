@@ -40,6 +40,7 @@ const NETWORK_IDLE_CAP_MS = 3_000;
 const FONTS_CAP_MS = 3_000;
 const HOME_SECTIONS = 4;
 const EXTRA_SECTIONS = 3;
+/** Keep in step with FULLPAGE_CAPTURE_DEPTH in @sitereel/shared (this height over the 1280px viewport width). */
 const FULLPAGE_MAX_CSS_HEIGHT = 4_000;
 /** Time held back from the browser phase so the plain-fetch fallback can still run inside the overall budget. */
 const PLAIN_FETCH_RESERVE_MS = 8_000;

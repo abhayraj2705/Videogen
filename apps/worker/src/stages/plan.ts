@@ -13,6 +13,7 @@ import {
 } from "@sitereel/shared";
 import { costOfError, type LlmProvider } from "@sitereel/llm";
 import { buildPlannerPrompt } from "../lib/planner-prompt.js";
+import { recipeFor, targetSceneCount } from "../lib/recipes.js";
 import { buildFallbackStoryboard, buildMinimalStoryboard, screenshotPageUrls } from "../lib/storyboard-fallback.js";
 
 export interface PlanStageDeps {
@@ -54,6 +55,7 @@ async function tryOnce(
   prompt: string,
   crawlOutput: CrawlOutput,
   source: "llm" | "llm-escalated",
+  minScenes?: number,
 ): Promise<Attempt> {
   const started = Date.now();
   try {
@@ -65,7 +67,7 @@ async function tryOnce(
       return s.durationSec < floor ? { ...s, durationSec: floor } : s;
     });
     const storyboard: Storyboard = { ...result.data, scenes, version: 1, source };
-    const report = validateStoryboard(storyboard, crawlOutput.facts, { pageUrls: screenshotPageUrls(crawlOutput) });
+    const report = validateStoryboard(storyboard, crawlOutput.facts, { pageUrls: screenshotPageUrls(crawlOutput), ...(minScenes ? { minScenes } : {}) });
     const rejected = report.issues.filter((i) => i.severity === "error").map((i) => `${i.code}: ${i.message}`);
     return { storyboard, report, call: { provider: provider.id, ok: true, valid: report.valid, costUsd: result.costUsd, latencyMs: Date.now() - started, ...(rejected.length > 0 ? { rejected } : {}) } };
   } catch (err) {
@@ -109,6 +111,9 @@ export async function runPlanStage(crawlOutput: CrawlOutput, options: JobOptions
   const started = Date.now();
   const { system, prompt } = buildPlannerPrompt({ crawlOutput, options });
   const pageUrls = screenshotPageUrls(crawlOutput);
+  // Pacing gate for the LLM: a film two scenes short of its recipe is sent back once with that feedback.
+  const recipe = recipeFor(options.videoType);
+  const minScenes = Math.max(recipe.minScenes, targetSceneCount(recipe, options.lengthSec) - 2);
   const calls: PlanLlmCall[] = [];
   let lastReport: ValidationReport | undefined;
   /** Parsed-but-invalid attempts, kept so one bad scene doesn't cost the whole plan. */
@@ -129,7 +134,7 @@ export async function runPlanStage(crawlOutput: CrawlOutput, options: JobOptions
   if (deps.primaryProvider) {
     const primaryTries = deps.escalationProvider ? 1 : 2;
     for (let i = 0; i < primaryTries; i++) {
-      const attempt = await tryOnce(deps.primaryProvider, system, i === 0 ? prompt : withErrors(lastReport), crawlOutput, "llm");
+      const attempt = await tryOnce(deps.primaryProvider, system, i === 0 ? prompt : withErrors(lastReport), crawlOutput, "llm", minScenes);
       calls.push(attempt.call);
       if (attempt.storyboard && attempt.report) {
         if (attempt.report.valid) return finish(attempt.storyboard, attempt.report);
@@ -140,10 +145,17 @@ export async function runPlanStage(crawlOutput: CrawlOutput, options: JobOptions
   }
 
   if (deps.escalationProvider) {
-    const attempt = await tryOnce(deps.escalationProvider, system, withErrors(lastReport), crawlOutput, "llm-escalated");
+    const attempt = await tryOnce(deps.escalationProvider, system, withErrors(lastReport), crawlOutput, "llm-escalated", minScenes);
     calls.push(attempt.call);
     if (attempt.storyboard && attempt.report?.valid) return finish(attempt.storyboard, attempt.report);
     if (attempt.storyboard && attempt.report) rejected.push({ storyboard: attempt.storyboard, report: attempt.report });
+  }
+
+  // A film that is only short on scenes is still a directed, grounded film — better than the fallback.
+  for (const r of [...rejected].reverse()) {
+    if (r.report.issues.filter((i) => i.severity === "error").every((i) => i.code === "too_few_scenes")) {
+      return finish(r.storyboard, validateStoryboard(r.storyboard, crawlOutput.facts, { pageUrls }));
+    }
   }
 
   // Latest attempt first: it had the validator's feedback.

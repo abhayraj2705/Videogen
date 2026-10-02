@@ -30,7 +30,14 @@ const BASE: JobOptions = {
   reviewBeforeRender: true,
 } as JobOptions;
 
-const VARIANTS: JobOptions[] = [BASE, { ...BASE, noVoiceover: true, lengthSec: 15 }, { ...BASE, lengthSec: 30, tone: "cinematic" }];
+const VARIANTS: JobOptions[] = [
+  BASE,
+  { ...BASE, noVoiceover: true, lengthSec: 15 },
+  { ...BASE, lengthSec: 30, tone: "cinematic" },
+  { ...BASE, videoType: "walkthrough", lengthSec: 45 },
+  { ...BASE, videoType: "feature" },
+  { ...BASE, videoType: "teaser", lengthSec: 10 },
+];
 
 const fixtures = loadCrawlFixtures();
 
@@ -135,7 +142,7 @@ describe("planner prompt", () => {
     expect(prompt).toContain("BRAND");
     expect(prompt).toContain("ASSETS");
     expect(prompt).toContain("[screenshot-0]");
-    expect(prompt).toMatch(/hook \(2-3s\) -> reveal \(2-4s\)/);
+    expect(prompt).toMatch(/hook \(2-3s\) -> reveal the product \(2-4s\)/);
     expect(prompt).toContain('"supercharge"');
   });
 });

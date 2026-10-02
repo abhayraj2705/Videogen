@@ -1,6 +1,6 @@
-import type { FilmManifest } from "@sitereel/film-runtime";
+import { montageCuts, type FilmManifest } from "@sitereel/film-runtime";
 
-export type SfxKind = "whoosh" | "hit" | "pop" | "rise";
+export type SfxKind = "whoosh" | "hit" | "pop" | "rise" | "sting";
 
 export interface SfxEvent {
   kind: SfxKind;
@@ -15,7 +15,7 @@ const SAMPLE_RATE = 48000;
  * music bed peaks around 0.23 before ducking and speech around 0.7, so these
  * sit just above the music and clearly under the voice.
  */
-export const SFX_GAIN: Record<SfxKind, number> = { whoosh: 0.3, hit: 0.4, pop: 0.26, rise: 0.22 };
+export const SFX_GAIN: Record<SfxKind, number> = { whoosh: 0.3, hit: 0.4, pop: 0.26, rise: 0.22, sting: 0.28 };
 
 /**
  * Where the film wants a sound: a whoosh under every moving cut, a hit on a
@@ -34,7 +34,14 @@ export function sfxEvents(manifest: FilmManifest): SfxEvent[] {
     const cues = (scene.props as { cues?: unknown }).cues;
     if (Array.isArray(cues)) for (const c of cues) if (typeof c === "number") events.push({ kind: "pop", t: scene.start + c });
     if (scene.templateId === "StatCounter") events.push({ kind: "rise", t: scene.start + 0.1 });
+    if (scene.templateId === "Montage") {
+      const shots = (scene.props as { screenshotUrls?: unknown[] }).screenshotUrls?.length ?? 0;
+      for (const c of montageCuts(shots, scene.end - scene.start).slice(1)) events.push({ kind: "pop", t: scene.start + c });
+    }
   });
+  // A closing sting as the last scene (the call to action) lands.
+  const last = manifest.scenes[manifest.scenes.length - 1];
+  if (last && manifest.scenes.length > 1) events.push({ kind: "sting", t: last.start + (last.transitionInSec ?? 0) / 2 + 0.35 });
   return events.filter((e) => e.t >= 0 && e.t < manifest.duration - 0.2).sort((a, b) => a.t - b.t);
 }
 
@@ -60,6 +67,16 @@ function samplesFor(kind: SfxKind): Float32Array {
       low += cutoff * (noise() - low);
       band += 0.35 * (low - band);
       out[i] = (low - band * 0.6) * Math.sin(Math.PI * p) ** 2 * 2.2;
+    }
+    return out;
+  }
+  if (kind === "sting") {
+    // A bright three-note chord (root, fifth, octave) struck together and left to ring.
+    const out = new Float32Array(Math.round(1.1 * SAMPLE_RATE));
+    for (let i = 0; i < out.length; i++) {
+      const tt = i / SAMPLE_RATE;
+      const tone = Math.sin(2 * Math.PI * 523.25 * tt) + 0.7 * Math.sin(2 * Math.PI * 783.99 * tt) + 0.5 * Math.sin(2 * Math.PI * 1046.5 * tt);
+      out[i] = tone * Math.exp(-tt * 4.2) * Math.min(1, i / 96);
     }
     return out;
   }

@@ -19,6 +19,13 @@ export type FactKind = z.infer<typeof FactKind>;
 export const FactRect = z.object({ x: z.number(), y: z.number(), w: z.number(), h: z.number() });
 export type FactRect = z.infer<typeof FactRect>;
 
+/**
+ * How far down a page the full-page screenshot reaches, in page widths (the
+ * crawl caps it at 4000 CSS px on a 1280px-wide viewport). A fact below this
+ * line has a position but no pixels — it can be cited, not shown.
+ */
+export const FULLPAGE_CAPTURE_DEPTH = 4000 / 1280;
+
 export const FactLedgerEntry = z.object({
   id: z.string(),
   kind: FactKind,
@@ -51,6 +58,10 @@ export const CrawledPage = z.object({
   screenshotKey: z.string(),
   /** Per-section screenshots (one per viewport-height slice, top to bottom). Additive, optional. */
   sectionScreenshotKeys: z.array(z.string()).optional(),
+  /** Additive, optional: "upload" marks an image the user supplied (the url is then a #upload-N fragment of the job URL). */
+  origin: z.enum(["crawl", "upload"]).optional(),
+  /** Additive, optional: a human name for the page ("Dashboard overview"), shown to the planner. */
+  label: z.string().optional(),
 });
 export type CrawledPage = z.infer<typeof CrawledPage>;
 

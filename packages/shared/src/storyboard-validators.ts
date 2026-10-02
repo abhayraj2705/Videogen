@@ -79,6 +79,17 @@ export const TEMPLATE_PROP_SCHEMAS: Record<TemplateId, z.ZodType> = {
     leftLabel: z.string().optional(),
     rightLabel: z.string().optional(),
   }),
+  StepByStep: z.object({
+    sourcePageUrl: z.string().url(),
+    caption: z.string().min(1),
+    step: z.number().int().min(1).max(12),
+  }),
+  KineticType: z.object({
+    text: z.string().min(1),
+  }),
+  Montage: z.object({
+    caption: z.string().min(1),
+  }),
   LogoWall: z.object({
     title: z.string().min(1),
     names: z.array(z.string().min(1)).min(3).max(10),
@@ -107,7 +118,11 @@ export function visibleTextFor(templateId: TemplateId, props: unknown): string[]
     case "ScreenCollage":
     case "DeviceMockup":
     case "ZoomDetail":
+    case "StepByStep":
+    case "Montage":
       return [p.caption as string];
+    case "KineticType":
+      return [p.text as string];
     case "SplitCompare":
       return [p.left as string, p.right as string];
     case "LogoWall":
@@ -147,7 +162,7 @@ export function syncOnScreenText<S extends { templateId: TemplateId; props: unkn
 }
 
 /** Templates that show a crawled page and so must point at one (`sourcePageUrl`). */
-export const SCREENSHOT_TEMPLATES: ReadonlySet<string> = new Set(["SectionShowcase", "UIFlowCursor", "ScreenCollage", "DeviceMockup", "ZoomDetail"]);
+export const SCREENSHOT_TEMPLATES: ReadonlySet<string> = new Set(["SectionShowcase", "UIFlowCursor", "ScreenCollage", "DeviceMockup", "ZoomDetail", "StepByStep"]);
 
 /** Appendix C — phrases the planner must never use, enforced in code, not just asked for in the prompt. */
 export const BANNED_PHRASES = ["streamline your workflow", "supercharge", "unlock", "elevate"] as const;
@@ -310,6 +325,8 @@ function normalizeUrl(u: string): string {
 export interface ValidateStoryboardOptions {
   /** URLs actually crawled; SectionShowcase/UIFlowCursor must point at one of them. Omit to skip that check. */
   pageUrls?: string[];
+  /** Fewest scenes this film should have (its recipe's pacing). Fewer is a `too_few_scenes` error. Omit to skip. */
+  minScenes?: number;
 }
 
 /**
@@ -505,6 +522,14 @@ export function validateStoryboard(input: unknown, facts: FactLedger, opts: Vali
   }
   for (const phrase of findBannedPhrases(storyboard.shareCaption)) {
     issues.push({ code: "banned_phrase", message: `shareCaption uses banned phrase "${phrase}"`, severity: "error" });
+  }
+
+  if (opts.minScenes && storyboard.scenes.length < opts.minScenes) {
+    issues.push({
+      code: "too_few_scenes",
+      message: `Only ${storyboard.scenes.length} scenes; this film needs at least ${opts.minScenes}. Split long scenes: one idea, one short narration line and a different template for each.`,
+      severity: "error",
+    });
   }
 
   const totalDuration = storyboard.scenes.reduce((s, sc) => s + sc.durationSec, 0);

@@ -4,7 +4,7 @@ import fsp from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
-import { CrawlOutput, JobOptions, Storyboard, ffprobe, formatSlug, runFfmpegQuiet, validateStoryboard, type AspectFormat } from "@sitereel/shared";
+import { CrawlOutput, JobOptions, Storyboard, ffprobe, formatSlug, runFfmpegQuiet, userUploadPrefix, validateStoryboard, type AspectFormat, type JobMedia } from "@sitereel/shared";
 import { createLocalStorageClient, type StorageClient } from "@sitereel/storage";
 import { selectLlmProviders, type LlmEnv } from "../lib/llm-providers.js";
 import { createGeminiTtsProvider } from "@sitereel/tts";
@@ -20,6 +20,7 @@ import { assembleNarrationTrack, mixFinalAudio } from "../lib/audio-mix.js";
 import { buildVtt } from "../lib/vtt.js";
 import { getAudioSidecarFromEnv } from "../lib/audio-sidecar.js";
 import { selectMusicTrack } from "../lib/music.js";
+import { ingestUserMedia } from "../lib/media-intake.js";
 import { screenshotPageUrls } from "../lib/storyboard-fallback.js";
 import { buildStageHash, decideVoiceScenes, manifestHash, qaStageHash, renderStageHash, sha16, voiceSceneHashes } from "../lib/input-hash.js";
 
@@ -109,7 +110,7 @@ async function main() {
   const [, , cmd, target, ...rest] = process.argv;
   if (cmd !== "run" || !target) {
     console.error(
-      "usage: pnpm pipeline run <url-or-crawl-fixture.json> [--out DIR] [--formats 16:9,9:16,1:1] [--music MOOD|off] [--tone clean|playful|cinematic|app-store] [--no-voice] [--plan free|pro] [--force] [--edit storyboard.json]",
+      "usage: pnpm pipeline run <url-or-crawl-fixture.json> [--out DIR] [--formats 16:9,9:16,1:1] [--music MOOD|off] [--tone clean|playful|cinematic|app-store] [--type launch|walkthrough|feature|teaser] [--length SEC] [--media DIR] [--no-voice] [--plan free|pro] [--force] [--edit storyboard.json]",
     );
     process.exit(2);
   }
@@ -126,7 +127,8 @@ async function main() {
   const music = flag(rest, "music") ?? "upbeat";
   const options = JobOptions.parse({
     formats,
-    lengthSec: 20,
+    lengthSec: Number(flag(rest, "length") ?? 20),
+    videoType: flag(rest, "type") ?? "launch",
     tone: flag(rest, "tone") ?? "clean",
     voiceLanguage: "en",
     voiceId: "default",
@@ -135,6 +137,19 @@ async function main() {
     musicMood: music === "off" ? "upbeat" : music,
     reviewBeforeRender: false,
   });
+  // --media DIR: every image in the folder (name order) becomes an upload; the file name is its caption.
+  const mediaDir = flag(rest, "media");
+  const mediaFiles = mediaDir
+    ? fs
+        .readdirSync(path.resolve(cwd, mediaDir))
+        .filter((f) => /\.(png|jpe?g|webp)$/i.test(f))
+        .sort()
+    : [];
+  const media: JobMedia[] = mediaFiles.map((f, i) => ({
+    key: `${userUploadPrefix("local")}${String(i + 1).padStart(2, "0")}${path.extname(f).toLowerCase()}`,
+    role: "screen",
+    caption: path.basename(f, path.extname(f)).replace(/^\d+[-_ ]*/, "").replace(/[-_]+/g, " ").trim() || undefined,
+  }));
   const plan = (flag(rest, "plan") ?? "free") as "free" | "creator" | "pro";
   const force = rest.includes("--force");
   const editArg = flag(rest, "edit");
@@ -152,6 +167,10 @@ async function main() {
   };
 
   const storage = createLocalStorageClient(storageDir);
+  for (const [i, file] of mediaFiles.entries()) {
+    const type = /\.png$/i.test(file) ? "image/png" : /\.webp$/i.test(file) ? "image/webp" : "image/jpeg";
+    await storage.putObject("assets", media[i]!.key, await fsp.readFile(path.join(path.resolve(cwd, mediaDir!), file)), type);
+  }
   const env = { STORAGE_DRIVER: "local" as const, STORAGE_LOCAL_DIR: storageDir };
   const { primary: gemini, escalation: anthropic } = selectLlmProviders(process.env as LlmEnv);
   if (gemini) console.log(`  LLM: ${gemini.id}${anthropic ? ` (escalation: ${anthropic.id})` : ""}`);
@@ -174,7 +193,7 @@ async function main() {
   const started = Date.now();
 
   // 1. Crawl (or load fixture)
-  const crawl = await t("crawl", async () => {
+  const crawlOnly = await t("crawl", async () => {
     if (fixturePath) {
       const raw = JSON.parse(await fsp.readFile(fixturePath, "utf8")) as Record<string, unknown>;
       const parsed = CrawlOutput.parse({ domain: raw.domain, pages: raw.pages, brand: raw.brand, facts: raw.facts, siteBrief: raw.siteBrief });
@@ -191,8 +210,17 @@ async function main() {
   });
   note("crawl", fixturePath ? "skipped" : "ran", fixturePath ? "saved fixture" : undefined);
 
+  // 1b. The user's own images (--media DIR): filed as extra pages, read by the vision model when there is one.
+  const crawl = await t("media", async () => {
+    if (media.length === 0) return crawlOnly;
+    const r = await ingestUserMedia({ crawlOutput: crawlOnly, jobUrl: isUrl ? target : `https://${crawlOnly.domain}`, media, getObject: (key) => storage.getObject("assets", key), llm: gemini });
+    for (const n of r.notes) process.stdout.write(`\n  upload "${n.title}": ${n.facts} facts (vision ${n.vision})`);
+    process.stdout.write("\n");
+    return r.crawlOutput;
+  });
+
   // 2. Plan — or the edited storyboard (W6 editor save), which replaces it.
-  const planHash = sha16(["plan-v1", crawl, options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, gemini?.id ?? null, anthropic?.id ?? null]);
+  const planHash = sha16(["plan-v2", crawl, options.videoType, options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, gemini?.id ?? null, anthropic?.id ?? null]);
   const plannedPath = path.join(outDir, "storyboard.planned.json");
   let storyboard: Storyboard;
   if (editPath) {
