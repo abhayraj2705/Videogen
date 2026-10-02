@@ -1,7 +1,7 @@
 import type { JobOptions, Storyboard } from "@sitereel/shared";
 import type { StorageClient } from "@sitereel/storage";
 import type { TtsProvider, TtsResult, WordAligner, WordTiming } from "@sitereel/tts";
-import { createCachedTtsProvider, createFallbackTtsProvider, updateCachedWords, type TtsCacheStore } from "@sitereel/tts";
+import { createCachedTtsProvider, createFallbackTtsProvider, estimateWordTimings, splitTakeAtPauses, updateCachedWords, type TakeClip, type TtsCacheStore } from "@sitereel/tts";
 
 export interface VoiceSceneResult {
   sceneId: string;
@@ -26,6 +26,8 @@ export interface VoiceStageResult {
   synthesized: string[];
   /** Scenes whose previous take was reused untouched (downstream-only re-runs). */
   reused: string[];
+  /** True when the narration was recorded as one continuous take and cut into lines (see packages/tts take.ts). */
+  oneTake: boolean;
 }
 
 /** Parallel TTS calls per job: enough to cut a 7-line film's voice stage ~3x without tripping provider rate limits. */
@@ -87,6 +89,28 @@ export async function runVoiceStage(
   const reused: string[] = [];
   const language = options.voiceLanguage ?? storyboard.language ?? "en";
 
+  // First choice: the whole voiceover as ONE take, cut at the pauses between lines — the voice then carries
+  // through the script instead of starting each line cold. Only for a full recording (a re-voice of one
+  // line has no take to belong to), and only when the cut lines up; otherwise lines are recorded one by one.
+  const narrated = storyboard.scenes.filter((s) => !options.noVoiceover && s.narration && !deps.reuse?.has(s.id));
+  const takeClips = new Map<string, { clip: TakeClip; cacheHit: boolean }>();
+  if (cached && narrated.length >= 2 && narrated.length === storyboard.scenes.filter((s) => s.narration).length && process.env.SITEREEL_VOICE_TAKE !== "off") {
+    const lines = narrated.map((s) => s.narration!.trim());
+    try {
+      const take = await cached.synthesizeCached({ text: lines.join("\n\n"), paragraphs: lines, voiceId: options.voiceId, language });
+      const clips = take.contentType === "audio/wav" ? splitTakeAtPauses(take.audio, lines) : null;
+      if (clips) {
+        narrated.forEach((s, i) => takeClips.set(s.id, { clip: clips[i]!, cacheHit: take.cacheHit }));
+        totalCost += take.costUsd;
+        if (take.cacheHit) cacheHits++;
+      } else {
+        deps.log?.("One-take voiceover could not be cut cleanly at its pauses — recording line by line", { lines: lines.length });
+      }
+    } catch (err) {
+      deps.log?.("One-take voiceover failed — recording line by line", { error: (err as Error).message });
+    }
+  }
+
   // Lines are independent, so they're synthesized a few at a time (results keep storyboard order).
   const voiceScene = async (scene: Storyboard["scenes"][number]): Promise<VoiceSceneResult> => {
     const prior = deps.reuse?.get(scene.id);
@@ -104,19 +128,27 @@ export async function runVoiceStage(
     let providerId: string;
     let cacheHit = false;
     let cacheKey: string | null = null;
+    const fromTake = takeClips.get(scene.id);
     try {
       if (!cached) throw new Error("no TTS provider configured");
-      const r = await cached.synthesizeCached(req);
-      result = r;
-      cacheHit = r.cacheHit;
-      cacheKey = r.cacheKey;
-      providerId = cached.id;
+      if (fromTake) {
+        // This line's slice of the take; its cost was counted once, with the take.
+        result = { audio: fromTake.clip.audio, contentType: "audio/wav", durationSec: fromTake.clip.durationSec, words: estimateWordTimings(scene.narration, fromTake.clip.durationSec), wordsSource: "estimate", costUsd: 0 };
+        providerId = cached.id;
+        cacheHit = fromTake.cacheHit;
+      } else {
+        const r = await cached.synthesizeCached(req);
+        result = r;
+        cacheHit = r.cacheHit;
+        cacheKey = r.cacheKey;
+        providerId = cached.id;
+      }
     } catch (err) {
       if (cached) deps.log?.("TTS provider failed for a line — using silent fallback", { sceneId: scene.id, error: (err as Error).message });
       result = await fallback.synthesize(req);
       providerId = fallback.id;
     }
-    if (cacheHit) cacheHits++;
+    if (cacheHit && !fromTake) cacheHits++;
 
     let words = result.words;
     let wordsSource = result.wordsSource ?? "estimate";
@@ -159,5 +191,5 @@ export async function runVoiceStage(
   const order = new Map(storyboard.scenes.map((s, i) => [s.id, i]));
   const inOrder = (ids: string[]) => ids.sort((a, b) => order.get(a)! - order.get(b)!);
 
-  return { scenes, costUsd: totalCost, cacheHits, aligned, synthesized: inOrder(synthesized), reused: inOrder(reused) };
+  return { scenes, costUsd: totalCost, cacheHits, aligned, synthesized: inOrder(synthesized), reused: inOrder(reused), oneTake: takeClips.size > 0 };
 }

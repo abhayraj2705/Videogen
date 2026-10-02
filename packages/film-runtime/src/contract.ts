@@ -67,7 +67,7 @@ export interface Caption {
 }
 
 /** How a scene enters over its predecessor. Absent = the player picks one deterministically per cut. */
-export type TransitionKind = "fade" | "slide-left" | "slide-up" | "zoom" | "cut" | "push" | "wipe" | "whip";
+export type TransitionKind = "fade" | "slide-left" | "slide-up" | "zoom" | "cut" | "push" | "wipe" | "whip" | "match";
 
 export interface Mark {
   t: number;
@@ -97,7 +97,8 @@ export interface ResolvedScene<P = Record<string, unknown>> {
 export interface FilmManifest {
   width: number;
   height: number;
-  fps: 30;
+  /** 30 by default; 60 for films made with smooth motion on (twice the frames to render). */
+  fps: 30 | 60;
   duration: number;
   palette: Palette;
   fonts: Fonts;
@@ -123,6 +124,8 @@ export interface FilmManifest {
   captionStyle?: "burned" | "none";
   /** Absolute beat times (s) of the music bed; the backdrop pulses on them. */
   beats?: number[];
+  /** How far into the track (s) the music bed starts, so its drop lands on the product reveal. Used by the audio mix only. */
+  musicOffsetSec?: number;
   /** Style pack id (see style.ts) — the job's tone. Absent = "clean". */
   style?: string;
 }

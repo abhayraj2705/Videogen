@@ -16,6 +16,13 @@ export interface Recipe {
   /** Target seconds per scene: sets how many scenes a film of a given length gets. */
   secPerScene: number;
   minScenes: number;
+  /** Most scenes a film of this type gets, however long: past this the scenes get longer instead of more numerous. */
+  maxScenes: number;
+  /**
+   * A voiceover of this type written for an invented product, shown to the script writer as an example of
+   * the register and the arc. Never of the wording: the prompt says so.
+   */
+  example: string[];
 }
 
 export const RECIPES: Record<VideoType, Recipe> = {
@@ -29,6 +36,15 @@ export const RECIPES: Record<VideoType, Recipe> = {
     ],
     secPerScene: 3,
     minScenes: 4,
+    maxScenes: 12,
+    example: [
+      "Month-end close still eats a week of your team's time.",
+      "Ledgerly closes the books while you sleep.",
+      "It matches every bank line to an invoice on its own.",
+      "Anything it can't match lands in one short review list.",
+      "Finance teams at 4,000 companies already close in a day.",
+      "Start your first close free at ledgerly.com.",
+    ],
   },
   walkthrough: {
     id: "walkthrough",
@@ -43,6 +59,15 @@ export const RECIPES: Record<VideoType, Recipe> = {
     ],
     secPerScene: 5,
     minScenes: 5,
+    maxScenes: 16,
+    example: [
+      "Here's how a booking gets made in Roomly, start to finish.",
+      "First, pick the room straight from the floor plan.",
+      "Next, drag across the calendar to set the time.",
+      "Then invite people, and Roomly checks who is free.",
+      "The room's screen updates the moment you confirm.",
+      "That's a booking in four clicks. Try it at roomly.app.",
+    ],
   },
   feature: {
     id: "feature",
@@ -54,6 +79,14 @@ export const RECIPES: Record<VideoType, Recipe> = {
     ],
     secPerScene: 3.5,
     minScenes: 4,
+    maxScenes: 10,
+    example: [
+      "Reviewing a contract shouldn't mean reading all forty pages.",
+      "Clausewise highlights the three clauses that differ from your template.",
+      "Click one, and the original wording sits right beside it.",
+      "Accept, reject, or send it back with a note.",
+      "Review your next contract at clausewise.com.",
+    ],
   },
   teaser: {
     id: "teaser",
@@ -67,6 +100,8 @@ export const RECIPES: Record<VideoType, Recipe> = {
     ],
     secPerScene: 2.2,
     minScenes: 3,
+    maxScenes: 5,
+    example: ["Your standup, without the meeting.", "Updates in, summary out.", "Try Huddle free."],
   },
 };
 
@@ -76,5 +111,5 @@ export function recipeFor(videoType: VideoType | undefined): Recipe {
 
 /** How many scenes a film of this type and length should have. */
 export function targetSceneCount(recipe: Recipe, lengthSec: number): number {
-  return Math.max(recipe.minScenes, Math.round(lengthSec / recipe.secPerScene));
+  return Math.min(recipe.maxScenes, Math.max(recipe.minScenes, Math.round(lengthSec / recipe.secPerScene)));
 }

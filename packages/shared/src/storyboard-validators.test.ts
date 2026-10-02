@@ -5,6 +5,8 @@ import {
   validateStoryboard,
   formatValidationErrorsForRetry,
   findBannedPhrases,
+  findCliches,
+  narrationEchoesScreen,
   RETRY_INSTRUCTION,
   visibleTextFor,
   syncOnScreenText,
@@ -210,5 +212,39 @@ describe("numbers written as words", () => {
     expect(spokenNumbersIn("a hundred and five ways, twenty four seven")).toEqual([105, 24]);
     expect(spokenNumbersIn("one platform, three steps, millions of users")).toEqual([]);
     expect(spokenNumbersIn("two million developers")).toEqual([2000000]);
+  });
+});
+
+describe("writing gates (model-written drafts only)", () => {
+  const wallFacts: FactLedger = [...facts, { id: "tools", kind: "feature", text: "Works with Slack, GitHub and Figma. Loved by developers and designers", sourceUrl: PAGE, selector: "p" }];
+  const wall = (names: string[]) => scene({ id: "wall", templateId: "LogoWall", onScreenText: ["Works with"], factIds: ["tools"], props: { title: "Works with", names } });
+
+  it("accepts a wall of real names and rejects ordinary words lifted from a sentence", () => {
+    expect(validateStoryboard(board([wall(["Slack", "GitHub", "Figma"])]), wallFacts).issues.map((i) => i.code)).not.toContain("logo_wall_names");
+    const bad = validateStoryboard(board([wall(["Slack", "developers", "designers"])]), wallFacts);
+    expect(bad.issues.find((i) => i.code === "logo_wall_names")?.message).toContain('"developers"');
+    // Capitalising an ordinary word does not make it a name the fact wrote.
+    expect(validateStoryboard(board([wall(["Slack", "GitHub", "Developers"])]), wallFacts).issues.map((i) => i.code)).toContain("logo_wall_names");
+  });
+
+  it("flags stock phrases only when asked to", () => {
+    const s = [scene({ id: "a", templateId: "BigStatement", onScreenText: ["Ship at lightning speed"], narration: "Ship at lightning speed, with ease.", props: { text: "Ship at lightning speed" } })];
+    expect(validateStoryboard(board(s), facts).valid).toBe(true);
+    const strict = validateStoryboard(board(s), facts, { cliches: true });
+    expect(strict.issues.filter((i) => i.code === "cliche").map((i) => i.message).join(" ")).toMatch(/lightning speed.*with ease|with ease.*lightning speed/s);
+    expect(findCliches("A seamlessly integrated tool")).toEqual(["seamlessly"]);
+    expect(findCliches("Seams that hold")).toEqual([]);
+  });
+
+  it("flags a voiceover that reads the screen aloud in more than the allowed share of scenes", () => {
+    const echo = (id: string, text: string) => scene({ id, templateId: "BigStatement", onScreenText: [text], narration: `${text}.`, props: { text } });
+    const fresh = (id: string, text: string) => scene({ id, templateId: "BigStatement", onScreenText: [text], narration: "Here is the reason that matters to you.", props: { text } });
+    const mostlyEcho = board([echo("a", "Built for teams"), echo("b", "Offline mode"), fresh("c", "Version history")]);
+    expect(validateStoryboard(mostlyEcho, facts).valid).toBe(true);
+    const r = validateStoryboard(mostlyEcho, facts, { maxNarrationEcho: 1 / 3 });
+    expect(r.issues.find((i) => i.code === "narration_reads_titles")?.message).toContain("2 of 3");
+    const mostlyFresh = board([echo("a", "Built for teams"), fresh("b", "Offline mode"), fresh("c", "Version history")]);
+    expect(validateStoryboard(mostlyFresh, facts, { maxNarrationEcho: 1 / 3 }).valid).toBe(true);
+    expect(narrationEchoesScreen({ narration: "Built for teams!", onScreenText: ["Built for teams"], props: {} })).toBe(true);
   });
 });

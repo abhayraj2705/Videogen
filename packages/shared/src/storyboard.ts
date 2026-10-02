@@ -15,7 +15,7 @@ import { Tone } from "./job.js";
  * assets only by fact id / role, not by final URL.
  */
 
-/** Full 24-template catalog — must stay in lockstep with film-runtime's TEMPLATE_REGISTRY. */
+/** Full 25-template catalog — must stay in lockstep with film-runtime's TEMPLATE_REGISTRY. */
 export const TemplateId = z.enum([
   "KineticHook",
   "FeatureTriplet",
@@ -42,11 +42,12 @@ export const TemplateId = z.enum([
   "MetricsRow",
   "PhotoShowcase",
   "IsoStack",
+  "Composed",
 ]);
 export type TemplateId = z.infer<typeof TemplateId>;
 
 /** How a scene enters over the one before it — must stay in lockstep with film-runtime's TransitionKind. */
-export const SceneTransition = z.enum(["fade", "slide-left", "slide-up", "zoom", "cut", "push", "wipe", "whip"]);
+export const SceneTransition = z.enum(["fade", "slide-left", "slide-up", "zoom", "cut", "push", "wipe", "whip", "match"]);
 export type SceneTransition = z.infer<typeof SceneTransition>;
 
 export const StoryboardScene = z.object({
@@ -123,6 +124,9 @@ export const LlmSceneProps = z.object({
   names: z.array(z.string()).optional(),
   step: z.number().optional(),
   metrics: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+  blocks: z.array(z.object({ kind: z.string(), text: z.string().optional(), items: z.array(z.string()).optional(), value: z.string().optional(), label: z.string().optional() })).optional(),
+  align: z.string().optional(),
+  panel: z.string().optional(),
 });
 
 /** Drops the props a model left empty (null, "", []), so optional template props stay absent rather than blank. */

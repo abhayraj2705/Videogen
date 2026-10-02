@@ -52,6 +52,23 @@ export const SiteBrief = z.object({
 });
 export type SiteBrief = z.infer<typeof SiteBrief>;
 
+/**
+ * A short recording of the live page: frames captured while the crawler really scrolled it, so the
+ * site's own scroll effects and animations are in the picture. Frames are evenly spaced at `fps`;
+ * a key may repeat where the page did not change between two of them.
+ */
+export const PageClip = z.object({
+  frameKeys: z.array(z.string()).min(2),
+  fps: z.number().positive(),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+});
+export type PageClip = z.infer<typeof PageClip>;
+
+/** A logo found in a "trusted by" / integrations strip on the site, captured as an image. */
+export const SiteLogo = z.object({ name: z.string().min(1), key: z.string().min(1) });
+export type SiteLogo = z.infer<typeof SiteLogo>;
+
 export const CrawledPage = z.object({
   url: z.string().url(),
   /** Full-page (or first-viewport) screenshot. Empty string when the page came from the plain-fetch fallback. */
@@ -59,10 +76,20 @@ export const CrawledPage = z.object({
   /** Per-section screenshots (one per viewport-height slice, top to bottom). Additive, optional. */
   sectionScreenshotKeys: z.array(z.string()).optional(),
   /** Additive, optional: "upload" marks an image the user supplied (the url is then a #upload-N fragment of the job URL). */
-  origin: z.enum(["crawl", "upload"]).optional(),
+  /** "image" (also additive) is a picture lifted from the site itself: a product photo or an embedded product screenshot. */
+  origin: z.enum(["crawl", "upload", "image"]).optional(),
   /** Additive, optional: a human name for the page ("Dashboard overview"), shown to the planner. */
   label: z.string().optional(),
+  /** Additive, optional: the page recorded while scrolling (homepage only, when the crawl had time for it). */
+  clip: PageClip.optional(),
+  /** Additive, optional: logos captured from this page's customer / integration strip. */
+  logos: z.array(SiteLogo).optional(),
 });
+
+/** True for a page entry that is one picture (an upload or a site image), not a scrollable page. */
+export function isSingleImagePage(page: { origin?: string | undefined }): boolean {
+  return page.origin === "upload" || page.origin === "image";
+}
 export type CrawledPage = z.infer<typeof CrawledPage>;
 
 /** How the crawl material was obtained: a real browser, or the plain-HTTP fallback (no screenshots, no computed styles). */

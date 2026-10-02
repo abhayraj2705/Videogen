@@ -5,14 +5,42 @@ import type { LlmProvider } from "@sitereel/llm";
 import { validateStoryboard, visibleTextFor, type FactLedger, type Storyboard, type ValidationIssue } from "@sitereel/shared";
 import { editorialIssues, type EditorialIssue } from "../lib/editorial-qa.js";
 
-export type QaIssue = (ValidationIssue | FilmQaIssue | EditorialIssue) & { source: "grounding" | "probe" | "vision" | "editorial" };
+export interface VisionIssue {
+  code: "vision_below_bar";
+  severity: "error" | "warning";
+  message: string;
+}
+
+export type QaIssue = (ValidationIssue | FilmQaIssue | EditorialIssue | VisionIssue) & { source: "grounding" | "probe" | "vision" | "editorial" };
+
+export interface VisionRubric {
+  /** Can the text — on-screen copy AND the text inside product screenshots — be read at phone size? */
+  legibility: number;
+  /** Is the real product on screen, large enough to see what it is? */
+  product: number;
+  /** Does each frame use its space, with a clear focal point and no dead areas? */
+  composition: number;
+  /** Is the copy specific to this product, free of stock phrases, and not repeated between scenes? */
+  copy: number;
+}
 
 export interface VisionReview {
   status: "ok" | "skipped" | "failed";
-  /** 1-5 overall polish score, when a reviewer ran. */
+  /** 1-5: the mean of the rubric, when a reviewer ran. */
   score?: number;
+  rubric?: VisionRubric;
+  /** Things that are plainly wrong in a frame: a blank screen, an empty-state page, cut-off or overlapping text. */
+  defects?: string[];
+  /** False when the film misses the bar (see visionPasses). Absent when no reviewer ran. */
+  passed?: boolean;
   notes: string[];
   reviewer?: string;
+}
+
+/** The bar: no rubric score under 3, a mean of at least 3.5, and no defect a viewer would see. */
+export function visionPasses(rubric: VisionRubric, defects: string[]): boolean {
+  const scores = [rubric.legibility, rubric.product, rubric.composition, rubric.copy];
+  return defects.length === 0 && Math.min(...scores) >= 3 && scores.reduce((a, b) => a + b, 0) / scores.length >= 3.5;
 }
 
 /**
@@ -23,7 +51,8 @@ export interface VisionReview {
  */
 export type VisionReviewer = (input: { contactSheet: Buffer | null; manifest: FilmManifest; visibleText: { sceneId: string; visibleText: string }[]; issues: QaIssue[] }) => Promise<VisionReview>;
 
-const VisionSchema = z.object({ score: z.number().min(1).max(5), notes: z.array(z.string()).max(8) });
+const score = z.number().min(1).max(5);
+const VisionSchema = z.object({ legibility: score, product: score, composition: score, copy: score, defects: z.array(z.string()).max(6), notes: z.array(z.string()).max(6) });
 
 /**
  * Vision review through the packages/llm provider interface. Providers with
@@ -43,7 +72,13 @@ export function createLlmVisionReviewer(llm: LlmProvider): VisionReviewer {
       sawFrames
         ? "The attached image is the contact sheet: each scene's settled frame in order, then evenly spaced in-between frames. Judge what you see — composition, hierarchy, legibility, empty space, whether the screenshots read — not just the text below."
         : "",
-      "Score the video's polish 1-5 for a social-media product promo and list up to 5 concrete notes (copy, pacing, hierarchy, contrast).",
+      "Grade it as a strict reviewer who has to decide whether this goes out under the brand's name. Most machine-made promos earn 2s and 3s; a 5 means an agency would ship the frame unchanged. Score each 1-5:",
+      "- legibility: can a viewer on a phone read the on-screen copy AND the text inside the product screenshots? A screenshot shown so small its text is a grey blur is a 2.",
+      "- product: is the real product on screen, large enough to see what it is and does?",
+      "- composition: does each frame use its space, with a clear focal point? Frames that are mostly empty background score low.",
+      "- copy: is the wording specific to this product, free of stock ad phrases, and different from scene to scene?",
+      'Then "defects": things plainly wrong in a frame — a blank or mostly white screen inside a device or window, a page that says it is empty ("No results", "No templates found"), text cut off or overlapping, a logo wall of ordinary words. Name the scene. Empty list if none.',
+      'And "notes": up to 5 concrete changes that would raise the lowest score.',
     ]
       .filter(Boolean)
       .join("\n");
@@ -56,7 +91,10 @@ export function createLlmVisionReviewer(llm: LlmProvider): VisionReviewer {
         ...(sawFrames ? { images: [{ mimeType: "image/jpeg", base64: contactSheet!.toString("base64") }] } : {}),
       });
       const basis = sawFrames ? "Reviewed the rendered contact sheet." : `Reviewed a text description of the frames only (${llm.id} has no image input).`;
-      return { status: "ok", score: r.data.score, notes: [...r.data.notes, basis], reviewer: llm.id };
+      const { defects, notes, ...rubric } = r.data;
+      const mean = (rubric.legibility + rubric.product + rubric.composition + rubric.copy) / 4;
+      // Without the frames a reviewer cannot judge the picture: its scores are recorded but it cannot fail the film.
+      return { status: "ok", score: Math.round(mean * 10) / 10, rubric, defects, ...(sawFrames ? { passed: visionPasses(rubric, defects) } : {}), notes: [...notes, basis], reviewer: llm.id };
     } catch (err) {
       return { status: "failed", notes: [`vision review call failed: ${(err as Error).message}`], reviewer: llm.id };
     }
@@ -121,6 +159,18 @@ export async function runQaStage(opts: {
   const vision: VisionReview = opts.secondary
     ? { status: "skipped", notes: ["Vision review runs once per job, on the first format."] }
     : await (opts.vision ?? skippedVisionReviewer)({ contactSheet: probe.contactSheet, manifest, visibleText: probe.text, issues });
+
+  // A film the reviewer marks below the bar is flagged. It is a warning unless SITEREEL_VISION_GATE=block, which makes
+  // it a hard gate like the layout probes — only worth turning on with a vision model whose judgement you have checked.
+  if (vision.status === "ok" && vision.passed === false) {
+    const why = [...(vision.defects ?? []), ...(vision.rubric ? Object.entries(vision.rubric).filter(([, v]) => v < 3).map(([k, v]) => `${k} scored ${v}`) : [])];
+    issues.push({
+      code: "vision_below_bar",
+      severity: process.env.SITEREEL_VISION_GATE === "block" ? "error" : "warning",
+      message: `The visual review marked this film below the bar (${vision.score}/5)${why.length ? `: ${why.join("; ")}` : ""}`,
+      source: "vision",
+    });
+  }
 
   const blocking = issues.filter((i) => i.severity === "error");
   return {

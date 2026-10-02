@@ -1,9 +1,10 @@
 import { eq, desc } from "drizzle-orm";
 import { jobs, crawls, audioTakes, users } from "@sitereel/db";
-import type { CrawlOutput, Storyboard } from "@sitereel/shared";
+import { resolveMusicMood, type CrawlOutput, type Storyboard } from "@sitereel/shared";
 import type { VoiceSceneResult } from "../stages/voice.js";
 import { getAudioSidecarFromEnv, type AudioSidecarClient } from "../lib/audio-sidecar.js";
 import { selectMusicTrack, type MusicTrack } from "../lib/music.js";
+import { ensureGeneratedTrack } from "../lib/music-gen.js";
 import { getBrandKitForUser, getJobBrandKitId, getJobWatermarkSnapshot, loadStoryboardVersion } from "../lib/db-adapters.js";
 import { applyBrandKit } from "../lib/brand-kit.js";
 import { decideWatermark } from "../lib/job-policy.js";
@@ -73,6 +74,9 @@ export async function loadBuildInputs(deps: WorkerDeps, jobId: string, opts: { s
   const kit = brandKitId ? await getBrandKitForUser(deps.db, brandKitId, jobRow.userId) : null;
   const brand = applyBrandKit(crawlRow.brand, kit);
 
+  // A track generated for this job (MUSIC_SOURCE=generated) wins over the library; stored once, so every stage gets the same one.
+  const generated = await ensureGeneratedTrack({ jobId: jobRow.id, options: jobRow.options, storage: deps.storage, sidecar: sidecarFor(deps), log: (msg, extra) => deps.logger.warn(extra ?? {}, msg) });
+
   return {
     storyboard: storyboardRow.json,
     storyboardId: storyboardRow.id,
@@ -81,7 +85,7 @@ export async function loadBuildInputs(deps: WorkerDeps, jobId: string, opts: { s
     voiceScenes,
     jobOptions: jobRow.options,
     userPlan: userRow?.plan ?? "free",
-    music: selectMusicTrack(deps.repoRoot, { musicOn: jobRow.options.musicOn ?? true, musicMood: jobRow.options.musicMood ?? "upbeat", seed: jobRow.id }),
+    music: generated ?? selectMusicTrack(deps.repoRoot, { musicOn: jobRow.options.musicOn ?? true, musicMood: resolveMusicMood(jobRow.options), trackId: jobRow.options.musicTrackId, videoType: jobRow.options.videoType, seed: jobRow.id }),
     audioHashes,
     watermark: decideWatermark({ snapshot: getJobWatermarkSnapshot(jobRow), currentPlan: userRow?.plan ?? "free" }),
     brandKitId: kit ? kit.id : null,

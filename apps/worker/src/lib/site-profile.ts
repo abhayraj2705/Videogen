@@ -20,6 +20,8 @@ export interface SiteEvidence {
   features: number;
   /** Short name-like facts (1-3 words): integrations, customers, platforms — material for a wall of names. */
   names: number;
+  /** Logos captured from the site's customer / integration strip. */
+  logos: number;
   hasPricingPage: boolean;
   hasLogo: boolean;
 }
@@ -99,6 +101,7 @@ export function gatherEvidence(crawl: CrawlOutput): SiteEvidence {
     quotes: crawl.facts.filter((f) => f.kind === "testimonial" && isQuoteShaped(f.text.trim().split(/s+/).slice(0, 8).join(" "))).length,
     features: crawl.facts.filter((f) => f.kind === "feature").length,
     names: crawl.facts.filter((f) => (f.kind === "feature" || f.kind === "heading") && wordsOf(f.text) <= 3 && /^\p{Lu}/u.test(f.text) && !/\d/.test(f.text)).length,
+    logos: crawl.pages.reduce((n, p) => n + (p.logos?.length ?? 0), 0),
     hasPricingPage: crawl.pages.some((p) => /pricing|plans/i.test(p.url)),
     hasLogo: Boolean(crawl.brand.logoUrl),
   };
@@ -165,12 +168,13 @@ export function buildSiteProfile(crawl: CrawlOutput, videoType: VideoType = "lau
     rate("StatCounter", e.stats >= 1 ? null : "the site states no number that reads as a claim", e.stats === 1 ? "the site has one strong number" : null, "one number, counted up"),
     rate("MetricsRow", e.stats >= 2 ? null : "needs at least two numbers the site states", e.stats >= 2 ? `the site states ${plural(e.stats, "number")}` : null, "several numbers side by side"),
     rate("QuoteCard", e.quotes >= 1 ? null : "no testimonial that reads like a quote", e.quotes >= 1 ? `${plural(e.quotes, "quotable testimonial")} found` : null, "a customer quote"),
-    rate("LogoWall", e.names >= 3 ? null : "needs at least three short names (customers, integrations)", null, "a wall of names"),
+    rate("LogoWall", e.names >= 3 || e.logos >= 3 ? null : "needs at least three short names (customers, integrations)", e.logos >= 3 ? `${e.logos} logos captured from the site` : null, "a wall of names"),
     rate("FeatureTriplet", e.features >= 3 ? null : "needs three feature facts", e.features >= 6 ? `${e.features} features to choose three from` : null, "three features as cards"),
     rate("BentoGrid", e.features >= 3 ? null : "needs three feature facts", null, "one idea framing three points"),
     rate("ChecklistReveal", null, videoType === "walkthrough" ? "recaps the steps of a walkthrough" : null, "a short list, ticked off"),
     rate("SplitCompare", null, null, "before and after"),
     rate("BigStatement", null, null, "one line, poster-size"),
+    rate("Composed", null, null, "a scene designed for this film from blocks"),
     rate("KineticType", null, videoType === "teaser" ? "type-led openings suit a teaser" : null, "one line as a full-frame poster"),
     rate("HeroRebuild", null, hasShots ? null : "stands in for the product reveal when there is no screenshot", "the site's headline rebuilt large"),
     rate("LogoReveal", e.hasLogo ? null : "no logo was found on the site", null, "a short logo bumper"),

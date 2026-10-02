@@ -109,7 +109,47 @@ interface CutStyle {
  * "wipe" keep both at full strength and separate them in space instead;
  * "whip" smears both sideways; "cut" swaps them at the midpoint.
  */
-function cutStyle(kind: TransitionKind, role: "in" | "out", p: number, width: number, height: number, u: number): CutStyle {
+/** A rectangle in film pixels. */
+interface Box {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/**
+ * A match cut between two scenes that each show the product in a window: the
+ * outgoing scene is moved and scaled so its window travels onto the incoming
+ * one's, while the incoming scene starts with its window where the outgoing
+ * one was and settles into its own place. The eye follows one window through
+ * the cut instead of watching one layout replace another.
+ * Scene roots transform about the frame centre, so the move is solved for that origin.
+ */
+function matchStyle(role: "in" | "out", p: number, from: Box, to: Box, width: number, height: number): CutStyle {
+  const e = easeInOutCubic(p);
+  const cx = width / 2;
+  const cy = height / 2;
+  // The window this root draws, and where it should appear at this moment.
+  const own = role === "out" ? from : to;
+  const k = role === "out" ? e : 1 - e;
+  const other = role === "out" ? to : from;
+  const targetW = own.w + (other.w - own.w) * k;
+  const targetCx = own.x + own.w / 2 + (other.x + other.w / 2 - own.x - own.w / 2) * k;
+  const targetCy = own.y + own.h / 2 + (other.y + other.h / 2 - own.y - own.h / 2) * k;
+  const s = targetW / own.w;
+  const tx = targetCx - cx - s * (own.x + own.w / 2 - cx);
+  const ty = targetCy - cy - s * (own.y + own.h / 2 - cy);
+  const opacity = role === "out" ? 1 - clamp01((p - 0.35) / 0.4) : clamp01((p - 0.2) / 0.4);
+  const still = Math.abs(s - 1) < 0.0001 && Math.abs(tx) < 0.01 && Math.abs(ty) < 0.01;
+  return { opacity, transform: still ? "" : `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px) scale(${s.toFixed(5)})` };
+}
+
+function cutStyle(kind: TransitionKind, role: "in" | "out", p: number, width: number, height: number, u: number, match?: { from: Box; to: Box } | null): CutStyle {
+  if (kind === "match") {
+    if (match) return matchStyle(role, p, match.from, match.to, width, height);
+    // Nothing to match on (a scene without a window): it plays as a zoom.
+    kind = "zoom";
+  }
   if (kind === "cut") return { opacity: (role === "in") === p >= 0.5 ? 1 : 0, transform: "" };
   if (kind === "push") {
     const e = easeInOutQuart(p);
@@ -158,6 +198,8 @@ interface MountedScene {
   transition: TransitionKind;
   /** The word nodes to stress and when. */
   emphasis: { nodes: HTMLElement[]; at: number } | null;
+  /** Where the scene's window (browser frame, device screen) rests, in film pixels; null when it has none. */
+  hero: Box | null;
 }
 
 export interface PlayerHandle {
@@ -214,6 +256,9 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
       }
     }
     stage.appendChild(root);
+    const transitionIn = resolveTransition(style, sceneIndex, scene.transition);
+    // Read by browser frames and devices at seek time (util/ui.ts entersMatched): a matched scene skips its own entrance.
+    if (sceneIndex > 0 && transitionIn === "match" && (scene.transitionInSec ?? 0) > 0) root.dataset.matchIn = "1";
 
     const ctx: FilmContext = {
       palette,
@@ -237,6 +282,15 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
       const k = frame.width > 0 ? manifest.width / frame.width : 1;
       if (logo && box && box.width > 0) openingLogo.rect = { src: logo.src, x: (box.left - frame.left) * k, y: (box.top - frame.top) * k, w: box.width * k, h: box.height * k };
     }
+    // The scene's window, measured while it is laid out and before any entrance moves it: match cuts line these up.
+    let hero: Box | null = null;
+    const heroNode = root.querySelector<HTMLElement>("[data-hero]");
+    if (heroNode) {
+      const frame = stage.getBoundingClientRect();
+      const box = heroNode.getBoundingClientRect();
+      const k = frame.width > 0 ? manifest.width / frame.width : 1;
+      if (box.width > 0 && box.height > 0) hero = { x: (box.left - frame.left) * k, y: (box.top - frame.top) * k, w: box.width * k, h: box.height * k };
+    }
     // Remember the display mode the template chose (flex, grid, ...) so
     // showing the scene again restores it instead of falling back to block.
     const shownDisplay = root.style.display;
@@ -250,7 +304,7 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
     const stress = new Set((scene.emphasis?.words ?? []).flatMap((w) => w.split(/\s+/)).map(wordKey).filter(Boolean));
     const nodes = stress.size > 0 ? Array.from(root.querySelectorAll<HTMLElement>('[class$="-word"]')).filter((n) => stress.has(wordKey(n.textContent ?? ""))) : [];
     const emphasis = scene.emphasis && nodes.length > 0 ? { nodes, at: scene.emphasis.at } : null;
-    return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0, transition, emphasis };
+    return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0, transition, emphasis, hero };
   });
 
   // Continuity: once the opening scene ends, its logo doesn't vanish — it travels up into the top margin
@@ -367,12 +421,15 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
           if (c.clipPath) clipPath = c.clipPath;
           if (c.filter) filter = c.filter;
         };
+        const prev = mounted[i - 1];
         if (scene.transitionIn > 0 && localT < scene.transitionIn) {
-          apply(cutStyle(scene.transition, "in", clamp01(localT / scene.transitionIn), manifest.width, manifest.height, u));
+          const match = prev?.hero && scene.hero ? { from: prev.hero, to: scene.hero } : null;
+          apply(cutStyle(scene.transition, "in", clamp01(localT / scene.transitionIn), manifest.width, manifest.height, u, match));
         }
         const next = mounted[i + 1];
         if (next && next.transitionIn > 0 && t >= next.start) {
-          apply(cutStyle(next.transition, "out", clamp01((t - next.start) / next.transitionIn), manifest.width, manifest.height, u));
+          const match = scene.hero && next.hero ? { from: scene.hero, to: next.hero } : null;
+          apply(cutStyle(next.transition, "out", clamp01((t - next.start) / next.transitionIn), manifest.width, manifest.height, u, match));
         }
         // Camera: a slow push in (odd scenes pull out) across the whole scene. It only ever
         // shrinks the frame — never past 1x — so nothing drifts out of the title-safe area.

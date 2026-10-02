@@ -78,6 +78,9 @@ export function frameTime(frame: number, manifest: FilmManifest, bakePoster: boo
 
 export const totalFramesOf = (manifest: FilmManifest) => Math.round(manifest.duration * manifest.fps);
 
+/** Share of a frame's duration the shutter is open for motion blur: 0.5 is the 180-degree shutter film cameras use. */
+const SHUTTER = 0.5;
+
 /**
  * Single-process renderer (Phase 0 path, still used by the fixture CLI's
  * `--single` flag): one Chromium page, one ffmpeg process, frames in order.
@@ -190,6 +193,12 @@ export interface ChunkedRenderOptions {
    * keeps the lossless intermediate.
    */
   capture?: "jpeg" | "png";
+  /**
+   * Motion blur: captures per output frame, spread across a 180-degree shutter (half the frame's
+   * duration) and averaged. 1 = off (the default). 3-4 smooths fast moves — whip pans, pushes, the
+   * camera closing in on a region — at that many times the capture cost.
+   */
+  motionBlurSamples?: number;
   onProgress?: (framesDone: number, totalFrames: number) => void;
   log?: (msg: string) => void;
 }
@@ -218,7 +227,8 @@ export async function renderChunked(opts: ChunkedRenderOptions): Promise<Chunked
   const preset = opts.preset ?? "veryfast";
   const crf = opts.crf ?? 19;
   const capture = opts.capture ?? "jpeg";
-  const salt = JSON.stringify({ bakePoster, wm: opts.watermarkPng ? fs.readFileSync(opts.watermarkPng).length : 0, preset, crf, capture });
+  const blurSamples = Math.max(1, Math.min(8, Math.round(opts.motionBlurSamples ?? 1)));
+  const salt = JSON.stringify({ bakePoster, wm: opts.watermarkPng ? fs.readFileSync(opts.watermarkPng).length : 0, preset, crf, capture, ...(blurSamples > 1 ? { blurSamples } : {}) });
 
   const workDir = await fsp.mkdtemp(path.join(os.tmpdir(), "sitereel-chunks-"));
   const store = opts.chunkStore ?? createDirChunkStore(path.join(workDir, "store"));
@@ -248,13 +258,18 @@ export async function renderChunked(opts: ChunkedRenderOptions): Promise<Chunked
     }
 
     const page = await getPage();
-    const enc = spawnSegmentEncoder({ fps: manifest.fps, outPath: localPath, watermarkPng: opts.watermarkPng, preset, crf, capture });
+    const enc = spawnSegmentEncoder({ fps: manifest.fps, outPath: localPath, watermarkPng: opts.watermarkPng, preset, crf, capture, blurSamples });
     const exit = once(enc, "exit");
     try {
       for (let f = range.start; f < range.end; f++) {
-        await seekPage(page, frameTime(f, manifest, bakePoster));
-        const shot = await page.screenshot(capture === "png" ? { type: "png" } : { type: "jpeg", quality: 95 });
-        if (!enc.stdin!.write(shot)) await once(enc.stdin!, "drain");
+        const t = frameTime(f, manifest, bakePoster);
+        // The baked poster (frame 0) is a still: its samples are all the same moment.
+        const still = f === 0 && bakePoster && manifest.posterTime !== undefined;
+        for (let k = 0; k < blurSamples; k++) {
+          await seekPage(page, still ? t : t + (k / blurSamples) * (SHUTTER / manifest.fps));
+          const shot = await page.screenshot(capture === "png" ? { type: "png" } : { type: "jpeg", quality: 95 });
+          if (!enc.stdin!.write(shot)) await once(enc.stdin!, "drain");
+        }
         report(1);
       }
     } finally {

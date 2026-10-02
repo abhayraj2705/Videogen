@@ -23,7 +23,7 @@ export interface PreviewScene {
   end: number;
   props: Record<string, unknown>;
   transitionInSec?: number;
-  transition?: "fade" | "slide-left" | "slide-up" | "zoom" | "cut" | "push" | "wipe" | "whip";
+  transition?: "fade" | "slide-left" | "slide-up" | "zoom" | "cut" | "push" | "wipe" | "whip" | "match";
   audioStart?: number;
 }
 

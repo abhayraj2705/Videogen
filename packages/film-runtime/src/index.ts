@@ -7,6 +7,7 @@ export * from "./util/text-fit.js";
 export * from "./util/dom.js";
 export * from "./util/color.js";
 export * from "./util/layout.js";
+export type { ClipSource } from "./util/clip.js";
 export * from "./timing.js";
 export * from "./style.js";
 export type { KineticHookProps } from "./templates/kinetic-hook.js";
@@ -34,5 +35,6 @@ export type { Callout, FeatureCalloutsProps } from "./templates/feature-callouts
 export type { Metric, MetricsRowProps } from "./templates/metrics-row.js";
 export type { PhotoShowcaseProps } from "./templates/photo-showcase.js";
 export type { IsoStackProps } from "./templates/iso-stack.js";
+export type { ComposedBlock, ComposedProps } from "./templates/composed.js";
 export { cursorClickTimes } from "./templates/ui-flow-cursor.js";
 export { ICON_NAMES } from "./util/icons.js";

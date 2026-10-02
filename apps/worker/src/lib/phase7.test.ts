@@ -278,7 +278,8 @@ describe("chaos (Phase 7: a provider outage degrades the video, it never fails t
 
       const narrated = storyboard.scenes.filter((s) => s.narration);
       expect(narrated.length).toBeGreaterThan(0);
-      expect(warnings).toHaveLength(narrated.length);
+      // One warning for the one-take attempt, then one per line recorded on its own.
+      expect(warnings).toHaveLength(narrated.length + 1);
       for (const scene of voice.scenes.filter((s) => s.audioKey)) expect(scene.provider).toBe("fallback:silence");
 
       const manifest = buildFilmManifest({ storyboard, crawlOutput: crawl, voiceScenes: voice.scenes, format: "9:16" });

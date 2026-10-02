@@ -2,16 +2,20 @@ import type { FilmContext, Mark, SceneTemplate } from "../contract.js";
 import { clamp01, easeInOutCubic, spring } from "../util/easing.js";
 import { el, setStyle } from "../util/dom.js";
 import { layoutFor } from "../util/layout.js";
-import { sceneRoot, textBlock, wordsIn, wordsSettle } from "../util/ui.js";
+import { entersMatched, sceneRoot, textBlock, wordsIn, wordsSettle } from "../util/ui.js";
+import { clipLayer, type ClipLayer, type ClipSource } from "../util/clip.js";
 
 export interface DeviceMockupProps {
   /** Full-page capture of the site (R2 URL by render time). Added by Build. */
   screenshotUrl: string;
   /** Grounded caption tied to a fact id. */
   caption: string;
+  /** A recording of the page being scrolled; plays on the screen instead of a pan over the still. Added by Build. */
+  clip?: ClipSource;
 }
 
 interface Instance {
+  recording: ClipLayer | null;
   device: HTMLElement;
   image: HTMLImageElement;
   screenWidth: number;
@@ -90,6 +94,13 @@ export function createDeviceMockup(): SceneTemplate<DeviceMockupProps> {
       image.src = props.screenshotUrl;
       setStyle(image, { display: "block", width: `${imageWidth}px`, maxWidth: "none", height: "auto" });
       screen.appendChild(image);
+      // The recording is laid out like the still: full width on the laptop, the left part enlarged on the phone.
+      let recording: ClipLayer | null = null;
+      if (props.clip && props.clip.frames.length > 1) {
+        recording = clipLayer(props.clip, "dm-clip", laptop ? { width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" } : { width: `${imageWidth}px`, maxWidth: "none", height: "auto" });
+        screen.appendChild(recording.node);
+      }
+      screen.dataset.hero = "1";
       if (!laptop) {
         const island = el("div", "dm-island");
         setStyle(island, { position: "absolute", left: "50%", top: `${12 * u}px`, width: `${screenWidth * 0.3}px`, height: `${24 * u}px`, marginLeft: `${-screenWidth * 0.15}px`, borderRadius: `${12 * u}px`, background: shell });
@@ -105,24 +116,29 @@ export function createDeviceMockup(): SceneTemplate<DeviceMockupProps> {
 
       root.appendChild(device);
       root.appendChild(caption.wrap);
-      instance = { device, image, screenWidth, screenHeight, imageWidth, words: caption.words, durationSec: ctx.durationSec, u };
+      instance = { recording, device, image, screenWidth, screenHeight, imageWidth, words: caption.words, durationSec: ctx.durationSec, u };
     },
 
     seek(localT) {
       if (!instance) return;
       const { device, image, screenHeight, imageWidth, durationSec, u } = instance;
       // Entrance swings the device up; after that it keeps turning slowly, so it never rests flat.
-      const lin = clamp01(localT / DEVICE_ENTER);
+      const lin = entersMatched(device) ? 1 : clamp01(localT / DEVICE_ENTER);
       const inv = 1 - spring(lin, 0.82, 1);
       const turn = -7 + 14 * clamp01(localT / Math.max(0.001, durationSec));
       device.style.opacity = String(clamp01(lin * 2.4));
       device.style.transform = `perspective(${1800 * u}px) translateY(${(90 * u * inv).toFixed(2)}px) rotateX(${(4 + 14 * inv).toFixed(3)}deg) rotateY(${(turn - 16 * inv).toFixed(3)}deg) scale(${(1 - 0.1 * inv).toFixed(4)})`;
 
       // naturalWidth is known by the time the player signals ready (it awaits every image's decode()).
-      const pageHeight = image.naturalWidth > 0 ? (imageWidth * image.naturalHeight) / image.naturalWidth : screenHeight;
-      const travel = Math.min(Math.max(0, pageHeight - screenHeight), screenHeight * 0.8);
-      const offset = travel * easeInOutCubic(clamp01((localT - 1.1) / Math.max(0.8, durationSec - 1.6)));
-      image.style.transform = offset < 0.005 ? "none" : `translateY(${(-offset).toFixed(2)}px)`;
+      if (instance.recording) {
+        // The site itself scrolls on the screen: the recording plays once the device has swung up.
+        instance.recording.play(clamp01((localT - 0.8) / Math.max(0.8, durationSec - 1.2)));
+      } else {
+        const pageHeight = image.naturalWidth > 0 ? (imageWidth * image.naturalHeight) / image.naturalWidth : screenHeight;
+        const travel = Math.min(Math.max(0, pageHeight - screenHeight), screenHeight * 0.8);
+        const offset = travel * easeInOutCubic(clamp01((localT - 1.1) / Math.max(0.8, durationSec - 1.6)));
+        image.style.transform = offset < 0.005 ? "none" : `translateY(${(-offset).toFixed(2)}px)`;
+      }
 
       wordsIn(instance.words, localT, CAPTION_START, WORD_EACH, WORD_DUR);
     },

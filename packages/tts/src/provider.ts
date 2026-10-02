@@ -20,6 +20,11 @@ export interface SynthesizeOptions {
   text: string;
   voiceId: string;
   language: "en" | "hi";
+  /**
+   * The lines of a whole voiceover, to be read as ONE continuous take with a pause between them
+   * (`text` is then the same lines joined, for caching and cost). See take.ts.
+   */
+  paragraphs?: string[];
 }
 
 /**

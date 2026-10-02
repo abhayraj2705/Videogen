@@ -4,10 +4,9 @@ import fsp from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
-import { CrawlOutput, JobOptions, Storyboard, ffprobe, formatSlug, runFfmpegQuiet, userUploadPrefix, validateStoryboard, type AspectFormat, type JobMedia } from "@sitereel/shared";
+import { CrawlOutput, JobOptions, Storyboard, resolveMusicMood, ffprobe, formatSlug, runFfmpegQuiet, userUploadPrefix, validateStoryboard, type AspectFormat, type JobMedia } from "@sitereel/shared";
 import { createLocalStorageClient, type StorageClient } from "@sitereel/storage";
-import { selectLlmProviders, type LlmEnv } from "../lib/llm-providers.js";
-import { createGeminiTtsProvider } from "@sitereel/tts";
+import { scriptProviders, selectLlmProviders, selectTtsProvider, type LlmEnv } from "../lib/llm-providers.js";
 import { parseColor, type FilmManifest } from "@sitereel/film-runtime";
 import { bundleFilmEntry, startFilmServer } from "@sitereel/renderer";
 import { runCrawlStage } from "../stages/crawl.js";
@@ -20,6 +19,7 @@ import { assembleNarrationTrack, mixFinalAudio } from "../lib/audio-mix.js";
 import { buildVtt } from "../lib/vtt.js";
 import { getAudioSidecarFromEnv } from "../lib/audio-sidecar.js";
 import { selectMusicTrack } from "../lib/music.js";
+import { ensureGeneratedTrack } from "../lib/music-gen.js";
 import { ingestUserMedia } from "../lib/media-intake.js";
 import { buildSiteProfile, profileSummary } from "../lib/site-profile.js";
 import { screenshotPageUrls } from "../lib/storyboard-fallback.js";
@@ -125,7 +125,7 @@ async function main() {
   await fsp.mkdir(outDir, { recursive: true });
 
   const formats = (flag(rest, "formats") ?? "16:9,9:16,1:1").split(",") as AspectFormat[];
-  const music = flag(rest, "music") ?? "upbeat";
+  const music = flag(rest, "music") ?? "auto";
   const options = JobOptions.parse({
     formats,
     lengthSec: Number(flag(rest, "length") ?? 20),
@@ -135,8 +135,9 @@ async function main() {
     voiceId: "default",
     noVoiceover: rest.includes("--no-voice"),
     musicOn: music !== "off",
-    musicMood: music === "off" ? "upbeat" : music,
+    musicMood: music === "off" ? "auto" : music,
     reviewBeforeRender: false,
+    ...(flag(rest, "fps") === "60" ? { fps: 60 } : {}),
   });
   // --media DIR: every image in the folder (name order) becomes an upload; the file name is its caption.
   const mediaDir = flag(rest, "media");
@@ -175,7 +176,7 @@ async function main() {
   const env = { STORAGE_DRIVER: "local" as const, STORAGE_LOCAL_DIR: storageDir };
   const { primary: gemini, escalation: anthropic } = selectLlmProviders(process.env as LlmEnv);
   if (gemini) console.log(`  LLM: ${gemini.id}${anthropic ? ` (escalation: ${anthropic.id})` : ""}`);
-  const tts = process.env.GEMINI_API_KEY ? createGeminiTtsProvider({ apiKey: process.env.GEMINI_API_KEY, model: process.env.GEMINI_TTS_MODEL || undefined }) : null;
+  const tts = selectTtsProvider(process.env);
   const sidecar = getAudioSidecarFromEnv((m) => console.warn(`  [sidecar] ${m}`));
   const jobId = cache.jobId;
   const timings: Record<string, number> = {};
@@ -226,7 +227,7 @@ async function main() {
   console.log(`  ruled out: ${profile.ruledOut.map((f) => f.template).join(", ") || "(nothing)"}`);
 
   // 2. Plan — or the edited storyboard (W6 editor save), which replaces it.
-  const planHash = sha16(["plan-v2", crawl, options.videoType, options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, gemini?.id ?? null, anthropic?.id ?? null]);
+  const planHash = sha16(["plan-v3", crawl, options.videoType, options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, gemini?.id ?? null, anthropic?.id ?? null]);
   const plannedPath = path.join(outDir, "storyboard.planned.json");
   let storyboard: Storyboard;
   if (editPath) {
@@ -239,8 +240,13 @@ async function main() {
     storyboard = Storyboard.parse(JSON.parse(await fsp.readFile(plannedPath, "utf8")));
     note("plan", "skipped", "inputs unchanged — reused storyboard.planned.json");
   } else {
-    const planned = await t("plan", () => runPlanStage(crawl, options, { primaryProvider: gemini, escalationProvider: anthropic }));
+    const planned = await t("plan", () => runPlanStage(crawl, options, { primaryProvider: gemini, escalationProvider: anthropic, ...scriptProviders({ primary: gemini, escalation: anthropic }) }));
     storyboard = planned.storyboard;
+    if (planned.script) {
+      await fsp.writeFile(path.join(outDir, "script.json"), JSON.stringify({ ...planned.script, calls: planned.scriptCalls }, null, 2));
+      const c = planned.script.critique;
+      console.log(`  script: ${planned.script.lines.length} lines${planned.script.rewritten ? " (rewritten once)" : ""}${c ? `, editor scores hook ${c.hook} specificity ${c.specificity} arc ${c.arc} spoken ${c.spoken}` : ""}`);
+    }
     await fsp.writeFile(plannedPath, JSON.stringify(storyboard, null, 2));
     cache.plan = { hash: planHash };
     note("plan", "ran");
@@ -263,7 +269,7 @@ async function main() {
   await saveCache();
 
   // 4. Build — skip when storyboard content, audio, brand, music and formats are unchanged.
-  const track = selectMusicTrack(REPO_ROOT, { ...options, seed: flag(rest, "track") ?? jobId });
+  const track = (await ensureGeneratedTrack({ jobId, options, storage, sidecar, log: (m) => console.warn(`  [music] ${m}`) })) ?? selectMusicTrack(REPO_ROOT, { musicOn: options.musicOn, musicMood: resolveMusicMood(options), videoType: options.videoType, trackId: flag(rest, "track-id"), seed: flag(rest, "track") ?? jobId });
   const audioHashes = Object.fromEntries(voice.scenes.map((s) => [s.sceneId, `${sceneHashes.get(s.sceneId)}:${s.audioKey ?? ""}`]));
   const buildHash = buildStageHash({ storyboard, audioHashes, brand: crawl.brand, musicId: track?.id ?? null, formats });
   const manifests = new Map<AspectFormat, FilmManifest>();
@@ -274,7 +280,7 @@ async function main() {
   } else {
     await t("build", async () => {
       for (const f of formats) {
-        const m = buildFilmManifest({ storyboard, crawlOutput: crawl, voiceScenes: voice.scenes, format: f, music: track });
+        const m = buildFilmManifest({ storyboard, crawlOutput: crawl, voiceScenes: voice.scenes, format: f, music: track, fps: options.fps });
         manifests.set(f, m);
         await fsp.writeFile(path.join(outDir, `manifest-${formatSlug(f)}.json`), JSON.stringify(m, null, 2));
       }
@@ -297,7 +303,7 @@ async function main() {
     const mix = await t("mix", async () => {
       if (!voice.scenes.some((v) => v.audioKey) && !track) return null;
       const narration = await assembleNarrationTrack({ manifest: baseManifest, voiceScenes: voice.scenes, storage, repoRoot: REPO_ROOT, sfx: Boolean(track) });
-      return mixFinalAudio({ narration, music: track, durationSec: baseManifest.duration, sidecar, repoRoot: REPO_ROOT });
+      return mixFinalAudio({ narration, music: track, durationSec: baseManifest.duration, sidecar, repoRoot: REPO_ROOT, musicOffsetSec: baseManifest.musicOffsetSec });
     });
     if (mix) {
       await fsp.writeFile(audioPath, mix.audio);
@@ -332,7 +338,7 @@ async function main() {
         Promise.all(
           qaTodo.map(async (format) => {
             const { resolved, manifestUrl } = await publishManifest({ manifest: manifests.get(format)!, storage, env, serverUrl: server.url, key: `jobs/${jobId}/qa/manifest-${formatSlug(format)}.json` });
-            const llm = gemini ?? anthropic;
+            const llm = anthropic?.supportsImages ? anthropic : (gemini ?? anthropic);
             return runQaStage({
               manifest: resolved,
               filmHost: server.url,
@@ -424,7 +430,7 @@ async function main() {
     durationSec: baseManifest.duration,
     beatLocked: Boolean(track),
     music: track?.id ?? null,
-    voice: { providerIds: [...new Set(voice.scenes.map((s) => s.provider))], cacheHits: voice.cacheHits, aligned: voice.aligned, synthesized: voice.synthesized, reused: voice.reused },
+    voice: { oneTake: voice.oneTake, providerIds: [...new Set(voice.scenes.map((s) => s.provider))], cacheHits: voice.cacheHits, aligned: voice.aligned, synthesized: voice.synthesized, reused: voice.reused },
     audio: mixInfo,
     stageReuse: reuseLog,
     timingsMs: timings,

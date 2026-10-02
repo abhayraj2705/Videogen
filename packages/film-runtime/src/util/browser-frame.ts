@@ -1,6 +1,8 @@
 import type { FilmContext } from "../contract.js";
 import { clamp01, easeInOutCubic, easeInOutQuart, spring } from "./easing.js";
 import { el, setStyle } from "./dom.js";
+import { entersMatched } from "./ui.js";
+import { clipLayer, type ClipLayer, type ClipSource } from "./clip.js";
 
 /** A region of the captured page, in fractions of the page width (see FactRect in @sitereel/shared). */
 export interface PageRect {
@@ -40,6 +42,11 @@ export interface BrowserFrame {
    * on the captured image — fall back to scroll().
    */
   tour(rects: PageRect[], t: number, durationSec: number): boolean;
+  /**
+   * Plays the page's recording in the window (p in [0, 1] of the recording) in place of the still
+   * screenshot. Returns false (and does nothing) when the frame was built without a clip.
+   */
+  play(p: number): boolean;
 }
 
 /**
@@ -48,7 +55,7 @@ export interface BrowserFrame {
  * screenshot is laid out at full width and natural height, so scrolling
  * reveals the real page below the fold instead of a static crop.
  */
-export function browserFrame(opts: { className: string; width: number; height: number; screenshotUrl: string; pageLabel?: string; ctx: FilmContext; u: number }): BrowserFrame {
+export function browserFrame(opts: { className: string; width: number; height: number; screenshotUrl: string; pageLabel?: string; clip?: ClipSource; ctx: FilmContext; u: number }): BrowserFrame {
   const { ctx, u, width, height } = opts;
   const barHeight = Math.round(46 * u);
   const viewportHeight = height - barHeight;
@@ -113,7 +120,15 @@ export function browserFrame(opts: { className: string; width: number; height: n
   setStyle(pageLayer, { position: "relative", width: "100%", minHeight: "100%" });
   pageLayer.appendChild(image);
   viewport.appendChild(pageLayer);
+  // The recording, when there is one, plays over the still page (which stays underneath as its first frame's stand-in).
+  let recording: ClipLayer | null = null;
+  if (opts.clip && opts.clip.frames.length > 1) {
+    recording = clipLayer(opts.clip, `${opts.className}-clip`, { width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" });
+    viewport.appendChild(recording.node);
+  }
   wrap.appendChild(viewport);
+  // The window is the scene's "hero": a match cut lines it up with the next scene's (see player.ts).
+  wrap.dataset.hero = "1";
 
   interface Pose {
     scale: number;
@@ -166,7 +181,8 @@ export function browserFrame(opts: { className: string; width: number; height: n
     viewportWidth: width,
     viewportHeight,
     enter(t, start, dur) {
-      const lin = clamp01((t - start) / dur);
+      // Carried in by a match cut: the window is already in place.
+      const lin = entersMatched(wrap) ? 1 : clamp01((t - start) / dur);
       const inv = 1 - spring(lin, 0.8, 1);
       wrap.style.opacity = String(clamp01(lin * 2.4));
       wrap.style.transform = lin >= 1 ? "none" : `perspective(${1800 * u}px) translateY(${(60 * u * inv).toFixed(2)}px) rotateX(${(16 * inv).toFixed(3)}deg) scale(${(1 - 0.1 * inv).toFixed(4)})`;
@@ -194,6 +210,11 @@ export function browserFrame(opts: { className: string; width: number; height: n
       pageLayer.style.transformOrigin = "0 0";
       pageLayer.style.transform = e < 0.0001 ? "none" : `translate(${(pose.tx * e).toFixed(2)}px, ${(pose.ty * e).toFixed(2)}px) scale(${scale.toFixed(4)})`;
       pose.highlight.style.opacity = String(clamp01(ring));
+      return true;
+    },
+    play(p) {
+      if (!recording) return false;
+      recording.play(clamp01(p));
       return true;
     },
     tour(rects, t, durationSec) {

@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CheckCircle2, Loader2, AlertTriangle, Coins } from "lucide-react";
-import type { AspectFormat, JobOptions, Tone, VideoType } from "@sitereel/shared";
+import type { AspectFormat, JobOptions, MusicMood, Tone, VideoType } from "@sitereel/shared";
 import { previewUrl } from "@/lib/api/client";
 import { classifyCreateJobError, createJobChecked, getCreditBalance, type CreateJobBlock } from "@/lib/api/jobs";
 import { Button } from "@/components/ui/button";
@@ -66,6 +66,9 @@ const TONE_OPTIONS: { value: Tone; label: string; description: string }[] = [
   { value: "app-store", label: "App Store", description: "Device-led" },
 ];
 
+/** Kept in step with MUSIC_MOODS in @sitereel/shared (imported as a type only: the package index pulls in server code). */
+const MUSIC_MOODS: MusicMood[] = ["upbeat", "energetic", "calm", "cinematic"];
+
 function Section({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
   return (
     <Card>
@@ -102,7 +105,9 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
   const [voiceId, setVoiceId] = useState("default");
   const [noVoiceover, setNoVoiceover] = useState(false);
   const [musicOn, setMusicOn] = useState(true);
+  const [musicMood, setMusicMood] = useState("auto");
   const [reviewBeforeRender, setReviewBeforeRender] = useState(true);
+  const [smoothMotion, setSmoothMotion] = useState(false);
   const [focusPage, setFocusPage] = useState("");
   const [consent, setConsent] = useState(false);
   const [block, setBlock] = useState<CreateJobBlock | null>(null);
@@ -138,8 +143,9 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
         voiceId,
         noVoiceover,
         musicOn,
-        musicMood: "upbeat",
+        musicMood,
         reviewBeforeRender,
+        ...(smoothMotion ? { fps: 60 as const } : {}),
         ...(focusPage.trim() ? { focusPage: focusPage.trim() } : {}),
         ...(brandKitId ? { brandKitId } : {}),
         ...(media.some((m) => m.key) ? { media: media.filter((m) => m.key).map((m) => ({ key: m.key, role: "screen" as const, ...(m.caption.trim() ? { caption: m.caption.trim() } : {}) })) } : {}),
@@ -287,6 +293,21 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
             Background music
           </Label>
         </div>
+        {musicOn && (
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="music-mood">Music mood</Label>
+            <div className="max-w-48">
+              <Select id="music-mood" value={musicMood} onChange={(e) => setMusicMood(e.target.value)}>
+                <option value="auto">Match the tone</option>
+                {MUSIC_MOODS.map((m) => (
+                  <option key={m} value={m}>
+                    {m[0]!.toUpperCase() + m.slice(1)}
+                  </option>
+                ))}
+              </Select>
+            </div>
+          </div>
+        )}
       </Section>
 
       <Section n={5} title="Brand">
@@ -302,6 +323,12 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
                 <Switch id="review-first" checked={reviewBeforeRender} onCheckedChange={setReviewBeforeRender} />
                 <Label htmlFor="review-first" className="font-normal">
                   Review the script before rendering
+                </Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Switch id="smooth-motion" checked={smoothMotion} onCheckedChange={setSmoothMotion} />
+                <Label htmlFor="smooth-motion" className="font-normal">
+                  Smooth motion (60 fps; takes about twice as long to render)
                 </Label>
               </div>
               <div className="flex flex-col gap-2">

@@ -190,12 +190,80 @@ describe("runPlanStage with LLM providers", () => {
       id: "fake:ok",
       async generateJson() {
         const { source: _s, version: _v, ...data } = fb;
-        return { data: data as never, costUsd: 0.002, inputTokens: 1, outputTokens: 1, attempts: 1, provider: "fake", latencyMs: 1 };
+        // A voice that says something the screen doesn't: a draft that only reads its titles aloud is sent back (next test).
+        const scenes = data.scenes.map((sc, i) => ({ ...sc, narration: `Here is why this matters, part ${"abcdefgh"[i]}.` }));
+        return { data: { ...data, scenes } as never, costUsd: 0.002, inputTokens: 1, outputTokens: 1, attempts: 1, provider: "fake", latencyMs: 1 };
       },
     };
     const r = await runPlanStage(crawl, BASE, { primaryProvider: primary, escalationProvider: null });
     expect(r.storyboard.source).toBe("llm");
     expect(r.validation.valid).toBe(true);
     expect(r.costUsd).toBeCloseTo(0.002, 10);
+  });
+
+  it("sends a draft whose voice only reads the screen back once, then keeps it rather than fall back", async () => {
+    const fb = buildFallbackStoryboard(crawl, BASE);
+    const prompts: string[] = [];
+    const primary: LlmProvider = {
+      id: "fake:echo",
+      async generateJson(opts) {
+        prompts.push(opts.prompt);
+        const { source: _s, version: _v, ...data } = fb;
+        const scenes = data.scenes.map((sc) => ({ ...sc, narration: sc.onScreenText.join(". ") }));
+        return { data: { ...data, scenes } as never, costUsd: 0.002, inputTokens: 1, outputTokens: 1, attempts: 1, provider: "fake", latencyMs: 1 };
+      },
+    };
+    const r = await runPlanStage(crawl, BASE, { primaryProvider: primary, escalationProvider: null });
+    expect(r.attempts).toBe(2);
+    expect(prompts[1]).toContain("[narration_reads_titles]");
+    expect(r.storyboard.source).toBe("llm");
+    expect(r.validation.valid).toBe(true);
+  });
+
+  it("cuts the storyboard to a script when a script provider is given, and counts its cost", async () => {
+    const fb = buildFallbackStoryboard(crawl, BASE);
+    const fact = crawl.facts[0]!;
+    const seen: string[] = [];
+    const writer: LlmProvider = {
+      id: "fake:writer",
+      async generateJson(opts) {
+        seen.push(opts.schemaName ?? "");
+        const usage = { costUsd: 0.01, inputTokens: 1, outputTokens: 1, attempts: 1, provider: "fake", latencyMs: 1 };
+        if (opts.schemaName === "film_strategy") {
+          return { data: { audience: "founders", pain: "slow launches", promise: "ship sooner", proofs: [{ factId: fact.id, why: "it is the headline" }], hooks: ["Launching takes too long"], cta: "Try it" } as never, ...usage };
+        }
+        if (opts.schemaName === "film_voiceover") {
+          return { data: { hookIndex: 0, lines: [{ line: "Launching takes too long.", factIds: [] }, { line: "This is the fix for that.", factIds: [fact.id] }, { line: "Try it now.", factIds: [] }] } as never, ...usage };
+        }
+        if (opts.schemaName === "script_critique") return { data: { hook: 4, specificity: 4, arc: 4, spoken: 4, notes: [] } as never, ...usage };
+        const { source: _s, version: _v, ...data } = fb;
+        const scenes = data.scenes.map((sc, i) => ({ ...sc, narration: `Here is why this matters, part ${"abcdefgh"[i]}.` }));
+        return { data: { ...data, scenes } as never, ...usage };
+      },
+    };
+    const r = await runPlanStage(crawl, BASE, { primaryProvider: writer, escalationProvider: null, scriptProvider: writer });
+    expect(seen).toEqual(["film_strategy", "film_voiceover", "script_critique", "storyboard"]);
+    expect(r.script?.lines).toHaveLength(3);
+    expect(r.script?.rewritten).toBe(false);
+    expect(r.scriptCalls).toHaveLength(3);
+    expect(r.costUsd).toBeCloseTo(0.04, 10);
+    expect(r.storyboard.source).toBe("llm");
+  });
+
+  it("plans without a script when the script calls fail", async () => {
+    const fb = buildFallbackStoryboard(crawl, BASE);
+    const flaky: LlmProvider = {
+      id: "fake:flaky",
+      async generateJson(opts) {
+        if (opts.schemaName !== "storyboard") throw new LlmCallError("boom", "fake", { costUsd: 0.001, inputTokens: 1, outputTokens: 1, attempts: 1 });
+        const { source: _s, version: _v, ...data } = fb;
+        const scenes = data.scenes.map((sc, i) => ({ ...sc, narration: `Here is why this matters, part ${"abcdefgh"[i]}.` }));
+        return { data: { ...data, scenes } as never, costUsd: 0.002, inputTokens: 1, outputTokens: 1, attempts: 1, provider: "fake", latencyMs: 1 };
+      },
+    };
+    const r = await runPlanStage(crawl, BASE, { primaryProvider: flaky, escalationProvider: null, scriptProvider: flaky });
+    expect(r.script).toBeNull();
+    expect(r.storyboard.source).toBe("llm");
+    expect(r.costUsd).toBeCloseTo(0.003, 10);
   });
 });

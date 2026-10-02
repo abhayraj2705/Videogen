@@ -26,6 +26,7 @@ export const TEMPLATE_IDS: TemplateId[] = [
   "MetricsRow",
   "PhotoShowcase",
   "IsoStack",
+  "Composed",
 ];
 
 const LABELS: Record<string, string> = {
@@ -53,14 +54,16 @@ const LABELS: Record<string, string> = {
   MetricsRow: "Metrics",
   PhotoShowcase: "Full-frame image",
   IsoStack: "3D stack",
+  Composed: "Composed scene",
 };
 
 /** Mirror of shared's SceneTransition enum, with the words an editor would use. */
-export const SCENE_TRANSITIONS: { value: "cut" | "push" | "wipe" | "whip" | "zoom" | "fade" | "slide-left" | "slide-up"; label: string }[] = [
+export const SCENE_TRANSITIONS: { value: "cut" | "push" | "wipe" | "whip" | "zoom" | "fade" | "slide-left" | "slide-up" | "match"; label: string }[] = [
   { value: "cut", label: "Hard cut" },
   { value: "push", label: "Push" },
   { value: "wipe", label: "Wipe" },
   { value: "whip", label: "Whip pan" },
+  { value: "match", label: "Match cut (window to window)" },
   { value: "zoom", label: "Zoom through" },
   { value: "fade", label: "Dissolve" },
   { value: "slide-left", label: "Slide left" },

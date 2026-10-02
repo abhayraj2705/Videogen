@@ -15,13 +15,27 @@ export interface SiteBriefResult {
   costUsd: number;
 }
 
+/**
+ * A product name from the domain alone: the registrable label, not a subdomain ("ui.aceternity.com" is
+ * Aceternity, not "ui"; "shop.example.co.uk" is Example), with a capital.
+ */
+export function nameFromDomain(domain: string): string {
+  const parts = domain.replace(/^www\./, "").split(".").filter(Boolean);
+  if (parts.length === 0) return domain;
+  const secondLevel = new Set(["co", "com", "org", "net", "gov", "ac", "edu"]);
+  let at = Math.max(0, parts.length - 2);
+  if (parts.length >= 3 && secondLevel.has(parts[at]!)) at -= 1;
+  const label = parts[at]!;
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
 function buildFallbackBrief(domain: string, facts: FactLedger): SiteBrief {
   const hero = facts.find((f) => f.kind === "hero");
   const feature = facts.find((f) => f.kind === "feature");
   const stat = facts.find((f) => f.kind === "stat");
 
   return {
-    productName: domain.replace(/^www\./, "").split(".")[0] ?? domain,
+    productName: nameFromDomain(domain),
     summary: hero?.text ?? `${domain} — see the site for details.`,
     audience: "general",
     differentiator: feature?.text ?? hero?.text ?? "See site for details.",

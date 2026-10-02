@@ -23,10 +23,11 @@ import { createFeatureCallouts } from "./templates/feature-callouts.js";
 import { createMetricsRow } from "./templates/metrics-row.js";
 import { createPhotoShowcase } from "./templates/photo-showcase.js";
 import { createIsoStack } from "./templates/iso-stack.js";
+import { createComposed } from "./templates/composed.js";
 
 export type TemplateFactory = () => SceneTemplate<any>;
 
-/** Full 24-template catalog — must stay in lockstep with shared's TemplateId enum. */
+/** Full 25-template catalog — must stay in lockstep with shared's TemplateId enum. */
 export const TEMPLATE_REGISTRY: Record<string, TemplateFactory> = {
   KineticHook: createKineticHook,
   FeatureTriplet: createFeatureTriplet,
@@ -52,6 +53,7 @@ export const TEMPLATE_REGISTRY: Record<string, TemplateFactory> = {
   MetricsRow: createMetricsRow,
   PhotoShowcase: createPhotoShowcase,
   IsoStack: createIsoStack,
+  Composed: createComposed,
 };
 
 /**

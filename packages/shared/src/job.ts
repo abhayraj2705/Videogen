@@ -74,6 +74,19 @@ export function userUploadPrefix(userId: string): string {
   return `users/${userId}/uploads/`;
 }
 
+/** Music moods the bundled library is tagged with. */
+export const MUSIC_MOODS = ["upbeat", "energetic", "calm", "cinematic"] as const;
+export type MusicMood = (typeof MUSIC_MOODS)[number];
+
+/** The mood that suits each tone, used when the job asks for "auto". */
+const TONE_MOOD: Record<Tone, MusicMood> = { clean: "upbeat", playful: "energetic", cinematic: "cinematic", "app-store": "upbeat" };
+
+/** The mood to pick music by: the job's own choice, or the one its tone implies when it says "auto". */
+export function resolveMusicMood(options: { musicMood?: string | undefined; tone: Tone }): string {
+  const mood = (options.musicMood ?? "auto").toLowerCase();
+  return mood === "auto" ? TONE_MOOD[options.tone] : mood;
+}
+
 /** §3.6 W4 "Create video" form. */
 export const JobOptions = z.object({
   formats: z.array(AspectFormat).min(1).max(3),
@@ -88,7 +101,12 @@ export const JobOptions = z.object({
   voiceId: z.string().default("default"),
   noVoiceover: z.boolean().default(false),
   musicOn: z.boolean().default(true),
+  /** A mood from MUSIC_MOODS, or "auto" to take the one the tone implies (resolveMusicMood). */
   musicMood: z.string().default("upbeat"),
+  /** Additive, optional: 60 renders at twice the frame rate for smoother motion (and twice the render time). Absent = 30. */
+  fps: z.union([z.literal(30), z.literal(60)]).optional(),
+  /** Additive, optional: a specific track id from the music library; wins over the mood. */
+  musicTrackId: z.string().max(80).optional(),
   brandKitId: z.string().uuid().optional(),
   reviewBeforeRender: z.boolean().default(true),
   focusPage: z.string().optional(),

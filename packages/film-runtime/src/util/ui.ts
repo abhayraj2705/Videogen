@@ -122,6 +122,14 @@ function sceneOf(node: HTMLElement): SceneInfo {
   return info;
 }
 
+/**
+ * True when the scene this node belongs to is cut into with a match cut: its window is carried in from
+ * the previous scene's by the player, so the scene's own entrance (tilting up, swinging in) must not play too.
+ */
+export function entersMatched(node: HTMLElement): boolean {
+  return node.closest<HTMLElement>("[data-style]")?.dataset.matchIn === "1";
+}
+
 /** The style pack of the film a mounted node belongs to. */
 export function styleOf(node: HTMLElement): StylePack {
   return sceneOf(node).pack;

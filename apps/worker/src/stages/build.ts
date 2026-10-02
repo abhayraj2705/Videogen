@@ -9,13 +9,16 @@ import {
   type FilmManifest,
   type ResolvedScene,
 } from "@sitereel/film-runtime";
-import { FORMAT_DIMENSIONS, FULLPAGE_CAPTURE_DEPTH, type AspectFormat, type CrawlOutput, type FactRect, type Storyboard } from "@sitereel/shared";
+import { FORMAT_DIMENSIONS, FULLPAGE_CAPTURE_DEPTH, isSingleImagePage, narrationEchoesScreen, type AspectFormat, type CrawlOutput, type FactRect, type Storyboard } from "@sitereel/shared";
 import { assetRef } from "../lib/asset-ref.js";
 import { phraseCues } from "../lib/vtt.js";
-import type { MusicTrack } from "../lib/music.js";
+import { musicStartOffset, shiftBeatGrid, type MusicTrack } from "../lib/music.js";
 import type { VoiceSceneResult } from "./voice.js";
 
 const SAFE_FONT_STACK = "system-ui, -apple-system, Segoe UI, sans-serif";
+
+/** Templates that show the site inside a window (a browser frame or a device screen): the "hero" a match cut follows. */
+const WINDOW_TEMPLATES: ReadonlySet<string> = new Set(["SectionShowcase", "UIFlowCursor", "DeviceMockup", "StepByStep"]);
 
 /** Crossfade between scenes when a caller forces one length for every cut; by default each cut takes its kind's own length (TRANSITION_DURATION). */
 export const TRANSITION_SEC = 0.4;
@@ -36,21 +39,6 @@ export function pageLabel(url: string): string {
 }
 
 const spokenWords = (text: string): string[] => text.toLowerCase().replace(/[^\p{L}\p{N}\s]+/gu, "").split(/\s+/).filter(Boolean);
-
-function propStrings(value: unknown): string[] {
-  if (typeof value === "string") return [value];
-  if (Array.isArray(value)) return value.flatMap(propStrings);
-  if (value && typeof value === "object") return Object.values(value).flatMap(propStrings);
-  return [];
-}
-
-/** True when every word of the scene's narration is already drawn by the scene itself (titles, labels, product name). */
-function repeatsScreenText(scene: Storyboard["scenes"][number]): boolean {
-  const spoken = spokenWords(scene.narration ?? "");
-  if (spoken.length === 0) return false;
-  const shown = new Set([...scene.onScreenText, ...propStrings(scene.props)].flatMap(spokenWords));
-  return spoken.every((w) => shown.has(w));
-}
 
 /** The list a template reveals item by item, if it has one. */
 function listItems(templateId: string, props: Record<string, unknown>): string[] | null {
@@ -101,6 +89,45 @@ function focusRectFor(factIds: string[], crawlOutput: CrawlOutput, pageUrl: stri
   return undefined;
 }
 
+/**
+ * What a film has already pointed its camera at, page by page, so a page shown twice is shown differently
+ * the second time. Created per manifest; scenes are resolved in order.
+ */
+export interface CameraLog {
+  used: Set<string>;
+  /** Set once a scene has been given the page's recording: one scene plays it, the others keep their own moves. */
+  clipUsed: boolean;
+}
+
+const rectKey = (pageUrl: string, r: FactRect) => `${pageUrl}|${r.x.toFixed(3)},${r.y.toFixed(3)}`;
+
+/**
+ * Places on a page worth a close-up when the scene's own facts have no position: headings and feature
+ * blocks the crawl measured, the ones sharing words with what the scene says first, then the next the film
+ * has not visited yet, top to bottom. Without this a product scene shows the whole page at once — and a
+ * 1280px page fitted into a video frame is too small to read.
+ */
+function autoStopsFor(crawlOutput: CrawlOutput, pageUrl: string, sceneText: string, log: CameraLog, max: number): FactRect[] {
+  const wanted = new Set(spokenWords(sceneText).filter((w) => w.length >= 4));
+  const candidates = crawlOutput.facts
+    .filter((f) => f.sourceUrl === pageUrl && f.rect && ["hero", "heading", "feature", "stat"].includes(f.kind))
+    .map((f) => ({ r: f.rect!, score: spokenWords(f.text).filter((w) => wanted.has(w)).length }))
+    // On the image, wide enough to be a block rather than a nav link, and not so tall that "zooming in" shows the whole page again.
+    .filter(({ r }) => r.x >= 0 && r.x + r.w <= 1.001 && r.y + r.h <= FULLPAGE_CAPTURE_DEPTH && r.w >= 0.16 && r.h >= 0.012 && r.h <= 0.5)
+    .filter(({ r }) => !log.used.has(rectKey(pageUrl, r)));
+  const picked: FactRect[] = [];
+  for (const c of [...candidates].sort((a, b) => b.score - a.score || a.r.y - b.r.y)) {
+    if (picked.some((s) => Math.abs(s.y - c.r.y) < 0.12 && Math.abs(s.x - c.r.x) < 0.25)) continue;
+    picked.push(c.r);
+    if (picked.length === max) break;
+  }
+  return picked.sort((a, b) => a.y - b.y);
+}
+
+const remember = (log: CameraLog, pageUrl: string, rects: (FactRect | undefined)[]) => {
+  for (const r of rects) if (r) log.used.add(rectKey(pageUrl, r));
+};
+
 /** All the distinct places the cited facts point at on a page, top to bottom — the stops of a camera tour. */
 function focusStopsFor(factIds: string[], crawlOutput: CrawlOutput, pageUrl: string): FactRect[] {
   const stops: FactRect[] = [];
@@ -135,7 +162,13 @@ function emphasisMoment(scene: Storyboard["scenes"][number], voice: VoiceSceneRe
 }
 
 /** Resolves a scene's props for its template, swapping sourcePageUrl references for real asset refs. */
-function resolveProps(templateId: string, props: Record<string, unknown>, crawlOutput: CrawlOutput, factIds: string[] = []): Record<string, unknown> {
+function resolveProps(templateId: string, props: Record<string, unknown>, crawlOutput: CrawlOutput, factIds: string[] = [], log: CameraLog = { used: new Set(), clipUsed: false }, sceneText = ""): Record<string, unknown> {
+  /** The page's recording as the template takes it, the first time a scene asks; later scenes get nothing. */
+  const clipFor = (page: CrawlOutput["pages"][number] | undefined) => {
+    if (!page?.clip || log.clipUsed) return null;
+    log.clipUsed = true;
+    return { frames: page.clip.frameKeys.map((k) => assetRef("assets", k)), fps: page.clip.fps };
+  };
   if (templateId === "FeatureCallouts") {
     const page = crawlOutput.pages.find((p) => p.url === props.sourcePageUrl) ?? crawlOutput.pages[0];
     const { sourcePageUrl: _drop, items, ...rest } = props;
@@ -149,15 +182,15 @@ function resolveProps(templateId: string, props: Record<string, unknown>, crawlO
   if (templateId === "PhotoShowcase") {
     const page = crawlOutput.pages.find((p) => p.url === props.sourcePageUrl) ?? crawlOutput.pages[0];
     const { sourcePageUrl: _drop, ...rest } = props;
-    // A crawled page is shown by its first screenful (sharp, and composed like a hero image); an upload as it is.
-    const key = page?.origin === "upload" ? page.screenshotKey : (page?.sectionScreenshotKeys?.[0] ?? page?.screenshotKey);
+    // A crawled page is shown by its first screenful (sharp, and composed like a hero image); a single image as it is.
+    const key = page && isSingleImagePage(page) ? page.screenshotKey : (page?.sectionScreenshotKeys?.[0] ?? page?.screenshotKey);
     return { ...rest, screenshotUrl: key ? assetRef("assets", key) : "" };
   }
   if (templateId === "Montage") {
     // Cut through the product: the user's own uploads first, then the top of every crawled page, then further sections.
     const shot = crawlOutput.pages.filter((p) => p.screenshotKey);
-    const tops = shot.map((p) => (p.origin === "upload" ? p.screenshotKey : (p.sectionScreenshotKeys?.[0] ?? p.screenshotKey)));
-    const deeper = shot.flatMap((p) => (p.origin === "upload" ? [] : (p.sectionScreenshotKeys ?? []).slice(1)));
+    const tops = shot.map((p) => (isSingleImagePage(p) ? p.screenshotKey : (p.sectionScreenshotKeys?.[0] ?? p.screenshotKey)));
+    const deeper = shot.flatMap((p) => (isSingleImagePage(p) ? [] : (p.sectionScreenshotKeys ?? []).slice(1)));
     const ordered = [...shot.filter((p) => p.origin === "upload").map((p) => p.screenshotKey), ...tops, ...deeper];
     const keys = ordered.filter((k, i) => ordered.indexOf(k) === i).slice(0, 6);
     return { ...props, screenshotUrls: keys.map((k) => assetRef("assets", k)) };
@@ -165,18 +198,23 @@ function resolveProps(templateId: string, props: Record<string, unknown>, crawlO
   if (templateId === "StepByStep") {
     const page = crawlOutput.pages.find((p) => p.url === props.sourcePageUrl) ?? crawlOutput.pages[0];
     const { sourcePageUrl: _drop, ...rest } = props;
-    const focus = page ? focusRectFor(factIds, crawlOutput, page.url) : undefined;
+    const focus = page ? (focusRectFor(factIds, crawlOutput, page.url) ?? autoStopsFor(crawlOutput, page.url, sceneText, log, 1)[0]) : undefined;
+    if (page) remember(log, page.url, [focus]);
     return { ...rest, screenshotUrl: page?.screenshotKey ? assetRef("assets", page.screenshotKey) : "", ...(page ? { pageLabel: pageLabel(page.url) } : {}), ...(focus ? { focus } : {}) };
   }
   if (templateId === "DeviceMockup" || templateId === "ZoomDetail") {
     const page = crawlOutput.pages.find((p) => p.url === props.sourcePageUrl) ?? crawlOutput.pages[0];
     const { sourcePageUrl: _drop, ...rest } = props;
-    const focus = templateId === "ZoomDetail" && page ? focusRectFor(factIds, crawlOutput, page.url) : undefined;
+    const focus = templateId === "ZoomDetail" && page ? (focusRectFor(factIds, crawlOutput, page.url) ?? autoStopsFor(crawlOutput, page.url, sceneText, log, 1)[0]) : undefined;
+    if (page) remember(log, page.url, [focus]);
+    // The device shows the site itself in motion when the crawl recorded it.
+    const clip = templateId === "DeviceMockup" ? clipFor(page) : null;
     return {
       ...rest,
       screenshotUrl: page?.screenshotKey ? assetRef("assets", page.screenshotKey) : "",
       ...(templateId === "ZoomDetail" && page ? { pageLabel: pageLabel(page.url) } : {}),
       ...(focus ? { focus } : {}),
+      ...(clip ? { clip } : {}),
     };
   }
   if (templateId === "SectionShowcase" || templateId === "UIFlowCursor") {
@@ -200,14 +238,20 @@ function resolveProps(templateId: string, props: Record<string, unknown>, crawlO
             .slice(0, 2)
         : [];
     // Every further cited fact measured on this page is another stop for the camera (up to three).
-    const stops = !sectionKey && page && templateId === "SectionShowcase" ? focusStopsFor(factIds, crawlOutput, page.url) : [];
+    let stops = !sectionKey && page && templateId === "SectionShowcase" ? focusStopsFor(factIds, crawlOutput, page.url) : [];
+    // Nothing cited has a position: tour the page's own blocks instead of showing all of it at once, too small to read.
+    if (!sectionKey && page && templateId === "SectionShowcase" && !focus && !isSingleImagePage(page)) stops = autoStopsFor(crawlOutput, page.url, sceneText, log, 3);
+    if (page) remember(log, page.url, [focus, ...stops]);
+    // A scene with nowhere particular to look plays the page's recording, if no earlier scene has.
+    const clip = !sectionKey && templateId === "SectionShowcase" && !focus && stops.length === 0 ? clipFor(page) : null;
     return {
       ...rest,
       screenshotUrl: key ? assetRef("assets", key) : "",
       ...(page ? { pageLabel: pageLabel(page.url) } : {}),
       ...(focus ? { focus } : {}),
-      ...(stops.length > 1 ? { focusStops: stops } : {}),
+      ...(stops.length > 1 ? { focusStops: stops } : stops.length === 1 && !focus ? { focus: stops[0]! } : {}),
       ...(targets.length > 0 ? { cursorTargets: targets } : {}),
+      ...(clip ? { clip } : {}),
     };
   }
   if (templateId === "ScreenCollage" || templateId === "IsoStack") {
@@ -217,12 +261,20 @@ function resolveProps(templateId: string, props: Record<string, unknown>, crawlO
     const sections = page?.sectionScreenshotKeys ?? [];
     let keys = sections.length >= 2 ? sections.slice(0, 3) : page?.screenshotKey ? [page.screenshotKey] : [];
     // A collage of an upload shows it with its neighbouring uploads rather than one image alone.
-    if (page?.origin === "upload") {
-      const uploads = crawlOutput.pages.filter((p) => p.origin === "upload" && p.screenshotKey);
+    if (page && isSingleImagePage(page)) {
+      // Its neighbours of the same kind: the user's uploads together, the site's own pictures together.
+      const uploads = crawlOutput.pages.filter((p) => p.origin === page.origin && p.screenshotKey);
       const at = uploads.indexOf(page);
       keys = [page, ...uploads.slice(at + 1), ...uploads.slice(0, at)].slice(0, 3).map((p) => p.screenshotKey);
     }
     return { ...rest, screenshotUrls: keys.map((k) => assetRef("assets", k)) };
+  }
+  if (templateId === "LogoWall") {
+    // Names the crawl captured a logo for are shown as that logo.
+    const captured = crawlOutput.pages.flatMap((p) => p.logos ?? []);
+    const names = new Set((Array.isArray(props.names) ? props.names : []).map((n) => String(n).toLowerCase()));
+    const logos = captured.filter((l) => names.has(l.name.toLowerCase())).map((l) => ({ name: l.name, url: assetRef("assets", l.key) }));
+    return logos.length > 0 ? { ...props, logos } : props;
   }
   if (templateId === "KineticHook" || templateId === "CTAEndCard" || templateId === "LogoReveal") {
     // brand.logoUrl is already a fully-qualified URL on the crawled site itself
@@ -254,6 +306,8 @@ export function buildFilmManifest(opts: {
   transitionSec?: number;
   /** Draw word-synced captions into the picture. Default: on whenever the film has narration. */
   burnCaptions?: boolean;
+  /** Frame rate (JobOptions.fps). Default 30. */
+  fps?: 30 | 60;
 }): FilmManifest {
   const { storyboard, crawlOutput, voiceScenes, format } = opts;
   const { width, height } = FORMAT_DIMENSIONS[format];
@@ -262,29 +316,43 @@ export function buildFilmManifest(opts: {
   // The cut into each scene: its own choice, else the style pack's cycle. Decided here (not in
   // the player) because the timing engine sizes each overlap from the kind of cut.
   const style = stylePackFor(storyboard.tone);
-  const transitions = storyboard.scenes.map((scene, i) => resolveTransition(style, i, scene.transition));
+  const fps = opts.fps ?? 30;
+  // Two product scenes in a row that each show the site in a window are joined by a match cut (the window
+  // travels from one into the other) unless the storyboard chose the cut itself.
+  const transitions = storyboard.scenes.map((scene, i) => {
+    const prev = storyboard.scenes[i - 1];
+    if (!scene.transition && prev && WINDOW_TEMPLATES.has(scene.templateId) && WINDOW_TEMPLATES.has(prev.templateId)) return "match" as const;
+    return resolveTransition(style, i, scene.transition);
+  });
 
-  const timeline = computeTimeline(
-    storyboard.scenes.map((scene) => {
-      const voice = voiceBySceneId.get(scene.id);
-      return {
-        id: scene.id,
-        minDurationSec: scene.durationSec,
-        voiceDurationSec: voice?.audioKey ? (voice.audioDurationSec ?? Math.max(0, voice.durationSec - 0.5)) : null,
-      };
-    }),
-    {
-      fps: 30,
-      ...(opts.transitionSec !== undefined ? { transitionSec: opts.transitionSec } : { transitionSecs: transitions.map((k) => TRANSITION_DURATION[k]) }),
-      beatGrid: opts.music?.beatGrid ?? null,
-      loopSec: opts.music?.loopSec ?? null,
-      // The next line starts just before its picture arrives.
-      audioLeadSec: 0.2,
-      // Our own tracks are written in 4/4 from beat 0; a licensed track's detected grid has no known bar phase.
-      ...(opts.music?.source === "procedural" ? { beatsPerBar: 4 } : {}),
-    },
-  );
+  const timingScenes = storyboard.scenes.map((scene) => {
+    const voice = voiceBySceneId.get(scene.id);
+    return {
+      id: scene.id,
+      minDurationSec: scene.durationSec,
+      voiceDurationSec: voice?.audioKey ? (voice.audioDurationSec ?? Math.max(0, voice.durationSec - 0.5)) : null,
+    };
+  });
+  const timingBase = {
+    fps,
+    ...(opts.transitionSec !== undefined ? { transitionSec: opts.transitionSec } : { transitionSecs: transitions.map((k) => TRANSITION_DURATION[k]) }),
+    // The next line starts just before its picture arrives.
+    audioLeadSec: 0.2,
+  };
+  // Edit to the music's structure: a track with a marked drop is started part-way in, so the drop lands on
+  // the cut out of the hook into the product reveal — where that cut falls with no music to wait for.
+  const revealCut = storyboard.scenes.length > 1 ? computeTimeline(timingScenes, timingBase).scenes[0]!.slotEnd : 0;
+  const musicOffsetSec = musicStartOffset(opts.music, revealCut);
+  const beatGrid = opts.music ? shiftBeatGrid(opts.music.beatGrid, opts.music.loopSec, musicOffsetSec) : null;
+  const timeline = computeTimeline(timingScenes, {
+    ...timingBase,
+    beatGrid,
+    loopSec: opts.music?.loopSec ?? null,
+    // Our own tracks are written in 4/4 from beat 0; a licensed track's detected grid (or a shifted one) has no known bar phase.
+    ...(opts.music?.source === "procedural" && musicOffsetSec === 0 ? { beatsPerBar: 4 } : {}),
+  });
 
+  const cameraLog: CameraLog = { used: new Set(), clipUsed: false };
   const scenes: ResolvedScene[] = storyboard.scenes.map((scene, i) => {
     const slot = timeline.scenes[i]!;
     const items = listItems(scene.templateId, scene.props);
@@ -301,7 +369,7 @@ export function buildFilmManifest(opts: {
       audioStart: slot.audioStart,
       ...(emphasis ? { emphasis } : {}),
       props: {
-        ...resolveProps(scene.templateId, scene.props, crawlOutput, scene.factIds),
+        ...resolveProps(scene.templateId, scene.props, crawlOutput, scene.factIds, cameraLog, `${scene.onScreenText.join(" ")} ${scene.narration ?? ""}`),
         ...(cues ? { cues } : {}),
         // Every walkthrough step shows how many steps there are.
         ...(scene.templateId === "StepByStep" ? { total: storyboard.scenes.filter((s) => s.templateId === "StepByStep").length } : {}),
@@ -317,7 +385,7 @@ export function buildFilmManifest(opts: {
     if (voice?.audioKey && voice.words.length > 0) {
       const cues = phraseCues(voice.words.map((w) => ({ word: w.word, startSec: slot.audioStart + w.startSec, endSec: slot.audioStart + w.endSec })));
       // A line that only reads the scene's own titles aloud would put the same words on screen twice.
-      return repeatsScreenText(scene) ? cues.map((c) => ({ ...c, burn: false })) : cues;
+      return narrationEchoesScreen(scene) ? cues.map((c) => ({ ...c, burn: false })) : cues;
     }
     const text = scene.narration ?? scene.onScreenText.join(" ");
     return text ? [{ t0: slot.slotStart, t1: slot.slotEnd, text }] : [];
@@ -325,9 +393,7 @@ export function buildFilmManifest(opts: {
 
   // Real speech only: the silent TTS fallback still produces a clip + estimated words, but there is nothing to read along to.
   const hasNarration = voiceScenes.some((v) => v.audioKey && v.words.length > 0 && !v.provider.startsWith("fallback"));
-  const beats = opts.music?.beatGrid?.length
-    ? expandBeatGrid(opts.music.beatGrid, opts.music.loopSec, timeline.duration).map((b) => Math.round(b * 1000) / 1000)
-    : [];
+  const beats = beatGrid?.length ? expandBeatGrid(beatGrid, opts.music!.loopSec, timeline.duration).map((b) => Math.round(b * 1000) / 1000) : [];
 
   // Poster = the first scene's settled frame (renderer bakes it into frame 0).
   let posterTime: number | undefined;
@@ -344,7 +410,7 @@ export function buildFilmManifest(opts: {
   return {
     width,
     height,
-    fps: 30,
+    fps,
     duration: timeline.duration,
     style: style.id,
     palette: { bg: crawlOutput.brand.bg, fg: crawlOutput.brand.fg, accent: crawlOutput.brand.accent },
@@ -355,5 +421,6 @@ export function buildFilmManifest(opts: {
     // Captions that only repeat on-screen text (silent films) stay in the .vtt.
     ...((opts.burnCaptions ?? (hasNarration && captions.some((c) => c.burn !== false))) ? { captionStyle: "burned" as const } : {}),
     ...(beats.length > 0 ? { beats } : {}),
+    ...(musicOffsetSec > 0 ? { musicOffsetSec } : {}),
   };
 }

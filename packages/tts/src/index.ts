@@ -3,3 +3,5 @@ export * from "./timings.js";
 export * from "./cache.js";
 export * from "./fallback.js";
 export * from "./gemini-tts.js";
+export * from "./elevenlabs.js";
+export * from "./take.js";

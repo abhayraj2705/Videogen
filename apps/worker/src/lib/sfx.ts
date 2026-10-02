@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { cursorClickTimes, montageCuts, type FilmManifest } from "@sitereel/film-runtime";
 
 export type SfxKind = "whoosh" | "hit" | "pop" | "rise" | "sting" | "click";
@@ -118,6 +120,24 @@ function samplesFor(kind: SfxKind): Float32Array {
     out[i] = (Math.sin(phase) + transient) * Math.exp(-p * (hit ? 5 : 6)) * Math.min(1, i / 48);
   }
   return out;
+}
+
+/**
+ * The sound for `kind` as a WAV file: a recorded one from assets/sfx/<kind>.wav when the repo has it
+ * (see assets/sfx/README.md), else the synthesized stand-in. A recorded whoosh or click is what makes
+ * the sound design read as produced; the synthesized ones exist so the pipeline always has something.
+ */
+export function sfxSound(kind: SfxKind, repoRoot?: string): Buffer {
+  if (repoRoot) {
+    try {
+      const file = path.join(repoRoot, "assets", "sfx", `${kind}.wav`);
+      const wav = fs.readFileSync(file);
+      if (wav.length > 44 && wav.toString("ascii", 0, 4) === "RIFF") return wav;
+    } catch {
+      // no recorded sound for this kind
+    }
+  }
+  return synthSfx(kind);
 }
 
 /** One synthesized sound as a 48 kHz mono 16-bit WAV file. */

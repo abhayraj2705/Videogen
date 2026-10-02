@@ -40,7 +40,7 @@ export function createBuildProcessor(deps: WorkerDeps) {
       // have this stage ship a large manifest through Redis (see load-build-inputs.ts).
       // What's produced here is persisted as a debug artifact for the admin inspector.
       for (const format of formats) {
-        const manifest = buildFilmManifest({ storyboard: inputs.storyboard, crawlOutput: inputs.crawlOutput, voiceScenes: inputs.voiceScenes, format, music: inputs.music });
+        const manifest = buildFilmManifest({ storyboard: inputs.storyboard, crawlOutput: inputs.crawlOutput, voiceScenes: inputs.voiceScenes, format, music: inputs.music, fps: inputs.jobOptions.fps });
         await deps.storage.putObject("assets", `jobs/${jobId}/build/manifest-${formatSlug(format)}.json`, Buffer.from(JSON.stringify(manifest, null, 2)), "application/json");
       }
       await finishStageRun(deps.db, runId, {

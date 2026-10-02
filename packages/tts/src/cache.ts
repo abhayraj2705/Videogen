@@ -42,7 +42,7 @@ export function ttsCacheKey(opts: { text: string; voiceId: string; language: str
 export function createCachedTtsProvider(inner: TtsProvider, store: TtsCacheStore, prefix = "tts-cache"): TtsProvider & {
   synthesizeCached(opts: SynthesizeOptions): Promise<CachedTtsResult>;
 } {
-  const keyFor = (opts: SynthesizeOptions) => `${prefix}/${ttsCacheKey({ text: opts.text, voiceId: opts.voiceId, language: opts.language, providerId: inner.id })}`;
+  const keyFor = (opts: SynthesizeOptions) => `${prefix}/${ttsCacheKey({ text: opts.paragraphs ? `[take] ${opts.paragraphs.join(" | ")}` : opts.text, voiceId: opts.voiceId, language: opts.language, providerId: inner.id })}`;
 
   async function synthesizeCached(opts: SynthesizeOptions): Promise<CachedTtsResult> {
     const key = keyFor(opts);

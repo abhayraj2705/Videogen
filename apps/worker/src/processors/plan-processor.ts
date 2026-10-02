@@ -3,6 +3,7 @@ import { eq, desc } from "drizzle-orm";
 import { jobs, crawls } from "@sitereel/db";
 import { QUEUE_NAMES, type CrawlOutput, type JobOptions, type JobStatus } from "@sitereel/shared";
 import { runPlanStage } from "../stages/plan.js";
+import { scriptProviders } from "../lib/llm-providers.js";
 import { buildSiteProfile } from "../lib/site-profile.js";
 import { chainJobId } from "./voice-processor.js";
 import type { WorkerDeps } from "./types.js";
@@ -49,7 +50,7 @@ export function createPlanProcessor(deps: WorkerDeps) {
     const runId = await startStageRun(deps.db, { jobId, stage: "plan", inputsHash });
 
     const profile = buildSiteProfile(crawlOutput, options.videoType);
-    const result = await runPlanStage(crawlOutput, options, { primaryProvider: deps.llm.primary, escalationProvider: deps.llm.escalation });
+    const result = await runPlanStage(crawlOutput, options, { primaryProvider: deps.llm.primary, escalationProvider: deps.llm.escalation, ...scriptProviders(deps.llm) });
     await assertNotCancelled(deps, jobId);
 
     // Storyboard versioning (W6): every plan appends max(version)+1.
@@ -73,6 +74,9 @@ export function createPlanProcessor(deps: WorkerDeps) {
         latencyMs: result.latencyMs,
         // Per-call cost/latency (including failed calls) so cost per plan is auditable (§8.3).
         llmCalls: result.calls,
+        // The script the storyboard was cut to, with the editor's scores, and what writing it cost.
+        ...(result.script ? { script: { hook: result.script.hook, lines: result.script.lines.map((l) => l.line), critique: result.script.critique, rewritten: result.script.rewritten } } : {}),
+        ...(result.scriptCalls?.length ? { scriptCalls: result.scriptCalls } : {}),
         ...(data.overrides ? { overrides: data.overrides } : {}),
       },
     });

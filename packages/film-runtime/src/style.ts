@@ -107,4 +107,5 @@ export const TRANSITION_DURATION: Record<TransitionKind, number> = {
   "slide-left": 0.4,
   "slide-up": 0.4,
   fade: 0.5,
+  match: 0.6,
 };
