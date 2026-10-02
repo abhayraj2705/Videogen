@@ -22,6 +22,10 @@ export interface VoiceStageResult {
   costUsd: number;
   cacheHits: number;
   aligned: number;
+  /** Scenes actually (re-)synthesized this run. */
+  synthesized: string[];
+  /** Scenes whose previous take was reused untouched (downstream-only re-runs). */
+  reused: string[];
 }
 
 /** Binds a StorageClient bucket to the TTS cache's tiny get/put interface. */
@@ -53,7 +57,21 @@ export async function runVoiceStage(
   jobId: string,
   storyboard: Storyboard,
   options: JobOptions,
-  deps: { storage: StorageClient; ttsProvider: TtsProvider | null; aligner?: WordAligner | null; repoRoot?: string; log?: (msg: string, extra?: Record<string, unknown>) => void },
+  deps: {
+    storage: StorageClient;
+    ttsProvider: TtsProvider | null;
+    aligner?: WordAligner | null;
+    repoRoot?: string;
+    log?: (msg: string, extra?: Record<string, unknown>) => void;
+    /**
+     * Phase 6 downstream-only re-runs: previous takes to reuse as-is, by
+     * sceneId (the caller decides which via decideVoiceScenes). Scenes not in
+     * the map are synthesized.
+     */
+    reuse?: Map<string, VoiceSceneResult>;
+    /** Per-scene input hashes; when given, clips are stored content-addressed (`{sceneId}-{hash}.wav`) so old takes stay intact. */
+    sceneHashes?: Map<string, string>;
+  },
 ): Promise<VoiceStageResult> {
   const fallback = createFallbackTtsProvider({ repoRoot: deps.repoRoot });
   const cacheStore = storageTtsCache(deps.storage);
@@ -62,9 +80,18 @@ export async function runVoiceStage(
   let cacheHits = 0;
   let aligned = 0;
   const scenes: VoiceSceneResult[] = [];
+  const synthesized: string[] = [];
+  const reused: string[] = [];
   const language = options.voiceLanguage ?? storyboard.language ?? "en";
 
   for (const scene of storyboard.scenes) {
+    const prior = deps.reuse?.get(scene.id);
+    if (prior) {
+      scenes.push({ ...prior, sceneId: scene.id, durationSec: prior.audioDurationSec !== null ? Math.max(scene.durationSec, prior.audioDurationSec + 0.5) : scene.durationSec, cacheHit: true });
+      reused.push(scene.id);
+      continue;
+    }
+    synthesized.push(scene.id);
     if (options.noVoiceover || !scene.narration) {
       scenes.push({ sceneId: scene.id, audioKey: null, audioDurationSec: null, durationSec: scene.durationSec, words: [], provider: "none" });
       continue;
@@ -102,7 +129,8 @@ export async function runVoiceStage(
       }
     }
 
-    const audioKey = `jobs/${jobId}/voice/${scene.id}.wav`;
+    const sceneHash = deps.sceneHashes?.get(scene.id);
+    const audioKey = sceneHash ? `jobs/${jobId}/voice/${scene.id}-${sceneHash}.wav` : `jobs/${jobId}/voice/${scene.id}.wav`;
     await deps.storage.putObject("assets", audioKey, result.audio, result.contentType);
     totalCost += result.costUsd;
 
@@ -118,5 +146,5 @@ export async function runVoiceStage(
     });
   }
 
-  return { scenes, costUsd: totalCost, cacheHits, aligned };
+  return { scenes, costUsd: totalCost, cacheHits, aligned, synthesized, reused };
 }

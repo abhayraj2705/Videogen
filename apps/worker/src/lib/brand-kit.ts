@@ -9,15 +9,15 @@ import { assetRef } from "./asset-ref.js";
  * and writes both, so kits created by either side apply correctly.
  */
 export interface BrandKitLike {
-  colors?: Record<string, string | undefined> | null;
-  fonts?: Record<string, string | undefined> | null;
+  colors?: object | null;
+  fonts?: object | null;
   logoKey?: string | null;
   logoUrl?: string | null;
 }
 
-const pick = (obj: Record<string, string | undefined> | null | undefined, ...names: string[]): string | undefined => {
+const pick = (obj: object | null | undefined, ...names: string[]): string | undefined => {
   for (const n of names) {
-    const v = obj?.[n];
+    const v = (obj as Record<string, unknown> | null | undefined)?.[n];
     if (typeof v === "string" && v.trim()) return v.trim();
   }
   return undefined;

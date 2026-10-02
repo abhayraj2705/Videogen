@@ -1,95 +1,108 @@
-import { createHash } from "node:crypto";
 import type { Job as BullJob } from "bullmq";
 import { eq } from "drizzle-orm";
-import { jobs, stageRuns, crawls } from "@sitereel/db";
-import { CrawlJobData, QUEUE_NAMES, type JobStatus } from "@sitereel/shared";
+import { jobs, crawls } from "@sitereel/db";
+import { QUEUE_NAMES, type CrawlOutput } from "@sitereel/shared";
 import { runCrawlStage } from "../stages/crawl.js";
+import { chainJobId } from "./voice-processor.js";
 import type { WorkerDeps } from "./types.js";
+import { CrawlJobDataP6 } from "../lib/phase6-contracts.js";
+import { buildManualCrawlOutput } from "../lib/manual-crawl.js";
+import { buildSiteBrief } from "../lib/site-brief.js";
+import { brandKitFromCrawl, userHasKitForHost } from "../lib/brand-kit.js";
+import { sha16 } from "../lib/input-hash.js";
+import { finishStageRun, insertBrandKit, listUserBrandKits, startStageRun } from "../lib/db-adapters.js";
+import { assertNotCancelled, notifyJobEmail, setJobStatus } from "../lib/job-lifecycle.js";
 
-async function setJobStatus(deps: WorkerDeps, jobId: string, status: JobStatus, errorCode?: string): Promise<void> {
-  await deps.db
-    .update(jobs)
-    .set({ status, errorCode: errorCode ?? null, updatedAt: new Date() })
-    .where(eq(jobs.id, jobId));
+/**
+ * W10 auto-create: after a successful live crawl, save the site's brand as a
+ * kit (name = hostname) unless the user already has one for that hostname.
+ * Best-effort — a kit insert failure never fails the crawl.
+ */
+async function autoCreateBrandKit(deps: WorkerDeps, userId: string, url: string, brand: CrawlOutput["brand"]): Promise<string | null> {
+  try {
+    const kits = await listUserBrandKits(deps.db, userId);
+    if (userHasKitForHost(kits, url)) return null;
+    const kit = brandKitFromCrawl(brand, url);
+    const row = await insertBrandKit(deps.db, { userId, ...kit, isDefault: kits.length === 0 });
+    return row?.id ?? null;
+  } catch (err) {
+    deps.logger.warn({ userId, err }, "brand kit auto-create failed (crawl unaffected)");
+    return null;
+  }
 }
 
 export function createCrawlProcessor(deps: WorkerDeps) {
   return async function processCrawl(job: BullJob): Promise<void> {
-    const { jobId, url } = CrawlJobData.parse(job.data);
-    const log = deps.logger.child({ jobId, stage: "crawl" });
-    const inputsHash = createHash("sha256").update(url).digest("hex").slice(0, 16);
+    const { jobId, url, manual } = CrawlJobDataP6.parse(job.data);
+    const log = deps.logger.child({ jobId, stage: "crawl", manual: !!manual });
+    const inputsHash = sha16(manual ? ["crawl-manual-v1", url, manual] : url);
 
     await setJobStatus(deps, jobId, "crawling");
-    await deps.publish({ jobId, stage: "crawl", status: "crawling", pct: 5, message: "Starting crawl", at: new Date().toISOString() });
+    await deps.publish({ jobId, stage: "crawl", status: "crawling", pct: 5, message: manual ? "Reading your uploads" : "Starting crawl", at: new Date().toISOString() });
 
-    const [crawlRun] = await deps.db
-      .insert(stageRuns)
-      .values({ jobId, stage: "crawl", attempt: job.attemptsMade + 1, inputsHash, status: "running", startedAt: new Date() })
-      .returning();
+    const runId = await startStageRun(deps.db, { jobId, stage: "crawl", inputsHash });
+    const [jobRow] = await deps.db.select().from(jobs).where(eq(jobs.id, jobId)).limit(1);
+    if (!jobRow) throw new Error(`crawl stage: job ${jobId} not found`);
 
-    const result = await runCrawlStage(jobId, url, {
-      storage: deps.storage,
-      llmProvider: deps.llm.primary,
-      onProgress: (pct, message) => {
-        deps.publish({ jobId, stage: "crawl", status: "crawling", pct, message, at: new Date().toISOString() }).catch(() => undefined);
+    let crawlOutput: CrawlOutput;
+    let costUsd = 0;
+    if (manual) {
+      // W8 needs-input resume: FactLedger from the user's description/features,
+      // uploaded screenshots as section screenshots — no live crawl.
+      const base = buildManualCrawlOutput({ jobId, url, manual });
+      if (base.facts.length === 0 && base.pages.every((p) => !p.screenshotKey)) {
+        await finishStageRun(deps.db, runId, { status: "failed", inputsHash, error: { reason: "empty", message: "Manual input had no description, features or screenshots" } });
+        await setJobStatus(deps, jobId, "needs_input", "empty");
+        await deps.publish({ jobId, stage: "crawl", status: "needs_input", pct: 100, message: "We still need a description or screenshots", payload: { reason: "empty" }, at: new Date().toISOString() });
+        return;
+      }
+      const brief = await buildSiteBrief({ domain: base.domain, facts: base.facts, provider: deps.llm.primary, timeoutMs: 15_000 });
+      crawlOutput = { ...base, siteBrief: brief.brief };
+      costUsd = brief.costUsd;
+    } else {
+      const result = await runCrawlStage(jobId, url, {
+        storage: deps.storage,
+        llmProvider: deps.llm.primary,
+        onProgress: (pct, message) => {
+          deps.publish({ jobId, stage: "crawl", status: "crawling", pct, message, at: new Date().toISOString() }).catch(() => undefined);
+        },
+      });
+
+      if (result.outcome === "needs_input") {
+        log.warn({ reason: result.reason, message: result.message }, "crawl needs input");
+        await finishStageRun(deps.db, runId, { status: "failed", inputsHash, error: { reason: result.reason, message: result.message } });
+        // needs_input is parked on the user — never refunded, resumable via POST /resume.
+        await setJobStatus(deps, jobId, "needs_input", result.reason);
+        await deps.publish({ jobId, stage: "crawl", status: "needs_input", pct: 100, message: result.message, payload: { reason: result.reason }, at: new Date().toISOString() });
+        await notifyJobEmail(deps, jobId, "needs-input", result.reason);
+        return;
+      }
+      crawlOutput = result.crawlOutput;
+      costUsd = result.costUsd;
+    }
+
+    await assertNotCancelled(deps, jobId);
+    await finishStageRun(deps.db, runId, {
+      status: "ok",
+      inputsHash,
+      costUsd,
+      outputs: {
+        domain: crawlOutput.domain,
+        mode: manual ? "manual" : (crawlOutput.mode ?? "browser"),
+        pageCount: crawlOutput.pages.length,
+        factCount: crawlOutput.facts.length,
+        featureCount: crawlOutput.facts.filter((f) => f.kind === "feature").length,
       },
     });
 
-    if (result.outcome === "needs_input") {
-      log.warn({ reason: result.reason, message: result.message }, "crawl needs input");
-      await deps.db
-        .update(stageRuns)
-        .set({ status: "failed", endedAt: new Date(), error: { reason: result.reason, message: result.message } })
-        .where(eq(stageRuns.id, crawlRun!.id));
-      await setJobStatus(deps, jobId, "needs_input", result.reason);
-      await deps.publish({
-        jobId,
-        stage: "crawl",
-        status: "needs_input",
-        pct: 100,
-        message: result.message,
-        payload: { reason: result.reason },
-        at: new Date().toISOString(),
-      });
-      return;
-    }
-
-    const { crawlOutput, costUsd } = result;
-    await deps.db
-      .update(stageRuns)
-      .set({
-        status: "ok",
-        endedAt: new Date(),
-        costUsd: String(costUsd),
-        outputs: {
-          domain: crawlOutput.domain,
-          mode: crawlOutput.mode ?? "browser",
-          pageCount: crawlOutput.pages.length,
-          factCount: crawlOutput.facts.length,
-          featureCount: crawlOutput.facts.filter((f) => f.kind === "feature").length,
-        },
-      })
-      .where(eq(stageRuns.id, crawlRun!.id));
-
-    log.info(
-      { facts: crawlOutput.facts.length, pages: crawlOutput.pages.length, mode: crawlOutput.mode ?? "browser", briefSource: crawlOutput.siteBrief.source },
-      "crawl + extract completed",
-    );
+    log.info({ facts: crawlOutput.facts.length, pages: crawlOutput.pages.length, mode: manual ? "manual" : (crawlOutput.mode ?? "browser"), briefSource: crawlOutput.siteBrief.source }, "crawl + extract completed");
 
     await setJobStatus(deps, jobId, "extracting");
-    await deps.db.insert(stageRuns).values({
-      jobId,
-      stage: "extract",
-      attempt: 1,
-      inputsHash,
-      status: "ok",
-      startedAt: new Date(),
-      endedAt: new Date(),
-      outputs: { siteBrief: crawlOutput.siteBrief, brand: crawlOutput.brand },
-    });
+    const extractId = await startStageRun(deps.db, { jobId, stage: "extract", inputsHash });
+    await finishStageRun(deps.db, extractId, { status: "ok", inputsHash, outputs: { siteBrief: crawlOutput.siteBrief, brand: crawlOutput.brand } });
 
     // Full crawl material (facts, brand, pages, brief) persists here — the
-    // plan stage reads it back by jobId rather than passing it through Redis.
+    // plan stage reads the newest row back by jobId rather than via Redis.
     await deps.db.insert(crawls).values({
       jobId,
       domain: crawlOutput.domain,
@@ -99,7 +112,10 @@ export function createCrawlProcessor(deps: WorkerDeps) {
       siteBrief: crawlOutput.siteBrief,
     });
 
-    await deps.queues.plan.add(QUEUE_NAMES.plan, { jobId }, { jobId, attempts: 2, backoff: { type: "fixed", delay: 5_000 } });
+    const brandKitId = manual ? null : await autoCreateBrandKit(deps, jobRow.userId, url, crawlOutput.brand);
+    if (brandKitId) log.info({ brandKitId }, "brand kit auto-created from crawl");
+
+    await deps.queues.plan.add(QUEUE_NAMES.plan, { jobId }, { jobId: chainJobId(jobId, "plan", runId), attempts: 2, backoff: { type: "fixed", delay: 5_000 } });
 
     await deps.publish({
       jobId,
@@ -107,7 +123,7 @@ export function createCrawlProcessor(deps: WorkerDeps) {
       status: "extracting",
       pct: 100,
       message: `Found ${crawlOutput.facts.length} facts across ${crawlOutput.pages.length} page(s)`,
-      payload: { factCount: crawlOutput.facts.length, briefSource: crawlOutput.siteBrief.source },
+      payload: { factCount: crawlOutput.facts.length, briefSource: crawlOutput.siteBrief.source, manual: !!manual, ...(brandKitId ? { brandKitId } : {}) },
       at: new Date().toISOString(),
     });
   };
