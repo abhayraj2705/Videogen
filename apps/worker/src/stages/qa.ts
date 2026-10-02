@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { FilmManifest } from "@sitereel/film-runtime";
 import { runFilmQa, type ContrastSample, type FilmQaIssue } from "@sitereel/renderer";
 import type { LlmProvider } from "@sitereel/llm";
-import { validateStoryboard, type FactLedger, type Storyboard, type ValidationIssue } from "@sitereel/shared";
+import { validateStoryboard, visibleTextFor, type FactLedger, type Storyboard, type ValidationIssue } from "@sitereel/shared";
 
 export type QaIssue = (ValidationIssue | FilmQaIssue) & { source: "grounding" | "probe" | "vision" };
 
@@ -87,7 +87,8 @@ export async function runQaStage(opts: {
   const grounding = validateStoryboard(storyboard, opts.facts);
   issues.push(...grounding.issues.map((i) => ({ ...i, source: "grounding" as const })));
 
-  const expectedText = Object.fromEntries(storyboard.scenes.map((s) => [s.id, s.onScreenText]));
+  // Probe for what the template actually draws (props), not the storyboard's onScreenText copy.
+  const expectedText = Object.fromEntries(storyboard.scenes.map((s) => [s.id, visibleTextFor(s.templateId, s.props) ?? s.onScreenText]));
   const probe = await runFilmQa({ manifest, filmHost: opts.filmHost, manifestUrl: opts.manifestUrl, expectedText });
   issues.push(...probe.issues.map((i) => ({ ...i, source: "probe" as const })));
 

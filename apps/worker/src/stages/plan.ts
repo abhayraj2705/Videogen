@@ -1,6 +1,7 @@
 import {
   StoryboardLlmOutput,
   validateStoryboard,
+  syncOnScreenText,
   formatValidationErrorsForRetry,
   type CrawlOutput,
   type JobOptions,
@@ -52,7 +53,8 @@ async function tryOnce(
   const started = Date.now();
   try {
     const result = await provider.generateJson({ system, prompt, schema: StoryboardLlmOutput, schemaName: "storyboard", maxOutputTokens: 4000 });
-    const storyboard: Storyboard = { ...result.data, version: 1, source };
+    // Templates draw from props; align onScreenText with them before validating.
+    const storyboard: Storyboard = { ...result.data, scenes: syncOnScreenText(result.data.scenes), version: 1, source };
     const report = validateStoryboard(storyboard, crawlOutput.facts, { pageUrls: screenshotPageUrls(crawlOutput) });
     return { storyboard, report, call: { provider: provider.id, ok: true, valid: report.valid, costUsd: result.costUsd, latencyMs: Date.now() - started } };
   } catch (err) {

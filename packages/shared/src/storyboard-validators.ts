@@ -50,6 +50,55 @@ export const TEMPLATE_PROP_SCHEMAS: Record<TemplateId, z.ZodType> = {
   }),
 };
 
+/**
+ * The text a template actually draws for the given props — the strings the QA
+ * text probe must find on screen. Templates render from props, never from
+ * `onScreenText`, so this is the source of truth when the two disagree (an LLM
+ * can write a caption in props and different words in onScreenText).
+ * StatCounter's value is omitted: it counts up and is re-formatted on screen.
+ * Returns null when the props don't match the template's schema.
+ */
+export function visibleTextFor(templateId: TemplateId, props: unknown): string[] | null {
+  const parsed = TEMPLATE_PROP_SCHEMAS[templateId]?.safeParse(props);
+  if (!parsed?.success) return null;
+  const p = parsed.data as Record<string, unknown>;
+  switch (templateId) {
+    case "KineticHook":
+      return [p.headline as string];
+    case "FeatureTriplet":
+      return (p.features as { label: string }[]).map((f) => f.label);
+    case "SectionShowcase":
+    case "UIFlowCursor":
+      return [p.caption as string];
+    case "CTAEndCard":
+      return [p.ctaText as string];
+    case "LogoReveal":
+      return [p.productName as string];
+    case "HeroRebuild":
+      return [p.headline as string, p.subheadline as string];
+    case "StatCounter":
+      return [p.label as string];
+    case "QuoteCard":
+      return [p.quote as string];
+    case "ChecklistReveal":
+      return p.items as string[];
+    default:
+      return null;
+  }
+}
+
+/**
+ * Rewrites each scene's onScreenText to what its template will really show, so
+ * word limits, reading floor and grounding are checked against the rendered
+ * text. Scenes whose props don't parse are left alone (validation flags them).
+ */
+export function syncOnScreenText<S extends { templateId: TemplateId; props: unknown; onScreenText: string[] }>(scenes: S[]): S[] {
+  return scenes.map((scene) => {
+    const visible = visibleTextFor(scene.templateId, scene.props);
+    return visible ? { ...scene, onScreenText: visible } : scene;
+  });
+}
+
 /** Appendix C — phrases the planner must never use, enforced in code, not just asked for in the prompt. */
 export const BANNED_PHRASES = ["streamline your workflow", "supercharge", "unlock", "elevate"] as const;
 

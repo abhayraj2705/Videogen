@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AlertTriangle, Loader2, Mic, Pause, Play, Plus, X } from "lucide-react";
+import { AlertTriangle, Loader2, Mic, Pause, Play } from "lucide-react";
 import type { FactLedger, StoryboardScene, TemplateId } from "@sitereel/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -174,30 +174,19 @@ export function SceneInspector({
 
       <Separator />
 
-      <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-xs font-medium">On-screen text</legend>
+      {/* Templates draw from their props, so on-screen text is edited under "Template text" below;
+          the server re-derives onScreenText from the props on save. */}
+      <div className="flex flex-col gap-1.5">
+        <span className="text-xs font-medium">On-screen text</span>
+        {scene.onScreenText.length === 0 && <span className="text-xs text-muted-foreground">None.</span>}
         {scene.onScreenText.map((text, i) => (
-          <div key={i} className="flex items-center gap-1.5">
-            <Input
-              aria-label={`On-screen text ${i + 1}`}
-              value={text}
-              onChange={(e) => onPatch({ onScreenText: scene.onScreenText.map((t, j) => (j === i ? e.target.value : t)) }, key(`ost${i}`))}
-            />
+          <div key={i} className="flex items-center gap-1.5 text-sm">
+            <span className="min-w-0 flex-1 truncate">{text}</span>
             {text.trim() && <FactBadge grounding={groundText(text, scene.factIds, facts)} />}
-            <Button
-              size="icon-xs"
-              variant="ghost"
-              aria-label={`Remove on-screen text ${i + 1}`}
-              onClick={() => onPatch({ onScreenText: scene.onScreenText.filter((_, j) => j !== i) })}
-            >
-              <X />
-            </Button>
           </div>
         ))}
-        <Button size="sm" variant="ghost" className="self-start" onClick={() => onPatch({ onScreenText: [...scene.onScreenText, "New text"] })}>
-          <Plus /> Add text
-        </Button>
-      </fieldset>
+        <p className="text-[11px] text-muted-foreground">Edit this under Template text below. It updates when you save.</p>
+      </div>
 
       <div className="flex flex-col gap-1.5">
         <span className="text-xs font-medium">Cited facts</span>

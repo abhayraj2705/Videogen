@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { and, asc, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 import { audioTakes, jobs, storyboards, type Db } from "@sitereel/db";
-import { QUEUE_NAMES, type Storyboard, type VoiceJobDataP6 } from "@sitereel/shared";
+import { QUEUE_NAMES, syncOnScreenText, type Storyboard, type VoiceJobDataP6 } from "@sitereel/shared";
 import type { StorageClient } from "@sitereel/storage";
 import type { AuthVerifier } from "../lib/auth.js";
 import type { Queues } from "../lib/queue.js";
@@ -119,7 +119,9 @@ export function registerStoryboardRoutes(app: FastifyInstance, deps: StoryboardR
     if (parsed.data.baseVersion !== latest.version) return conflict();
 
     const version = latest.version + 1;
-    const json = { ...parsed.data.storyboard, version } as unknown as Storyboard;
+    // Templates render from props, so props win: onScreenText is re-derived from them.
+    const submitted = parsed.data.storyboard as unknown as Storyboard;
+    const json = { ...submitted, scenes: syncOnScreenText(submitted.scenes), version } as Storyboard;
     const report = validateAgainstCrawl(json, await loadLatestCrawl(db, job.id));
     try {
       await db.insert(storyboards).values({ jobId: job.id, version, json, validation: report, source: "user" });

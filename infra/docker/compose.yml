@@ -4,7 +4,8 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      # Set REDIS_HOST_PORT when a native Redis already owns 6379 on the host.
+      - "${REDIS_HOST_PORT:-6379}:6379"
     volumes:
       - redis-data:/data
 

@@ -5,6 +5,8 @@ import {
   formatValidationErrorsForRetry,
   findBannedPhrases,
   RETRY_INSTRUCTION,
+  visibleTextFor,
+  syncOnScreenText,
 } from "./storyboard-validators.js";
 import type { FactLedger } from "./site.js";
 import type { Storyboard, StoryboardScene } from "./storyboard.js";
@@ -175,5 +177,27 @@ describe("formatValidationErrorsForRetry", () => {
     const msg = formatValidationErrorsForRetry(r);
     expect(msg).toContain("[unknown_fact_id]");
     expect(msg.trim().endsWith(RETRY_INSTRUCTION)).toBe(true);
+  });
+});
+
+describe("visibleTextFor / syncOnScreenText", () => {
+  it("derives on-screen text from template props (props win over onScreenText)", () => {
+    // Real planner output from linear.app: caption in props, different words in onScreenText.
+    const scene = {
+      templateId: "UIFlowCursor" as const,
+      props: { caption: "From PRD to PR", sourcePageUrl: "https://linear.app" },
+      onScreenText: ["Workflows shared by humans and agents."],
+    };
+    expect(visibleTextFor(scene.templateId, scene.props)).toEqual(["From PRD to PR"]);
+    expect(syncOnScreenText([scene])[0]!.onScreenText).toEqual(["From PRD to PR"]);
+  });
+
+  it("covers multi-string templates and leaves unparseable props alone", () => {
+    expect(visibleTextFor("FeatureTriplet", { features: [{ label: "A" }, { label: "B" }, { label: "C" }] })).toEqual(["A", "B", "C"]);
+    expect(visibleTextFor("HeroRebuild", { headline: "H", subheadline: "S" })).toEqual(["H", "S"]);
+    expect(visibleTextFor("StatCounter", { value: "10,000+", label: "teams" })).toEqual(["teams"]);
+    const broken = { templateId: "QuoteCard" as const, props: {}, onScreenText: ["keep me"] };
+    expect(visibleTextFor(broken.templateId, broken.props)).toBeNull();
+    expect(syncOnScreenText([broken])[0]!.onScreenText).toEqual(["keep me"]);
   });
 });
