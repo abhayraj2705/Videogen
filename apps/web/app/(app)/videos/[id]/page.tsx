@@ -28,6 +28,8 @@ import { ResultPlayer } from "@/components/player/result-player";
 import { SharePanel } from "@/components/result/share-panel";
 import { CaptionCopy } from "@/components/result/caption-copy";
 import { RatingWidget } from "@/components/result/rating-widget";
+import { QuickChanges } from "@/components/result/quick-changes";
+import { CancelJobButton } from "@/components/pipeline/cancel-job-button";
 import { ErrorState } from "@/components/states/error-state";
 import { PIPELINE_STAGES, STATUS_META, TERMINAL } from "@/lib/job-status";
 
@@ -135,7 +137,15 @@ export default function VideoDetailPage({ params }: { params: Promise<{ id: stri
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <Badge variant={meta.variant}>{meta.label}</Badge>
+        <div className="flex items-center gap-2">
+          {status === "done" && (
+            <Link href={`/videos/${job.id}/review`} className={buttonVariants({ size: "sm", variant: "secondary" })}>
+              <PenLine className="size-4" aria-hidden /> Edit script
+            </Link>
+          )}
+          {!TERMINAL.has(status) && <CancelJobButton jobId={job.id} />}
+          <Badge variant={meta.variant}>{meta.label}</Badge>
+        </div>
       </div>
       <h1 className="sr-only">Video for {job.domain}</h1>
 
@@ -159,6 +169,7 @@ export default function VideoDetailPage({ params }: { params: Promise<{ id: stri
                   </CardContent>
                 </Card>
               </div>
+              <QuickChanges job={job} />
             </>
           )}
         </div>
