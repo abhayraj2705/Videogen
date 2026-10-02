@@ -34,6 +34,16 @@ export function extractJsonText(text: string): string {
 }
 
 /**
+ * Gemini-web gateways render URLs as markdown links even inside JSON strings
+ * ("[https://x.com](https://x.com)"), which breaks url() validation on every
+ * re-prompt. Collapse `[label](url)` to the URL when the label is itself a URL,
+ * otherwise to the label. The replacement adds no quotes, so JSON stays valid.
+ */
+export function stripMarkdownLinks(text: string): string {
+  return text.replace(/\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)/g, (_m, label: string, url: string) => (/^https?:\/\//.test(label) ? url : label));
+}
+
+/**
  * Adapter for any OpenAI-compatible /chat/completions endpoint — used for
  * local development against WebAI-to-API (Gemini via a browser login) so the
  * planner can run without a paid API key. Cost is $0 unless `prices` says otherwise.
@@ -90,7 +100,7 @@ export function createOpenAiCompatProvider(opts: OpenAiCompatProviderOptions): L
             const reason = json.choices?.[0]?.finish_reason ?? "no text";
             return { output: new LlmValidationError(`OpenAI-compatible endpoint returned no text (${reason})`, ""), inputTokens, outputTokens };
           }
-          return { output: extractJsonText(text), inputTokens, outputTokens };
+          return { output: extractJsonText(stripMarkdownLinks(text)), inputTokens, outputTokens };
         },
       });
     },

@@ -87,6 +87,14 @@ export function collectRawFacts(input: { ctaWords: string[]; root?: any }): { ki
   };
 
   const cleanText = (text: string | null | undefined): string => (text ?? "").replace(/\s+/g, " ").trim();
+  // In a real page innerText skips CSS-hidden nodes and turns block breaks into
+  // whitespace — responsive sites (e.g. linear.app) put 2-3 copies of a headline
+  // in one <h1> and hide all but one, which textContent glues into one string.
+  // The node-html-parser fallback has no layout, so it uses textContent.
+  const textOf = (el: El): string => {
+    const inner = typeof document !== "undefined" && el && typeof el.innerText === "string" ? el.innerText : null;
+    return inner ?? el?.textContent ?? "";
+  };
   const insideChrome = (el: El): boolean => {
     let node: El | null = el;
     while (node) {
@@ -99,8 +107,21 @@ export function collectRawFacts(input: { ctaWords: string[]; root?: any }): { ki
 
   const results: { kind: string; text: string; selector: string }[] = [];
   const seen = new Set<string>();
+  // "X Y X Y" -> "X Y": responsive markup and screen-reader-only copies repeat a
+  // headline inside one element, and innerText still includes visible-to-AT copies.
+  const collapseRepeats = (text: string): string => {
+    const words = text.split(" ");
+    for (let k = 1; k <= words.length / 2; k++) {
+      if (words.length % k !== 0) continue;
+      const unit = words.slice(0, k).join(" ").toLowerCase();
+      let repeated = true;
+      for (let i = k; i < words.length && repeated; i += k) repeated = words.slice(i, i + k).join(" ").toLowerCase() === unit;
+      if (repeated) return words.slice(0, k).join(" ");
+    }
+    return text;
+  };
   const push = (kind: string, text: string, el: El): void => {
-    const clean = cleanText(text);
+    const clean = collapseRepeats(cleanText(text));
     if (clean.length < 3 || clean.length > 200) return;
     const key = kind + ":" + clean.toLowerCase();
     if (seen.has(key)) return;
@@ -111,9 +132,9 @@ export function collectRawFacts(input: { ctaWords: string[]; root?: any }): { ki
   // Hero: first h1 plus its nearest following paragraph.
   const h1 = one(root, "h1");
   if (h1) {
-    push("hero", h1.textContent, h1);
+    push("hero", textOf(h1), h1);
     const p = one(parentOf(h1) ?? root, "p");
-    if (p) push("hero", p.textContent, p);
+    if (p) push("hero", textOf(p), p);
   }
 
   // Features (a): explicit feature/benefit blocks.
@@ -121,8 +142,8 @@ export function collectRawFacts(input: { ctaWords: string[]; root?: any }): { ki
     if (insideChrome(block)) return;
     const heading = one(block, "h2, h3, h4, strong");
     const text = one(block, "p");
-    if (heading) push("feature", heading.textContent, heading);
-    if (text) push("feature", text.textContent, text);
+    if (heading) push("feature", textOf(heading), heading);
+    if (text) push("feature", textOf(text), text);
   });
 
   // Features (b): card grids — a container with >= 3 same-tag children that
@@ -137,38 +158,38 @@ export function collectRawFacts(input: { ctaWords: string[]; root?: any }): { ki
     if (!kids.every((k: El) => tag(k) === firstTag)) return;
     const headings = kids.map((k: El) => one(k, "h3, h4, h5, [class*='title' i]"));
     if (headings.some((h: El | null) => !h)) return;
-    const labels = headings.map((h: El) => cleanText(h.textContent));
+    const labels = headings.map((h: El) => cleanText(textOf(h)));
     if (labels.some((l: string) => l.length < 3 || l.length > 80)) return;
     gridGroups++;
     kids.forEach((k: El, i: number) => {
       push("feature", labels[i]!, headings[i]);
       const body = one(k, "p");
-      if (body) push("feature", body.textContent, body);
+      if (body) push("feature", textOf(body), body);
     });
   });
 
   // Headings: every other heading on the page, a broad net the caller can filter.
   all(root, "h2, h3").forEach((h: El) => {
-    if (!insideChrome(h)) push("heading", h.textContent, h);
+    if (!insideChrome(h)) push("heading", textOf(h), h);
   });
 
   // Stats: short text that looks numeric ("10,000+", "99%", "24/7").
   const statPattern = /\b\d[\d,.]*\s?(%|\+|k\+?|m\+?|x)?\b/i;
   all(root, "h2, h3, strong, b, [class*='stat' i], [class*='metric' i], [class*='number' i]").forEach((el: El) => {
-    const text = cleanText(el.textContent);
+    const text = cleanText(textOf(el));
     if (statPattern.test(text) && text.length < 40 && /\d/.test(text) && !insideChrome(el)) push("stat", text, el);
   });
 
   // Testimonials: blockquotes or elements explicitly marked as testimonial/review/quote.
   all(root, 'blockquote, [class*="testimonial" i], [class*="review" i], [class*="quote" i]').forEach((el: El) => {
-    if (!insideChrome(el)) push("testimonial", el.textContent, el);
+    if (!insideChrome(el)) push("testimonial", textOf(el), el);
   });
 
   // CTAs: buttons/links whose text matches a known call-to-action vocabulary.
   all(root, "button, a").forEach((el: El) => {
-    const text = cleanText(el.textContent).toLowerCase();
+    const text = cleanText(textOf(el)).toLowerCase();
     if (text.length === 0 || text.length > 30) return;
-    if (ctaWords.some((w) => text.includes(w))) push("cta", el.textContent, el);
+    if (ctaWords.some((w) => text.includes(w))) push("cta", textOf(el), el);
   });
 
   return results;

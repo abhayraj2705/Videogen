@@ -48,6 +48,13 @@ describe("plain-fetch HTML extraction", () => {
     expect(isSufficient(m.facts, m.words)).toBe(true);
   });
 
+  it("collapses a headline repeated inside one h1 (responsive / screen-reader copies)", () => {
+    // Shape of linear.app's hero: the same headline once per breakpoint in a single <h1>.
+    const html = `<main><h1><span>Ship docs faster</span> <span class="md">Ship docs faster</span> <span class="sr-only">Ship docs faster</span></h1><p>For teams.</p></main>`;
+    const m = materialFromHtml(html, "https://acme.test/");
+    expect(m.facts.filter((f) => f.kind === "hero").map((f) => f.text)).toContain("Ship docs faster");
+  });
+
   it("derives brand tokens from theme-color, Google Fonts links and the header logo", () => {
     const brand = extractBrandFromHtml(parse(MARKETING_HTML), "https://acme.test/");
     expect(brand.accent).toBe("#5b3df5");

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { z } from "zod";
-import { createOpenAiCompatProvider, extractJsonText, LlmCallError } from "./index.js";
+import { createOpenAiCompatProvider, extractJsonText, stripMarkdownLinks, LlmCallError } from "./index.js";
 
 const Schema = z.object({ name: z.string(), score: z.number() });
 const noSleep = async () => undefined;
@@ -16,6 +16,15 @@ describe("extractJsonText", () => {
     expect(extractJsonText('```json\n{"a":1}\n```')).toBe('{"a":1}');
     expect(extractJsonText('Sure! Here it is: {"a":{"b":2}} Hope that helps.')).toBe('{"a":{"b":2}}');
     expect(extractJsonText("no json here")).toBe("no json here");
+  });
+});
+
+describe("stripMarkdownLinks", () => {
+  it("collapses gateway-rendered markdown links inside JSON strings", () => {
+    // Real WebAI-to-API output for a sourcePageUrl prop.
+    const raw = '{"sourcePageUrl":"[https://linear.app](https://linear.app)","note":"see [docs](https://x.dev/a)"}';
+    expect(JSON.parse(stripMarkdownLinks(raw))).toEqual({ sourcePageUrl: "https://linear.app", note: "see docs" });
+    expect(stripMarkdownLinks('{"a":"[x]"}')).toBe('{"a":"[x]"}');
   });
 });
 
