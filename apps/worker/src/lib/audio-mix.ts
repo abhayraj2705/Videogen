@@ -2,72 +2,166 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
-import { runFfmpeg } from "@sitereel/shared";
+import { resolveFfmpegPath, runCapture, runFfmpegQuiet } from "@sitereel/shared";
+import type { FilmManifest } from "@sitereel/film-runtime";
 import type { StorageClient } from "@sitereel/storage";
 import type { VoiceSceneResult } from "../stages/voice.js";
+import type { AudioSidecarClient } from "./audio-sidecar.js";
+import type { MusicTrack } from "./music.js";
 
-const SAMPLE_RATE = 44100;
+const SAMPLE_RATE = 48000;
 
 /**
- * Concatenates each scene's voice clip (or generated silence, for scenes with
- * no narration) into one continuous track spanning the manifest's full
- * duration, in scene order. Each clip is resampled to a common format first —
- * the fallback TTS provider outputs 44.1kHz, Gemini TTS outputs 24kHz, and
- * the file-concat demuxer requires identical formats to stream-copy, so this
- * uses the `concat` audio filter (which resamples per input) instead.
+ * Lays every scene's voice clip onto one silent bed at the narration offset
+ * the timing engine chose for it (manifest scene.audioStart), so voice lines
+ * stay in sync with crossfaded, beat-snapped scenes — plain concatenation
+ * would drift as soon as scenes overlap. Output length = manifest.duration.
  */
-export async function assembleSceneAudio(opts: {
+export async function assembleNarrationTrack(opts: {
+  manifest: FilmManifest;
   voiceScenes: VoiceSceneResult[];
   storage: StorageClient;
   repoRoot?: string;
 }): Promise<Buffer> {
-  const { voiceScenes, storage, repoRoot } = opts;
-  const tmpDir = path.join(os.tmpdir(), `sitereel-mix-${randomUUID()}`);
+  const { manifest, voiceScenes, storage, repoRoot } = opts;
+  const tmpDir = path.join(os.tmpdir(), `sitereel-narr-${randomUUID()}`);
   await fs.mkdir(tmpDir, { recursive: true });
-
   try {
-    const clipPaths: string[] = [];
-    for (const [i, scene] of voiceScenes.entries()) {
-      const clipPath = path.join(tmpDir, `clip-${i}.wav`);
-      if (scene.audioKey) {
-        // The raw synthesized clip is sized to its own reading-floor estimate,
-        // which is almost never exactly `scene.durationSec` (Build picks the
-        // LARGER of the storyboard's own duration and audio+padding — see
-        // voice.ts). Pad (or trim) here so each clip exactly matches the
-        // scene window it's muxed under; otherwise the concatenated track's
-        // total length drifts from the video's, and ffmpeg's `-shortest` mux
-        // flag silently truncates the tail of the video to match the shorter
-        // audio track — a real bug this fixed (stripe.com job: video was
-        // 14.9s but the final MP4 played only 10.5s).
-        const rawPath = path.join(tmpDir, `raw-${i}.wav`);
-        const bytes = await storage.getObject("assets", scene.audioKey);
-        await fs.writeFile(rawPath, bytes);
-        await runFfmpeg(
-          ["-y", "-i", rawPath, "-af", "apad", "-t", scene.durationSec.toFixed(3), "-ar", String(SAMPLE_RATE), "-ac", "1", clipPath],
-          repoRoot,
-        );
-      } else {
-        await runFfmpeg(
-          ["-y", "-f", "lavfi", "-i", `anullsrc=channel_layout=mono:sample_rate=${SAMPLE_RATE}`, "-t", scene.durationSec.toFixed(3), clipPath],
-          repoRoot,
-        );
-      }
-      clipPaths.push(clipPath);
-    }
+    const voiced = voiceScenes
+      .map((v) => ({ v, scene: manifest.scenes.find((s) => s.id === v.sceneId) }))
+      .filter((x): x is { v: VoiceSceneResult & { audioKey: string }; scene: NonNullable<typeof x.scene> } => Boolean(x.v.audioKey && x.scene));
 
-    const outPath = path.join(tmpDir, "mixed.wav");
-    if (clipPaths.length === 1) {
-      await runFfmpeg(["-y", "-i", clipPaths[0]!, "-ar", String(SAMPLE_RATE), "-ac", "1", outPath], repoRoot);
-    } else {
-      const inputArgs = clipPaths.flatMap((p) => ["-i", p]);
-      const perInput = clipPaths.map((_, i) => `[${i}:a]aresample=${SAMPLE_RATE},aformat=sample_fmts=s16:channel_layouts=mono[a${i}]`).join("; ");
-      const concatInputs = clipPaths.map((_, i) => `[a${i}]`).join("");
-      const filter = `${perInput}; ${concatInputs}concat=n=${clipPaths.length}:v=0:a=1[aout]`;
-      await runFfmpeg(["-y", ...inputArgs, "-filter_complex", filter, "-map", "[aout]", outPath], repoRoot);
+    const inputs: string[] = ["-f", "lavfi", "-t", manifest.duration.toFixed(3), "-i", `anullsrc=channel_layout=mono:sample_rate=${SAMPLE_RATE}`];
+    const filters: string[] = [];
+    for (const [i, { v, scene }] of voiced.entries()) {
+      const p = path.join(tmpDir, `clip-${i}.wav`);
+      await fs.writeFile(p, await storage.getObject("assets", v.audioKey));
+      inputs.push("-i", p);
+      const delayMs = Math.round((scene.audioStart ?? scene.start) * 1000);
+      filters.push(`[${i + 1}:a]aresample=${SAMPLE_RATE},aformat=sample_fmts=fltp:channel_layouts=mono,adelay=${delayMs}:all=1[a${i}]`);
     }
-
+    const outPath = path.join(tmpDir, "narration.wav");
+    const mixInputs = ["[0:a]", ...voiced.map((_, i) => `[a${i}]`)].join("");
+    filters.push(`${mixInputs}amix=inputs=${voiced.length + 1}:normalize=0:duration=first[out]`);
+    await runFfmpegQuiet(["-y", ...inputs, "-filter_complex", filters.join(";"), "-map", "[out]", "-t", manifest.duration.toFixed(3), "-ar", String(SAMPLE_RATE), outPath], repoRoot);
     return await fs.readFile(outPath);
   } finally {
     await fs.rm(tmpDir, { recursive: true, force: true }).catch(() => undefined);
+  }
+}
+
+export interface MixParams {
+  targetLufs?: number;
+  truePeak?: number;
+  musicGain?: number;
+}
+
+/**
+ * Same filtergraph as the sidecar's mix_filtergraph() (services/audio-sidecar/
+ * sidecar/audio.py) — keep them in sync. Voice is split: one copy is the
+ * sidechain key that ducks the music (to roughly 0.12-0.15 linear under
+ * speech, §4.6), the other is mixed on top.
+ */
+export function mixFilterGraph(hasMusic: boolean, durationSec: number, p: Required<MixParams>): string {
+  const d = durationSec.toFixed(3);
+  const voice = `[0:a]aformat=sample_rates=${SAMPLE_RATE}:channel_layouts=stereo,apad,atrim=0:${d}`;
+  if (!hasMusic) return `${voice}[mix]`;
+  const fadeSt = Math.max(0, durationSec - 1.5).toFixed(3);
+  return [
+    `${voice},asplit=2[v][sc]`,
+    `[1:a]aformat=sample_rates=${SAMPLE_RATE}:channel_layouts=stereo,atrim=0:${d},volume=${p.musicGain},afade=t=in:d=0.4,afade=t=out:st=${fadeSt}:d=1.5[m]`,
+    `[m][sc]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=400:makeup=1[duck]`,
+    `[v][duck]amix=inputs=2:normalize=0:duration=first[mix]`,
+  ].join(";");
+}
+
+export interface MixResult {
+  audio: Buffer;
+  path: "sidecar" | "ffmpeg";
+  hasMusic: boolean;
+  lufs: number | null;
+  truePeakDbtp: number | null;
+  normalized: boolean;
+}
+
+/**
+ * Final audio: narration + optional music bed (looped, ducked under voice),
+ * loudness-normalized to -14 LUFS / -1.5 dBTP. Prefers the audio sidecar's
+ * /mix; if it's unset, down, slow or errors, runs the identical graph with
+ * local ffmpeg (two-pass loudnorm) — the sidecar is an optimization, never
+ * a dependency.
+ */
+export async function mixFinalAudio(opts: {
+  narration: Buffer;
+  music: MusicTrack | null;
+  durationSec: number;
+  sidecar?: AudioSidecarClient | null;
+  params?: MixParams;
+  repoRoot?: string;
+}): Promise<MixResult> {
+  const p: Required<MixParams> = { targetLufs: -14, truePeak: -1.5, musicGain: 0.32, ...opts.params };
+  const musicBuf = opts.music ? await fs.readFile(opts.music.path) : null;
+
+  if (opts.sidecar) {
+    const r = await opts.sidecar.mix({ voice: opts.narration, music: musicBuf, durationSec: opts.durationSec, targetLufs: p.targetLufs, musicGain: p.musicGain });
+    if (r) return { audio: r.audio, path: "sidecar", hasMusic: Boolean(musicBuf), lufs: r.report.lufs ?? null, truePeakDbtp: r.report.truePeakDbtp ?? null, normalized: r.report.normalized ?? false };
+  }
+
+  const tmpDir = path.join(os.tmpdir(), `sitereel-mix-${randomUUID()}`);
+  await fs.mkdir(tmpDir, { recursive: true });
+  try {
+    const voicePath = path.join(tmpDir, "voice.wav");
+    await fs.writeFile(voicePath, opts.narration);
+    const inputs = ["-i", voicePath];
+    if (opts.music) inputs.push("-stream_loop", "-1", "-i", opts.music.path);
+    const mixed = path.join(tmpDir, "mixed.wav");
+    await runFfmpegQuiet(
+      ["-y", ...inputs, "-filter_complex", mixFilterGraph(Boolean(opts.music), opts.durationSec, p), "-map", "[mix]", "-t", opts.durationSec.toFixed(3), "-ar", String(SAMPLE_RATE), mixed],
+      opts.repoRoot,
+    );
+
+    const stats = await measureLoudnorm(mixed, p, opts.repoRoot);
+    const out = path.join(tmpDir, "out.wav");
+    if (stats) {
+      const ln =
+        `loudnorm=I=${p.targetLufs}:TP=${p.truePeak}:LRA=11:measured_I=${stats.input_i}:measured_TP=${stats.input_tp}` +
+        `:measured_LRA=${stats.input_lra}:measured_thresh=${stats.input_thresh}:offset=${stats.target_offset}:linear=true`;
+      await runFfmpegQuiet(["-y", "-i", mixed, "-af", `${ln},aresample=${SAMPLE_RATE}`, "-t", opts.durationSec.toFixed(3), out], opts.repoRoot);
+    } else {
+      await fs.copyFile(mixed, out);
+    }
+    const after = stats ? await measureLoudnorm(out, p, opts.repoRoot) : null;
+    return {
+      audio: await fs.readFile(out),
+      path: "ffmpeg",
+      hasMusic: Boolean(opts.music),
+      lufs: after ? Number(after.input_i) : null,
+      truePeakDbtp: after ? Number(after.input_tp) : null,
+      normalized: Boolean(stats),
+    };
+  } finally {
+    await fs.rm(tmpDir, { recursive: true, force: true }).catch(() => undefined);
+  }
+}
+
+interface LoudnormStats {
+  input_i: string;
+  input_tp: string;
+  input_lra: string;
+  input_thresh: string;
+  target_offset: string;
+}
+
+/** loudnorm analysis pass. null for (near-)silence — normalizing silence would just amplify the noise floor. */
+async function measureLoudnorm(file: string, p: Required<MixParams>, repoRoot?: string): Promise<LoudnormStats | null> {
+  const { stderr } = await runCapture(resolveFfmpegPath(repoRoot), ["-hide_banner", "-nostdin", "-i", file, "-af", `loudnorm=I=${p.targetLufs}:TP=${p.truePeak}:LRA=11:print_format=json`, "-f", "null", "-"]);
+  const m = /\{[^{}]*"input_i"[^{}]*\}/s.exec(stderr);
+  if (!m) return null;
+  try {
+    const stats = JSON.parse(m[0]) as LoudnormStats;
+    const i = Number(stats.input_i);
+    return Number.isFinite(i) && i > -70 ? stats : null;
+  } catch {
+    return null;
   }
 }

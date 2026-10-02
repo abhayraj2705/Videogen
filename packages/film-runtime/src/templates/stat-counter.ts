@@ -1,6 +1,7 @@
 import type { FilmContext, Mark, SceneTemplate } from "../contract.js";
 import { easeOutExpo, progress } from "../util/easing.js";
 import { applyReveal, el, setStyle } from "../util/dom.js";
+import { WRAP_SAFE, fitFontSize, layoutFor } from "../util/layout.js";
 
 export interface StatCounterProps {
   /** The grounded stat fact's text, e.g. "10,000+" or "99.9%" — must come from a FactLedger entry (validated upstream). */
@@ -32,7 +33,13 @@ function formatCounted(n: number, decimals: number): string {
   return n.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
 }
 
-/** Big animated count-up for a single grounded stat. One stat per scene — the number IS the claim. */
+/**
+ * Big animated count-up for a single grounded stat. One stat per scene.
+ * Layouts: value size is fit to the safe width (the counted number never
+ * gets wider than the final value, which has the most digits); 9:16 sets
+ * value and label larger, 1:1 and 16:9 share sizes. Uses tabular numerals
+ * so the counter doesn't jitter horizontally while counting.
+ */
 export function createStatCounter(): SceneTemplate<StatCounterProps> {
   let instance: Instance | undefined;
 
@@ -40,35 +47,52 @@ export function createStatCounter(): SceneTemplate<StatCounterProps> {
     id: "StatCounter",
 
     mount(root, props, ctx: FilmContext) {
+      const L = layoutFor(ctx);
+      const u = L.u;
       setStyle(root, {
         position: "absolute",
         inset: "0",
+        boxSizing: "border-box",
+        padding: L.safePadding,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: `${ctx.height * 0.015}px`,
+        gap: `${L.pick({ landscape: 16, portrait: 28, square: 16 }) * u}px`,
         background: ctx.palette.bg,
       });
 
       const { numeric, prefix, suffix, decimals } = parseStatValue(props.value);
+      const finalText = numeric === null ? props.value : `${prefix}${formatCounted(numeric, decimals)}${suffix}`;
+      // Numerals are wider than average text — size with a wider advance estimate.
+      const maxValue = L.pick({ landscape: 190, portrait: 230, square: 180 }) * u;
+      const valueSize = Math.min(maxValue, (L.safe.width * 0.95) / (Math.max(1, finalText.length) * 0.66));
 
       const valueNode = el("div", "sc-value", numeric === null ? props.value : `${prefix}0${suffix}`);
       setStyle(valueNode, {
-        fontSize: `${ctx.height * 0.16}px`,
+        fontSize: `${valueSize}px`,
         fontWeight: "800",
-        color: ctx.palette.accent,
+        color: ctx.palette.accentText,
         fontFamily: ctx.fonts.display,
         letterSpacing: "-0.02em",
+        lineHeight: "1.05",
+        fontVariantNumeric: "tabular-nums",
+        whiteSpace: "nowrap",
+        textAlign: "center",
       });
       root.appendChild(valueNode);
 
+      const labelWidth = Math.min(L.safe.width, 1200 * u);
+      const labelSize = fitFontSize(props.label, labelWidth, L.pick({ landscape: 42, portrait: 54, square: 40 }) * u, 3, 22 * u);
       const labelNode = el("div", "sc-label", props.label);
       setStyle(labelNode, {
-        fontSize: `${ctx.height * 0.034}px`,
+        ...WRAP_SAFE,
+        fontSize: `${labelSize}px`,
         color: ctx.palette.fg,
         fontFamily: ctx.fonts.body,
         textAlign: "center",
+        lineHeight: "1.3",
+        maxWidth: `${labelWidth}px`,
       });
       root.appendChild(labelNode);
 
@@ -82,7 +106,7 @@ export function createStatCounter(): SceneTemplate<StatCounterProps> {
 
       if (instance.numericTarget !== null) {
         const countP = progress(localT, 0.1, 0.75, easeOutExpo);
-        const current = instance.numericTarget * countP;
+        const current = countP >= 1 ? instance.numericTarget : instance.numericTarget * countP;
         instance.valueNode.textContent = `${instance.prefix}${formatCounted(current, instance.decimals)}${instance.suffix}`;
       }
 

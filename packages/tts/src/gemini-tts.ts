@@ -1,4 +1,5 @@
-import type { SynthesizeOptions, TtsProvider, TtsResult, WordTiming } from "./provider.js";
+import type { SynthesizeOptions, TtsProvider, TtsResult } from "./provider.js";
+import { estimateWordTimings } from "./timings.js";
 
 // Placeholder rate — Gemini TTS is priced per character/token, not yet
 // finalized in the plan's own cost notes (§8.3); replace with the live rate
@@ -39,20 +40,6 @@ function pcm16ToWav(pcm: Buffer, sampleRate: number, channels = 1): Buffer {
   return Buffer.concat([header, pcm]);
 }
 
-function estimateWordTimings(text: string, durationSec: number): WordTiming[] {
-  const words = text.trim().length === 0 ? [] : text.trim().split(/\s+/);
-  if (words.length === 0) return [];
-  const weights = words.map((w) => w.length + 2);
-  const totalWeight = weights.reduce((s, w) => s + w, 0);
-  let t = 0;
-  return words.map((word, i) => {
-    const share = (weights[i]! / totalWeight) * durationSec;
-    const startSec = t;
-    t += share;
-    return { word, startSec, endSec: t };
-  });
-}
-
 /**
  * Gemini native-audio TTS. **Unverified against a live API in this
  * environment** — no GEMINI_API_KEY was available to test against during
@@ -63,11 +50,10 @@ function estimateWordTimings(text: string, durationSec: number): WordTiming[] {
  * silence rather than failing the job — but this still needs a real
  * end-to-end run against a real key before shipping.
  *
- * Gemini doesn't return word-level timestamps, so — same honest limitation
- * as the fallback provider — word timings are estimated proportionally by
- * word length rather than aligned to the actual waveform. §4.6 "Voice" notes
- * faster-whisper forced alignment as the real fix; that's a Phase 4+
- * follow-up, not implemented here.
+ * Gemini doesn't return word-level timestamps, so word timings start as a
+ * length-proportional estimate (wordsSource: "estimate"); the voice stage
+ * then replaces them with the audio sidecar's /align result when the sidecar
+ * is reachable (apps/worker/src/stages/voice.ts).
  */
 export function createGeminiTtsProvider(opts: GeminiTtsOptions): TtsProvider {
   const model = opts.model ?? "gemini-2.5-flash-preview-tts";
@@ -75,7 +61,7 @@ export function createGeminiTtsProvider(opts: GeminiTtsOptions): TtsProvider {
 
   return {
     id: `gemini-tts:${model}`,
-    async synthesize({ text, voiceId }: SynthesizeOptions): Promise<TtsResult> {
+    async synthesize({ text, voiceId, language }: SynthesizeOptions): Promise<TtsResult> {
       const voiceName = VOICE_MAP[voiceId] ?? VOICE_MAP.default!;
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${opts.apiKey}`;
       const controller = new AbortController();
@@ -87,7 +73,10 @@ export function createGeminiTtsProvider(opts: GeminiTtsOptions): TtsProvider {
           headers: { "Content-Type": "application/json" },
           signal: controller.signal,
           body: JSON.stringify({
-            contents: [{ role: "user", parts: [{ text }] }],
+            // Gemini TTS infers language from the text itself; the hint keeps
+            // Hindi lines (often written in romanized Hinglish) from being read
+            // with English phonetics.
+            contents: [{ role: "user", parts: [{ text: language === "hi" ? `Say in Hindi: ${text}` : text }] }],
             generationConfig: {
               responseModalities: ["AUDIO"],
               speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName } } },
@@ -115,6 +104,7 @@ export function createGeminiTtsProvider(opts: GeminiTtsOptions): TtsProvider {
           contentType: "audio/wav",
           durationSec,
           words: estimateWordTimings(text, durationSec),
+          wordsSource: "estimate",
           costUsd: (text.length / 1000) * USD_PER_1K_CHARS,
         };
       } finally {

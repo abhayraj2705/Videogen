@@ -10,29 +10,31 @@
     "typecheck": "tsc --noEmit",
     "benchmark": "tsx src/scripts/benchmark.ts",
     "plan-eval": "tsx src/scripts/plan-eval.ts",
-    "spot-check": "tsx src/scripts/spot-check.ts"
+    "spot-check": "tsx src/scripts/spot-check.ts",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@sitereel/shared": "workspace:*",
     "@sitereel/db": "workspace:*",
+    "@sitereel/film-runtime": "workspace:*",
     "@sitereel/llm": "workspace:*",
+    "@sitereel/renderer": "workspace:*",
+    "@sitereel/shared": "workspace:*",
     "@sitereel/storage": "workspace:*",
     "@sitereel/tts": "workspace:*",
-    "@sitereel/film-runtime": "workspace:*",
-    "@sitereel/renderer": "workspace:*",
     "bullmq": "5.34.6",
-    "ioredis": "5.4.2",
     "drizzle-orm": "0.38.3",
+    "ioredis": "5.4.2",
+    "nanoid": "5.0.9",
     "pino": "9.6.0",
     "pino-pretty": "13.0.0",
     "playwright": "1.63.0",
-    "nanoid": "5.0.9",
     "zod": "3.24.1"
   },
   "devDependencies": {
-    "typescript": "5.7.3",
-    "tsx": "4.19.2",
     "@types/node": "22.10.5",
-    "dotenv": "16.4.7"
+    "dotenv": "16.4.7",
+    "tsx": "4.19.2",
+    "typescript": "5.7.3",
+    "vitest": "2.1.8"
   }
 }

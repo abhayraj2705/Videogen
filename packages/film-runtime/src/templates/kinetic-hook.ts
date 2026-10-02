@@ -2,6 +2,7 @@ import type { FilmContext, Mark, SceneTemplate } from "../contract.js";
 import { easeOutBack, easeOutCubic, progress } from "../util/easing.js";
 import { applyReveal, el, setStyle } from "../util/dom.js";
 import { wrapText } from "../util/text-fit.js";
+import { WRAP_SAFE, charsPerLine, fitFontSize, layoutFor } from "../util/layout.js";
 
 export interface KineticHookProps {
   /** Grounded product name, from the FactLedger. */
@@ -19,8 +20,8 @@ interface Instance {
 
 /**
  * Opening scene (2-3s per the planner rubric): logo pops in, headline wipes in.
- * Factory: call createKineticHook() once per scene instance — each call returns
- * a template with its own closure-scoped DOM refs, so scenes never share state.
+ * Layouts: 16:9 two-line headline; 9:16 bigger logo + up to four stacked
+ * lines filling the tall frame; 1:1 three lines at a slightly smaller size.
  */
 export function createKineticHook(): SceneTemplate<KineticHookProps> {
   let instance: Instance | undefined;
@@ -29,9 +30,13 @@ export function createKineticHook(): SceneTemplate<KineticHookProps> {
     id: "KineticHook",
 
     mount(root, props, ctx: FilmContext) {
+      const L = layoutFor(ctx);
+      const u = L.u;
       setStyle(root, {
         position: "absolute",
         inset: "0",
+        boxSizing: "border-box",
+        padding: L.safePadding,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -40,14 +45,16 @@ export function createKineticHook(): SceneTemplate<KineticHookProps> {
         fontFamily: ctx.fonts.display,
       });
 
+      const logoSize = L.pick({ landscape: 150, portrait: 220, square: 150 }) * u;
       const logoWrap = el("div", "kh-logo");
       setStyle(logoWrap, {
-        width: `${ctx.height * 0.14}px`,
-        height: `${ctx.height * 0.14}px`,
-        marginBottom: `${ctx.height * 0.04}px`,
+        width: `${logoSize}px`,
+        height: `${logoSize}px`,
+        marginBottom: `${L.pick({ landscape: 44, portrait: 72, square: 40 }) * u}px`,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        flexShrink: "0",
       });
       if (props.logoUrl) {
         const img = el("img");
@@ -61,35 +68,41 @@ export function createKineticHook(): SceneTemplate<KineticHookProps> {
           height: "100%",
           borderRadius: "20%",
           background: ctx.palette.accent,
-          color: ctx.palette.bg,
+          color: ctx.palette.onAccent,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: `${ctx.height * 0.08}px`,
+          fontSize: `${logoSize * 0.55}px`,
           fontWeight: "700",
         });
         logoWrap.appendChild(fallback);
       }
       root.appendChild(logoWrap);
 
+      const textWidth = Math.min(L.safe.width, L.pick({ landscape: 1500, portrait: 1000, square: 960 }) * u);
+      const maxLines = L.pick({ landscape: 2, portrait: 4, square: 3 });
+      const fontSize = fitFontSize(props.headline, textWidth, L.pick({ landscape: 84, portrait: 104, square: 80 }) * u, maxLines, 28 * u);
+
       const headlineWrap = el("div", "kh-headline");
       setStyle(headlineWrap, {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: "0.3em",
-        maxWidth: `${ctx.width * 0.8}px`,
+        gap: "0.12em",
+        maxWidth: `${textWidth}px`,
       });
-      const lines = wrapText(props.headline, Math.round(ctx.width / 34), 2);
+      const lines = wrapText(props.headline, charsPerLine(textWidth, fontSize), maxLines);
       const lineNodes = lines.map((line) => {
         const p = el("div", "kh-line", line);
         setStyle(p, {
-          fontSize: `${ctx.height * 0.072}px`,
+          ...WRAP_SAFE,
+          fontSize: `${fontSize}px`,
           fontWeight: "700",
           color: ctx.palette.fg,
           textAlign: "center",
           letterSpacing: "-0.01em",
           lineHeight: "1.15",
+          maxWidth: `${textWidth}px`,
         });
         headlineWrap.appendChild(p);
         return p;
@@ -102,7 +115,7 @@ export function createKineticHook(): SceneTemplate<KineticHookProps> {
     seek(localT) {
       if (!instance) return;
       const logoP = progress(localT, 0, 0.5, easeOutBack);
-      instance.logoWrap.style.opacity = String(logoP);
+      instance.logoWrap.style.opacity = String(Math.min(1, logoP));
       instance.logoWrap.style.transform = `scale(${0.6 + 0.4 * logoP})`;
 
       instance.lineNodes.forEach((node, i) => {
@@ -117,7 +130,7 @@ export function createKineticHook(): SceneTemplate<KineticHookProps> {
       return [
         { t: 0, type: "start" },
         { t: 0.35, type: "headline-begin" },
-        { t: 0.35 + words * 0.05 + 0.4, type: "settle" },
+        { t: Math.max(1.25, 0.35 + words * 0.05 + 0.4), type: "settle" },
       ];
     },
 

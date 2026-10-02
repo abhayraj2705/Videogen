@@ -41,5 +41,7 @@ export type QaJobData = z.infer<typeof QaJobData>;
 export const RenderJobData = z.object({
   jobId: z.string().uuid(),
   format: z.enum(["16:9", "9:16", "1:1"]),
+  /** Free plan: burn in the "Made with SiteReel" watermark (§ pricing). Resolved from users.plan by QA when it enqueues. */
+  watermark: z.boolean().optional(),
 });
 export type RenderJobData = z.infer<typeof RenderJobData>;

@@ -15,6 +15,9 @@ const MIME: Record<string, string> = {
   ".jpeg": "image/jpeg",
   ".svg": "image/svg+xml",
   ".map": "application/json; charset=utf-8",
+  ".webp": "image/webp",
+  ".gif": "image/gif",
+  ".woff2": "font/woff2",
 };
 
 export interface FilmServer {
@@ -27,8 +30,8 @@ export interface FilmServer {
  * plus one extra root (manifest.json + scene assets for the job being rendered).
  * This is the local stand-in for FILM_HOST (§4.7 of the plan) in Phase 0.
  */
-export function startFilmServer(extraRoot: string, port = 4100): Promise<FilmServer> {
-  const publicRoot = path.join(__dirname, "..", "public");
+export function startFilmServer(extraRoot: string, port = 4100, opts: { publicRoot?: string } = {}): Promise<FilmServer> {
+  const publicRoot = opts.publicRoot ?? path.join(__dirname, "..", "public");
 
   const server = http.createServer((req, res) => {
     const reqPath = decodeURIComponent((req.url ?? "/").split("?")[0] ?? "/");
@@ -40,7 +43,7 @@ export function startFilmServer(extraRoot: string, port = 4100): Promise<FilmSer
       if (!allowedRoots.some((root) => resolved.startsWith(root))) continue;
       if (fs.existsSync(resolved) && fs.statSync(resolved).isFile()) {
         const ext = path.extname(resolved);
-        res.writeHead(200, { "Content-Type": MIME[ext] ?? "application/octet-stream" });
+        res.writeHead(200, { "Content-Type": MIME[ext] ?? "application/octet-stream", "Access-Control-Allow-Origin": "*" });
         fs.createReadStream(resolved).pipe(res);
         return;
       }
@@ -51,9 +54,12 @@ export function startFilmServer(extraRoot: string, port = 4100): Promise<FilmSer
 
   return new Promise((resolve, reject) => {
     server.once("error", reject);
+    // port 0 = pick a free port (parallel QA/render jobs and tests can't share one).
     server.listen(port, "127.0.0.1", () => {
+      const addr = server.address();
+      const actualPort = typeof addr === "object" && addr ? addr.port : port;
       resolve({
-        url: `http://127.0.0.1:${port}`,
+        url: `http://127.0.0.1:${actualPort}`,
         close: () => new Promise((r) => server.close(() => r())),
       });
     });

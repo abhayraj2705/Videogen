@@ -23,7 +23,8 @@
     "db:studio": "pnpm --filter @sitereel/db run db:studio",
     "phase0:render": "pnpm --filter @sitereel/renderer run render",
     "phase0:purity": "pnpm --filter @sitereel/renderer run purity",
-    "phase2:benchmark": "pnpm --filter @sitereel/worker run benchmark"
+    "phase2:benchmark": "pnpm --filter @sitereel/worker run benchmark",
+    "pipeline": "pnpm --filter @sitereel/worker exec tsx src/scripts/pipeline.ts"
   },
   "devDependencies": {
     "turbo": "2.3.3",

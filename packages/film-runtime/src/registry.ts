@@ -26,6 +26,16 @@ export const TEMPLATE_REGISTRY: Record<string, TemplateFactory> = {
   ChecklistReveal: createChecklistReveal,
 };
 
+/**
+ * Registers an extra template at runtime. Used by QA's seeded-defect tests
+ * (a deliberately impure / overflowing template must be caught), and by any
+ * future plugin templates. Refuses to overwrite a built-in.
+ */
+export function registerTemplate(id: string, factory: TemplateFactory): void {
+  if (TEMPLATE_REGISTRY[id] && !id.startsWith("__")) throw new Error(`Template ${id} already registered`);
+  TEMPLATE_REGISTRY[id] = factory;
+}
+
 export function createTemplate(templateId: string): SceneTemplate<any> {
   const factory = TEMPLATE_REGISTRY[templateId];
   if (!factory) {

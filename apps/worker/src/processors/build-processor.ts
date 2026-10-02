@@ -35,7 +35,7 @@ export function createBuildProcessor(deps: WorkerDeps) {
     // What's actually produced here is validated and persisted as a debug
     // artifact for the admin inspector (§3.6 W13), not consumed downstream.
     for (const format of jobRow.options.formats) {
-      const manifest = buildFilmManifest({ storyboard: inputs.storyboard, crawlOutput: inputs.crawlOutput, voiceScenes: inputs.voiceScenes, format });
+      const manifest = buildFilmManifest({ storyboard: inputs.storyboard, crawlOutput: inputs.crawlOutput, voiceScenes: inputs.voiceScenes, format, music: inputs.music });
       await deps.storage.putObject(
         "assets",
         `jobs/${jobId}/build/manifest-${formatSlug(format)}.json`,
@@ -46,7 +46,7 @@ export function createBuildProcessor(deps: WorkerDeps) {
 
     await deps.db
       .update(stageRuns)
-      .set({ status: "ok", endedAt: new Date(), outputs: { formats: jobRow.options.formats } })
+      .set({ status: "ok", endedAt: new Date(), outputs: { formats: jobRow.options.formats, music: inputs.music?.id ?? null } })
       .where(eq(stageRuns.id, buildRun!.id));
 
     log.info({ formats: jobRow.options.formats }, "build completed");

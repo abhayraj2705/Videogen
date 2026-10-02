@@ -9,6 +9,17 @@ export interface Palette {
   accent: string;
 }
 
+/**
+ * Palette as templates see it: the player derives two extra inks so brand
+ * colors never produce unreadable text — `accentText` is the accent when it
+ * reads against bg (>= 3:1), otherwise fg; `onAccent` is whichever of
+ * bg/fg/white/black reads best on an accent-filled surface.
+ */
+export interface ResolvedPalette extends Palette {
+  accentText: string;
+  onAccent: string;
+}
+
 export interface Fonts {
   display: string;
   body: string;
@@ -31,6 +42,15 @@ export interface ResolvedScene<P = Record<string, unknown>> {
   start: number;
   end: number;
   props: P;
+  /**
+   * Crossfade length at this scene's head. The scene is visible from `start`;
+   * for the first `transitionInSec` seconds it fades in *over* the previous
+   * scene, which stays visible until its own `end` (= this start + overlap).
+   * Produced by the timing engine (timing.ts); absent/0 = hard cut.
+   */
+  transitionInSec?: number;
+  /** Absolute time (s) the scene's narration starts; used by the audio mix, ignored by the player. */
+  audioStart?: number;
 }
 
 export interface FilmManifest {
@@ -44,10 +64,16 @@ export interface FilmManifest {
   captions: Caption[];
   /** Preview-only. The renderer muxes audio separately after frame capture. */
   audioUrl?: string;
+  /**
+   * Time (s) of the "designed poster" moment — the first scene's settle mark.
+   * The encoder bakes this frame into frame 0 so platforms that show the
+   * first frame as a thumbnail get a composed card, not a blank background.
+   */
+  posterTime?: number;
 }
 
 export interface FilmContext {
-  palette: Palette;
+  palette: ResolvedPalette;
   fonts: Fonts;
   width: number;
   height: number;
