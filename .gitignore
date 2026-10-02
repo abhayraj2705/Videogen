@@ -17,3 +17,10 @@ supabase/.temp/
 *.tsbuildinfo
 apps/web/test-results/
 apps/web/playwright-report/
+
+# Phase 4 generated media (renders, QA frames) and Python caches
+benchmark/out/
+packages/renderer/out/
+*.mp4
+__pycache__/
+.pytest_cache/

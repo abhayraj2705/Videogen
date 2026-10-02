@@ -9,17 +9,21 @@
     "typecheck": "tsc --noEmit",
     "build": "tsc -p tsconfig.json",
     "render": "tsx src/cli.ts render",
-    "purity": "tsx src/cli.ts purity"
+    "purity": "tsx src/cli.ts purity",
+    "test": "vitest run"
   },
   "dependencies": {
     "@sitereel/film-runtime": "workspace:*",
     "@sitereel/shared": "workspace:*",
-    "playwright": "1.63.0"
+    "playwright": "1.63.0",
+    "pngjs": "7.0.0"
   },
   "devDependencies": {
-    "typescript": "5.7.3",
-    "tsx": "4.19.2",
+    "@types/node": "22.10.5",
+    "@types/pngjs": "^6.0.5",
     "esbuild": "0.24.2",
-    "@types/node": "22.10.5"
+    "tsx": "4.19.2",
+    "typescript": "5.7.3",
+    "vitest": "2.1.8"
   }
 }

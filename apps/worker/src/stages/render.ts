@@ -3,12 +3,20 @@ import os from "node:os";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import type { FilmManifest } from "@sitereel/film-runtime";
-import { bundleFilmEntry, startFilmServer, renderFilm, extractPosterFrame } from "@sitereel/renderer";
+import {
+  bundleFilmEntry,
+  startFilmServer,
+  renderChunked,
+  extractBakedPoster,
+  renderWatermarkPng,
+  type ChunkStore,
+  type ChunkedRenderResult,
+} from "@sitereel/renderer";
 import type { StorageClient } from "@sitereel/storage";
-import { formatSlug, type AspectFormat, type ServerEnv } from "@sitereel/shared";
+import { ffprobe, formatSlug, type AspectFormat, type ServerEnv } from "@sitereel/shared";
 import { resolveAssetRefsDeep } from "../lib/asset-ref.js";
 
-const RENDER_PORT = 4100;
+export type RenderEnv = Pick<ServerEnv, "STORAGE_DRIVER" | "STORAGE_LOCAL_DIR">;
 
 export interface RenderStageResult {
   videoBuffer: Buffer;
@@ -16,20 +24,56 @@ export interface RenderStageResult {
   durationSec: number;
   frames: number;
   bytes: number;
+  chunked: ChunkedRenderResult;
+  probe: { width?: number; height?: number; frames?: number; hasAudio: boolean; durationSec: number };
 }
 
 /**
- * §4.6 "Render": resolves the manifest's asset:// placeholders into real
- * fetchable URLs (relative to the local film server for STORAGE_DRIVER=local,
- * or presigned R2 URLs for STORAGE_DRIVER=s3), starts the server, and runs
- * the same capture loop Phase 0 built — proving the Build stage's output and
- * the renderer's input are exactly the same contract (§2.2 decision).
- *
- * Phase 0's chunked/distributed design (§4.6: "split ranges across parallel
- * containers") isn't implemented here — this is the single-process renderer,
- * run with render-queue concurrency 1 per the plan's own §4.5 table ("1 per
- * container (CPU-bound)"). Splitting into ranges is an infra scaling change,
- * not a correctness one; the capture loop itself is unchanged either way.
+ * Chunk store backed by object storage, keyed per job+format: a retried render
+ * job (BullMQ attempt 2, possibly on a different render container) finds the
+ * segments the failed attempt already finished and only renders the rest.
+ */
+export function storageChunkStore(storage: StorageClient, prefix: string): ChunkStore {
+  return {
+    async get(name) {
+      try {
+        return await storage.getObject("assets", `${prefix}/${name}`);
+      } catch {
+        return null;
+      }
+    },
+    put: (name, data) => storage.putObject("assets", `${prefix}/${name}`, data, "video/mp4"),
+  };
+}
+
+/** Resolves asset:// refs to URLs the film page can fetch (local film server, or presigned R2). */
+export async function publishManifest(opts: {
+  manifest: FilmManifest;
+  storage: StorageClient;
+  env: RenderEnv;
+  serverUrl: string;
+  key: string;
+}): Promise<{ resolved: FilmManifest; manifestUrl: string }> {
+  const { manifest, storage, env, serverUrl, key } = opts;
+  const resolved = await resolveAssetRefsDeep(manifest, async (bucket, k) => {
+    if (env.STORAGE_DRIVER === "local") return `${serverUrl}/${bucket}/${k}`;
+    return storage.presignDownload(bucket, k, 3600);
+  });
+  await storage.putObject("assets", key, Buffer.from(JSON.stringify(resolved)), "application/json");
+  const manifestUrl = env.STORAGE_DRIVER === "local" ? `${serverUrl}/assets/${key}` : await storage.presignDownload("assets", key, 3600);
+  return { resolved, manifestUrl };
+}
+
+/**
+ * §4.6 "Render" + "Encode":
+ *  - distributed render: frame ranges split into N chunks rendered in parallel,
+ *    one Chromium per chunk (RENDER_CONCURRENCY / RENDER_CHUNKS), resumable
+ *    from segments already in storage, then a lossless `-c copy` concat;
+ *  - mux: AAC 192k audio trimmed to the exact video length, +faststart, BT.709;
+ *  - poster: frame 0 is the first scene's settled frame (manifest.posterTime,
+ *    baked during capture) and the poster PNG is extracted from that frame;
+ *  - watermark: free plan gets a "Made with SiteReel" overlay burned in
+ *    during each chunk's encode (no extra encode pass).
  */
 export async function runRenderStage(opts: {
   jobId: string;
@@ -37,58 +81,69 @@ export async function runRenderStage(opts: {
   manifest: FilmManifest;
   audioBuffer: Buffer | null;
   storage: StorageClient;
-  env: ServerEnv;
+  env: RenderEnv;
+  watermark?: boolean;
+  concurrency?: number;
+  chunks?: number;
   onProgress?: (frame: number, total: number) => void;
+  log?: (msg: string) => void;
 }): Promise<RenderStageResult> {
   const { jobId, format, manifest, audioBuffer, storage, env } = opts;
+  const slug = formatSlug(format);
 
   await bundleFilmEntry();
   const extraRoot = env.STORAGE_DRIVER === "local" ? path.resolve(env.STORAGE_LOCAL_DIR) : await fs.mkdtemp(path.join(os.tmpdir(), "sitereel-render-"));
-  const server = await startFilmServer(extraRoot, RENDER_PORT);
+  const server = await startFilmServer(extraRoot, 0);
+  const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "sitereel-render-out-"));
 
   try {
-    const resolvedManifest = await resolveAssetRefsDeep(manifest, async (bucket, key) => {
-      if (env.STORAGE_DRIVER === "local") return `${server.url}/${bucket}/${key}`;
-      return storage.presignDownload(bucket, key, 3600);
-    });
-
-    const manifestKey = `jobs/${jobId}/manifest-${formatSlug(format)}.json`;
-    await storage.putObject("assets", manifestKey, Buffer.from(JSON.stringify(resolvedManifest)), "application/json");
-    const manifestUrl = env.STORAGE_DRIVER === "local" ? `${server.url}/assets/${manifestKey}` : await storage.presignDownload("assets", manifestKey, 3600);
+    const { resolved, manifestUrl } = await publishManifest({ manifest, storage, env, serverUrl: server.url, key: `jobs/${jobId}/render/manifest-${slug}.json` });
 
     let audioPath: string | undefined;
     if (audioBuffer) {
-      audioPath = path.join(os.tmpdir(), `sitereel-audio-${randomUUID()}.wav`);
+      audioPath = path.join(tmp, `audio-${randomUUID()}.wav`);
       await fs.writeFile(audioPath, audioBuffer);
     }
+    const watermarkPng = opts.watermark ? await renderWatermarkPng({ frameWidth: manifest.width, frameHeight: manifest.height, outPath: path.join(tmp, "watermark.png") }) : undefined;
 
-    const outPath = path.join(os.tmpdir(), `sitereel-render-${randomUUID()}.mp4`);
-    await renderFilm({
-      manifest: resolvedManifest,
+    const envConcurrency = Number(process.env.RENDER_CONCURRENCY) || undefined;
+    const envChunks = Number(process.env.RENDER_CHUNKS) || undefined;
+    const outPath = path.join(tmp, `${slug}.mp4`);
+    const chunked = await renderChunked({
+      manifest: resolved,
       filmHost: server.url,
       manifestUrl,
       outPath,
       audioPath,
+      concurrency: opts.concurrency ?? envConcurrency,
+      chunks: opts.chunks ?? envChunks,
+      chunkStore: storageChunkStore(storage, `jobs/${jobId}/render/segments-${slug}`),
+      contentKey: JSON.stringify(manifest), // pre-resolution: stable across attempts
+
+      watermarkPng,
       onProgress: opts.onProgress,
+      log: opts.log,
     });
 
-    const posterPath = path.join(os.tmpdir(), `sitereel-poster-${randomUUID()}.png`);
-    const posterAtSec = manifest.scenes[0] ? (manifest.scenes[0].end - manifest.scenes[0].start) * 0.8 : manifest.duration * 0.1;
-    await extractPosterFrame(outPath, posterAtSec, posterPath);
+    const posterPath = path.join(tmp, `${slug}.png`);
+    await extractBakedPoster(outPath, posterPath);
 
-    const [videoBuffer, posterBuffer, stat] = await Promise.all([fs.readFile(outPath), fs.readFile(posterPath), fs.stat(outPath)]);
-
-    await Promise.all([fs.unlink(outPath).catch(() => undefined), fs.unlink(posterPath).catch(() => undefined), audioPath ? fs.unlink(audioPath).catch(() => undefined) : Promise.resolve()]);
+    const probe = await ffprobe(outPath);
+    const v = probe.streams.find((s) => s.codec_type === "video");
+    const [videoBuffer, posterBuffer] = await Promise.all([fs.readFile(outPath), fs.readFile(posterPath)]);
 
     return {
       videoBuffer,
       posterBuffer,
       durationSec: manifest.duration,
-      frames: Math.ceil(manifest.duration * manifest.fps),
-      bytes: stat.size,
+      frames: chunked.totalFrames,
+      bytes: videoBuffer.length,
+      chunked,
+      probe: { width: v?.width, height: v?.height, frames: v?.nb_frames ? Number(v.nb_frames) : undefined, hasAudio: probe.streams.some((s) => s.codec_type === "audio"), durationSec: probe.durationSec },
     };
   } finally {
     await server.close();
+    await fs.rm(tmp, { recursive: true, force: true }).catch(() => undefined);
     if (env.STORAGE_DRIVER !== "local") await fs.rm(extraRoot, { recursive: true, force: true }).catch(() => undefined);
   }
 }

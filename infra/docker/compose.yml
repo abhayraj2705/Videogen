@@ -33,6 +33,16 @@ services:
       exit 0;
       "
 
+  # Audio sidecar (§2.1): beats / align / loudness / mix. Worker reads
+  # AUDIO_SIDECAR_URL=http://localhost:8000 (or http://sidecar:8000 in-network)
+  # and falls back to local ffmpeg when it's not running.
+  sidecar:
+    build:
+      context: ../../services/audio-sidecar
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
 volumes:
   redis-data:
   minio-data:

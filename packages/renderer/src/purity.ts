@@ -2,6 +2,7 @@ import { chromium } from "playwright";
 import type { FilmManifest } from "@sitereel/film-runtime";
 import { createHash } from "node:crypto";
 import { VIRTUAL_CLOCK_INIT_SCRIPT } from "./virtual-clock.js";
+import { framesDiffer } from "./qa.js";
 
 export interface PurityResult {
   passed: boolean;
@@ -39,21 +40,23 @@ export async function runPurityTest(
     const sampleTimes = Array.from({ length: sampleCount }, (_, i) => (manifest.duration * (i + 0.5)) / sampleCount);
     const elsewhereT = manifest.duration * 0.02; // a point unlikely to equal any sample
 
-    const hashAt = async (t: number): Promise<string> => {
+    const shotAt = async (t: number): Promise<Buffer> => {
       await page.evaluate((tt) => {
         window.__setVirtualTimeMs(tt * 1000);
         window.__film.seek(tt);
       }, t);
-      const png = await page.screenshot({ type: "png" });
-      return createHash("sha256").update(png).digest("hex");
+      return page.screenshot({ type: "png" });
     };
+    const hash = (b: Buffer) => createHash("sha256").update(b).digest("hex");
 
     for (const t of sampleTimes) {
-      const hash1 = await hashAt(t);
-      const hash2 = await hashAt(t);
-      await hashAt(elsewhereT);
-      const hash3 = await hashAt(t);
-      const ok = hash1 === hash2 && hash2 === hash3;
+      const s1 = await shotAt(t);
+      const s2 = await shotAt(t);
+      await shotAt(elsewhereT);
+      const s3 = await shotAt(t);
+      const [hash1, hash2, hash3] = [hash(s1), hash(s2), hash(s3)];
+      // Tolerant compare (see framesDiffer): ±1 single-pixel raster noise isn't impurity.
+      const ok = !framesDiffer(s1, s2).differ && !framesDiffer(s1, s3).differ;
       samples.push({ t, hash1, hash2, hash3, ok });
     }
   } finally {

@@ -11,6 +11,8 @@ export interface TtsResult {
   durationSec: number;
   /** Per-word timings, used for both scene duration (§4.6 "Voice": "Scene durations computed from audio") and VTT caption generation (Phase 4 "Encode"). */
   words: WordTiming[];
+  /** Where `words` came from: real provider timestamps, sidecar alignment, or a length-proportional estimate. */
+  wordsSource?: "provider" | "aligned" | "estimate";
   costUsd: number;
 }
 

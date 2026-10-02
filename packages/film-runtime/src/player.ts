@@ -1,6 +1,36 @@
-import type { FilmContext, FilmManifest, Mark, SceneTemplate } from "./contract.js";
+import type { FilmContext, FilmManifest, Mark, Palette, ResolvedPalette, SceneTemplate } from "./contract.js";
 import { createSceneRng } from "./util/rng.js";
 import { createTemplate } from "./registry.js";
+import { bestContrast, contrastRatio } from "./util/color.js";
+import { clamp01 } from "./util/easing.js";
+
+/**
+ * Normalizes any CSS color (oklch(), named colors, ...) to rgb() via a canvas
+ * so the pure contrast math in util/color.ts can read it. Falls back to the
+ * input unchanged outside a browser.
+ */
+function toRgbString(color: string): string {
+  if (typeof document === "undefined") return color;
+  const c = document.createElement("canvas");
+  c.width = c.height = 1;
+  const g = c.getContext("2d");
+  if (!g) return color;
+  g.fillStyle = "#000";
+  g.fillStyle = color;
+  g.fillRect(0, 0, 1, 1);
+  const [r, gg, b] = g.getImageData(0, 0, 1, 1).data;
+  return `rgb(${r}, ${gg}, ${b})`;
+}
+
+/** Derives text-safe inks from the brand palette (see ResolvedPalette). Pure given rgb inputs. */
+export function resolvePalette(p: Palette, normalize: (c: string) => string = toRgbString): ResolvedPalette {
+  const bg = normalize(p.bg);
+  const fg = normalize(p.fg);
+  const accent = normalize(p.accent);
+  const accentText = (contrastRatio(accent, bg) ?? 0) >= 3 ? p.accent : p.fg;
+  const onAccent = bestContrast(accent, [bg, fg, "rgb(255, 255, 255)", "rgb(17, 17, 17)"]);
+  return { ...p, accentText, onAccent: onAccent === bg ? p.bg : onAccent === fg ? p.fg : onAccent };
+}
 
 interface MountedScene {
   id: string;
@@ -8,6 +38,7 @@ interface MountedScene {
   end: number;
   template: SceneTemplate<any>;
   root: HTMLElement;
+  transitionIn: number;
 }
 
 export interface PlayerHandle {
@@ -30,6 +61,7 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
     overflow: "hidden",
     background: manifest.palette.bg,
   });
+  const palette = resolvePalette(manifest.palette);
 
   const mounted: MountedScene[] = manifest.scenes.map((scene) => {
     const root = document.createElement("div");
@@ -39,18 +71,22 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
 
     const template = createTemplate(scene.templateId);
     const ctx: FilmContext = {
-      palette: manifest.palette,
+      palette,
       fonts: manifest.fonts,
       width: manifest.width,
       height: manifest.height,
       rng: createSceneRng(scene.id),
     };
     template.mount(root, scene.props, ctx);
+    // Remember the display mode the template chose (flex, grid, ...) so
+    // showing the scene again restores it instead of falling back to block.
+    const shownDisplay = root.style.display;
+    root.dataset.display = shownDisplay;
     root.style.display = "none";
     root.style.position = "absolute";
     root.style.inset = "0";
 
-    return { id: scene.id, start: scene.start, end: scene.end, template, root };
+    return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0 };
   });
 
   // Wait for every image to decode and every font to load before signalling ready.
@@ -76,8 +112,13 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
       const isActive = t >= scene.start && t < scene.end;
       if (isActive) {
         nextActive.add(scene.id);
-        if (scene.root.style.display === "none") scene.root.style.display = "";
-        scene.template.seek(t - scene.start);
+        if (scene.root.style.display === "none") scene.root.style.display = scene.root.dataset.display ?? "";
+        const localT = t - scene.start;
+        // Crossfade: later scenes are later in DOM order (on top), so fading
+        // the incoming scene's opacity over the still-visible outgoing one is
+        // a true dissolve. Pure function of t, like everything else here.
+        scene.root.style.opacity = scene.transitionIn > 0 ? String(clamp01(localT / scene.transitionIn)) : "1";
+        scene.template.seek(localT);
       } else if (activeIds.has(scene.id) && scene.root.style.display !== "none") {
         scene.root.style.display = "none";
       }

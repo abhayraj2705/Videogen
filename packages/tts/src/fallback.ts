@@ -1,28 +1,12 @@
-import { runFfmpeg, READING_SECONDS_PER_WORD } from "@sitereel/shared";
-import type { SynthesizeOptions, TtsProvider, TtsResult, WordTiming } from "./provider.js";
+import { runFfmpegQuiet, READING_SECONDS_PER_WORD } from "@sitereel/shared";
+import type { SynthesizeOptions, TtsProvider, TtsResult } from "./provider.js";
+import { estimateWordTimings } from "./timings.js";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 
 const SAMPLE_RATE = 44100;
-
-/** Proportional-to-length word timing: longer words get slightly more time, nothing gets zero. */
-function estimateWordTimings(text: string, durationSec: number): WordTiming[] {
-  const words = text.trim().length === 0 ? [] : text.trim().split(/\s+/);
-  if (words.length === 0) return [];
-
-  const weights = words.map((w) => w.length + 2);
-  const totalWeight = weights.reduce((s, w) => s + w, 0);
-
-  let t = 0;
-  return words.map((word, i) => {
-    const share = (weights[i]! / totalWeight) * durationSec;
-    const startSec = t;
-    t += share;
-    return { word, startSec, endSec: t };
-  });
-}
 
 /**
  * No-API-key, no-network fallback: synthesizes silence of exactly the
@@ -41,7 +25,7 @@ export function createFallbackTtsProvider(opts: { repoRoot?: string } = {}): Tts
       const durationSec = Math.max(0.6, words.length * READING_SECONDS_PER_WORD + 0.3);
 
       const tmpPath = path.join(os.tmpdir(), `sitereel-silence-${randomUUID()}.wav`);
-      await runFfmpeg(
+      await runFfmpegQuiet(
         [
           "-y",
           "-f", "lavfi",
@@ -59,6 +43,7 @@ export function createFallbackTtsProvider(opts: { repoRoot?: string } = {}): Tts
         contentType: "audio/wav",
         durationSec,
         words: estimateWordTimings(text, durationSec),
+        wordsSource: "estimate",
         costUsd: 0,
       };
     },
