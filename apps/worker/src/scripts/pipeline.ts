@@ -33,7 +33,7 @@ import { buildStageHash, decideVoiceScenes, manifestHash, qaStageHash, renderSta
  * no TTS key = silent fallback voice, no sidecar = local ffmpeg mix.
  *
  *   pnpm pipeline run benchmark/fixtures/<id>.json [--out DIR] [--formats 16:9,9:16,1:1]
- *                     [--music upbeat|calm|energetic|cinematic|off] [--tone clean|playful|cinematic|app-store]
+ *                     [--music upbeat|calm|energetic|cinematic|off] [--tone auto|clean|playful|cinematic|app-store]
  *                     [--no-voice] [--plan free|pro]
  *                     [--concurrency N] [--chunks N] [--force] [--edit storyboard.json]
  *   pnpm pipeline run https://example.com            (live crawl; needs network)
@@ -126,11 +126,13 @@ async function main() {
 
   const formats = (flag(rest, "formats") ?? "16:9,9:16,1:1").split(",") as AspectFormat[];
   const music = flag(rest, "music") ?? "auto";
-  const options = JobOptions.parse({
+  const toneArg = flag(rest, "tone") ?? "auto";
+  let options = JobOptions.parse({
     formats,
     lengthSec: Number(flag(rest, "length") ?? 20),
     videoType: flag(rest, "type") ?? "launch",
-    tone: flag(rest, "tone") ?? "clean",
+    tone: toneArg === "auto" ? "clean" : toneArg,
+    ...(toneArg === "auto" ? { toneAuto: true } : {}),
     voiceLanguage: "en",
     voiceId: "default",
     noVoiceover: rest.includes("--no-voice"),
@@ -222,6 +224,8 @@ async function main() {
   });
 
   const profile = profileSummary(buildSiteProfile(crawl, options.videoType));
+  console.log(`  site look: ${profile.look} -> style "${profile.style.tone}" (${profile.style.reason})`);
+  if (options.toneAuto) options = { ...options, tone: profile.style.tone as typeof options.tone, toneAuto: false };
   console.log(`  site profile: ${profile.category}${profile.signals.length ? ` (${profile.signals.join(", ")})` : ""} — ${profile.found.join(", ")}`);
   console.log(`  best-fit scenes: ${profile.fits.map((f) => f.template).join(", ") || "(none stand out)"}`);
   console.log(`  ruled out: ${profile.ruledOut.map((f) => f.template).join(", ") || "(nothing)"}`);
@@ -240,8 +244,9 @@ async function main() {
     storyboard = Storyboard.parse(JSON.parse(await fsp.readFile(plannedPath, "utf8")));
     note("plan", "skipped", "inputs unchanged — reused storyboard.planned.json");
   } else {
-    const planned = await t("plan", () => runPlanStage(crawl, options, { primaryProvider: gemini, escalationProvider: anthropic, ...scriptProviders({ primary: gemini, escalation: anthropic }) }));
+    const planned = await t("plan", () => runPlanStage(crawl, options, { primaryProvider: gemini, escalationProvider: anthropic, ...scriptProviders({ primary: gemini, escalation: anthropic }), seed: jobId }));
     storyboard = planned.storyboard;
+    console.log(`  signature scenes: ${planned.featured.join(", ") || "(none)"}${planned.addedScenes.length ? ` — cut in by code: ${planned.addedScenes.join(", ")}` : ""}`);
     if (planned.script) {
       await fsp.writeFile(path.join(outDir, "script.json"), JSON.stringify({ ...planned.script, calls: planned.scriptCalls }, null, 2));
       const c = planned.script.critique;

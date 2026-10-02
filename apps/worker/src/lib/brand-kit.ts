@@ -41,6 +41,7 @@ export function applyBrandKit(brand: BrandTokens, kit: BrandKitLike | null | und
     fontDisplay: pick(f, "heading", "display") ?? brand.fontDisplay,
     fontBody: pick(f, "body") ?? brand.fontBody,
     logoUrl: logo ?? brand.logoUrl,
+    ...(brand.radius !== undefined ? { radius: brand.radius } : {}),
   };
 }
 

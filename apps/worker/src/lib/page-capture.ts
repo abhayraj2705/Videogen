@@ -26,6 +26,8 @@ export interface TiledCapture {
   /** Height of `full` in CSS px. */
   heightCss: number;
   tiles: PageTile[];
+  /** How colourful the first screen is, 0-1: the mean saturation of its pixels. A site can be vivid without a vivid button. */
+  colorfulness: number;
 }
 
 /** Below this share of non-background pixels a viewport is an empty stretch, not a section worth showing. */
@@ -64,7 +66,7 @@ async function setFloatingChromeHidden(page: Page, hidden: boolean): Promise<voi
 /** Scrolls to `top`, then waits for the viewport's images and a short settle so in-view animations have played. */
 async function scrollAndSettle(page: Page, top: number): Promise<number> {
   const actual = await page.evaluate(async (y: number) => {
-    window.scrollTo(0, y);
+    window.scrollTo({ top: y, left: 0, behavior: "instant" });
     await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
     const inView = Array.from(document.images).filter((img) => {
       const r = img.getBoundingClientRect();
@@ -85,7 +87,7 @@ async function scrollAndSettle(page: Page, top: number): Promise<number> {
  * Joins tiles into one image inside a blank helper page (no image library in
  * the worker: a canvas does it) and measures how much of each tile is content.
  */
-async function composeTiles(helper: Page, tiles: { y: number; png: Buffer }[], cssWidth: number, cssHeight: number, viewportHeight: number): Promise<{ full: Buffer; heightCss: number; ink: number[] }> {
+async function composeTiles(helper: Page, tiles: { y: number; png: Buffer }[], cssWidth: number, cssHeight: number, viewportHeight: number): Promise<{ full: Buffer; heightCss: number; ink: number[]; colorfulness: number }> {
   const out = await helper.evaluate(
     async (input: { tiles: { y: number; b64: string }[]; cssWidth: number; cssHeight: number; viewportHeight: number; blankInk: number }) => {
       const bitmaps: ImageBitmap[] = [];
@@ -103,10 +105,19 @@ async function composeTiles(helper: Page, tiles: { y: number; png: Buffer }[], c
       small.width = 160;
       small.height = Math.max(1, Math.round((160 * first.height) / first.width));
       const sg = small.getContext("2d", { willReadFrequently: true })!;
-      const ink = bitmaps.map((bmp) => {
+      let colorfulness = 0;
+      const ink = bitmaps.map((bmp, index) => {
         sg.clearRect(0, 0, small.width, small.height);
         sg.drawImage(bmp, 0, 0, small.width, small.height);
         const px = sg.getImageData(0, 0, small.width, small.height).data;
+        if (index === 0) {
+          let sat = 0;
+          for (let i = 0; i < px.length; i += 4) {
+            const max = Math.max(px[i]!, px[i + 1]!, px[i + 2]!);
+            sat += max === 0 ? 0 : (max - Math.min(px[i]!, px[i + 1]!, px[i + 2]!)) / max;
+          }
+          colorfulness = sat / (px.length / 4);
+        }
         const bins = new Array<number>(256).fill(0);
         const lum = new Uint8Array(px.length / 4);
         for (let i = 0; i < lum.length; i++) {
@@ -136,11 +147,11 @@ async function composeTiles(helper: Page, tiles: { y: number; png: Buffer }[], c
       const buf = new Uint8Array(await blob.arrayBuffer());
       let s = "";
       for (let i = 0; i < buf.length; i += 0x8000) s += String.fromCharCode(...buf.subarray(i, i + 0x8000));
-      return { b64: btoa(s), heightCss, ink };
+      return { b64: btoa(s), heightCss, ink, colorfulness };
     },
     { tiles: tiles.map((t) => ({ y: t.y, b64: t.png.toString("base64") })), cssWidth, cssHeight, viewportHeight, blankInk: BLANK_INK },
   );
-  return { full: Buffer.from(out.b64, "base64"), heightCss: out.heightCss, ink: out.ink };
+  return { full: Buffer.from(out.b64, "base64"), heightCss: out.heightCss, ink: out.ink, colorfulness: out.colorfulness };
 }
 
 /**
@@ -156,6 +167,9 @@ export async function captureTiledPage(page: Page, helper: Page, opts: { maxHeig
     for (let y = 0; y < total; y += dims.vh) {
       if (raw.length > 0 && opts.shouldStop?.()) break;
       const actual = await scrollAndSettle(page, y);
+      // A page that is not where it was sent (a scroll hijacker, a scroll still animating) cannot be tiled:
+      // the tiles would be stamped at the wrong heights. The caller falls back to Chromium's full-page shot.
+      if (actual > y + 2) throw new Error(`page scrolled to ${Math.round(actual)}px when sent to ${y}px`);
       // Past the first screen the site header would repeat on every tile.
       if (y > 0 && raw.length === 1) {
         await setFloatingChromeHidden(page, true);
@@ -168,11 +182,11 @@ export async function captureTiledPage(page: Page, helper: Page, opts: { maxHeig
     }
   } finally {
     await setFloatingChromeHidden(page, false);
-    await page.evaluate(() => window.scrollTo(0, 0)).catch(() => undefined);
+    await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" })).catch(() => undefined);
   }
   const cssHeight = Math.min(total, raw[raw.length - 1]!.y + dims.vh);
   const composed = await composeTiles(helper, raw, dims.w, cssHeight, dims.vh);
-  return { full: composed.full, heightCss: composed.heightCss, tiles: raw.map((t, i) => ({ ...t, ink: composed.ink[i] ?? 1 })) };
+  return { full: composed.full, heightCss: composed.heightCss, tiles: raw.map((t, i) => ({ ...t, ink: composed.ink[i] ?? 1 })), colorfulness: composed.colorfulness };
 }
 
 const EMPTY_STATE_RE =
@@ -214,7 +228,7 @@ export async function recordScrollClip(page: Page, opts: { durationMs?: number; 
       raw.push({ t: Date.now(), data: Buffer.from(f.data, "base64") });
       cdp.send("Page.screencastFrameAck", { sessionId: f.sessionId }).catch(() => undefined);
     });
-    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
     await page.waitForTimeout(250);
     await cdp.send("Page.startScreencast", { format: "jpeg", quality: 80, maxWidth: viewport.width, maxHeight: viewport.height, everyNthFrame: 1 });
     const t0 = Date.now();
@@ -227,7 +241,7 @@ export async function recordScrollClip(page: Page, opts: { durationMs?: number; 
           const step = (now: number) => {
             const p = Math.min(1, Math.max(0, (now - start - hold) / (o.ms - 2 * hold)));
             const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
-            window.scrollTo(0, travel * e);
+            window.scrollTo({ top: travel * e, left: 0, behavior: "instant" });
             if (now - start < o.ms) requestAnimationFrame(step);
             else resolve();
           };
@@ -236,7 +250,7 @@ export async function recordScrollClip(page: Page, opts: { durationMs?: number; 
       { ms: durationMs, viewports: opts.viewports ?? 1.6 },
     );
     await cdp.send("Page.stopScreencast").catch(() => undefined);
-    await page.evaluate(() => window.scrollTo(0, 0)).catch(() => undefined);
+    await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" })).catch(() => undefined);
     if (raw.length < 8) return null;
     // The screencast only delivers a frame when the picture changes; resample to a fixed rate, holding the last one.
     const count = Math.round((durationMs / 1000) * fps);

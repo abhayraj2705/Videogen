@@ -436,10 +436,15 @@ export interface ValidateStoryboardOptions {
   maxNarrationEcho?: number;
   /** Hold CLICHE_PHRASES against the text (a `cliche` error per scene). For model-written drafts only. */
   cliches?: boolean;
+  /**
+   * The scenes chosen for this site's look and material. A draft that uses fewer than `min` of them gets a
+   * `missing_featured` error: it fell back on the same few safe templates every film uses.
+   */
+  featured?: { templates: string[]; min: number };
 }
 
 /** Errors that ask for better writing rather than report something wrong: a film that only has these is still safe to show. */
-export const STYLE_ISSUE_CODES: ReadonlySet<string> = new Set(["too_few_scenes", "narration_reads_titles", "cliche"]);
+export const STYLE_ISSUE_CODES: ReadonlySet<string> = new Set(["too_few_scenes", "narration_reads_titles", "cliche", "missing_featured"]);
 
 /**
  * Validates a storyboard against its FactLedger. Runs the zod schema first
@@ -667,6 +672,18 @@ export function validateStoryboard(input: unknown, facts: FactLedger, opts: Vali
       message: `Only ${storyboard.scenes.length} scenes; this film needs at least ${opts.minScenes}. Split long scenes: one idea, one short narration line and a different template for each.`,
       severity: "error",
     });
+  }
+
+  if (opts.featured && opts.featured.min > 0) {
+    const used = new Set(storyboard.scenes.map((sc) => sc.templateId as string));
+    const hits = opts.featured.templates.filter((t) => used.has(t));
+    if (hits.length < Math.min(opts.featured.min, opts.featured.templates.length)) {
+      issues.push({
+        code: "missing_featured",
+        message: `This film must use at least ${opts.featured.min} of the scenes chosen for this site (${opts.featured.templates.join(", ")}); it uses ${hits.length === 0 ? "none" : hits.join(", ")}. Replace the plainest middle scenes with them.`,
+        severity: "error",
+      });
+    }
   }
 
   if (opts.maxNarrationEcho !== undefined) {

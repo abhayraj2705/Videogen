@@ -380,6 +380,7 @@
       const img = el("img");
       img.src = opts.logoUrl;
       setStyle(img, { width: "100%", height: "100%", objectFit: "contain" });
+      img.dataset.stable = `${size}x${size}`;
       wrap.appendChild(img);
     } else {
       const tile = el("div", `${opts.className}-fallback`, opts.productName.slice(0, 1).toUpperCase());
@@ -418,12 +419,13 @@
         const stack = el("div", "kh-stack");
         setStyle(stack, { display: "flex", flexDirection: "column", alignItems: "center", gap: `${L.pick({ landscape: 48, portrait: 76, square: 44 }) * u}px` });
         root.appendChild(stack);
-        const logo = logoMark({ className: "kh-logo", size: L.pick({ landscape: 132, portrait: 200, square: 132 }) * u, logoUrl: props.logoUrl, productName: props.productName, ctx });
+        const logo = logoMark({ className: "kh-logo", size: L.pick({ landscape: 170, portrait: 220, square: 160 }) * u, logoUrl: props.logoUrl, productName: props.productName, ctx });
         stack.appendChild(logo);
         const headline = textBlock(props.headline, {
           className: "kh-headline",
           width: Math.min(L.safe.width, L.pick({ landscape: 1560, portrait: 1e3, square: 960 }) * u),
-          maxSize: L.pick({ landscape: 112, portrait: 124, square: 96 }) * u,
+          // A short hook is set larger: four words at the size of ten leave the opening frame mostly empty.
+          maxSize: L.pick({ landscape: 112, portrait: 124, square: 96 }) * u * (props.headline.trim().split(/\s+/).length <= 4 ? 1.4 : 1),
           minSize: 28 * u,
           maxLines: L.pick({ landscape: 2, portrait: 4, square: 3 }),
           color: ctx.palette.fg,
@@ -3391,6 +3393,28 @@
     );
     await Promise.race([Promise.all(loads), new Promise((resolve) => setTimeout(resolve, 4e3))]);
   }
+  function stabilizeImage(img) {
+    const [w, h] = (img.dataset.stable ?? "").split("x").map(Number);
+    if (!w || !h || img.naturalWidth <= 0) return img;
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(w * 2));
+    canvas.height = Math.max(1, Math.round(h * 2));
+    const g = canvas.getContext("2d");
+    if (!g) return img;
+    g.imageSmoothingQuality = "high";
+    const k = Math.min(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
+    const dw = img.naturalWidth * k;
+    const dh = img.naturalHeight * k;
+    try {
+      g.drawImage(img, (canvas.width - dw) / 2, (canvas.height - dh) / 2, dw, dh);
+    } catch {
+      return img;
+    }
+    canvas.className = img.className;
+    canvas.style.cssText = img.style.cssText;
+    img.replaceWith(canvas);
+    return canvas;
+  }
   function matchStyle(role, p, from, to, width, height) {
     const e = easeInOutCubic(p);
     const cx = width / 2;
@@ -3533,6 +3557,7 @@
       const node = document.createElement("img");
       node.className = "brand-mark";
       node.src = opening.src;
+      node.dataset.stable = `${opening.w}x${opening.h}`;
       Object.assign(node.style, { position: "absolute", left: "0", top: "0", width: `${opening.w}px`, height: `${opening.h}px`, objectFit: "contain", transformOrigin: "0 0", opacity: "0", pointerEvents: "none" });
       stage.appendChild(node);
       const lift = Math.max(0.45, second.transitionInSec ?? 0);
@@ -3586,6 +3611,10 @@
         })
       )
     ]);
+    for (const img of Array.from(stage.querySelectorAll("img[data-stable]"))) {
+      const drawn = stabilizeImage(img);
+      if (brand && brand.node === img) brand.node = drawn;
+    }
     let activeIds = /* @__PURE__ */ new Set();
     function seek(t) {
       backdrop.seek(t);
@@ -3645,7 +3674,7 @@
             const pulse = since < 0 ? 0 : since < 0.1 ? since / 0.1 : Math.max(0, 1 - (since - 0.1) / 0.4);
             for (const node of scene.emphasis.nodes) {
               node.style.color = since >= 0 ? palette.accentText : "";
-              if (pulse > 1e-3) node.style.transform = `scale(${(1 + 0.14 * pulse).toFixed(4)})`;
+              if (pulse > 1e-3) node.style.transform = `translateY(${(-0.12 * pulse).toFixed(4)}em)`;
             }
           }
         } else if (activeIds.has(scene.id) && scene.root.style.display !== "none") {

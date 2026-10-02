@@ -198,7 +198,10 @@ describe("runPlanStage with LLM providers", () => {
     const r = await runPlanStage(crawl, BASE, { primaryProvider: primary, escalationProvider: null });
     expect(r.storyboard.source).toBe("llm");
     expect(r.validation.valid).toBe(true);
-    expect(r.costUsd).toBeCloseTo(0.002, 10);
+    // The draft is sound but uses none of the scenes chosen for this site, so it is sent back once and then kept.
+    expect(r.calls[0]!.rejected?.join(" ")).toContain("missing_featured");
+    expect(r.attempts).toBe(2);
+    expect(r.costUsd).toBeCloseTo(0.004, 10);
   });
 
   it("sends a draft whose voice only reads the screen back once, then keeps it rather than fall back", async () => {
@@ -242,11 +245,11 @@ describe("runPlanStage with LLM providers", () => {
       },
     };
     const r = await runPlanStage(crawl, BASE, { primaryProvider: writer, escalationProvider: null, scriptProvider: writer });
-    expect(seen).toEqual(["film_strategy", "film_voiceover", "script_critique", "storyboard"]);
+    expect(seen).toEqual(["film_strategy", "film_voiceover", "script_critique", "storyboard", "storyboard"]);
     expect(r.script?.lines).toHaveLength(3);
     expect(r.script?.rewritten).toBe(false);
     expect(r.scriptCalls).toHaveLength(3);
-    expect(r.costUsd).toBeCloseTo(0.04, 10);
+    expect(r.costUsd).toBeCloseTo(0.05, 10);
     expect(r.storyboard.source).toBe("llm");
   });
 
@@ -264,6 +267,6 @@ describe("runPlanStage with LLM providers", () => {
     const r = await runPlanStage(crawl, BASE, { primaryProvider: flaky, escalationProvider: null, scriptProvider: flaky });
     expect(r.script).toBeNull();
     expect(r.storyboard.source).toBe("llm");
-    expect(r.costUsd).toBeCloseTo(0.003, 10);
+    expect(r.costUsd).toBeCloseTo(0.005, 10);
   });
 });

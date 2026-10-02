@@ -59,7 +59,8 @@ const VIDEO_TYPE_OPTIONS: { value: VideoType; label: string; description: string
   { value: "teaser", label: "Social teaser", description: "A few seconds to stop the scroll.", lengths: [10, 6, 15] },
 ];
 
-const TONE_OPTIONS: { value: Tone; label: string; description: string }[] = [
+const TONE_OPTIONS: { value: Tone | "auto"; label: string; description: string }[] = [
+  { value: "auto", label: "Match the site", description: "Picked from how your site looks" },
   { value: "clean", label: "Clean", description: "Calm, minimal" },
   { value: "playful", label: "Playful", description: "Bouncy, bright" },
   { value: "cinematic", label: "Cinematic", description: "Bold, dramatic" },
@@ -100,7 +101,7 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
     const lengths = VIDEO_TYPE_OPTIONS.find((t) => t.value === next)!.lengths;
     if (!lengths.includes(lengthSec)) setLengthSec(lengths[0]!);
   };
-  const [tone, setTone] = useState<Tone>("clean");
+  const [tone, setTone] = useState<Tone | "auto">("auto");
   const [voiceLanguage, setVoiceLanguage] = useState<VoiceLanguage>("en");
   const [voiceId, setVoiceId] = useState("default");
   const [noVoiceover, setNoVoiceover] = useState(false);
@@ -138,7 +139,9 @@ export function NewVideoForm({ availableSamples }: { availableSamples: string[] 
         formats,
         lengthSec,
         videoType,
-        tone,
+        // "Match the site" sends a stand-in tone; the worker replaces it once it has seen the site.
+        tone: tone === "auto" ? "clean" : tone,
+        ...(tone === "auto" ? { toneAuto: true } : {}),
         voiceLanguage,
         voiceId,
         noVoiceover,

@@ -122,10 +122,10 @@ export async function scrollThroughPage(page: Page, budgetMs = 6_000): Promise<v
       const step = window.innerHeight;
       const maxY = Math.min(document.body.scrollHeight, step * 25);
       for (let y = 0; y < maxY && Date.now() - start < budget; y += step) {
-        window.scrollTo(0, y);
+        window.scrollTo({ top: y, left: 0, behavior: "instant" });
         await new Promise((r) => setTimeout(r, 150));
       }
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, budgetMs)
     .catch(() => undefined);
 }
@@ -156,12 +156,12 @@ export async function captureSectionScreenshots(page: Page, maxSections: number,
   for (let i = 0; i < count; i++) {
     if (shouldStop()) break;
     const y = i * viewportHeight;
-    await page.evaluate((top: number) => window.scrollTo(0, top), y);
+    await page.evaluate((top: number) => window.scrollTo({ top: top, left: 0, behavior: "instant" }), y);
     await page.waitForTimeout(150);
     const png = await page.screenshot({ type: "png", timeout: 8_000 });
     shots.push({ index: i, y, png });
   }
-  await page.evaluate(() => window.scrollTo(0, 0)).catch(() => undefined);
+  await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" })).catch(() => undefined);
   return shots;
 }
 

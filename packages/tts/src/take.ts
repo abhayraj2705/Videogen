@@ -7,6 +7,8 @@
  * needs one clip per scene, so the take is cut at the pauses between lines.
  */
 
+import type { WordTiming } from "./provider.js";
+
 interface Pcm {
   sampleRate: number;
   channels: number;
@@ -55,6 +57,8 @@ function wavFrom(pcm: Buffer, sampleRate: number, channels: number): Buffer {
 export interface TakeClip {
   audio: Buffer;
   durationSec: number;
+  /** Word timings relative to this clip's start, when the take was cut by the provider's own timings. */
+  words?: WordTiming[];
 }
 
 const WINDOW_SEC = 0.01;
@@ -151,6 +155,44 @@ export function splitTakeAtPauses(wav: Buffer, lines: string[]): TakeClip[] | nu
     if (durationSec < Math.max(0.25, share * 0.45) || durationSec > share * 2.2 + 0.6) return null;
     const audio = wavFrom(wav.subarray(pcm.dataStart + a * window * frameBytes, pcm.dataStart + b * window * frameBytes), pcm.sampleRate, pcm.channels);
     clips.push({ audio, durationSec });
+  }
+  return clips;
+}
+
+/**
+ * Cuts a take into its lines using the provider's own word timings: line i
+ * owns as many words as it has, and the cut falls midway through the gap
+ * between its last word and the next line's first. Exact where
+ * splitTakeAtPauses has to guess, so it is tried first whenever the service
+ * returned real timings. Null when the timings do not account for every word.
+ */
+export function splitTakeAtWords(wav: Buffer, lines: string[], words: WordTiming[]): TakeClip[] | null {
+  const pcm = parseWav(wav);
+  if (!pcm || lines.length < 2) return null;
+  const counts = lines.map((l) => l.trim().split(/\s+/).filter(Boolean).length);
+  if (counts.some((c) => c === 0) || counts.reduce((a, b) => a + b, 0) !== words.length) return null;
+  const frameBytes = 2 * pcm.channels;
+  const totalSec = pcm.dataBytes / frameBytes / pcm.sampleRate;
+  const clips: TakeClip[] = [];
+  let at = 0;
+  let from = Math.max(0, words[0]!.startSec - PAD_SEC);
+  for (let i = 0; i < lines.length; i++) {
+    const own = words.slice(at, at + counts[i]!);
+    at += counts[i]!;
+    const next = words[at];
+    const lastEnd = own[own.length - 1]!.endSec;
+    // The cut sits in the gap after this line, never further than a short tail past its last word.
+    const to = Math.min(totalSec, next ? Math.min(lastEnd + Math.max(PAD_SEC, (next.startSec - lastEnd) / 2), lastEnd + 0.25) : lastEnd + PAD_SEC * 2);
+    if (!(to > from) || own[0]!.startSec < from - 0.05) return null;
+    const a = Math.floor(from * pcm.sampleRate) * frameBytes;
+    const b = Math.min(pcm.dataBytes, Math.ceil(to * pcm.sampleRate) * frameBytes);
+    const start = from;
+    clips.push({
+      audio: wavFrom(wav.subarray(pcm.dataStart + a, pcm.dataStart + b), pcm.sampleRate, pcm.channels),
+      durationSec: (b - a) / frameBytes / pcm.sampleRate,
+      words: own.map((w) => ({ word: w.word, startSec: Math.max(0, w.startSec - start), endSec: Math.max(0, w.endSec - start) })),
+    });
+    from = next ? Math.max(to, next.startSec - PAD_SEC) : to;
   }
   return clips;
 }

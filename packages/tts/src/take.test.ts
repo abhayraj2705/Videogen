@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { splitTakeAtPauses } from "./take.js";
+import { splitTakeAtPauses, splitTakeAtWords } from "./take.js";
 import { wordsFromCharacters } from "./elevenlabs.js";
 
 const RATE = 24000;
@@ -55,6 +55,28 @@ describe("splitTakeAtPauses", () => {
   it("refuses audio it cannot read and single lines", () => {
     expect(splitTakeAtPauses(Buffer.from("not a wav file at all, just some text bytes here"), lines)).toBeNull();
     expect(splitTakeAtPauses(wavOf([{ tone: 1 }]), ["One line."])).toBeNull();
+  });
+});
+
+describe("splitTakeAtWords", () => {
+  const two = ["Close the books.", "Start free today."];
+  const w = (word: string, startSec: number, endSec: number) => ({ word, startSec, endSec });
+  const timed = [w("Close", 0.1, 0.4), w("the", 0.45, 0.55), w("books.", 0.6, 1.0), w("Start", 1.2, 1.5), w("free", 1.55, 1.8), w("today.", 1.85, 2.3)];
+
+  it("cuts in the gap between lines even when there is no silence to hear, and re-bases the word timings", () => {
+    // One unbroken tone: pause detection has nothing to find.
+    const wav = wavOf([{ tone: 2.5 }]);
+    expect(splitTakeAtPauses(wav, two)).toBeNull();
+    const clips = splitTakeAtWords(wav, two, timed)!;
+    expect(clips).toHaveLength(2);
+    expect(clips[0]!.durationSec).toBeCloseTo(1.06, 1);
+    expect(clips[1]!.words!.map((x) => x.word)).toEqual(["Start", "free", "today."]);
+    expect(clips[1]!.words![0]!.startSec).toBeGreaterThanOrEqual(0);
+    expect(clips[1]!.words![0]!.startSec).toBeLessThan(0.15);
+  });
+
+  it("refuses timings that do not cover every word", () => {
+    expect(splitTakeAtWords(wavOf([{ tone: 2.5 }]), two, timed.slice(0, 5))).toBeNull();
   });
 });
 

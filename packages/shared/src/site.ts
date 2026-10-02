@@ -8,6 +8,10 @@ export const BrandTokens = z.object({
   fontDisplay: z.string(),
   fontBody: z.string(),
   logoUrl: z.string().url().nullable(),
+  /** Additive, optional: the corner radius (CSS px) the site's buttons typically have; pills come out large. */
+  radius: z.number().nonnegative().optional(),
+  /** Additive, optional: how colourful the homepage's first screen is, 0-1 (mean saturation of its pixels). */
+  colorfulness: z.number().min(0).max(1).optional(),
 });
 export type BrandTokens = z.infer<typeof BrandTokens>;
 

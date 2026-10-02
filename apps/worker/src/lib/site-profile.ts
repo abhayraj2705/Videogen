@@ -1,5 +1,6 @@
 import { FULLPAGE_CAPTURE_DEPTH, type CrawlOutput, type TemplateId, type VideoType } from "@sitereel/shared";
 import { isQuoteShaped, statParts } from "./storyboard-fallback.js";
+import { deriveSiteLook, type SiteLook } from "./site-look.js";
 
 /** What kind of site this is — it decides which scenes suit it, the way an editor would brief differently for a dev tool and a shop. */
 export type SiteCategory = "saas" | "devtool" | "ecommerce" | "agency" | "content" | "app" | "other";
@@ -40,7 +41,57 @@ export interface SiteProfile {
   /** The words on the site that decided the category. */
   categorySignals: string[];
   evidence: SiteEvidence;
+  /** How the site looks (colours, type, shapes, pictures): see site-look.ts. */
+  look: SiteLook;
   templates: TemplateChoice[];
+}
+
+/**
+ * Scenes that suit a look, with the reason shown to the user. Applied on top of what the site's
+ * kind favours: two software sites that say the same things but look different get different films.
+ */
+function lookFavours(look: SiteLook): Map<TemplateId, string> {
+  const out = new Map<TemplateId, string>();
+  const add = (reason: string, ...ids: TemplateId[]) => ids.forEach((id) => out.has(id) || out.set(id, reason));
+  if (look.recorded) add("the homepage was recorded scrolling, and plays on the device", "DeviceMockup");
+  if (look.logos >= 3) add(`${look.logos} logos captured from the site`, "LogoWall");
+  if (look.imagery === "rich") add("the site is led by pictures", "PhotoShowcase", "Montage", "ScreenCollage");
+  else if (look.imagery === "some") add("the site has pictures worth showing large", "PhotoShowcase");
+  if (look.dark) add("bold type and depth read well on a dark site", "KineticType", "IsoStack", "BigStatement");
+  if (look.rounded && look.vivid) add("round, colourful cards match the site's own", "BentoGrid", "FeatureTriplet", "Composed");
+  if (look.rounded === false) add("sharp, precise framing matches the site's corners", "ZoomDetail", "FeatureCallouts", "SplitCompare");
+  if (look.typeface === "serif") add("an editorial typeface carries a line or a quote on its own", "BigStatement", "QuoteCard");
+  if (look.typeface === "mono") add("a technical look suits close-ups and labelled detail", "ZoomDetail", "FeatureCallouts");
+  if (look.typeface === "display") add("the site's display type makes a poster", "KineticType");
+  if (!look.dark && !look.vivid) add("a restrained site is best shown plainly, as it is", "SectionShowcase", "ZoomDetail");
+  return out;
+}
+
+/**
+ * The few scenes this particular film should be built around: best fits for the site, a different handful
+ * for each `seed` (the job id) — so two films of one site, or of two similar sites, do not come out as the
+ * same sequence. Scenes the look itself calls for come first and are always among them.
+ */
+export function featuredTemplates(profile: SiteProfile, seed: string, count = 4): TemplateId[] {
+  const structural = new Set<string>(["KineticHook", "CTAEndCard", "LogoReveal", "HeroRebuild"]);
+  const byLook = lookFavours(profile.look);
+  const strong = profile.templates.filter((t) => t.fit === "strong" && !structural.has(t.id)).map((t) => t.id);
+  const possible = profile.templates.filter((t) => t.fit === "possible" && !structural.has(t.id)).map((t) => t.id);
+  let hash = 2166136261;
+  for (const ch of seed) hash = Math.imul(hash ^ ch.charCodeAt(0), 16777619) >>> 0;
+  const rotate = <T,>(list: T[]) => (list.length === 0 ? list : [...list.slice(hash % list.length), ...list.slice(0, hash % list.length)]);
+  // What the crawl captured from this site and no other — its customers' logos, its own pictures — is always shown:
+  // it is the most particular material a film can have.
+  const captured: TemplateId[] = [...(profile.look.logos >= 3 ? (["LogoWall"] as const) : []), ...(profile.look.imagery !== "none" ? (["PhotoShowcase"] as const) : [])].filter((id) => strong.includes(id));
+  const fromLook = rotate(strong.filter((id) => byLook.has(id) && !captured.includes(id)));
+  const rest = rotate(strong.filter((id) => !byLook.has(id)));
+  // Then one for the look and one for what the site says (numbers, quotes, features), turn about.
+  const mixed: TemplateId[] = [];
+  for (let i = 0; i < Math.max(fromLook.length, rest.length); i++) {
+    if (fromLook[i]) mixed.push(fromLook[i]!);
+    if (rest[i]) mixed.push(rest[i]!);
+  }
+  return [...new Set([...captured, ...mixed, ...rotate(possible)])].slice(0, count);
 }
 
 /** Words that mark each kind of site. Matched as whole words/phrases, case-insensitively, over every fact and page URL. */
@@ -135,6 +186,8 @@ export function buildSiteProfile(crawl: CrawlOutput, videoType: VideoType = "lau
   const e = gatherEvidence(crawl);
   const favoured = new Set(CATEGORY_FAVOURS[category]);
   const kind = CATEGORY_LABEL[category];
+  const look = deriveSiteLook(crawl);
+  const byLook = lookFavours(look);
   const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
   const hasShots = e.screenshotPages > 0;
   const noShots = "no screenshot of the site was captured";
@@ -143,6 +196,9 @@ export function buildSiteProfile(crawl: CrawlOutput, videoType: VideoType = "lau
   const rate = (id: TemplateId, missing: string | null, strong: string | null, possible: string): TemplateChoice => {
     if (missing) return { id, fit: "unavailable", reason: missing };
     if (strong) return { id, fit: "strong", reason: strong };
+    // How the site looks counts before what kind of site it says it is.
+    const lookReason = byLook.get(id);
+    if (lookReason) return { id, fit: "strong", reason: lookReason };
     if (favoured.has(id)) return { id, fit: "strong", reason: `suits a ${kind}` };
     return { id, fit: "possible", reason: possible };
   };
@@ -180,11 +236,11 @@ export function buildSiteProfile(crawl: CrawlOutput, videoType: VideoType = "lau
     rate("LogoReveal", e.hasLogo ? null : "no logo was found on the site", null, "a short logo bumper"),
   ];
 
-  return { category, categorySignals: signals.slice(0, 5), evidence: e, templates };
+  return { category, categorySignals: signals.slice(0, 5), evidence: e, look, templates };
 }
 
 /** The profile reduced to what the app shows while it works: what we found, and the scenes that fit. */
-export function profileSummary(profile: SiteProfile): { category: string; signals: string[]; found: string[]; fits: { template: string; reason: string }[]; ruledOut: { template: string; reason: string }[] } {
+export function profileSummary(profile: SiteProfile): { category: string; signals: string[]; look: string; style: { tone: string; reason: string }; found: string[]; fits: { template: string; reason: string }[]; ruledOut: { template: string; reason: string }[] } {
   const e = profile.evidence;
   const found = [
     e.screenshotPages > 0 ? `${e.screenshotPages} ${e.screenshotPages === 1 ? "page" : "pages"} captured` : "no screenshots",
@@ -200,6 +256,8 @@ export function profileSummary(profile: SiteProfile): { category: string; signal
   return {
     category: CATEGORY_LABEL[profile.category],
     signals: profile.categorySignals,
+    look: profile.look.summary,
+    style: { tone: profile.look.tone, reason: profile.look.toneReason },
     found,
     fits: profile.templates.filter((t) => t.fit === "strong" && !structural.has(t.id)).map((t) => ({ template: t.id, reason: t.reason })),
     ruledOut: profile.templates.filter((t) => t.fit === "unavailable").map((t) => ({ template: t.id, reason: t.reason })),

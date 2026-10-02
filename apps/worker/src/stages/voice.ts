@@ -1,7 +1,7 @@
 import type { JobOptions, Storyboard } from "@sitereel/shared";
 import type { StorageClient } from "@sitereel/storage";
 import type { TtsProvider, TtsResult, WordAligner, WordTiming } from "@sitereel/tts";
-import { createCachedTtsProvider, createFallbackTtsProvider, estimateWordTimings, splitTakeAtPauses, updateCachedWords, type TakeClip, type TtsCacheStore } from "@sitereel/tts";
+import { createCachedTtsProvider, createFallbackTtsProvider, estimateWordTimings, splitTakeAtPauses, splitTakeAtWords, updateCachedWords, type TakeClip, type TtsCacheStore } from "@sitereel/tts";
 
 export interface VoiceSceneResult {
   sceneId: string;
@@ -98,7 +98,9 @@ export async function runVoiceStage(
     const lines = narrated.map((s) => s.narration!.trim());
     try {
       const take = await cached.synthesizeCached({ text: lines.join("\n\n"), paragraphs: lines, voiceId: options.voiceId, language });
-      const clips = take.contentType === "audio/wav" ? splitTakeAtPauses(take.audio, lines) : null;
+      // A provider that timed every word tells us exactly where each line ends; otherwise listen for the pauses.
+      const clips =
+        take.contentType !== "audio/wav" ? null : ((take.wordsSource === "provider" ? splitTakeAtWords(take.audio, lines, take.words) : null) ?? splitTakeAtPauses(take.audio, lines));
       if (clips) {
         narrated.forEach((s, i) => takeClips.set(s.id, { clip: clips[i]!, cacheHit: take.cacheHit }));
         totalCost += take.costUsd;
@@ -133,7 +135,14 @@ export async function runVoiceStage(
       if (!cached) throw new Error("no TTS provider configured");
       if (fromTake) {
         // This line's slice of the take; its cost was counted once, with the take.
-        result = { audio: fromTake.clip.audio, contentType: "audio/wav", durationSec: fromTake.clip.durationSec, words: estimateWordTimings(scene.narration, fromTake.clip.durationSec), wordsSource: "estimate", costUsd: 0 };
+        result = {
+          audio: fromTake.clip.audio,
+          contentType: "audio/wav",
+          durationSec: fromTake.clip.durationSec,
+          words: fromTake.clip.words ?? estimateWordTimings(scene.narration, fromTake.clip.durationSec),
+          wordsSource: fromTake.clip.words ? "provider" : "estimate",
+          costUsd: 0,
+        };
         providerId = cached.id;
         cacheHit = fromTake.cacheHit;
       } else {

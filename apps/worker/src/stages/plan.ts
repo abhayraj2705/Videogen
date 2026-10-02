@@ -15,7 +15,9 @@ import {
 import { costOfError, type LlmProvider } from "@sitereel/llm";
 import { ICON_NAMES } from "@sitereel/film-runtime";
 import { writeFilmScript, type FilmScript, type ScriptCall } from "../lib/script-writer.js";
-import { buildPlannerPrompt } from "../lib/planner-prompt.js";
+import { enrichStoryboard } from "../lib/storyboard-enrich.js";
+import { buildSiteProfile } from "../lib/site-profile.js";
+import { buildPlannerPrompt, scriptedSceneCount } from "../lib/planner-prompt.js";
 import { recipeFor, targetSceneCount } from "../lib/recipes.js";
 import { buildFallbackStoryboard, buildMinimalStoryboard, screenshotPageUrls } from "../lib/storyboard-fallback.js";
 
@@ -30,6 +32,8 @@ export interface PlanStageDeps {
   scriptProvider?: LlmProvider | null;
   /** Grades the script draft; defaults to the script provider itself. A different model is a stricter editor. */
   criticProvider?: LlmProvider | null;
+  /** Varies which of the site's best-fit scenes a film is built around (the job id): two films of one site then differ. */
+  seed?: string;
 }
 
 /** No more than a third of the narrated scenes may have the voice read the screen aloud. */
@@ -59,6 +63,10 @@ export interface PlanStageResult {
   script?: FilmScript | null;
   /** The script writer's own calls (strategy, voiceover, critique, rewrite); their cost is in costUsd. */
   scriptCalls?: ScriptCall[];
+  /** The scenes this film was to be built around (site-profile.ts featuredTemplates). */
+  featured: string[];
+  /** Scenes cut in by code because the plan left the featured ones out (lib/storyboard-enrich.ts). */
+  addedScenes: string[];
 }
 
 interface Attempt {
@@ -87,6 +95,7 @@ async function tryOnce(
   crawlOutput: CrawlOutput,
   source: "llm" | "llm-escalated",
   minScenes?: number,
+  featured: string[] = [],
 ): Promise<Attempt> {
   const started = Date.now();
   try {
@@ -99,7 +108,7 @@ async function tryOnce(
     });
     const storyboard: Storyboard = { ...result.data, scenes, version: 1, source };
     // A model's draft is held to the writing gates too (a voice that reads the titles, stock phrases); edited and fallback storyboards are not.
-    const report = validateStoryboard(storyboard, crawlOutput.facts, { pageUrls: screenshotPageUrls(crawlOutput), ...(minScenes ? { minScenes } : {}), maxNarrationEcho: MAX_NARRATION_ECHO, cliches: true });
+    const report = validateStoryboard(storyboard, crawlOutput.facts, { pageUrls: screenshotPageUrls(crawlOutput), ...(minScenes ? { minScenes } : {}), maxNarrationEcho: MAX_NARRATION_ECHO, cliches: true, ...(featured.length > 0 ? { featured: { templates: featured, min: Math.min(2, featured.length) } } : {}) });
     const rejected = report.issues.filter((i) => i.severity === "error").map((i) => `${i.code}: ${i.message}`);
     return { storyboard, report, call: { provider: provider.id, ok: true, valid: report.valid, costUsd: result.costUsd, latencyMs: Date.now() - started, ...(rejected.length > 0 ? { rejected } : {}) } };
   } catch (err) {
@@ -151,25 +160,36 @@ export async function runPlanStage(crawlOutput: CrawlOutput, options: JobOptions
     script = written.script;
     scriptCalls = written.calls;
   }
-  const { system, prompt } = buildPlannerPrompt({ crawlOutput, options, script });
+  const { system, prompt, featured } = buildPlannerPrompt({ crawlOutput, options, script, ...(deps.seed ? { seed: deps.seed } : {}) });
   const pageUrls = screenshotPageUrls(crawlOutput);
   // Pacing gate for the LLM: a film two scenes short of its recipe is sent back once with that feedback.
   const recipe = recipeFor(options.videoType);
-  const minScenes = Math.max(recipe.minScenes, (script ? script.lines.length : targetSceneCount(recipe, options.lengthSec)) - 2);
+  const wanted = targetSceneCount(recipe, options.lengthSec);
+  // The site's other strong fits, for filling a film that came back short of scenes.
+  const otherFits = featured.length > 0 ? buildSiteProfile(crawlOutput, options.videoType).templates.filter((t) => t.fit === "strong").map((t) => t.id) : [];
+  const minScenes = Math.max(recipe.minScenes, (script ? scriptedSceneCount(script.lines.length, wanted) : wanted) - 2);
   const calls: PlanLlmCall[] = [];
   let lastReport: ValidationReport | undefined;
   /** Parsed-but-invalid attempts, kept so one bad scene doesn't cost the whole plan. */
   const rejected: { storyboard: Storyboard; report: ValidationReport }[] = [];
 
-  const finish = (storyboard: Storyboard, validation: ValidationReport): PlanStageResult => ({
+  const finish = (planned: Storyboard, plannedValidation: ValidationReport): PlanStageResult => {
+    // The scenes chosen for this site are not left to the planner's goodwill: missing ones are built from the crawl and cut in.
+    const enriched = plannedValidation.valid ? enrichStoryboard(planned, crawlOutput, { featured, alsoConsider: otherFits, targetScenes: wanted, maxAdded: options.lengthSec >= 45 ? 3 : 2 }) : { storyboard: planned, added: [] };
+    const storyboard = enriched.storyboard;
+    const validation = enriched.added.length > 0 ? validateStoryboard(storyboard, crawlOutput.facts, { pageUrls }) : plannedValidation;
+    return {
     storyboard,
     validation,
+    featured,
+    addedScenes: enriched.added,
     costUsd: calls.reduce((s, c) => s + c.costUsd, 0) + scriptCalls.reduce((s, c) => s + c.costUsd, 0),
     attempts: calls.length,
     latencyMs: Date.now() - started,
     calls,
     ...(deps.scriptProvider ? { script, scriptCalls } : {}),
-  });
+    };
+  };
 
   const withErrors = (report: ValidationReport | undefined) =>
     report ? `${prompt}\n\nYour previous storyboard had these problems:\n${formatValidationErrorsForRetry(report)}` : prompt;
@@ -177,7 +197,7 @@ export async function runPlanStage(crawlOutput: CrawlOutput, options: JobOptions
   if (deps.primaryProvider) {
     const primaryTries = deps.escalationProvider ? 1 : 2;
     for (let i = 0; i < primaryTries; i++) {
-      const attempt = await tryOnce(deps.primaryProvider, system, i === 0 ? prompt : withErrors(lastReport), crawlOutput, "llm", minScenes);
+      const attempt = await tryOnce(deps.primaryProvider, system, i === 0 ? prompt : withErrors(lastReport), crawlOutput, "llm", minScenes, featured);
       calls.push(attempt.call);
       if (attempt.storyboard && attempt.report) {
         if (attempt.report.valid) return finish(attempt.storyboard, attempt.report);
@@ -188,7 +208,7 @@ export async function runPlanStage(crawlOutput: CrawlOutput, options: JobOptions
   }
 
   if (deps.escalationProvider) {
-    const attempt = await tryOnce(deps.escalationProvider, system, withErrors(lastReport), crawlOutput, "llm-escalated", minScenes);
+    const attempt = await tryOnce(deps.escalationProvider, system, withErrors(lastReport), crawlOutput, "llm-escalated", minScenes, featured);
     calls.push(attempt.call);
     if (attempt.storyboard && attempt.report?.valid) return finish(attempt.storyboard, attempt.report);
     if (attempt.storyboard && attempt.report) rejected.push({ storyboard: attempt.storyboard, report: attempt.report });

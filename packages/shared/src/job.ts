@@ -97,6 +97,8 @@ export const JobOptions = z.object({
   /** The user's own screenshots/photos, shown alongside (or instead of) what the crawl captured. */
   media: z.array(JobMedia).max(JOB_MEDIA_MAX).optional(),
   tone: Tone,
+  /** Additive, optional: true = pick the tone that matches how the site looks; `tone` is then only the stand-in until the plan stage decides. */
+  toneAuto: z.boolean().optional(),
   voiceLanguage: z.enum(["en", "hi"]).default("en"),
   voiceId: z.string().default("default"),
   noVoiceover: z.boolean().default(false),

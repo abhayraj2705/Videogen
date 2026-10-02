@@ -287,6 +287,8 @@ export function logoMark(opts: { className: string; size: number; logoUrl?: stri
     const img = el("img");
     img.src = opts.logoUrl;
     setStyle(img, { width: "100%", height: "100%", objectFit: "contain" });
+    // Redrawn onto a canvas at this size once loaded (player.ts stabilizeImage): see there for why.
+    img.dataset.stable = `${size}x${size}`;
     wrap.appendChild(img);
   } else {
     const tile = el("div", `${opts.className}-fallback`, opts.productName.slice(0, 1).toUpperCase());

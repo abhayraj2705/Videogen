@@ -99,7 +99,9 @@ describe("planner prompt with a script", () => {
     const script = { strategy, hook: strategy.hooks[0]!, lines: good.lines.slice(0, 4), critique: null, rewritten: false };
     const { prompt } = buildPlannerPrompt({ crawlOutput: crawl, options, script });
     expect(prompt).toContain('2. [f1] "Acme closes your books in a day."');
-    expect(prompt).toContain("Write 4 scenes");
+    // Four lines make five scenes: one line is split across two pictures.
+    expect(prompt).toContain("Write 5 scenes");
+    expect(prompt).toContain("split the longest lines across TWO consecutive scenes");
     expect(prompt).toContain("word for word");
     expect(buildPlannerPrompt({ crawlOutput: crawl, options }).prompt).not.toContain("SCRIPT (the film's voiceover");
   });

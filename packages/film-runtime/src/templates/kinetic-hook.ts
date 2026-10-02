@@ -49,13 +49,14 @@ export function createKineticHook(): SceneTemplate<KineticHookProps> {
       setStyle(stack, { display: "flex", flexDirection: "column", alignItems: "center", gap: `${L.pick({ landscape: 48, portrait: 76, square: 44 }) * u}px` });
       root.appendChild(stack);
 
-      const logo = logoMark({ className: "kh-logo", size: L.pick({ landscape: 132, portrait: 200, square: 132 }) * u, logoUrl: props.logoUrl, productName: props.productName, ctx });
+      const logo = logoMark({ className: "kh-logo", size: L.pick({ landscape: 170, portrait: 220, square: 160 }) * u, logoUrl: props.logoUrl, productName: props.productName, ctx });
       stack.appendChild(logo);
 
       const headline = textBlock(props.headline, {
         className: "kh-headline",
         width: Math.min(L.safe.width, L.pick({ landscape: 1560, portrait: 1000, square: 960 }) * u),
-        maxSize: L.pick({ landscape: 112, portrait: 124, square: 96 }) * u,
+        // A short hook is set larger: four words at the size of ten leave the opening frame mostly empty.
+        maxSize: L.pick({ landscape: 112, portrait: 124, square: 96 }) * u * (props.headline.trim().split(/\s+/).length <= 4 ? 1.4 : 1),
         minSize: 28 * u,
         maxLines: L.pick({ landscape: 2, portrait: 4, square: 3 }),
         color: ctx.palette.fg,

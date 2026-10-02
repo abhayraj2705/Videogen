@@ -134,7 +134,7 @@ async function capturePage(
   storage: StorageClient,
   budget: Budget,
   entry: CrawledPage,
-): Promise<void> {
+): Promise<{ colorfulness?: number }> {
   // Fills `entry` in place as each capture lands, so a budget cut-off keeps whatever finished.
   const fullKey = screenshotKey(jobId, label);
   // The 2x capture keeps close-ups sharp but costs seconds to encode. When the crawl is already short on
@@ -158,8 +158,9 @@ async function capturePage(
         await storage.putObject("assets", key, tile.png, "image/png");
         entry.sectionScreenshotKeys.push(key);
       }
+      const result = { colorfulness: Math.round(tiled.colorfulness * 1000) / 1000 };
       if (DEBUG) console.error(`[crawl] ${label} tiled capture: ${tiled.tiles.length} tiles (${tiled.tiles.length - tiled.tiles.filter((t) => t.ink >= BLANK_INK).length} empty), ${tiled.heightCss}px, ${tiled.full.byteLength} bytes`);
-      return;
+      return result;
     }
   }
 
@@ -175,6 +176,7 @@ async function capturePage(
     await storage.putObject("assets", key, shot.png, "image/png");
     entry.sectionScreenshotKeys.push(key);
   }
+  return {};
 }
 
 const DEBUG = !!process.env.SITEREEL_CRAWL_DEBUG;
@@ -250,7 +252,8 @@ async function crawlWithBrowser(jobId: string, targetUrl: string, deps: CrawlSta
   const extraUrls = await discoverSameOriginPages(page, page.url() || targetUrl, EXTRA_PAGES_LIMIT).catch(() => []);
   const homeEntry: CrawledPage = { url: targetUrl, screenshotKey: "" };
   state.pages.push(homeEntry);
-  await capturePage(page, helper, jobId, "home", HOME_SECTIONS, deps.storage, budget, homeEntry);
+  const homeShot = await capturePage(page, helper, jobId, "home", HOME_SECTIONS, deps.storage, budget, homeEntry);
+  if (homeShot.colorfulness !== undefined && state.brand) state.brand = { ...state.brand, colorfulness: homeShot.colorfulness };
   mark("home screenshots");
 
   // The homepage in motion: recorded while really scrolling, so the film can play the site instead of panning a still.

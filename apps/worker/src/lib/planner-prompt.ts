@@ -1,7 +1,8 @@
 import { BANNED_PHRASES, CLICHE_PHRASES, FULLPAGE_CAPTURE_DEPTH, type CrawlOutput, type FactLedgerEntry, type JobOptions } from "@sitereel/shared";
 import { ICON_NAMES } from "@sitereel/film-runtime";
 import { recipeFor, targetSceneCount } from "./recipes.js";
-import { buildSiteProfile, categoryLabel, type SiteProfile } from "./site-profile.js";
+import { buildSiteProfile, categoryLabel, featuredTemplates, type SiteProfile } from "./site-profile.js";
+import type { TemplateId } from "@sitereel/shared";
 import type { FilmScript } from "./script-writer.js";
 
 const TEMPLATE_CATALOG = `- KineticHook: opening hook (2-3s). props: { productName, headline }. Use once, first scene.
@@ -90,10 +91,12 @@ function catalogFor(profile: SiteProfile): string {
 }
 
 /** The site profile as the planner reads it: what kind of site, and which templates fit it and why. */
-function profileBlock(profile: SiteProfile): string {
+function profileBlock(profile: SiteProfile, featured: TemplateId[]): string {
   const fits = profile.templates.filter((t) => t.fit === "strong" && t.id !== "KineticHook" && t.id !== "CTAEndCard");
   return [
     `kind of site: ${categoryLabel(profile.category)}${profile.categorySignals.length ? ` (it says: ${profile.categorySignals.join(", ")})` : ""}`,
+    `how the site looks: ${profile.look.summary}. The film should look like it came from the same place.`,
+    ...(featured.length > 0 ? [`THIS film's signature scenes — chosen for this site's look and material; use at least ${Math.min(2, featured.length)} of them in the middle of the film: ${featured.join(", ")}`] : []),
     "best-fit templates for THIS site (build the middle of the film mainly from these; each is here because the site has the material for it):",
     ...fits.map((t) => `- ${t.id}: ${t.reason}`),
   ].join("\n");
@@ -106,7 +109,8 @@ audience: ${script.strategy.audience}
 their problem: ${script.strategy.pain}
 the promise: ${script.strategy.promise}
 ${script.lines.map((l, i) => `${i + 1}. ${l.factIds.length ? `[${l.factIds.join(", ")}] ` : ""}"${l.line}"`).join("\n")}
-- One scene per script line, in this order. Each scene's narration is its line, word for word.
+- The scenes follow the script in order. A short line is one scene, with the line as its narration, word for word.
+- To reach the scene count, split the longest lines across TWO consecutive scenes at a natural break (a comma, an "and", the turn of the sentence): each scene's narration is its part of the line, every word kept, none added. Two pictures for one sentence is how an editor keeps a film moving.
 - A scene cites its line's fact ids (shown in brackets) and may add others its on-screen text needs.
 - A scene's on-screen text is a 2-6 word title for its line — the idea, not the sentence. The voice says the line; the screen must not repeat it.
 - Pick each scene's template for what its line is about: a line about something on a page gets a product scene pointed at that page; a number gets StatCounter or MetricsRow; a quote gets QuoteCard.
@@ -115,7 +119,15 @@ ${script.lines.map((l, i) => `${i + 1}. ${l.factIds.length ? `[${l.factIds.join(
 }
 
 /** Appendix C skeleton, filled in with this job's real crawl material. */
-export function buildPlannerPrompt(opts: { crawlOutput: CrawlOutput; options: JobOptions; script?: FilmScript | null }): { system: string; prompt: string } {
+/**
+ * How many scenes a film cut to a script has: one per line, plus a few lines split in two, up to the
+ * recipe's pace. More scenes than lines is what gives a short film room for more than three kinds of shot.
+ */
+export function scriptedSceneCount(lines: number, recipeScenes: number): number {
+  return Math.max(lines, Math.min(recipeScenes, lines + Math.max(1, Math.round(lines * 0.3))));
+}
+
+export function buildPlannerPrompt(opts: { crawlOutput: CrawlOutput; options: JobOptions; script?: FilmScript | null; seed?: string }): { system: string; prompt: string; featured: TemplateId[] } {
   const { crawlOutput, options } = opts;
   const script = options.noVoiceover ? null : (opts.script ?? null);
   const { siteBrief, facts, domain } = crawlOutput;
@@ -134,7 +146,9 @@ export function buildPlannerPrompt(opts: { crawlOutput: CrawlOutput; options: Jo
   const recipe = recipeFor(options.videoType);
   const profile = buildSiteProfile(crawlOutput, options.videoType);
   // With a script the film has exactly as many scenes as the script has lines.
-  const sceneCount = script ? script.lines.length : targetSceneCount(recipe, options.lengthSec);
+  const sceneCount = script ? scriptedSceneCount(script.lines.length, targetSceneCount(recipe, options.lengthSec)) : targetSceneCount(recipe, options.lengthSec);
+  // Teasers are too short to be told what to include.
+  const featured = recipe.id === "teaser" ? [] : featuredTemplates(profile, opts.seed ?? `${crawlOutput.domain}|${options.tone}`);
 
   const prompt = `RULES
 - ${recipe.purpose}
@@ -173,7 +187,7 @@ differentiator: ${siteBrief.differentiator}
 ${siteBrief.strongestClaimFactId ? `strongest claim fact: ${siteBrief.strongestClaimFactId}` : ""}
 
 SITE PROFILE
-${profileBlock(profile)}
+${profileBlock(profile, featured)}
 
 FACT LEDGER
 ${factList}
@@ -191,5 +205,5 @@ First fill "rubric" (what, who, differentiator, strongest grounded claim, visual
 then "scenes" (each: id, templateId, durationSec, narration?, onScreenText[], factIds[], props, transition?, emphasis?), then "shareCaption".
 Set targetDurationSec=${options.lengthSec}, tone="${options.tone}", language="${options.voiceLanguage}". JSON only.`;
 
-  return { system, prompt };
+  return { system, prompt, featured };
 }
