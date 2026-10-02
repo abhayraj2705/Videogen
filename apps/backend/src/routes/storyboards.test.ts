@@ -121,7 +121,7 @@ describe("storyboard editing", () => {
     const { app, queues } = build();
     const res = await app.inject({ method: "POST", url: `/api/jobs/${job.id}/storyboard/revoice`, headers: { "x-test-user": user.id }, payload: { sceneId: "hook" } });
     expect(res.statusCode).toBe(202);
-    expect(queues.voice.added[0]!.data).toEqual({ jobId: job.id, storyboardVersion: 1, sceneIds: ["hook"], previewOnly: true });
+    expect(queues.voice.added[0]!.data).toEqual({ jobId: job.id, storyboardVersion: 1, sceneIds: ["hook"] });
     const missing = await app.inject({ method: "POST", url: `/api/jobs/${job.id}/storyboard/revoice`, headers: { "x-test-user": user.id }, payload: { sceneId: "nope" } });
     expect(missing.statusCode).toBe(404);
   });

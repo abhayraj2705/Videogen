@@ -141,7 +141,7 @@ describe("quick-change cost rules", () => {
     expect(await userCredits(user.id)).toBe(2);
     const ledger = await db.select().from(creditLedger).where(and(eq(creditLedger.userId, user.id), eq(creditLedger.reason, "quick_change")));
     expect(ledger.map((l) => l.delta)).toEqual([-1]);
-    expect(queues.plan.added[0]!.data).toEqual({ jobId: job.id, reason: "quick-change", overrides: { tone: "playful", lengthSec: 30 }, targetVersion: 2 });
+    expect(queues.plan.added[0]!.data).toEqual({ jobId: job.id, reason: "quick-change", overrides: { tone: "playful", lengthSec: 30 } });
   });
 
   it("402 when the user can't afford a tone/length change", async () => {

@@ -251,14 +251,16 @@ export const brandKits = pgTable(
   ],
 );
 
-/** Razorpay / Stripe payments. `providerRef` is the provider's order / checkout-session id. */
+/**
+ * Razorpay / Stripe payments. `providerRef` is the provider's order / checkout-session id.
+ * Kept after account deletion for billing-record retention: user_id is nulled
+ * (anonymised) rather than the row deleted.
+ */
 export const payments = pgTable(
   "payments",
   {
     id: uuid("id").primaryKey().defaultRandom(),
-    userId: uuid("user_id")
-      .references(() => users.id, { onDelete: "cascade" })
-      .notNull(),
+    userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
     provider: text("provider", { enum: ["razorpay", "stripe"] }).notNull(),
     providerRef: text("provider_ref").notNull().unique(),
     amount: integer("amount").notNull(), // minor units (paise / cents)

@@ -3,15 +3,15 @@ import { and, eq, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 import { chargeCredits, computeQuickChangeCost, creditLedger, jobs, refundJobCredits, renders, storyboards, users, type Db } from "@sitereel/db";
 import {
-  ManualSiteInput,
-  PlanOverrides,
+  ManualCrawlInput,
   QUEUE_NAMES,
+  Tone,
   jobUploadPrefix,
-  type CrawlJobDataV6,
+  type CrawlJobDataP6,
   type JobStatus,
-  type PlanJobDataV6,
+  type PlanJobDataP6,
   type Storyboard,
-  type VoiceJobDataV6,
+  type VoiceJobDataP6,
 } from "@sitereel/shared";
 import type { StorageClient } from "@sitereel/storage";
 import type { AuthVerifier } from "../lib/auth.js";
@@ -33,11 +33,21 @@ export interface JobActionRouteDeps {
   uploadTokenSecret: string;
 }
 
-const QuickChangeBody = PlanOverrides.strict().refine((b) => b.voiceId !== undefined || b.tone !== undefined || b.lengthSec !== undefined, {
+const QuickChangeBody = z
+  .object({
+    voiceId: z.string().trim().min(1).max(64).optional(),
+    tone: Tone.optional(),
+    lengthSec: z.union([z.literal(15), z.literal(30), z.literal(45), z.literal(60)]).optional(),
+  })
+  .strict()
+  .refine((b) => b.voiceId !== undefined || b.tone !== undefined || b.lengthSec !== undefined, {
   message: "Choose a voice, tone or length to change",
 });
 
-const ResumeBody = ManualSiteInput.extend({
+const ResumeBody = ManualCrawlInput.extend({
+  keys: z.array(z.string().min(1).max(300)).max(8).default([]),
+  description: z.string().max(2000).optional(),
+  features: z.array(z.string().max(200)).max(12).optional(),
   brandColor: z
     .string()
     .regex(/^#[0-9a-fA-F]{6}$/, { message: "Brand color must look like #7C5CFF" })
@@ -81,6 +91,7 @@ export function registerJobActionRoutes(app: FastifyInstance, deps: JobActionRou
       ...job.options,
       ...(change.voiceId !== undefined ? { voiceId: change.voiceId } : {}),
       ...(change.tone !== undefined ? { tone: change.tone } : {}),
+      ...(change.lengthSec !== undefined ? { lengthSec: change.lengthSec } : {}),
     };
 
     if (cost === 0) {
@@ -103,7 +114,7 @@ export function registerJobActionRoutes(app: FastifyInstance, deps: JobActionRou
       });
       if (!result) return sendError(reply, 409, "version_conflict", "The video changed while applying this change. Reload and try again.");
 
-      const data: VoiceJobDataV6 = { jobId: job.id, storyboardVersion: nextVersion };
+      const data: VoiceJobDataP6 = { jobId: job.id, storyboardVersion: nextVersion };
       try {
         await deps.queues.voice.add(QUEUE_NAMES.voice, data, { jobId: uniqueJobId(job.id, "quick-voice", nextVersion), attempts: 2, backoff: { type: "fixed", delay: 5_000 } });
       } catch (err) {
@@ -142,7 +153,7 @@ export function registerJobActionRoutes(app: FastifyInstance, deps: JobActionRou
     }
 
     const overrides = { ...(change.tone ? { tone: change.tone } : {}), ...(change.lengthSec ? { lengthSec: change.lengthSec } : {}), ...(change.voiceId ? { voiceId: change.voiceId } : {}) };
-    const data: PlanJobDataV6 = { jobId: job.id, reason: "quick-change", overrides, targetVersion: nextVersion };
+    const data: PlanJobDataP6 = { jobId: job.id, reason: "quick-change", overrides };
     try {
       await deps.queues.plan.add(QUEUE_NAMES.plan, data, { jobId: uniqueJobId(job.id, "quick-plan", nextVersion), attempts: 2, backoff: { type: "fixed", delay: 5_000 } });
     } catch (err) {
@@ -237,7 +248,7 @@ export function registerJobActionRoutes(app: FastifyInstance, deps: JobActionRou
       ...(parsed.data.features ? { features: parsed.data.features.map((f) => f.trim()).filter(Boolean) } : {}),
       ...(parsed.data.brandColor ? { brandColor: parsed.data.brandColor } : {}),
     };
-    const data: CrawlJobDataV6 = { jobId: job.id, url: job.url, manual };
+    const data: CrawlJobDataP6 = { jobId: job.id, url: job.url, manual };
     try {
       await deps.queues.crawl.add(QUEUE_NAMES.crawl, data, { jobId: uniqueJobId(job.id, "resume"), attempts: 2, backoff: { type: "fixed", delay: 5_000 } });
     } catch (err) {

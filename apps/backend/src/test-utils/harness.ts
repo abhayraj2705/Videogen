@@ -79,6 +79,7 @@ export function fakeQueues(): FakeQueues {
     render: fakeQueue("render"),
     encode: fakeQueue("encode"),
     accountDelete: fakeQueue("account-delete"),
+    rerunFromStage: fakeQueue("rerun-from-stage"),
   };
 }
 

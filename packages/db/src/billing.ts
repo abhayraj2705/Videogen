@@ -76,6 +76,7 @@ export async function applyPaymentSucceeded(db: Db, input: PaymentGrantInput): P
 
     // Trust the row created at checkout (server-side catalog numbers) over the event payload.
     const credits = payment.credits;
+    const ownerId = payment.userId ?? input.userId;
     await tx
       .update(payments)
       .set({ status: "paid", raw: input.raw ?? payment.raw, invoiceUrl: input.invoiceUrl ?? payment.invoiceUrl, updatedAt: new Date() })
@@ -91,8 +92,8 @@ export async function applyPaymentSucceeded(db: Db, input: PaymentGrantInput): P
     await tx
       .update(users)
       .set({ credits: sql`${users.credits} + ${credits}`, ...planPatch })
-      .where(eq(users.id, payment.userId));
-    await tx.insert(creditLedger).values({ userId: payment.userId, delta: credits, reason: "purchase", paymentId: payment.id });
+      .where(eq(users.id, ownerId));
+    await tx.insert(creditLedger).values({ userId: ownerId, delta: credits, reason: "purchase", paymentId: payment.id });
 
     return { status: "granted", paymentId: payment.id, credits } as const;
   });

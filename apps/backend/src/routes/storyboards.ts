@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { and, asc, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 import { audioTakes, jobs, storyboards, type Db } from "@sitereel/db";
-import { QUEUE_NAMES, type Storyboard, type VoiceJobDataV6 } from "@sitereel/shared";
+import { QUEUE_NAMES, type Storyboard, type VoiceJobDataP6 } from "@sitereel/shared";
 import type { StorageClient } from "@sitereel/storage";
 import type { AuthVerifier } from "../lib/auth.js";
 import type { Queues } from "../lib/queue.js";
@@ -149,7 +149,8 @@ export function registerStoryboardRoutes(app: FastifyInstance, deps: StoryboardR
       return sendError(reply, 404, "scene_not_found", `Scene "${parsed.data.sceneId}" isn't in the latest script.`);
     }
 
-    const data: VoiceJobDataV6 = { jobId: job.id, storyboardVersion: latest.version, sceneIds: [parsed.data.sceneId], previewOnly: true };
+    // sceneIds ⇒ the worker re-voices only these scenes and does not advance past voice.
+    const data: VoiceJobDataP6 = { jobId: job.id, storyboardVersion: latest.version, sceneIds: [parsed.data.sceneId] };
     try {
       await deps.queues.voice.add(QUEUE_NAMES.voice, data, { ...VOICE_JOB_OPTS, jobId: uniqueJobId(job.id, "revoice", latest.version) });
     } catch (err) {
@@ -188,7 +189,7 @@ export function registerStoryboardRoutes(app: FastifyInstance, deps: StoryboardR
       .returning({ id: jobs.id });
     if (updated.length === 0) return sendError(reply, 409, "not_in_review", "This video isn't waiting for approval.");
 
-    const data: VoiceJobDataV6 = { jobId: job.id, storyboardVersion: target.version };
+    const data: VoiceJobDataP6 = { jobId: job.id, storyboardVersion: target.version };
     try {
       await deps.queues.voice.add(QUEUE_NAMES.voice, data, { ...VOICE_JOB_OPTS, jobId: uniqueJobId(job.id, "approve", target.version) });
     } catch (err) {

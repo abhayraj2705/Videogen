@@ -22,8 +22,9 @@ import { deleteStoragePrefix, deleteSupabaseAuthUser } from "../lib/db-adapters.
 /**
  * GDPR-style account deletion (contract "Account" DELETE /api/me):
  *   1. storage objects under jobs/{jobId}/ for every job of the user (both buckets);
- *   2. DB rows, children first, in one transaction (works whether or not the
- *      FKs cascade — Wave A only cascades shares/ratings);
+ *   2. DB rows, children first, in one transaction (FKs also cascade since
+ *      migration 0004); payments are kept for billing retention with user_id
+ *      nulled and the raw provider payload dropped;
  *   3. the Supabase auth user via the service-role admin API (skipped with a
  *      warning if SUPABASE_SERVICE_ROLE_KEY is unset);
  *   4. deletion_requests.completedAt (that table has no FK to users, so the record survives).
@@ -39,6 +40,8 @@ export function createAccountDeleteProcessor(deps: WorkerDeps) {
 
     let storageDeleted = 0;
     for (const jobId of jobIds) storageDeleted += await deleteStoragePrefix(deps.env, deps.storage, `jobs/${jobId}/`);
+    // Brand-kit logos (users/{userId}/brand-kits/{kitId}/logo-*).
+    storageDeleted += await deleteStoragePrefix(deps.env, deps.storage, `users/${userId}/`);
     log.info({ jobs: jobIds.length, storageDeleted }, "storage objects deleted");
 
     await deps.db.transaction(async (tx) => {
@@ -60,7 +63,8 @@ export function createAccountDeleteProcessor(deps: WorkerDeps) {
       await tx.delete(creditLedger).where(eq(creditLedger.userId, userId));
       if (jobIds.length > 0) await tx.delete(jobs).where(or(inArray(jobs.id, jobIds), eq(jobs.userId, userId)));
       await tx.delete(brandKits).where(eq(brandKits.userId, userId));
-      await tx.delete(payments).where(eq(payments.userId, userId));
+      // Payments are billing records: retained, anonymised (FK is also ON DELETE SET NULL).
+      await tx.update(payments).set({ userId: null, raw: null, updatedAt: new Date() }).where(eq(payments.userId, userId));
       await tx.delete(users).where(eq(users.id, userId));
     });
     log.info("database rows deleted");

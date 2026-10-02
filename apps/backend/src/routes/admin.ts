@@ -4,17 +4,7 @@ import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { and, asc, desc, eq, ilike, inArray, lt, or, type SQL } from "drizzle-orm";
 import { z } from "zod";
 import { jobs, renders, stageRuns, storyboards, users, type Db } from "@sitereel/db";
-import {
-  JobStatus,
-  QUEUE_NAMES,
-  RerunStage,
-  formatSlug,
-  parseFormatSlug,
-  watermarkForPlan,
-  type AspectFormat,
-  type JobEvent,
-  type JobStatus as JobStatusT,
-} from "@sitereel/shared";
+import { JobStatus, PHASE6_QUEUE_NAMES, RerunStage, parseFormatSlug, type AspectFormat, type JobEvent, type RerunFromStageJobData } from "@sitereel/shared";
 import type { StorageClient } from "@sitereel/storage";
 import type { AuthVerifier, AuthedUser } from "../lib/auth.js";
 import { uniqueJobId, type Queues } from "../lib/queue.js";
@@ -45,15 +35,6 @@ const ListQuery = z.object({
 
 const RerunBody = z.object({ fromStage: RerunStage });
 
-/** Status the job shows while a re-run of `stage` is queued (workers set the precise one when they start). */
-const RERUN_STATUS: Record<RerunStage, JobStatusT> = {
-  crawl: "queued",
-  plan: "planning",
-  voice: "voicing",
-  build: "building",
-  qa: "checking",
-  render: "rendering",
-};
 
 function encodeCursor(createdAt: Date, id: string): string {
   return Buffer.from(`${createdAt.toISOString()}|${id}`).toString("base64url");
@@ -183,7 +164,8 @@ export function registerAdminRoutes(app: FastifyInstance, deps: AdminRouteDeps):
         durationMs: r.endedAt ? r.endedAt.getTime() - r.startedAt.getTime() : null,
         costUsd: Number(r.costUsd ?? 0),
         ...(r.error ? { error: r.error } : {}),
-        meta: { inputsHash: r.inputsHash, ...((r.outputs as Record<string, unknown> | null) ?? {}) },
+        inputsHash: r.inputsHash,
+        meta: { inputHash: r.inputsHash, ...((r.outputs as Record<string, unknown> | null) ?? {}) },
       })),
       crawl: crawl
         ? {
@@ -218,36 +200,19 @@ export function registerAdminRoutes(app: FastifyInstance, deps: AdminRouteDeps):
       return sendError(reply, 409, "no_storyboard", `Can't re-run from ${stage}: the job has no approved storyboard.`);
     }
 
-    const [owner] = await db.select({ plan: users.plan }).from(users).where(eq(users.id, job.userId)).limit(1);
-    const watermark = watermarkForPlan(owner?.plan ?? "free");
-    const opts = (suffix: string) => ({ jobId: uniqueJobId(job.id, "rerun", suffix), attempts: 2, backoff: { type: "fixed" as const, delay: 5_000 } });
+    // The worker's rerun-from-stage processor invalidates this + downstream stage runs,
+    // resets status/errorCode and enqueues the stage with force (apps/worker rerun-processor).
+    const data: RerunFromStageJobData = { jobId: job.id, fromStage: stage };
     try {
-      switch (stage) {
-        case "crawl":
-          await deps.queues.crawl.add(QUEUE_NAMES.crawl, { jobId: job.id, url: job.url, force: true }, opts(stage));
-          break;
-        case "plan":
-          await deps.queues.plan.add(QUEUE_NAMES.plan, { jobId: job.id, reason: "admin-rerun", force: true }, opts(stage));
-          break;
-        case "voice":
-          await deps.queues.voice.add(QUEUE_NAMES.voice, { jobId: job.id, force: true }, opts(stage));
-          break;
-        case "build":
-          await deps.queues.build.add(QUEUE_NAMES.build, { jobId: job.id, force: true }, opts(stage));
-          break;
-        case "qa":
-        case "render":
-          for (const format of new Set(job.options.formats)) {
-            const queue = stage === "qa" ? deps.queues.qa : deps.queues.render;
-            await queue.add(QUEUE_NAMES[stage], { jobId: job.id, format, watermark, force: true }, opts(`${stage}-${formatSlug(format)}`));
-          }
-          break;
-      }
+      await deps.queues.rerunFromStage.add(PHASE6_QUEUE_NAMES.rerunFromStage, data, {
+        jobId: uniqueJobId(job.id, "rerun", stage),
+        attempts: 2,
+        backoff: { type: "fixed", delay: 5_000 },
+      });
     } catch (err) {
       deps.logger.error({ err, jobId: job.id, stage }, "admin rerun enqueue failed");
       return sendError(reply, 503, "queue_unavailable", "Couldn't enqueue the re-run.");
     }
-    await db.update(jobs).set({ status: RERUN_STATUS[stage], errorCode: null, updatedAt: new Date() }).where(eq(jobs.id, job.id));
     deps.logger.info({ jobId: job.id, stage, adminId: admin.id }, "admin re-run enqueued");
     return reply.code(202).send({ ok: true, fromStage: stage });
   });

@@ -24,6 +24,7 @@ export interface Queues {
   render: QueueLike;
   encode: QueueLike;
   accountDelete: QueueLike;
+  rerunFromStage: QueueLike;
   connection?: IORedis;
 }
 
@@ -39,6 +40,7 @@ export function createQueues(redisUrl: string): Queues & { connection: IORedis }
     render: q(QUEUE_NAMES.render),
     encode: q(QUEUE_NAMES.encode),
     accountDelete: q(PHASE6_QUEUE_NAMES.accountDelete),
+    rerunFromStage: q(PHASE6_QUEUE_NAMES.rerunFromStage),
     connection,
   };
 }

@@ -78,7 +78,11 @@ export async function createJobWithCharge(
   const cost = computeJobCost(input.options);
 
   return db.transaction(async (tx) => {
-    const [user] = await tx.select({ id: users.id, credits: users.credits }).from(users).where(eq(users.id, input.userId)).for("update");
+    const [user] = await tx
+      .select({ id: users.id, credits: users.credits, plan: users.plan })
+      .from(users)
+      .where(eq(users.id, input.userId))
+      .for("update");
     if (!user) return { ok: false, error: "user_not_found" } as const;
 
     const [active] = await tx
@@ -101,7 +105,9 @@ export async function createJobWithCharge(
         url: input.url,
         domain: input.domain,
         status: "queued",
-        options: input.options,
+        // Watermark snapshot (contract "Billing"): decided by the plan at creation,
+        // never by the client. The worker only ever turns it off (later upgrade).
+        options: { ...input.options, watermark: user.plan === "free" },
         brandKitId: input.brandKitId ?? null,
         creditsCharged: cost,
       })
