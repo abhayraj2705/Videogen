@@ -46,6 +46,28 @@ describe("OpenAI-compatible provider (WebAI-to-API)", () => {
     expect(body.messages[0].content).toContain('"score"');
   });
 
+  it("sends JSON mode and a labelled id for DeepSeek-style APIs", async () => {
+    const fetchMock = vi.fn(async () => chatOk('{"name":"x","score":1}'));
+    const p = createOpenAiCompatProvider({
+      baseUrl: "https://api.deepseek.com",
+      model: "deepseek-chat",
+      apiKey: "sk-test",
+      label: "deepseek",
+      jsonObjectMode: true,
+      fetch: fetchMock as typeof fetch,
+      sleep: noSleep,
+    });
+    await p.generateJson({ system: "SYS", prompt: "go", schema: Schema });
+
+    expect(p.id).toBe("deepseek:deepseek-chat");
+    const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+    expect(url).toBe("https://api.deepseek.com/chat/completions");
+    expect((init.headers as Record<string, string>).Authorization).toBe("Bearer sk-test");
+    const body = JSON.parse(String(init.body));
+    expect(body.response_format).toEqual({ type: "json_object" });
+    expect(body.messages[0].content).toContain('"score"');
+  });
+
   it("re-prompts on schema-invalid output, then succeeds", async () => {
     const fetchMock = vi.fn().mockResolvedValueOnce(chatOk('{"name":"x"}')).mockResolvedValueOnce(chatOk('{"name":"x","score":2}'));
     const p = createOpenAiCompatProvider({ baseUrl: "http://localhost:6969/v1", fetch: fetchMock as typeof fetch, sleep: noSleep });

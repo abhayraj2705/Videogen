@@ -67,6 +67,28 @@ describe("QA seeded defects", () => {
     }
   }, 120_000);
 
+  it("passes BigStatement and BentoGrid in all three formats", async () => {
+    for (const [w, h] of [
+      [640, 360],
+      [360, 640],
+      [480, 480],
+    ] as const) {
+      const m = manifestWith(
+        [
+          { id: "statement", templateId: "BigStatement", props: { text: "Docs your whole team actually reads", highlight: "actually reads" } },
+          { id: "bento", templateId: "BentoGrid", props: { title: "Everything in one place", items: ["Realtime collaboration", "Version history built in", "Works offline"] } },
+        ],
+        w,
+        h,
+      );
+      const r = await qa(`new-${w}x${h}`, m, {
+        statement: ["Docs your whole team actually reads"],
+        bento: ["Everything in one place", "Realtime collaboration", "Version history built in", "Works offline"],
+      });
+      expect(r.issues.filter((i) => i.severity === "error").map((i) => `${w}x${h} ${i.message}`)).toEqual([]);
+    }
+  }, 120_000);
+
   it("catches Math.random in seek() (100% of runs)", async () => {
     for (let run = 0; run < 3; run++) {
       const r = await qa(`rand-seek-${run}`, manifestWith([{ id: "bad", templateId: "__SeededRandomSeek", props: { text: "Jitter" } }]));

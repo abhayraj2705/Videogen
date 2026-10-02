@@ -3,12 +3,14 @@ import { BANNED_PHRASES, type CrawlOutput, type FactLedgerEntry, type JobOptions
 const TEMPLATE_CATALOG = `- KineticHook: opening hook (2-3s). props: { productName, headline }. Use once, first scene.
 - LogoReveal: short reveal bumper (1-2s), logo only (asset "logo"). props: { productName }. Optional, at most once.
 - HeroRebuild: the reveal — rebuilds the site's hero headline big (2-4s). props: { headline, subheadline }. Optional.
-- FeatureTriplet: three grounded facts side by side (3-5s). props: { features: [{label, icon?}, {label, icon?}, {label, icon?}] } — exactly 3 entries.
-- SectionShowcase: a real screenshot asset of the product with a caption (3-6s). props: { sourcePageUrl (must be the url of one of the ASSETS of type "screenshot"), caption }.
-- UIFlowCursor: a real screenshot with an animated cursor implying interactivity (4-6s). props: { sourcePageUrl, caption }. Use instead of SectionShowcase when the facts suggest a workflow/UI.
+- FeatureTriplet: three grounded facts as cards that take turns in the spotlight (4-5s). props: { features: [{label, icon?}, {label, icon?}, {label, icon?}] } — exactly 3 entries; icon is one emoji, optional.
+- SectionShowcase: the real page in a browser window, scrolling, with a caption (4-6s). props: { sourcePageUrl (must be the url of one of the ASSETS of type "screenshot"), caption, section? }. Omit section to scroll the page from the top; set section (1 = top of the page, 2 = one screen down, ...) to hold on that part of the page — use it to show the section the caption is about.
+- UIFlowCursor: the real page in a browser window with a pointer that moves and clicks (4-6s). props: { sourcePageUrl, caption, section? }. Use instead of SectionShowcase when the facts suggest a workflow/UI.
 - StatCounter: one grounded number, counted up big (2-3s). props: { value (the exact number text from a cited "stat" fact, e.g. "10,000+"), label }. Must cite a "stat" fact. Only use if one exists.
 - QuoteCard: a verbatim testimonial (3-4s). props: { quote (exact text copied from a cited "testimonial" fact), author? }. Must cite a "testimonial" fact. Only use if one exists.
 - ChecklistReveal: 2-4 short grounded items checked off in sequence (3-5s). props: { items: string[] } (2-4 entries, each from a cited fact).
+- BigStatement: one line set poster-size, for the differentiator or strongest claim (2-4s). props: { text (3-8 words), highlight? (1-3 consecutive words copied exactly from text, shown in the accent color) }.
+- BentoGrid: a lead line on a large accent tile beside three supporting points (4-5s). props: { title (2-6 words), items: [string, string, string] } — exactly 3 items, 2-5 words each, each from a cited fact. Use instead of FeatureTriplet when one idea frames the three.
 - CTAEndCard: closing scene (2-4s). props: { productName, ctaText, domain }. Use once, last scene.`;
 
 const KIND_PRIORITY: Record<string, number> = { hero: 0, feature: 1, stat: 2, testimonial: 3, cta: 4, heading: 5, other: 6 };
@@ -74,6 +76,11 @@ export function buildPlannerPrompt(opts: { crawlOutput: CrawlOutput; options: Jo
 - One idea per scene. Model the viewer: list what they must understand, one read at a time.
 - Every number shown or spoken must appear verbatim in a fact cited by that scene's factIds. No rounding, no new numbers.
 - Prefer showing the product in use (UIFlowCursor, SectionShowcase) over describing it.
+- Every on-screen line is a complete phrase that reads on its own: never end on a comma or on a word like "and", "to", "of", "with", "on". Shorten by rewriting, not by cutting off.
+- Text animates in word by word, so short punchy lines land best: hook headline 3-7 words, feature labels 2-5 words, captions 3-8 words.
+- Pacing: never use the same template for two scenes in a row; alternate text scenes with product (screenshot) scenes.
+- Each scene after the first may set "transition" (how it cuts in): "zoom" for a reveal or a big number, "slide-left" between parallel points, "slide-up" into a screenshot scene, "fade" for a calm change of topic. Vary them; leave it out to let the renderer choose.
+- Screenshot scenes scroll the real page inside a browser window — give them at least 4s, and point two screenshot scenes at two different pages when more than one screenshot asset exists.
 - Use only these templates:
 ${TEMPLATE_CATALOG}
 - Banned phrases (never use, in any form): ${BANNED_PHRASES.map((p) => `"${p}"`).join(", ")}.
@@ -100,7 +107,7 @@ DOMAIN: ${domain}
 
 OUTPUT
 First fill "rubric" (what, who, differentiator, strongest grounded claim, visual hook, user flow, caption),
-then "scenes" (each: id, templateId, durationSec, narration?, onScreenText[], factIds[], props), then "shareCaption".
+then "scenes" (each: id, templateId, durationSec, narration?, onScreenText[], factIds[], props, transition?), then "shareCaption".
 Set targetDurationSec=${options.lengthSec}, tone="${options.tone}", language="${options.voiceLanguage}". JSON only.`;
 
   return { system, prompt };

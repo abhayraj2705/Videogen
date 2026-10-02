@@ -15,6 +15,7 @@ import {
 import type { StorageClient } from "@sitereel/storage";
 import { ffprobe, formatSlug, type AspectFormat, type ServerEnv } from "@sitereel/shared";
 import { resolveAssetRefsDeep } from "../lib/asset-ref.js";
+import { resolveFontFaces } from "../lib/brand-fonts.js";
 
 export type RenderEnv = Pick<ServerEnv, "STORAGE_DRIVER" | "STORAGE_LOCAL_DIR">;
 
@@ -55,10 +56,13 @@ export async function publishManifest(opts: {
   key: string;
 }): Promise<{ resolved: FilmManifest; manifestUrl: string }> {
   const { manifest, storage, env, serverUrl, key } = opts;
-  const resolved = await resolveAssetRefsDeep(manifest, async (bucket, k) => {
+  const withUrls = await resolveAssetRefsDeep(manifest, async (bucket, k) => {
     if (env.STORAGE_DRIVER === "local") return `${serverUrl}/${bucket}/${k}`;
     return storage.presignDownload(bucket, k, 3600);
   });
+  // Brand fonts ride in the published manifest only: the pre-resolution manifest (hashes, chunk names) stays small and stable.
+  const fontFaces = await resolveFontFaces(manifest.fonts, storage);
+  const resolved: FilmManifest = fontFaces.length > 0 ? { ...withUrls, fontFaces } : withUrls;
   await storage.putObject("assets", key, Buffer.from(JSON.stringify(resolved)), "application/json");
   const manifestUrl = env.STORAGE_DRIVER === "local" ? `${serverUrl}/assets/${key}` : await storage.presignDownload("assets", key, 3600);
   return { resolved, manifestUrl };
@@ -118,7 +122,9 @@ export async function runRenderStage(opts: {
       concurrency: opts.concurrency ?? envConcurrency,
       chunks: opts.chunks ?? envChunks,
       chunkStore: storageChunkStore(storage, `jobs/${jobId}/render/segments-${slug}`),
-      contentKey: JSON.stringify(manifest), // pre-resolution: stable across attempts
+      // Pre-resolution manifest: stable across attempts. Font count is included because a retry that
+      // loads the brand fonts must not reuse segments an earlier attempt rendered with fallback fonts.
+      contentKey: `${JSON.stringify(manifest)}|fonts:${resolved.fontFaces?.length ?? 0}`,
 
       watermarkPng,
       onProgress: opts.onProgress,

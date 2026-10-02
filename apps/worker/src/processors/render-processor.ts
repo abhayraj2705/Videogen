@@ -4,7 +4,7 @@ import { jobs, renders, storyboards } from "@sitereel/db";
 import { formatSlug } from "@sitereel/shared";
 import { buildFilmManifest } from "../stages/build.js";
 import { runRenderStage } from "../stages/render.js";
-import { assembleNarrationTrack, mixFinalAudio } from "../lib/audio-mix.js";
+import { assembleNarrationTrack, mixFinalAudio, type MixResult } from "../lib/audio-mix.js";
 import { buildVtt } from "../lib/vtt.js";
 import { loadBuildInputs, sidecarFor, type BuildInputs } from "./load-build-inputs.js";
 import { qaReportKey } from "./qa-processor.js";
@@ -35,6 +35,15 @@ async function completeIfAllFormatsDone(deps: WorkerDeps, jobId: string, inputs:
     await setJobStatus(deps, jobId, "done");
     log.info({ formats: jobRow!.options.formats, version: inputs.storyboardVersion }, "job done — all formats rendered");
     await notifyJobEmail(deps, jobId, "video-ready");
+  }
+}
+
+async function loadCachedMix(deps: WorkerDeps, mixKey: string): Promise<MixResult | null> {
+  try {
+    const [audio, meta] = await Promise.all([deps.storage.getObject("assets", `${mixKey}.wav`), deps.storage.getObject("assets", `${mixKey}.json`)]);
+    return { ...(JSON.parse(meta.toString("utf8")) as Omit<MixResult, "audio">), audio };
+  } catch {
+    return null;
   }
 }
 
@@ -84,10 +93,21 @@ export function createRenderProcessor(deps: WorkerDeps) {
     // Audio: narration placed at the timing engine's offsets + music bed,
     // ducked and normalized (sidecar /mix, else local ffmpeg).
     const hasVoice = inputs.voiceScenes.some((v) => v.audioKey);
-    let mix: Awaited<ReturnType<typeof mixFinalAudio>> | null = null;
+    let mix: MixResult | null = null;
     if (hasVoice || inputs.music) {
-      const narration = await assembleNarrationTrack({ manifest, voiceScenes: inputs.voiceScenes, storage: deps.storage, repoRoot: deps.repoRoot });
-      mix = await mixFinalAudio({ narration, music: inputs.music, durationSec: manifest.duration, sidecar: sidecarFor(deps), repoRoot: deps.repoRoot });
+      // Every format shares one timeline, so the mix is identical across them: the first
+      // format's render stores it, the others read it back instead of re-running ffmpeg.
+      const mixKey = `jobs/${jobId}/audio/mix-${sha16(["mix-v1", manifestHash({ ...manifest, width: 0, height: 0 }), inputs.audioHashes, inputs.music?.id ?? null])}`;
+      mix = await loadCachedMix(deps, mixKey);
+      if (!mix) {
+        const narration = await assembleNarrationTrack({ manifest, voiceScenes: inputs.voiceScenes, storage: deps.storage, repoRoot: deps.repoRoot });
+        mix = await mixFinalAudio({ narration, music: inputs.music, durationSec: manifest.duration, sidecar: sidecarFor(deps), repoRoot: deps.repoRoot });
+        const { audio, ...meta } = mix;
+        await Promise.all([
+          deps.storage.putObject("assets", `${mixKey}.wav`, audio, "audio/wav"),
+          deps.storage.putObject("assets", `${mixKey}.json`, Buffer.from(JSON.stringify(meta)), "application/json"),
+        ]).catch(() => undefined);
+      }
     }
 
     const result = await runRenderStage({

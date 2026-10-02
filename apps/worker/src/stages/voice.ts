@@ -28,6 +28,9 @@ export interface VoiceStageResult {
   reused: string[];
 }
 
+/** Parallel TTS calls per job: enough to cut a 7-line film's voice stage ~3x without tripping provider rate limits. */
+const VOICE_CONCURRENCY = 3;
+
 /** Binds a StorageClient bucket to the TTS cache's tiny get/put interface. */
 export function storageTtsCache(storage: StorageClient): TtsCacheStore {
   return {
@@ -84,17 +87,16 @@ export async function runVoiceStage(
   const reused: string[] = [];
   const language = options.voiceLanguage ?? storyboard.language ?? "en";
 
-  for (const scene of storyboard.scenes) {
+  // Lines are independent, so they're synthesized a few at a time (results keep storyboard order).
+  const voiceScene = async (scene: Storyboard["scenes"][number]): Promise<VoiceSceneResult> => {
     const prior = deps.reuse?.get(scene.id);
     if (prior) {
-      scenes.push({ ...prior, sceneId: scene.id, durationSec: prior.audioDurationSec !== null ? Math.max(scene.durationSec, prior.audioDurationSec + 0.5) : scene.durationSec, cacheHit: true });
       reused.push(scene.id);
-      continue;
+      return { ...prior, sceneId: scene.id, durationSec: prior.audioDurationSec !== null ? Math.max(scene.durationSec, prior.audioDurationSec + 0.5) : scene.durationSec, cacheHit: true };
     }
     synthesized.push(scene.id);
     if (options.noVoiceover || !scene.narration) {
-      scenes.push({ sceneId: scene.id, audioKey: null, audioDurationSec: null, durationSec: scene.durationSec, words: [], provider: "none" });
-      continue;
+      return { sceneId: scene.id, audioKey: null, audioDurationSec: null, durationSec: scene.durationSec, words: [], provider: "none" };
     }
 
     const req = { text: scene.narration, voiceId: options.voiceId, language };
@@ -134,7 +136,7 @@ export async function runVoiceStage(
     await deps.storage.putObject("assets", audioKey, result.audio, result.contentType);
     totalCost += result.costUsd;
 
-    scenes.push({
+    return {
       sceneId: scene.id,
       audioKey,
       audioDurationSec: result.durationSec,
@@ -143,8 +145,19 @@ export async function runVoiceStage(
       provider: providerId,
       wordsSource,
       cacheHit,
-    });
-  }
+    };
+  };
 
-  return { scenes, costUsd: totalCost, cacheHits, aligned, synthesized, reused };
+  const results = new Array<VoiceSceneResult>(storyboard.scenes.length);
+  let next = 0;
+  await Promise.all(
+    Array.from({ length: Math.min(VOICE_CONCURRENCY, storyboard.scenes.length) }, async () => {
+      for (let i = next++; i < storyboard.scenes.length; i = next++) results[i] = await voiceScene(storyboard.scenes[i]!);
+    }),
+  );
+  scenes.push(...results);
+  const order = new Map(storyboard.scenes.map((s, i) => [s.id, i]));
+  const inOrder = (ids: string[]) => ids.sort((a, b) => order.get(a)! - order.get(b)!);
+
+  return { scenes, costUsd: totalCost, cacheHits, aligned, synthesized: inOrder(synthesized), reused: inOrder(reused) };
 }

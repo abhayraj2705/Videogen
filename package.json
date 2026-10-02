@@ -26,7 +26,8 @@
     "phase0:render": "pnpm --filter @sitereel/renderer run render",
     "phase0:purity": "pnpm --filter @sitereel/renderer run purity",
     "phase2:benchmark": "pnpm --filter @sitereel/worker run benchmark",
-    "pipeline": "pnpm --filter @sitereel/worker exec tsx src/scripts/pipeline.ts"
+    "pipeline": "pnpm --filter @sitereel/worker exec tsx src/scripts/pipeline.ts",
+    "loadtest": "pnpm --filter @sitereel/worker exec tsx src/scripts/load-test.ts"
   },
   "devDependencies": {
     "@eslint/js": "9.17.0",

@@ -27,6 +27,7 @@ describe("admin routes", () => {
       ["GET", `/api/admin/jobs/${job.id}`],
       ["POST", `/api/admin/jobs/${job.id}/rerun`, { fromStage: "plan" }],
       ["GET", "/api/admin/benchmark"],
+      ["GET", "/api/admin/ops"],
       ["GET", `/api/admin/jobs/${job.id}/assets?key=jobs/${job.id}/crawl/home.png`],
       ["GET", `/api/admin/jobs/${job.id}/renders/16x9/video`],
     ];
@@ -83,6 +84,31 @@ describe("admin routes", () => {
     expect(queues.rerunFromStage.added[0]!.data).toEqual({ jobId: job.id, fromStage: "voice" });
     const bad = await app.inject({ method: "POST", url: `/api/admin/jobs/${job.id}/rerun`, headers: { "x-test-user": admin.id }, payload: { fromStage: "encode" } });
     expect(bad.statusCode).toBe(400);
+  });
+
+  it("ops returns live metrics and the alerts they trip", async () => {
+    const admin = await seedUser(db, { role: "admin" });
+    const user = await seedUser(db);
+    for (let i = 0; i < 6; i++) await seedJob(db, user.id, { status: "failed" });
+    const app = newApp();
+    const now = Date.now();
+    const probe = (name: string, depth: number, oldestAgeSec: number) => ({
+      name,
+      add: async () => undefined,
+      getWaitingCount: async () => depth,
+      getJobs: async () => (depth > 0 ? [{ timestamp: now - oldestAgeSec * 1000, data: {}, remove: async () => undefined }] : []),
+    });
+    const queues = { ...fakeQueues(), render: probe("render", 7, 900), crawl: probe("crawl", 0, 0) };
+    registerAdminRoutes(app, { db, queues: queues as never, storage: memoryStorage(), storageDriver: "s3", verifyAuth: fakeAuth(), logger: silentLogger });
+    const res = await app.inject({ method: "GET", url: "/api/admin/ops", headers: { "x-test-user": admin.id } });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.metrics.failed).toBeGreaterThanOrEqual(6);
+    expect(body.metrics.queueDepth).toMatchObject({ render: 7, crawl: 0 });
+    expect(body.metrics.queueWaitSec.render).toBeGreaterThanOrEqual(899);
+    const keys = body.alerts.map((a: { key: string }) => a.key);
+    expect(keys).toContain("queue-wait:render");
+    expect(keys).toContain("success-rate");
   });
 
   it("benchmark reads benchmark/latest/ via index.json", async () => {

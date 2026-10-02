@@ -27,3 +27,6 @@ __pycache__/
 
 # Claude Code agent worktrees
 .claude/worktrees/
+
+# Production secrets for infra/docker/compose.prod.yml
+infra/docker/.env.prod

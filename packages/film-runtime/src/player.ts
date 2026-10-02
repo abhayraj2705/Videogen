@@ -1,8 +1,11 @@
-import type { FilmContext, FilmManifest, Mark, Palette, ResolvedPalette, SceneTemplate } from "./contract.js";
+import type { FilmContext, FilmManifest, FontFaceSpec, Mark, Palette, ResolvedPalette, SceneTemplate, TransitionKind } from "./contract.js";
 import { createSceneRng } from "./util/rng.js";
 import { createTemplate } from "./registry.js";
-import { bestContrast, contrastRatio } from "./util/color.js";
-import { clamp01 } from "./util/easing.js";
+import { bestContrast, contrastRatio, mixRgb, parseColor, relativeLuminance, rgbString, rgbaString, shiftHue, type Rgb } from "./util/color.js";
+import { clamp01, easeInCubic, easeOutQuint } from "./util/easing.js";
+import { captionBand } from "./util/layout.js";
+import { createBackdrop } from "./backdrop.js";
+import { createCaptionLayer } from "./captions.js";
 
 /**
  * Normalizes any CSS color (oklch(), named colors, ...) to rgb() via a canvas
@@ -22,14 +25,98 @@ function toRgbString(color: string): string {
   return `rgb(${r}, ${gg}, ${b})`;
 }
 
-/** Derives text-safe inks from the brand palette (see ResolvedPalette). Pure given rgb inputs. */
+/**
+ * Derives text-safe inks and the surface/glow tones templates share from the
+ * brand palette (see ResolvedPalette). Pure given rgb inputs.
+ */
 export function resolvePalette(p: Palette, normalize: (c: string) => string = toRgbString): ResolvedPalette {
   const bg = normalize(p.bg);
   const fg = normalize(p.fg);
   const accent = normalize(p.accent);
   const accentText = (contrastRatio(accent, bg) ?? 0) >= 3 ? p.accent : p.fg;
   const onAccent = bestContrast(accent, [bg, fg, "rgb(255, 255, 255)", "rgb(17, 17, 17)"]);
-  return { ...p, accentText, onAccent: onAccent === bg ? p.bg : onAccent === fg ? p.fg : onAccent };
+
+  const bgRgb: Rgb = parseColor(bg) ?? [255, 255, 255];
+  const fgRgb: Rgb = parseColor(fg) ?? [17, 17, 17];
+  const accentRgb: Rgb = parseColor(accent) ?? fgRgb;
+  const isDark = relativeLuminance(bgRgb) < 0.3;
+  const accentIsNeutral = Math.max(...accentRgb) - Math.min(...accentRgb) < 24;
+
+  return {
+    ...p,
+    accentText,
+    onAccent: onAccent === bg ? p.bg : onAccent === fg ? p.fg : onAccent,
+    isDark,
+    surface: rgbString(isDark ? mixRgb(bgRgb, fgRgb, 0.08) : mixRgb(bgRgb, [255, 255, 255], 0.6)),
+    border: rgbaString(fgRgb, isDark ? 0.16 : 0.1),
+    muted: rgbString(mixRgb(fgRgb, bgRgb, 0.32)),
+    accentSoft: rgbaString(accentRgb, isDark ? 0.24 : 0.13),
+    accentAlt: rgbString(shiftHue(accentRgb, 38)),
+    glow: accentIsNeutral ? `rgba(0, 0, 0, ${isDark ? 0.6 : 0.3})` : rgbaString(accentRgb, isDark ? 0.5 : 0.38),
+  };
+}
+
+/** Loads the manifest's webfonts; a face that fails (or stalls) just leaves the stack on its fallback. */
+async function loadFontFaces(specs: FontFaceSpec[] | undefined): Promise<void> {
+  if (!specs || specs.length === 0 || typeof FontFace === "undefined") return;
+  const loads = specs.map(async (s) => {
+    try {
+      const face = new FontFace(s.family, `url(${JSON.stringify(s.url)})`, {
+        weight: s.weight ?? "400",
+        style: s.style ?? "normal",
+        ...(s.unicodeRange ? { unicodeRange: s.unicodeRange } : {}),
+      });
+      await face.load();
+      // TS's FontFaceSet typing omits the Set-like add().
+      (document.fonts as unknown as { add(f: FontFace): void }).add(face);
+    } catch {
+      // unreachable/invalid font file — fall back silently
+    }
+  });
+  await Promise.race([Promise.all(loads), new Promise((resolve) => setTimeout(resolve, 8000))]);
+}
+
+/** Links the manifest's font stylesheets and waits for them to parse (the faces themselves load on first use, before ready). */
+async function loadFontStylesheets(urls: string[] | undefined): Promise<void> {
+  if (!urls || urls.length === 0 || typeof document === "undefined") return;
+  const loads = urls.map(
+    (href) =>
+      new Promise<void>((resolve) => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        link.onload = () => resolve();
+        link.onerror = () => resolve();
+        document.head.appendChild(link);
+      }),
+  );
+  await Promise.race([Promise.all(loads), new Promise((resolve) => setTimeout(resolve, 4000))]);
+}
+
+/** Cut styles cycled when a scene doesn't name one, so consecutive cuts differ but a re-render never does. */
+const AUTO_TRANSITIONS: TransitionKind[] = ["zoom", "slide-left", "fade", "slide-up"];
+
+/**
+ * Style for a scene root partway through a cut. Scene roots are transparent
+ * over a shared backdrop, so the outgoing scene clears out during the first
+ * half while the incoming one arrives during the second — two layouts are
+ * never legible on top of each other.
+ */
+function cutStyle(kind: TransitionKind, role: "in" | "out", p: number, width: number, height: number): { opacity: number; transform: string } {
+  if (role === "in") {
+    const inv = 1 - easeOutQuint(p);
+    const opacity = clamp01((p - 0.15) / 0.6);
+    if (kind === "slide-left") return { opacity, transform: `translateX(${(inv * 0.22 * width).toFixed(2)}px)` };
+    if (kind === "slide-up") return { opacity, transform: `translateY(${(inv * 0.2 * height).toFixed(2)}px)` };
+    if (kind === "zoom") return { opacity, transform: `scale(${(1 - 0.18 * inv).toFixed(4)})` };
+    return { opacity, transform: `scale(${(1 - 0.03 * inv).toFixed(4)})` };
+  }
+  const e = easeInCubic(p);
+  const opacity = 1 - clamp01(p / 0.55);
+  if (kind === "slide-left") return { opacity, transform: `translateX(${(-e * 0.22 * width).toFixed(2)}px)` };
+  if (kind === "slide-up") return { opacity, transform: `translateY(${(-e * 0.2 * height).toFixed(2)}px)` };
+  if (kind === "zoom") return { opacity, transform: `scale(${(1 + 0.22 * e).toFixed(4)})` };
+  return { opacity, transform: `scale(${(1 + 0.03 * e).toFixed(4)})` };
 }
 
 interface MountedScene {
@@ -39,6 +126,7 @@ interface MountedScene {
   template: SceneTemplate<any>;
   root: HTMLElement;
   transitionIn: number;
+  transition: TransitionKind;
 }
 
 export interface PlayerHandle {
@@ -48,8 +136,9 @@ export interface PlayerHandle {
 }
 
 /**
- * Mounts every scene's DOM once (all at start=0, stacked), then on each seek()
- * shows only the scene(s) covering t and calls their seek(localT). This is what
+ * Mounts the backdrop, every scene's DOM (all at start=0, stacked) and the
+ * caption layer once, then on each seek() shows only the scene(s) covering t,
+ * applies the cut between them and calls their seek(localT). This is what
  * both the preview player and the renderer's capture loop drive.
  */
 export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Promise<PlayerHandle> {
@@ -62,8 +151,14 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
     background: manifest.palette.bg,
   });
   const palette = resolvePalette(manifest.palette);
+  // Fonts first: templates fit and wrap text at mount.
+  await Promise.all([loadFontFaces(manifest.fontFaces), loadFontStylesheets(manifest.fontCssUrls)]);
 
-  const mounted: MountedScene[] = manifest.scenes.map((scene) => {
+  const backdrop = createBackdrop(stage, manifest, palette, toRgbString);
+  const burnCaptions = manifest.captionStyle === "burned" && manifest.captions.length > 0;
+  const insetBottom = burnCaptions ? captionBand(manifest.width, manifest.height).reserve : 0;
+
+  const mounted: MountedScene[] = manifest.scenes.map((scene, sceneIndex) => {
     const root = document.createElement("div");
     root.dataset.sceneId = scene.id;
     root.dataset.templateId = scene.templateId;
@@ -75,6 +170,9 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
       fonts: manifest.fonts,
       width: manifest.width,
       height: manifest.height,
+      durationSec: scene.end - scene.start,
+      sceneIndex,
+      insetBottom,
       rng: createSceneRng(scene.id),
     };
     template.mount(root, scene.props, ctx);
@@ -86,8 +184,11 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
     root.style.position = "absolute";
     root.style.inset = "0";
 
-    return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0 };
+    const transition = scene.transition ?? AUTO_TRANSITIONS[Math.max(0, sceneIndex - 1) % AUTO_TRANSITIONS.length]!;
+    return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0, transition };
   });
+
+  const captionLayer = burnCaptions ? createCaptionLayer(stage, manifest, palette) : null;
 
   // Wait for every image to decode and every font to load before signalling ready.
   // A renderer that captures before this resolves would get blank/half-loaded frames.
@@ -107,17 +208,31 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
   let activeIds = new Set<string>();
 
   function seek(t: number): void {
+    backdrop.seek(t);
+    captionLayer?.seek(t);
     const nextActive = new Set<string>();
-    for (const scene of mounted) {
+    for (const [i, scene] of mounted.entries()) {
       const isActive = t >= scene.start && t < scene.end;
       if (isActive) {
         nextActive.add(scene.id);
         if (scene.root.style.display === "none") scene.root.style.display = scene.root.dataset.display ?? "";
         const localT = t - scene.start;
-        // Crossfade: later scenes are later in DOM order (on top), so fading
-        // the incoming scene's opacity over the still-visible outgoing one is
-        // a true dissolve. Pure function of t, like everything else here.
-        scene.root.style.opacity = scene.transitionIn > 0 ? String(clamp01(localT / scene.transitionIn)) : "1";
+        // Cut in over the previous scene, and out under the next one. Pure function of t.
+        let opacity = 1;
+        const transforms: string[] = [];
+        if (scene.transitionIn > 0 && localT < scene.transitionIn) {
+          const c = cutStyle(scene.transition, "in", clamp01(localT / scene.transitionIn), manifest.width, manifest.height);
+          opacity *= c.opacity;
+          transforms.push(c.transform);
+        }
+        const next = mounted[i + 1];
+        if (next && next.transitionIn > 0 && t >= next.start) {
+          const c = cutStyle(next.transition, "out", clamp01((t - next.start) / next.transitionIn), manifest.width, manifest.height);
+          opacity *= c.opacity;
+          transforms.push(c.transform);
+        }
+        scene.root.style.opacity = String(opacity);
+        scene.root.style.transform = transforms.length > 0 ? transforms.join(" ") : "none";
         scene.template.seek(localT);
       } else if (activeIds.has(scene.id) && scene.root.style.display !== "none") {
         scene.root.style.display = "none";

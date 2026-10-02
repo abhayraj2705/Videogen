@@ -6,7 +6,8 @@ import { runCrawlStage } from "../stages/crawl.js";
 import { chainJobId } from "./voice-processor.js";
 import type { WorkerDeps } from "./types.js";
 import { CrawlJobDataP6 } from "../lib/phase6-contracts.js";
-import { buildManualCrawlOutput } from "../lib/manual-crawl.js";
+import { buildManualCrawlOutput, filterUploadKeys } from "../lib/manual-crawl.js";
+import { filterCleanUploads } from "../lib/virus-scan.js";
 import { buildSiteBrief } from "../lib/site-brief.js";
 import { brandKitFromCrawl, userHasKitForHost } from "../lib/brand-kit.js";
 import { sha16 } from "../lib/input-hash.js";
@@ -49,7 +50,15 @@ export function createCrawlProcessor(deps: WorkerDeps) {
     if (manual) {
       // W8 needs-input resume: FactLedger from the user's description/features,
       // uploaded screenshots as section screenshots — no live crawl.
-      const base = buildManualCrawlOutput({ jobId, url, manual });
+      // §8.1: uploads are scanned before anything reads them. Infected files are dropped; if clamd
+      // can't be reached this throws and the queue retries rather than using unscanned files.
+      let safeManual = manual;
+      if (deps.virusScanner && manual.keys.length > 0) {
+        const scanned = await filterCleanUploads(filterUploadKeys(jobId, manual.keys), (key) => deps.storage.getObject("assets", key), deps.virusScanner);
+        if (scanned.infected.length > 0) log.warn({ infected: scanned.infected }, "infected uploads dropped");
+        safeManual = { ...manual, keys: scanned.clean };
+      }
+      const base = buildManualCrawlOutput({ jobId, url, manual: safeManual });
       if (base.facts.length === 0 && base.pages.every((p) => !p.screenshotKey)) {
         await finishStageRun(deps.db, runId, { status: "failed", inputsHash, error: { reason: "empty", message: "Manual input had no description, features or screenshots" } });
         await setJobStatus(deps, jobId, "needs_input", "empty");

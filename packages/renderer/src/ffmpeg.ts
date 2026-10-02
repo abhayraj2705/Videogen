@@ -48,18 +48,23 @@ export function spawnFfmpegEncoder(opts: FfmpegEncodeOptions) {
  * what makes the later concat a lossless `-c copy`. The optional watermark
  * is overlaid here, per chunk, so the free-plan path costs no extra encode.
  */
-export function spawnSegmentEncoder(opts: { fps: number; outPath: string; watermarkPng?: string; preset: string; crf: number }) {
+export function spawnSegmentEncoder(opts: { fps: number; outPath: string; watermarkPng?: string; preset: string; crf: number; capture?: "jpeg" | "png" }) {
   const ffmpegBin = resolveFfmpegPath();
+  const jpeg = opts.capture === "jpeg";
+  // Chromium's JPEGs are full-range BT.601 YCbCr; go back through RGB before the
+  // overlay so the watermark and the BT.709 conversion see the same thing as with PNG.
+  const toRgb = jpeg ? "scale=in_color_matrix=bt601:in_range=pc,format=gbrp," : "";
   const args = [
     "-y",
     "-hide_banner",
     "-loglevel", "error",
     "-f", "image2pipe",
+    ...(jpeg ? ["-c:v", "mjpeg"] : []),
     "-framerate", String(opts.fps),
     "-i", "-",
     ...(opts.watermarkPng
-      ? ["-i", opts.watermarkPng, "-filter_complex", `[0:v][1:v]overlay=x=main_w-overlay_w-main_w*0.03:y=main_h-overlay_h-main_h*0.03,${TO_BT709}[v]`, "-map", "[v]"]
-      : ["-vf", TO_BT709]),
+      ? ["-i", opts.watermarkPng, "-filter_complex", `[0:v]${toRgb}null[base];[base][1:v]overlay=x=main_w-overlay_w-main_w*0.03:y=main_h-overlay_h-main_h*0.03,${TO_BT709}[v]`, "-map", "[v]"]
+      : ["-vf", `${toRgb}${TO_BT709}`]),
     "-c:v", "libx264",
     "-preset", opts.preset,
     "-crf", String(opts.crf),

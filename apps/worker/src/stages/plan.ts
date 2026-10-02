@@ -69,9 +69,11 @@ async function tryOnce(
 }
 
 /**
- * §4.6 "Plan": LLM call -> code validators -> retry-with-errors (2 attempts) ->
- * escalate to a stronger provider -> deterministic fallback -> (if somehow
- * still invalid) minimal storyboard. Every path returns a VALID, grounded
+ * §4.6 "Plan": LLM call -> code validators -> ONE second try carrying the
+ * validator errors (on the escalation provider when there is one, else the
+ * primary again) -> deterministic fallback -> (if somehow still invalid)
+ * minimal storyboard. Capped at two LLM calls: a third rarely rescued a plan
+ * the first two got wrong, and each one is the slowest step of the job. Every path returns a VALID, grounded
  * storyboard; `source`, `calls` and `costUsd` say which one ran and what it cost.
  */
 export async function runPlanStage(crawlOutput: CrawlOutput, options: JobOptions, deps: PlanStageDeps): Promise<PlanStageResult> {
@@ -94,7 +96,8 @@ export async function runPlanStage(crawlOutput: CrawlOutput, options: JobOptions
     report ? `${prompt}\n\nYour previous storyboard had these problems:\n${formatValidationErrorsForRetry(report)}` : prompt;
 
   if (deps.primaryProvider) {
-    for (let i = 0; i < 2; i++) {
+    const primaryTries = deps.escalationProvider ? 1 : 2;
+    for (let i = 0; i < primaryTries; i++) {
       const attempt = await tryOnce(deps.primaryProvider, system, i === 0 ? prompt : withErrors(lastReport), crawlOutput, "llm");
       calls.push(attempt.call);
       if (attempt.storyboard && attempt.report) {

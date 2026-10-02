@@ -143,7 +143,7 @@ describe("planner prompt", () => {
 describe("runPlanStage with LLM providers", () => {
   const crawl = fixtures[0]!.crawl;
 
-  it("retries with validator errors, escalates, then falls back — summing cost of every call including failures", async () => {
+  it("escalates with the validator errors, then falls back — summing cost of every call including failures", async () => {
     const prompts: string[] = [];
     const primary: LlmProvider = {
       id: "fake:primary",
@@ -163,15 +163,16 @@ describe("runPlanStage with LLM providers", () => {
     };
     const escalation: LlmProvider = {
       id: "fake:escalation",
-      async generateJson() {
+      async generateJson(opts) {
+        prompts.push(opts.prompt);
         throw new LlmCallError("boom", "fake", { costUsd: 0.05, inputTokens: 1, outputTokens: 1, attempts: 3 });
       },
     };
     const r = await runPlanStage(crawl, BASE, { primaryProvider: primary, escalationProvider: escalation });
     expect(r.storyboard.source).toBe("fallback");
     expect(r.validation.valid).toBe(true);
-    expect(r.attempts).toBe(3);
-    expect(r.costUsd).toBeCloseTo(0.07, 10);
+    expect(r.attempts).toBe(2);
+    expect(r.costUsd).toBeCloseTo(0.06, 10);
     expect(prompts[1]).toContain("[ungrounded_number]");
     expect(prompts[1]).toContain("Fix only these problems; keep everything else.");
   });

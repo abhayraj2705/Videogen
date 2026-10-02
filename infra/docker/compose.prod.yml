@@ -1,0 +1,73 @@
+# Beta production stack for one worker VM (§7.2 "Worker hosting path", step 1).
+#
+#   cp infra/docker/.env.prod.example infra/docker/.env.prod   # fill in secrets
+#   docker compose -f infra/docker/compose.prod.yml --env-file infra/docker/.env.prod up -d --build
+#   docker compose -f infra/docker/compose.prod.yml --env-file infra/docker/.env.prod up -d --scale worker-render=4
+#
+# Postgres (Supabase), Redis and R2 are managed services reached through
+# .env.prod — nothing stateful runs on this VM, so it can be replaced freely.
+# The web app deploys to Vercel separately.
+name: sitereel-prod
+
+x-worker: &worker
+  build:
+    context: ../..
+    dockerfile: infra/docker/worker.Dockerfile
+  image: sitereel-worker:${IMAGE_TAG:-latest}
+  env_file: .env.prod
+  restart: unless-stopped
+  # Chromium needs more shared memory than Docker's 64 MB default.
+  shm_size: 1gb
+  # worker.close() waits for in-flight jobs on SIGTERM; give a render time to finish its chunk.
+  stop_grace_period: 2m
+  depends_on:
+    - sidecar
+
+services:
+  backend:
+    build:
+      context: ../..
+      dockerfile: infra/docker/backend.Dockerfile
+    image: sitereel-backend:${IMAGE_TAG:-latest}
+    env_file: .env.prod
+    environment:
+      # Behind the VM's reverse proxy / load balancer: use X-Forwarded-For for per-IP limits.
+      TRUST_PROXY: "true"
+    ports:
+      - "127.0.0.1:8787:8787"
+    restart: unless-stopped
+
+  # Crawl, plan, voice, build, QA, housekeeping (retention + ops alerts). One instance.
+  worker-general:
+    <<: *worker
+    environment:
+      WORKER_ROLE: general
+      AUDIO_SIDECAR_URL: http://sidecar:8000
+      CLAMAV_HOST: clamav
+    depends_on:
+      - sidecar
+      - clamav
+
+  # CPU-bound: one render at a time per container. Scale with --scale worker-render=N (N ~ vCPUs / 4;
+  # each render already fans out across cores — see RENDER_CONCURRENCY).
+  worker-render:
+    <<: *worker
+    environment:
+      WORKER_ROLE: render
+      AUDIO_SIDECAR_URL: http://sidecar:8000
+
+  sidecar:
+    build:
+      context: ../../services/audio-sidecar
+    image: sitereel-sidecar:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+
+  # Virus scanning for user uploads (§8.1). First start downloads signatures (~1-2 min).
+  clamav:
+    image: clamav/clamav:stable
+    restart: unless-stopped
+    volumes:
+      - clamav-db:/var/lib/clamav
+
+volumes:
+  clamav-db:

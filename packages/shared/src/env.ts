@@ -41,6 +41,17 @@ export const ServerEnv = z.object({
   OPENAI_COMPAT_MODEL: z.string().default("gemini-3-flash"),
   OPENAI_COMPAT_API_KEY: z.string().optional(),
 
+  // Optional: DeepSeek's first-party API (OpenAI-compatible). Text only — no TTS.
+  DEEPSEEK_API_KEY: z.string().optional(),
+  DEEPSEEK_MODEL: z.string().default("deepseek-chat"),
+  DEEPSEEK_BASE_URL: z.string().url().default("https://api.deepseek.com"),
+
+  // Which configured provider runs SiteBrief + planning. "auto" picks the first
+  // configured of: openai-compat, deepseek, gemini. A named provider that isn't
+  // configured falls back to "auto". The next configured one becomes the
+  // escalation provider when ANTHROPIC_API_KEY is unset.
+  LLM_PRIMARY: z.enum(["auto", "openai-compat", "deepseek", "gemini"]).default("auto"),
+
   // Escalation provider (§4.6 "Plan"): used only after the default provider's
   // retries are exhausted. Unset means the planner skips straight to the
   // deterministic fallback storyboard instead of escalating.
@@ -69,6 +80,24 @@ export const ServerEnv = z.object({
   DOMAIN_THROTTLE_MAX: z.coerce.number().int().min(1).default(10),
   DOMAIN_THROTTLE_WINDOW_SEC: z.coerce.number().int().min(1).default(600),
 
+  // --- Phase 7: deployment, retention, alerting, upload scanning ---
+  // Which queues this worker process serves. Production runs one "general"
+  // worker (crawl, plan, voice, build, qa, housekeeping) and N "render"
+  // workers (CPU-bound, one render at a time each); "all" is local dev.
+  WORKER_ROLE: z.enum(["all", "general", "render"]).default("all"),
+  // Crawl screenshots and render work files are deleted this many days after a
+  // job finishes (§7.6 "data retention"). Finished videos are kept. 0 disables.
+  RETENTION_CRAWL_DAYS: z.coerce.number().int().min(0).default(30),
+  // Slack/Discord-compatible webhook for ops alerts. Unset = alerts are only logged.
+  ALERT_WEBHOOK_URL: z.string().url().optional(),
+  ALERT_MIN_SUCCESS_RATE: z.coerce.number().min(0).max(1).default(0.9),
+  ALERT_MAX_QUEUE_WAIT_SEC: z.coerce.number().int().min(1).default(300),
+  // Expected AI + TTS cost per video in USD; an alert fires above 2x. 0 disables the cost alert.
+  ALERT_COST_BASELINE_USD: z.coerce.number().min(0).default(0),
+  // clamd host for scanning user uploads (§8.1). Unset = uploads are not scanned.
+  CLAMAV_HOST: z.string().optional(),
+  CLAMAV_PORT: z.coerce.number().int().default(3310),
+
   // --- SSE replay buffer ---
   SSE_REPLAY_MAX_EVENTS: z.coerce.number().int().min(10).default(500),
   SSE_REPLAY_TTL_SEC: z.coerce.number().int().min(60).default(86_400),
@@ -76,7 +105,8 @@ export const ServerEnv = z.object({
 export type ServerEnv = z.infer<typeof ServerEnv>;
 
 export function loadServerEnv(source: NodeJS.ProcessEnv = process.env): ServerEnv {
-  const parsed = ServerEnv.safeParse(source);
+  // Empty strings (blank lines copied from .env.example) count as unset.
+  const parsed = ServerEnv.safeParse(Object.fromEntries(Object.entries(source).map(([k, v]) => [k, v === "" ? undefined : v])));
   if (!parsed.success) {
     const issues = parsed.error.issues.map((i) => `  - ${i.path.join(".")}: ${i.message}`).join("\n");
     throw new Error(`Invalid environment configuration:\n${issues}\n\nCopy .env.example to .env and fill it in.`);

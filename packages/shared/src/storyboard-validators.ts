@@ -9,6 +9,9 @@ import { MAX_WORDS_ON_SCREEN, READING_SECONDS_PER_WORD, exceedsWordLimit, wordCo
  * final resolved asset URL — the Build stage (Phase 4) attaches those once audio
  * durations and real asset URLs exist.
  */
+/** 1-based section of the page (one viewport-height slice, top to bottom) to show instead of the whole page. */
+const SECTION = z.number().int().min(1).max(12).optional();
+
 export const TEMPLATE_PROP_SCHEMAS: Record<TemplateId, z.ZodType> = {
   KineticHook: z.object({
     productName: z.string().min(1),
@@ -20,6 +23,7 @@ export const TEMPLATE_PROP_SCHEMAS: Record<TemplateId, z.ZodType> = {
   SectionShowcase: z.object({
     sourcePageUrl: z.string().url(),
     caption: z.string().min(1),
+    section: SECTION,
   }),
   CTAEndCard: z.object({
     productName: z.string().min(1),
@@ -36,6 +40,7 @@ export const TEMPLATE_PROP_SCHEMAS: Record<TemplateId, z.ZodType> = {
   UIFlowCursor: z.object({
     sourcePageUrl: z.string().url(),
     caption: z.string().min(1),
+    section: SECTION,
   }),
   StatCounter: z.object({
     value: z.string().min(1),
@@ -47,6 +52,14 @@ export const TEMPLATE_PROP_SCHEMAS: Record<TemplateId, z.ZodType> = {
   }),
   ChecklistReveal: z.object({
     items: z.array(z.string().min(1)).min(2).max(4),
+  }),
+  BigStatement: z.object({
+    text: z.string().min(1),
+    highlight: z.string().optional(),
+  }),
+  BentoGrid: z.object({
+    title: z.string().min(1),
+    items: z.array(z.string().min(1)).length(3),
   }),
 };
 
@@ -82,6 +95,10 @@ export function visibleTextFor(templateId: TemplateId, props: unknown): string[]
       return [p.quote as string];
     case "ChecklistReveal":
       return p.items as string[];
+    case "BigStatement":
+      return [p.text as string];
+    case "BentoGrid":
+      return [p.title as string, ...(p.items as string[])];
     default:
       return null;
   }

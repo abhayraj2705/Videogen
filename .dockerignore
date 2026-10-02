@@ -1,0 +1,22 @@
+# Keep build contexts small and secrets out of images.
+.git
+.github
+.claude
+**/node_modules
+**/.next
+**/.turbo
+**/dist
+**/.data
+**/*.tsbuildinfo
+**/.env
+**/.env.*
+!**/.env.example
+benchmark
+docs
+supabase
+# The web app deploys to Vercel; only its manifest is needed (a frozen install checks every workspace importer).
+apps/web/*
+!apps/web/package.json
+**/*.mp4
+**/test-results
+**/playwright-report

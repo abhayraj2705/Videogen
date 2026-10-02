@@ -1,4 +1,4 @@
-import { chromium, type Page } from "playwright";
+import { chromium, type CDPSession, type Page } from "playwright";
 import { PNG } from "pngjs";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -58,9 +58,22 @@ export interface FilmQaOptions {
 
 const normalize = (s: string) => s.replace(/\s+/g, " ").trim().toLowerCase();
 
+const cdpSessions = new WeakMap<Page, Promise<CDPSession>>();
+
+/**
+ * Lossless frame for the purity comparison. Goes straight to CDP with
+ * optimizeForSpeed (fast zlib level): Playwright's page.screenshot spends
+ * ~250 ms compressing a 1080p PNG, which made purity the bulk of QA time.
+ */
 async function grabFrame(page: Page, t: number): Promise<Buffer> {
   await seekPage(page, t);
-  return page.screenshot({ type: "png" });
+  let session = cdpSessions.get(page);
+  if (!session) {
+    session = page.context().newCDPSession(page);
+    cdpSessions.set(page, session);
+  }
+  const shot = await (await session).send("Page.captureScreenshot", { format: "png", optimizeForSpeed: true });
+  return Buffer.from(shot.data, "base64");
 }
 
 /**

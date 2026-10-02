@@ -1,4 +1,4 @@
-import { computeTimeline, createTemplate, type Caption, type FilmManifest, type ResolvedScene } from "@sitereel/film-runtime";
+import { computeTimeline, createTemplate, expandBeatGrid, type Caption, type FilmManifest, type ResolvedScene } from "@sitereel/film-runtime";
 import { FORMAT_DIMENSIONS, type AspectFormat, type CrawlOutput, type Storyboard } from "@sitereel/shared";
 import { assetRef } from "../lib/asset-ref.js";
 import { phraseCues } from "../lib/vtt.js";
@@ -14,13 +14,27 @@ function withFallback(font: string): string {
   return `${font}, ${SAFE_FONT_STACK}`;
 }
 
+/** "https://www.acme.com/pricing/" -> "acme.com/pricing": the address shown in a screenshot scene's browser toolbar. */
+export function pageLabel(url: string): string {
+  try {
+    const u = new URL(url);
+    const label = `${u.hostname.replace(/^www\./, "")}${u.pathname.replace(/\/$/, "")}`;
+    return label.length > 44 ? `${label.slice(0, 43)}…` : label;
+  } catch {
+    return "";
+  }
+}
+
 /** Resolves a scene's props for its template, swapping sourcePageUrl references for real asset refs. */
 function resolveProps(templateId: string, props: Record<string, unknown>, crawlOutput: CrawlOutput): Record<string, unknown> {
   if (templateId === "SectionShowcase" || templateId === "UIFlowCursor") {
     const sourcePageUrl = props.sourcePageUrl as string | undefined;
     const page = crawlOutput.pages.find((p) => p.url === sourcePageUrl) ?? crawlOutput.pages[0];
-    const { sourcePageUrl: _drop, ...rest } = props;
-    return { ...rest, screenshotUrl: page ? assetRef("assets", page.screenshotKey) : "" };
+    const { sourcePageUrl: _drop, section, ...rest } = props;
+    // `section` (1-based) picks one viewport-height slice of the page; anything else shows the scrolling full page.
+    const sectionKey = typeof section === "number" ? page?.sectionScreenshotKeys?.[section - 1] : undefined;
+    const key = sectionKey ?? page?.screenshotKey;
+    return { ...rest, screenshotUrl: key ? assetRef("assets", key) : "", ...(page ? { pageLabel: pageLabel(page.url) } : {}) };
   }
   if (templateId === "KineticHook" || templateId === "CTAEndCard" || templateId === "LogoReveal") {
     // brand.logoUrl is already a fully-qualified URL on the crawled site itself
@@ -50,6 +64,8 @@ export function buildFilmManifest(opts: {
   format: AspectFormat;
   music?: MusicTrack | null;
   transitionSec?: number;
+  /** Draw word-synced captions into the picture. Default: on whenever the film has narration. */
+  burnCaptions?: boolean;
 }): FilmManifest {
   const { storyboard, crawlOutput, voiceScenes, format } = opts;
   const { width, height } = FORMAT_DIMENSIONS[format];
@@ -80,6 +96,7 @@ export function buildFilmManifest(opts: {
       start: slot.start,
       end: slot.end,
       transitionInSec: slot.transitionInSec,
+      ...(i > 0 && scene.transition ? { transition: scene.transition } : {}),
       audioStart: slot.audioStart,
       props: resolveProps(scene.templateId, scene.props, crawlOutput),
     };
@@ -96,6 +113,12 @@ export function buildFilmManifest(opts: {
     const text = scene.narration ?? scene.onScreenText.join(" ");
     return text ? [{ t0: slot.slotStart, t1: slot.slotEnd, text }] : [];
   });
+
+  // Real speech only: the silent TTS fallback still produces a clip + estimated words, but there is nothing to read along to.
+  const hasNarration = voiceScenes.some((v) => v.audioKey && v.words.length > 0 && !v.provider.startsWith("fallback"));
+  const beats = opts.music?.beatGrid?.length
+    ? expandBeatGrid(opts.music.beatGrid, opts.music.loopSec, timeline.duration).map((b) => Math.round(b * 1000) / 1000)
+    : [];
 
   // Poster = the first scene's settled frame (renderer bakes it into frame 0).
   let posterTime: number | undefined;
@@ -119,5 +142,8 @@ export function buildFilmManifest(opts: {
     scenes,
     captions,
     posterTime,
+    // Captions that only repeat on-screen text (silent films) stay in the .vtt.
+    ...((opts.burnCaptions ?? hasNarration) ? { captionStyle: "burned" as const } : {}),
+    ...(beats.length > 0 ? { beats } : {}),
   };
 }

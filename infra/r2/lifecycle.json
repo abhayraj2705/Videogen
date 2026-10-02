@@ -1,0 +1,17 @@
+{
+  "_comment": "R2 lifecycle rules for the ASSETS bucket (docs/deployment.md 'Backups and retention'). A backstop behind the worker's retention job: apply with `aws s3api put-bucket-lifecycle-configuration --endpoint-url $R2_ENDPOINT --bucket $R2_BUCKET_ASSETS --lifecycle-configuration file://infra/r2/lifecycle.json` after removing this _comment key. The RENDERS bucket (finished videos) has no expiry rule.",
+  "Rules": [
+    {
+      "ID": "abort-stale-multipart-uploads",
+      "Status": "Enabled",
+      "Filter": { "Prefix": "" },
+      "AbortIncompleteMultipartUpload": { "DaysAfterInitiation": 2 }
+    },
+    {
+      "ID": "expire-benchmark-reports",
+      "Status": "Enabled",
+      "Filter": { "Prefix": "benchmark/" },
+      "Expiration": { "Days": 180 }
+    }
+  ]
+}

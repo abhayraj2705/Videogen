@@ -14,9 +14,18 @@ export interface LlmCallResult<T> extends LlmUsage {
   latencyMs: number;
 }
 
+/** An image attached to a prompt (vision-capable providers only — see LlmProvider.supportsImages). */
+export interface LlmImage {
+  /** e.g. "image/jpeg" */
+  mimeType: string;
+  base64: string;
+}
+
 export interface GenerateJsonOptions<T> {
   system: string;
   prompt: string;
+  /** Images the model should look at alongside the prompt. Providers without vision ignore them. */
+  images?: LlmImage[];
   schema: z.ZodType<T>;
   /** Name for the structured-output schema/tool (letters, digits, underscores). */
   schemaName?: string;
@@ -34,6 +43,8 @@ export interface GenerateJsonOptions<T> {
  */
 export interface LlmProvider {
   id: string;
+  /** True when generateJson() actually sends `images` to the model. */
+  supportsImages?: boolean;
   generateJson<T>(opts: GenerateJsonOptions<T>): Promise<LlmCallResult<T>>;
 }
 

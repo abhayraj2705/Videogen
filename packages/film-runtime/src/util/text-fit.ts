@@ -32,14 +32,14 @@ export function wrapText(text: string, maxCharsPerLine: number, maxLines = 3): s
   const lines: string[] = [];
   let current = "";
 
-  for (const word of words) {
+  for (const [index, word] of words.entries()) {
     const candidate = current ? `${current} ${word}` : word;
     if (candidate.length > maxCharsPerLine && current) {
       lines.push(current);
       current = word;
       if (lines.length === maxLines - 1) {
-        // fold the remainder into the last allowed line
-        const rest = words.slice(words.indexOf(word)).join(" ");
+        // fold the remainder into the last allowed line (by position: a repeated word must not rewind the text)
+        const rest = words.slice(index).join(" ");
         lines.push(rest.length > maxCharsPerLine ? `${rest.slice(0, maxCharsPerLine - 1)}…` : rest);
         return lines;
       }

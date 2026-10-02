@@ -58,7 +58,7 @@ export function createQaProcessor(deps: WorkerDeps) {
       const { resolved, manifestUrl } = await publishManifest({ manifest, storage: deps.storage, env: deps.env, serverUrl: server.url, key: `jobs/${jobId}/qa/manifest-${slug}.json` });
       const vision = deps.llm.primary ? createLlmVisionReviewer(deps.llm.primary) : deps.llm.escalation ? createLlmVisionReviewer(deps.llm.escalation) : skippedVisionReviewer;
 
-      const { report, contactSheet } = await runQaStage({ manifest: resolved, filmHost: server.url, manifestUrl, storyboard: inputs.storyboard, facts: inputs.crawlOutput.facts, vision });
+      const { report, contactSheet } = await runQaStage({ manifest: resolved, filmHost: server.url, manifestUrl, storyboard: inputs.storyboard, facts: inputs.crawlOutput.facts, vision, secondary: format !== inputs.jobOptions.formats[0] });
 
       const contactKey = contactSheet ? qaContactSheetKey(jobId, slug) : null;
       if (contactSheet && contactKey) await deps.storage.putObject("assets", contactKey, contactSheet, "image/jpeg");

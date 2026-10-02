@@ -1,12 +1,13 @@
 import type { FilmContext, Mark, SceneTemplate } from "../contract.js";
-import { easeOutCubic, progress } from "../util/easing.js";
-import { applyReveal, el, setStyle } from "../util/dom.js";
+import { clamp01, easeOutCubic, progress } from "../util/easing.js";
+import { el, setStyle } from "../util/dom.js";
 import { WRAP_SAFE, fitFontSize, layoutFor } from "../util/layout.js";
+import { cardStyle, enter, scaleXTo, sceneRoot } from "../util/ui.js";
 
 export interface Feature {
   /** Grounded fact: short label, e.g. "Sync across 4 devices". Must cite a factId upstream. */
   label: string;
-  /** Optional lucide-style icon glyph rendered as text/emoji placeholder in Phase 0. */
+  /** Optional icon glyph (emoji/text); cards without one show their position number. */
   icon?: string;
 }
 
@@ -14,18 +15,30 @@ export interface FeatureTripletProps {
   features: [Feature, Feature, Feature];
 }
 
-interface Instance {
-  cards: HTMLElement[];
-  horizontal: boolean;
+interface Card {
+  node: HTMLElement;
+  ring: HTMLElement;
+  bar: HTMLElement;
 }
 
-const CARD_STAGGER = 0.2;
-const CARD_RISE_DURATION = 0.4;
+interface Instance {
+  cards: Card[];
+  horizontal: boolean;
+  u: number;
+  durationSec: number;
+}
+
+const CARD_STAGGER = 0.14;
+const CARD_ENTER = 0.75;
+
+const settleFor = (count: number) => (count - 1) * CARD_STAGGER + CARD_ENTER;
 
 /**
- * Three grounded feature facts reveal in sequence, staggered.
- * Layouts: 16:9 three cards side by side (icon above label); 9:16 and 1:1
- * stack the cards vertically as full-width rows (icon left, label right),
+ * Three grounded feature facts as cards that spring in one after another,
+ * then take turns in the spotlight (accent outline + lift) for the rest of
+ * the scene, so there is always one thing to look at.
+ * Layouts: 16:9 three cards side by side (badge above label); 9:16 and 1:1
+ * stack the cards vertically as full-width rows (badge left, label right),
  * sliding in from the side instead of rising.
  */
 export function createFeatureTriplet(): SceneTemplate<FeatureTripletProps> {
@@ -38,89 +51,116 @@ export function createFeatureTriplet(): SceneTemplate<FeatureTripletProps> {
       const L = layoutFor(ctx);
       const u = L.u;
       const row = L.orientation === "landscape";
-      const gap = L.pick({ landscape: 48, portrait: 36, square: 24 }) * u;
-      setStyle(root, {
-        position: "absolute",
-        inset: "0",
-        boxSizing: "border-box",
-        padding: L.safePadding,
-        display: "flex",
-        flexDirection: row ? "row" : "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: `${gap}px`,
-        background: ctx.palette.bg,
-        fontFamily: ctx.fonts.body,
-      });
+      const gap = L.pick({ landscape: 40, portrait: 34, square: 22 }) * u;
+      sceneRoot(root, L, { flexDirection: row ? "row" : "column", gap: `${gap}px`, fontFamily: ctx.fonts.body });
 
-      const pad = L.pick({ landscape: 40, portrait: 40, square: 28 }) * u;
-      const cardWidth = row ? Math.min((L.safe.width - 2 * gap) / 3, 540 * u) : L.safe.width * L.pick({ landscape: 1, portrait: 1, square: 0.92 });
-      const iconSize = L.pick({ landscape: 72, portrait: 76, square: 56 }) * u;
-      const labelWidth = row ? cardWidth - 2 * pad : cardWidth - 2 * pad - (props.features.some((f) => f.icon) ? iconSize + pad * 0.8 : 0);
+      const pad = L.pick({ landscape: 44, portrait: 40, square: 28 }) * u;
+      const cardWidth = row ? Math.min((L.safe.width - 2 * gap) / 3, 560 * u) : L.safe.width * L.pick({ landscape: 1, portrait: 1, square: 0.94 });
+      const badge = L.pick({ landscape: 84, portrait: 88, square: 64 }) * u;
+      const labelWidth = row ? cardWidth - 2 * pad : cardWidth - 2 * pad - badge - pad * 0.8;
       const longest = props.features.reduce((a, f) => (f.label.length > a.length ? f.label : a), "");
-      const labelSize = fitFontSize(longest, labelWidth, L.pick({ landscape: 40, portrait: 50, square: 40 }) * u, row ? 3 : 2, 22 * u);
+      const labelSize = fitFontSize(longest, labelWidth, L.pick({ landscape: 52, portrait: 52, square: 40 }) * u, row ? 3 : 2, 22 * u);
 
-      const cards = props.features.map((feature) => {
-        const card = el("div", "ft-card");
-        setStyle(card, {
-          boxSizing: "border-box",
+      const cards = props.features.map((feature, i): Card => {
+        const node = el("div", "ft-card");
+        setStyle(node, {
+          ...cardStyle(ctx, u),
+          position: "relative",
           display: "flex",
           flexDirection: row ? "column" : "row",
-          alignItems: "center",
+          alignItems: row ? "flex-start" : "center",
           justifyContent: row ? "center" : "flex-start",
-          gap: `${row ? pad * 0.5 : pad * 0.8}px`,
+          gap: `${row ? pad * 0.7 : pad * 0.8}px`,
           width: `${cardWidth}px`,
-          minHeight: row ? `${L.safe.height * 0.42}px` : "0",
+          minHeight: row ? `${L.safe.height * 0.52}px` : "0",
           padding: `${pad}px`,
-          borderRadius: `${20 * u}px`,
-          background: ctx.palette.accent,
-          textAlign: row ? "center" : "left",
         });
 
-        if (feature.icon) {
-          const icon = el("div", "ft-icon", feature.icon);
-          setStyle(icon, { fontSize: `${iconSize}px`, lineHeight: "1", flexShrink: "0", width: row ? "auto" : `${iconSize}px`, textAlign: "center" });
-          card.appendChild(icon);
-        }
+        const bar = el("div", "ft-bar");
+        setStyle(bar, {
+          position: "absolute",
+          left: `${pad}px`,
+          top: "0",
+          width: `${badge}px`,
+          height: `${6 * u}px`,
+          borderRadius: `0 0 ${4 * u}px ${4 * u}px`,
+          background: `linear-gradient(90deg, ${ctx.palette.accent}, ${ctx.palette.accentAlt})`,
+          transformOrigin: "left center",
+        });
+        node.appendChild(bar);
+
+        const badgeNode = el("div", "ft-icon", feature.icon ?? String(i + 1).padStart(2, "0"));
+        setStyle(badgeNode, {
+          width: `${badge}px`,
+          height: `${badge}px`,
+          flexShrink: "0",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: `${badge * 0.3}px`,
+          background: ctx.palette.accentSoft,
+          color: ctx.palette.accentText,
+          fontFamily: ctx.fonts.display,
+          fontSize: `${badge * (feature.icon ? 0.56 : 0.4)}px`,
+          fontWeight: "800",
+          lineHeight: "1",
+          letterSpacing: "-0.02em",
+        });
+        node.appendChild(badgeNode);
 
         const label = el("div", "ft-label", feature.label);
         setStyle(label, {
           ...WRAP_SAFE,
           fontSize: `${labelSize}px`,
-          fontWeight: "600",
-          color: ctx.palette.onAccent,
-          lineHeight: "1.3",
+          fontWeight: "700",
+          color: ctx.palette.fg,
+          fontFamily: ctx.fonts.display,
+          lineHeight: "1.22",
+          letterSpacing: "-0.02em",
           maxWidth: `${labelWidth}px`,
+          textAlign: "left",
         });
-        card.appendChild(label);
+        node.appendChild(label);
 
-        root.appendChild(card);
-        return card;
+        const ring = el("div", "ft-ring");
+        setStyle(ring, {
+          position: "absolute",
+          inset: `${-3 * u}px`,
+          borderRadius: `${30 * u}px`,
+          border: `${4 * u}px solid ${ctx.palette.accent}`,
+          boxShadow: `0 0 ${50 * u}px ${ctx.palette.glow}`,
+          opacity: "0",
+        });
+        node.appendChild(ring);
+
+        root.appendChild(node);
+        return { node, ring, bar };
       });
 
-      instance = { cards, horizontal: row };
+      instance = { cards, horizontal: row, u, durationSec: ctx.durationSec };
     },
 
     seek(localT) {
       if (!instance) return;
-      const { horizontal } = instance;
-      instance.cards.forEach((card, i) => {
+      const { horizontal, u, cards, durationSec } = instance;
+      const settled = settleFor(cards.length);
+      // Spotlight: after the cards land, the rest of the scene is split into one turn per card.
+      const turn = Math.max(0.5, (durationSec - settled - 0.5) / cards.length);
+      cards.forEach((card, i) => {
         const start = i * CARD_STAGGER;
-        const p = progress(localT, start, start + CARD_RISE_DURATION, easeOutCubic);
-        if (horizontal) {
-          applyReveal(card, p, 20);
-        } else {
-          card.style.opacity = String(p);
-          card.style.transform = `translateX(${(1 - p) * -28}px)`;
-        }
+        const local = localT - settled - 0.1 - i * turn;
+        const spot = clamp01(local / 0.25) * clamp01((turn - local) / 0.25);
+        card.ring.style.opacity = String(spot);
+        const lift = spot > 0 ? `translateY(${(-10 * u * spot).toFixed(2)}px)` : "";
+        enter(card.node, localT, start, CARD_ENTER, horizontal ? { y: 90 * u, scale: 0.9, rotate: (i - 1) * 4 } : { x: -110 * u, scale: 0.96 }, lift);
+        card.bar.style.transform = scaleXTo(progress(localT, start + 0.3, start + 0.8, easeOutCubic));
       });
     },
 
     marks(props): Mark[] {
-      const lastStart = (props.features.length - 1) * CARD_STAGGER;
       return [
         { t: 0, type: "start" },
-        { t: lastStart + CARD_RISE_DURATION, type: "settle" },
+        { t: settleFor(props.features.length), type: "settle" },
       ];
     },
 

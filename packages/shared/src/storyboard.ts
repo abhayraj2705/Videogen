@@ -15,7 +15,7 @@ import { Tone } from "./job.js";
  * assets only by fact id / role, not by final URL.
  */
 
-/** Full 10-template catalog — must stay in lockstep with film-runtime's TEMPLATE_REGISTRY. */
+/** Full 12-template catalog — must stay in lockstep with film-runtime's TEMPLATE_REGISTRY. */
 export const TemplateId = z.enum([
   "KineticHook",
   "FeatureTriplet",
@@ -27,8 +27,15 @@ export const TemplateId = z.enum([
   "StatCounter",
   "QuoteCard",
   "ChecklistReveal",
+  // Added after the v1 freeze. Additive: every stored v1 storyboard still parses.
+  "BigStatement",
+  "BentoGrid",
 ]);
 export type TemplateId = z.infer<typeof TemplateId>;
+
+/** How a scene enters over the one before it — must stay in lockstep with film-runtime's TransitionKind. */
+export const SceneTransition = z.enum(["fade", "slide-left", "slide-up", "zoom"]);
+export type SceneTransition = z.infer<typeof SceneTransition>;
 
 export const StoryboardScene = z.object({
   id: z.string(),
@@ -42,6 +49,8 @@ export const StoryboardScene = z.object({
   factIds: z.array(z.string()),
   /** Template-specific props, validated against that template's own requirements (see validators.ts), not by this schema. */
   props: z.record(z.unknown()),
+  /** Cut into this scene. Additive, optional: absent = the player picks one per cut. Ignored on the first scene. */
+  transition: SceneTransition.optional(),
 });
 export type StoryboardScene = z.infer<typeof StoryboardScene>;
 

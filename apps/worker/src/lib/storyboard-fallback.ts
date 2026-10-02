@@ -18,9 +18,37 @@ export function screenshotPageUrls(crawlOutput: CrawlOutput): string[] {
   return crawlOutput.pages.filter((p) => p.screenshotKey).map((p) => p.url);
 }
 
-function truncateWords(text: string, maxWords = MAX_WORDS_ON_SCREEN): string {
+/** Words a line must not end on — a cut that lands here reads as broken ("…online and", "…from Stripe on"). */
+const DANGLING_WORDS = new Set(["and", "or", "but", "to", "of", "the", "a", "an", "with", "for", "in", "on", "from", "by", "at", "as", "is", "are", "that", "your", "our", "their", "its", "&"]);
+
+/**
+ * Shortens text to at most `maxWords` without cutting mid-thought: prefers the
+ * last full sentence inside the limit, then the last clause boundary (comma,
+ * colon, dash), and never ends on a connective or stray punctuation. Only
+ * ever removes words from the end, so the result stays a verbatim prefix of
+ * the fact it came from (grounding and quote checks still hold).
+ */
+export function truncateWords(text: string, maxWords = MAX_WORDS_ON_SCREEN): string {
   const words = text.trim().split(/\s+/).filter(Boolean);
-  return words.length <= maxWords ? words.join(" ") : words.slice(0, maxWords).join(" ");
+  if (words.length <= maxWords) return words.join(" ");
+  let cut = words.slice(0, maxWords);
+  const MIN_KEEP = 3;
+
+  const lastIndexWhere = (test: (w: string, i: number) => boolean) => {
+    for (let i = cut.length - 1; i >= MIN_KEEP - 1; i--) if (test(cut[i]!, i)) return i;
+    return -1;
+  };
+
+  const sentenceEnd = lastIndexWhere((w) => /[.!?]$/.test(w));
+  if (sentenceEnd >= 0) return cut.slice(0, sentenceEnd + 1).join(" ");
+
+  // The cut landed mid-clause: fall back to the last clause boundary, if one leaves enough words.
+  const clauseEnd = lastIndexWhere((w, i) => /[,;:]$/.test(w) || /^[–—-]$/.test(cut[i + 1] ?? ""));
+  if (clauseEnd >= 0) cut = cut.slice(0, clauseEnd + 1);
+
+  const bare = (w: string) => w.toLowerCase().replace(/[,;:]+$/, "");
+  while (cut.length > 2 && (DANGLING_WORDS.has(bare(cut[cut.length - 1]!)) || /^[–—-]$/.test(cut[cut.length - 1]!))) cut.pop();
+  return cut.join(" ").replace(/[\s,;:–—-]+$/, "");
 }
 
 /** Never shorter than the reading floor for its own on-screen text, with a small margin. */
@@ -90,6 +118,9 @@ export function statParts(text: string): { value: string; label: string } | null
 export function isQuoteShaped(text: string): boolean {
   const words = text.split(/\s+/).filter(Boolean);
   if (words.length < 4 || words.length > MAX_WORDS_ON_SCREEN) return false;
+  // Mostly Capitalised Words is a byline ("Jane Doe, Head of Product, Acme"), not something anyone said.
+  const capitalised = words.filter((w) => /^\p{Lu}/u.test(w)).length;
+  if (capitalised / words.length > 0.6) return false;
   const letters = (text.match(/\p{L}/gu) ?? []).length;
   return letters / text.replace(/\s/g, "").length >= 0.75 && !/[★☆|$€£₹]/.test(text) && numbersIn(text).length === 0;
 }
@@ -263,6 +294,18 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
       onScreenText: [caption],
       factIds: [revealFact.id],
       props: { sourcePageUrl: revealPage.url, caption },
+    });
+  } else if (revealFact) {
+    // No screenshot (plain-fetch crawl): the second hero/heading line still gets its own beat, set big.
+    const text = truncateWords(revealFact.text);
+    scenes.push({
+      id: "reveal",
+      templateId: "BigStatement",
+      durationSec: durationFor([text], 2.5),
+      narration: narrate(text),
+      onScreenText: [text],
+      factIds: [revealFact.id],
+      props: { text },
     });
   }
 

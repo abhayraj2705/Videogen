@@ -25,24 +25,37 @@ export type VisionReviewer = (input: { contactSheet: Buffer | null; manifest: Fi
 const VisionSchema = z.object({ score: z.number().min(1).max(5), notes: z.array(z.string()).max(8) });
 
 /**
- * Vision review through the packages/llm provider interface. That interface
- * is text-only today (no image parts), so this sends a structured description
- * of the contact-sheet frames — per-scene template, visible text, layout/
- * contrast findings — and asks for a polish score. When the interface gains
- * image input, attach `contactSheet` here; callers don't change.
+ * Vision review through the packages/llm provider interface. Providers with
+ * image input (Gemini, Anthropic) get the contact sheet itself — a grid of
+ * each scene's settled frame plus in-between frames — alongside the structured
+ * description (per-scene template, visible text, layout/contrast findings).
+ * Text-only providers get the description alone, and the notes say so.
  */
 export function createLlmVisionReviewer(llm: LlmProvider): VisionReviewer {
-  return async ({ manifest, visibleText, issues }) => {
+  return async ({ contactSheet, manifest, visibleText, issues }) => {
+    const sawFrames = Boolean(llm.supportsImages && contactSheet);
     const prompt = [
       `A ${manifest.width}x${manifest.height} ${manifest.duration.toFixed(1)}s promo video. Palette bg=${manifest.palette.bg} fg=${manifest.palette.fg} accent=${manifest.palette.accent}.`,
       "Scenes (template — text visible at the settled frame):",
       ...manifest.scenes.map((s) => `- ${s.id} [${s.templateId}] ${(s.end - s.start).toFixed(1)}s — "${visibleText.find((v) => v.sceneId === s.id)?.visibleText ?? ""}"`),
       issues.length ? `Automated QA findings:\n${issues.map((i) => `- ${i.severity}: ${i.message}`).join("\n")}` : "Automated QA found no issues.",
+      sawFrames
+        ? "The attached image is the contact sheet: each scene's settled frame in order, then evenly spaced in-between frames. Judge what you see — composition, hierarchy, legibility, empty space, whether the screenshots read — not just the text below."
+        : "",
       "Score the video's polish 1-5 for a social-media product promo and list up to 5 concrete notes (copy, pacing, hierarchy, contrast).",
-    ].join("\n");
+    ]
+      .filter(Boolean)
+      .join("\n");
     try {
-      const r = await llm.generateJson({ system: "You are a senior motion designer reviewing short product videos.", prompt, schema: VisionSchema, maxOutputTokens: 600 });
-      return { status: "ok", score: r.data.score, notes: [...r.data.notes, "Reviewed a structured frame description (LlmProvider is text-only; no image input yet)."], reviewer: llm.id };
+      const r = await llm.generateJson({
+        system: "You are a senior motion designer reviewing short product videos.",
+        prompt,
+        schema: VisionSchema,
+        maxOutputTokens: 600,
+        ...(sawFrames ? { images: [{ mimeType: "image/jpeg", base64: contactSheet!.toString("base64") }] } : {}),
+      });
+      const basis = sawFrames ? "Reviewed the rendered contact sheet." : `Reviewed a text description of the frames only (${llm.id} has no image input).`;
+      return { status: "ok", score: r.data.score, notes: [...r.data.notes, basis], reviewer: llm.id };
     } catch (err) {
       return { status: "failed", notes: [`vision review call failed: ${(err as Error).message}`], reviewer: llm.id };
     }
@@ -53,6 +66,8 @@ export const skippedVisionReviewer: VisionReviewer = async () => ({
   status: "skipped",
   notes: ["Vision review skipped: no LLM API key configured (GEMINI_API_KEY / ANTHROPIC_API_KEY)."],
 });
+
+const SECONDARY_PURITY_SAMPLES = 4;
 
 export interface QaReport {
   passed: boolean;
@@ -80,6 +95,13 @@ export async function runQaStage(opts: {
   storyboard: Storyboard;
   facts: FactLedger;
   vision?: VisionReviewer;
+  /**
+   * True for every format after the job's first. All formats run the same
+   * templates on the same timeline, so the first format carries the full
+   * determinism sweep and the (format-independent) vision review; the others
+   * keep every layout/text/safe-area gate but only spot-check determinism.
+   */
+  secondary?: boolean;
 }): Promise<{ report: QaReport; contactSheet: Buffer | null }> {
   const { manifest, storyboard } = opts;
   const issues: QaIssue[] = [];
@@ -89,10 +111,12 @@ export async function runQaStage(opts: {
 
   // Probe for what the template actually draws (props), not the storyboard's onScreenText copy.
   const expectedText = Object.fromEntries(storyboard.scenes.map((s) => [s.id, visibleTextFor(s.templateId, s.props) ?? s.onScreenText]));
-  const probe = await runFilmQa({ manifest, filmHost: opts.filmHost, manifestUrl: opts.manifestUrl, expectedText });
+  const probe = await runFilmQa({ manifest, filmHost: opts.filmHost, manifestUrl: opts.manifestUrl, expectedText, ...(opts.secondary ? { puritySamples: SECONDARY_PURITY_SAMPLES } : {}) });
   issues.push(...probe.issues.map((i) => ({ ...i, source: "probe" as const })));
 
-  const vision = await (opts.vision ?? skippedVisionReviewer)({ contactSheet: probe.contactSheet, manifest, visibleText: probe.text, issues });
+  const vision: VisionReview = opts.secondary
+    ? { status: "skipped", notes: ["Vision review runs once per job, on the first format."] }
+    : await (opts.vision ?? skippedVisionReviewer)({ contactSheet: probe.contactSheet, manifest, visibleText: probe.text, issues });
 
   const blocking = issues.filter((i) => i.severity === "error");
   return {

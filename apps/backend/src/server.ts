@@ -95,7 +95,15 @@ async function main() {
       env.RAZORPAY_KEY_ID && env.RAZORPAY_KEY_SECRET && env.RAZORPAY_WEBHOOK_SECRET ? createRazorpayGateway(env.RAZORPAY_KEY_ID, env.RAZORPAY_KEY_SECRET) : null,
     razorpayWebhookSecret: env.RAZORPAY_WEBHOOK_SECRET,
   });
-  registerAdminRoutes(app, { db, queues, ...storageDeps, verifyAuth, logger, readReplay: (jobId) => events.readReplay(jobId) });
+  registerAdminRoutes(app, {
+    db,
+    queues,
+    ...storageDeps,
+    verifyAuth,
+    logger,
+    readReplay: (jobId) => events.readReplay(jobId),
+    alertThresholds: { minSuccessRate: env.ALERT_MIN_SUCCESS_RATE, maxQueueWaitSec: env.ALERT_MAX_QUEUE_WAIT_SEC, costBaselineUsd: env.ALERT_COST_BASELINE_USD },
+  });
 
   const address = await app.listen({ port: env.PORT, host: "0.0.0.0" });
   logger.info({ address, sentry: sentryEnabled }, "backend listening");

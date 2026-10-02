@@ -6,6 +6,7 @@ import type { Queue } from "bullmq";
 import type { Logger } from "pino";
 import type { JobEvent, ServerEnv } from "@sitereel/shared";
 import type { AudioSidecarClient } from "../lib/audio-sidecar.js";
+import type { VirusScanner } from "../lib/virus-scan.js";
 
 export interface WorkerDeps {
   db: Db;
@@ -34,6 +35,8 @@ export interface WorkerDeps {
    * that's unset or down they fall back to local ffmpeg / estimated timings.
    */
   sidecar?: AudioSidecarClient | null;
+  /** Phase 7: clamd scanner for user uploads. Absent/null = uploads are used unscanned. */
+  virusScanner?: VirusScanner | null;
   /** Phase 6: worker -> web email + Supabase admin. All optional; unset = feature skipped. */
   phase6?: {
     webUrl?: string | null;

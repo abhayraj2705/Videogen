@@ -9,10 +9,12 @@ import { createUIFlowCursor } from "./templates/ui-flow-cursor.js";
 import { createStatCounter } from "./templates/stat-counter.js";
 import { createQuoteCard } from "./templates/quote-card.js";
 import { createChecklistReveal } from "./templates/checklist-reveal.js";
+import { createBigStatement } from "./templates/big-statement.js";
+import { createBentoGrid } from "./templates/bento-grid.js";
 
 export type TemplateFactory = () => SceneTemplate<any>;
 
-/** Full 10-template catalog (Phase 0: first 4; Phase 4: remaining 6). */
+/** Full 12-template catalog (Phase 0: first 4; Phase 4: next 6; then BigStatement + BentoGrid). */
 export const TEMPLATE_REGISTRY: Record<string, TemplateFactory> = {
   KineticHook: createKineticHook,
   FeatureTriplet: createFeatureTriplet,
@@ -24,6 +26,8 @@ export const TEMPLATE_REGISTRY: Record<string, TemplateFactory> = {
   StatCounter: createStatCounter,
   QuoteCard: createQuoteCard,
   ChecklistReveal: createChecklistReveal,
+  BigStatement: createBigStatement,
+  BentoGrid: createBentoGrid,
 };
 
 /**

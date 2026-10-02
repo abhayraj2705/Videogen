@@ -18,3 +18,5 @@ export type { UIFlowCursorProps } from "./templates/ui-flow-cursor.js";
 export type { StatCounterProps } from "./templates/stat-counter.js";
 export type { QuoteCardProps } from "./templates/quote-card.js";
 export type { ChecklistRevealProps } from "./templates/checklist-reveal.js";
+export type { BigStatementProps } from "./templates/big-statement.js";
+export type { BentoGridProps } from "./templates/bento-grid.js";

@@ -23,6 +23,7 @@ export interface PreviewScene {
   end: number;
   props: Record<string, unknown>;
   transitionInSec?: number;
+  transition?: "fade" | "slide-left" | "slide-up" | "zoom";
   audioStart?: number;
 }
 
@@ -35,6 +36,8 @@ export interface PreviewManifest {
   fonts: { display: string; body: string };
   scenes: PreviewScene[];
   captions: { t0: number; t1: number; text: string }[];
+  /** Brand font stylesheets the player links before mounting (the render embeds the same families). */
+  fontCssUrls?: string[];
 }
 
 export interface PreviewBrand {
@@ -101,6 +104,12 @@ export function sceneSlots(storyboard: Storyboard, audioMsBySceneId: ReadonlyMap
   });
 }
 
+/** One Google Fonts css2 URL covering the brand's families (crawl maps brand fonts onto Google Fonts names). */
+export function googleFontsCssUrl(families: string[]): string {
+  const unique = [...new Set(families.map((f) => f.trim()).filter(Boolean))];
+  return `https://fonts.googleapis.com/css2?${unique.map((f) => `family=${encodeURIComponent(f).replace(/%20/g, "+")}:wght@400;500;600;700;800`).join("&")}&display=swap`;
+}
+
 export function buildPreviewManifest(
   storyboard: Storyboard,
   opts: { format: AspectFormat; brand?: PreviewBrand; audio?: { sceneId: string; durationMs: number }[] },
@@ -123,6 +132,7 @@ export function buildPreviewManifest(
       start: slot.start,
       end: round3(Math.min(duration, slot.start + slot.duration + (i < n - 1 ? TRANSITION_SEC : 0))),
       transitionInSec: i > 0 ? TRANSITION_SEC : 0,
+      ...(i > 0 && scene.transition ? { transition: scene.transition } : {}),
       audioStart: round3(slot.start + AUDIO_LEAD_SEC),
       props: previewProps(scene.templateId, scene.props, brand),
     };
@@ -146,6 +156,7 @@ export function buildPreviewManifest(
     },
     scenes,
     captions,
+    fontCssUrls: [googleFontsCssUrl([brand.fontDisplay ?? "Inter", brand.fontBody ?? "Inter"])],
   };
 }
 

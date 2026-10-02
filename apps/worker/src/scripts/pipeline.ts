@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
 import { CrawlOutput, JobOptions, Storyboard, ffprobe, formatSlug, runFfmpegQuiet, validateStoryboard, type AspectFormat } from "@sitereel/shared";
 import { createLocalStorageClient, type StorageClient } from "@sitereel/storage";
-import { createAnthropicProvider, createGeminiProvider, createOpenAiCompatProvider, type LlmProvider } from "@sitereel/llm";
+import { selectLlmProviders, type LlmEnv } from "../lib/llm-providers.js";
 import { createGeminiTtsProvider } from "@sitereel/tts";
 import { parseColor, type FilmManifest } from "@sitereel/film-runtime";
 import { bundleFilmEntry, startFilmServer } from "@sitereel/renderer";
@@ -152,17 +152,8 @@ async function main() {
 
   const storage = createLocalStorageClient(storageDir);
   const env = { STORAGE_DRIVER: "local" as const, STORAGE_LOCAL_DIR: storageDir };
-  const gemini: LlmProvider | null = process.env.OPENAI_COMPAT_BASE_URL
-    ? createOpenAiCompatProvider({
-        baseUrl: process.env.OPENAI_COMPAT_BASE_URL,
-        model: process.env.OPENAI_COMPAT_MODEL ?? "gemini-3-flash",
-        apiKey: process.env.OPENAI_COMPAT_API_KEY,
-      })
-    : process.env.GEMINI_API_KEY
-      ? createGeminiProvider({ apiKey: process.env.GEMINI_API_KEY, model: process.env.GEMINI_MODEL ?? "gemini-2.0-flash-lite" })
-      : null;
-  if (gemini) console.log(`  LLM: ${gemini.id}`);
-  const anthropic: LlmProvider | null = process.env.ANTHROPIC_API_KEY ? createAnthropicProvider({ apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL ?? "claude-sonnet-5-5" }) : null;
+  const { primary: gemini, escalation: anthropic } = selectLlmProviders(process.env as LlmEnv);
+  if (gemini) console.log(`  LLM: ${gemini.id}${anthropic ? ` (escalation: ${anthropic.id})` : ""}`);
   const tts = process.env.GEMINI_API_KEY ? createGeminiTtsProvider({ apiKey: process.env.GEMINI_API_KEY }) : null;
   const sidecar = getAudioSidecarFromEnv((m) => console.warn(`  [sidecar] ${m}`));
   const jobId = cache.jobId;
@@ -286,38 +277,61 @@ async function main() {
   const results: Record<string, unknown>[] = [];
   let failed = false;
   try {
+    // 6. QA (hard gate) — every format at once (QA is light and mostly idle on the browser);
+    //    skipped per format when that exact manifest already passed.
+    const qaPassed = new Map<AspectFormat, boolean>();
+    const qaTodo = formats.filter((format) => {
+      const qaHash = qaStageHash(manifestHash(manifests.get(format)!), format);
+      if (!force && cache.qa?.[format]?.hash === qaHash && cache.qa[format]!.passed) {
+        qaPassed.set(format, true);
+        note(`qa ${format}`, "skipped", "manifest unchanged — previous pass reused");
+        return false;
+      }
+      return true;
+    });
+    if (qaTodo.length > 0) {
+      const reports = await t(`qa ${qaTodo.join(" ")}`, () =>
+        Promise.all(
+          qaTodo.map(async (format) => {
+            const { resolved, manifestUrl } = await publishManifest({ manifest: manifests.get(format)!, storage, env, serverUrl: server.url, key: `jobs/${jobId}/qa/manifest-${formatSlug(format)}.json` });
+            const llm = gemini ?? anthropic;
+            return runQaStage({
+              manifest: resolved,
+              filmHost: server.url,
+              manifestUrl,
+              storyboard,
+              facts: crawl.facts,
+              vision: llm ? createLlmVisionReviewer(llm) : skippedVisionReviewer,
+              secondary: format !== formats[0],
+            });
+          }),
+        ),
+      );
+      for (const [i, format] of qaTodo.entries()) {
+        const slug = formatSlug(format);
+        const { report, contactSheet } = reports[i]!;
+        if (contactSheet) await fsp.writeFile(path.join(outDir, `contact-${slug}.jpg`), contactSheet);
+        await fsp.writeFile(path.join(outDir, `qa-${slug}.json`), JSON.stringify(report, null, 2));
+        const warnings = report.issues.filter((x) => x.severity === "warning").length;
+        console.log(`  QA ${format}: ${report.passed ? "PASSED" : "FAILED"} (${report.blocking.length} blocking, ${warnings} warnings; vision: ${report.vision.status}; ${(report.durationMs / 1000).toFixed(1)}s)`);
+        for (const b of report.blocking) console.log(`    BLOCKING ${b.code}: ${b.message}`);
+        qaPassed.set(format, report.passed);
+        cache.qa = { ...(cache.qa ?? {}), [format]: { hash: qaStageHash(manifestHash(manifests.get(format)!), format), passed: report.passed } };
+        note(`qa ${format}`, "ran");
+        if (!report.passed && !force) {
+          failed = true;
+          results.push({ format, qa: "failed", blocking: report.blocking });
+        }
+      }
+      await saveCache();
+    }
+
     for (const format of formats) {
       const slug = formatSlug(format);
       const manifest = manifests.get(format)!;
       const mHash = manifestHash(manifest);
-
-      // 6. QA (hard gate) — skipped when this exact manifest already passed.
-      const qaHash = qaStageHash(mHash, format);
-      let passed: boolean;
-      if (!force && cache.qa?.[format]?.hash === qaHash && cache.qa[format]!.passed) {
-        passed = true;
-        note(`qa ${format}`, "skipped", "manifest unchanged — previous pass reused");
-      } else {
-        const { report, contactSheet } = await t(`qa ${format}`, async () => {
-          const { resolved, manifestUrl } = await publishManifest({ manifest, storage, env, serverUrl: server.url, key: `jobs/${jobId}/qa/manifest-${slug}.json` });
-          const llm = gemini ?? anthropic;
-          return runQaStage({ manifest: resolved, filmHost: server.url, manifestUrl, storyboard, facts: crawl.facts, vision: llm ? createLlmVisionReviewer(llm) : skippedVisionReviewer });
-        });
-        if (contactSheet) await fsp.writeFile(path.join(outDir, `contact-${slug}.jpg`), contactSheet);
-        await fsp.writeFile(path.join(outDir, `qa-${slug}.json`), JSON.stringify(report, null, 2));
-        const warnings = report.issues.filter((i) => i.severity === "warning").length;
-        console.log(`  QA ${format}: ${report.passed ? "PASSED" : "FAILED"} (${report.blocking.length} blocking, ${warnings} warnings; vision: ${report.vision.status})`);
-        for (const i of report.blocking) console.log(`    BLOCKING ${i.code}: ${i.message}`);
-        passed = report.passed;
-        cache.qa = { ...(cache.qa ?? {}), [format]: { hash: qaHash, passed } };
-        await saveCache();
-        note(`qa ${format}`, "ran");
-        if (!passed && !force) {
-          failed = true;
-          results.push({ format, qa: "failed", blocking: report.blocking });
-          continue;
-        }
-      }
+      const passed = qaPassed.get(format) ?? false;
+      if (!passed && !force) continue;
 
       // 7. Render + encode — skipped when manifest, audio and watermark are unchanged and the MP4 exists.
       const mp4 = path.join(outDir, `${slug}.mp4`);

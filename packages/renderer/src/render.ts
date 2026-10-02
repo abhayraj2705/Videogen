@@ -182,6 +182,13 @@ export interface ChunkedRenderOptions {
   /** x264 preset; identical across all chunks so `-c copy` concat is valid. */
   preset?: string;
   crf?: number;
+  /**
+   * Frame capture format piped to the encoder. JPEG (q95) is the default:
+   * encoding a 1080p PNG in Chromium costs several times more than the JPEG,
+   * and the frame is about to be compressed to 4:2:0 H.264 anyway. "png"
+   * keeps the lossless intermediate.
+   */
+  capture?: "jpeg" | "png";
   onProgress?: (framesDone: number, totalFrames: number) => void;
   log?: (msg: string) => void;
 }
@@ -207,9 +214,10 @@ export async function renderChunked(opts: ChunkedRenderOptions): Promise<Chunked
   const concurrency = Math.max(1, opts.concurrency ?? Math.max(1, Math.floor(os.cpus().length / 2)));
   const ranges = splitFrameRanges(totalFrames, opts.chunks ?? concurrency * 2);
   const bakePoster = opts.bakePoster ?? manifest.posterTime !== undefined;
-  const preset = opts.preset ?? "medium";
-  const crf = opts.crf ?? 20;
-  const salt = JSON.stringify({ bakePoster, wm: opts.watermarkPng ? fs.readFileSync(opts.watermarkPng).length : 0, preset, crf });
+  const preset = opts.preset ?? "veryfast";
+  const crf = opts.crf ?? 19;
+  const capture = opts.capture ?? "jpeg";
+  const salt = JSON.stringify({ bakePoster, wm: opts.watermarkPng ? fs.readFileSync(opts.watermarkPng).length : 0, preset, crf, capture });
 
   const workDir = await fsp.mkdtemp(path.join(os.tmpdir(), "sitereel-chunks-"));
   const store = opts.chunkStore ?? createDirChunkStore(path.join(workDir, "store"));
@@ -225,7 +233,7 @@ export async function renderChunked(opts: ChunkedRenderOptions): Promise<Chunked
   const t0 = Date.now();
   const segPaths: string[] = new Array(ranges.length);
 
-  const renderOne = async (range: FrameRange) => {
+  const renderOne = async (range: FrameRange, getPage: () => Promise<Page>) => {
     const name = segmentName(opts.contentKey ?? JSON.stringify(manifest), range, salt);
     const localPath = path.join(workDir, name);
     const cached = await store.get(name);
@@ -238,36 +246,50 @@ export async function renderChunked(opts: ChunkedRenderOptions): Promise<Chunked
       return;
     }
 
-    // One browser per chunk: isolates crashes/leaks and lets chunks run on separate cores.
-    const browser = await chromium.launch({ args: BROWSER_ARGS });
+    const page = await getPage();
+    const enc = spawnSegmentEncoder({ fps: manifest.fps, outPath: localPath, watermarkPng: opts.watermarkPng, preset, crf, capture });
+    const exit = once(enc, "exit");
     try {
-      const page = await openFilmPage(browser, manifest, opts.filmHost, opts.manifestUrl);
-      const enc = spawnSegmentEncoder({ fps: manifest.fps, outPath: localPath, watermarkPng: opts.watermarkPng, preset, crf });
-      const exit = once(enc, "exit");
       for (let f = range.start; f < range.end; f++) {
         await seekPage(page, frameTime(f, manifest, bakePoster));
-        const png = await page.screenshot({ type: "png" });
-        if (!enc.stdin!.write(png)) await once(enc.stdin!, "drain");
+        const shot = await page.screenshot(capture === "png" ? { type: "png" } : { type: "jpeg", quality: 95 });
+        if (!enc.stdin!.write(shot)) await once(enc.stdin!, "drain");
         report(1);
       }
-      enc.stdin!.end();
-      const [code] = await exit;
-      if (code !== 0) throw new Error(`segment encoder for chunk ${range.index} exited with ${code}`);
     } finally {
-      await browser.close();
+      enc.stdin!.end();
     }
+    const [code] = await exit;
+    if (code !== 0) throw new Error(`segment encoder for chunk ${range.index} exited with ${code}`);
     await store.put(name, await fsp.readFile(localPath));
     segPaths[range.index] = localPath;
     opts.log?.(`chunk ${range.index} [${range.start},${range.end}) rendered`);
   };
 
+  /**
+   * One lane = one Chromium with the film loaded once, pulling chunks off the
+   * shared queue. Lanes run on separate cores and a crash only takes its own
+   * lane down; launching + loading + warming the film per chunk (as this used
+   * to) cost seconds each. A lane that only meets cached chunks never launches.
+   */
+  const runLane = async (queue: FrameRange[]) => {
+    let browser: Browser | undefined;
+    let page: Promise<Page> | undefined;
+    const getPage = () =>
+      (page ??= (async () => {
+        browser = await chromium.launch({ args: BROWSER_ARGS });
+        return openFilmPage(browser, manifest, opts.filmHost, opts.manifestUrl);
+      })());
+    try {
+      for (let r = queue.shift(); r; r = queue.shift()) await renderOne(r, getPage);
+    } finally {
+      await (browser as Browser | undefined)?.close();
+    }
+  };
+
   try {
     const queue = [...ranges];
-    await Promise.all(
-      Array.from({ length: Math.min(concurrency, ranges.length) }, async () => {
-        for (let r = queue.shift(); r; r = queue.shift()) await renderOne(r);
-      }),
-    );
+    await Promise.all(Array.from({ length: Math.min(concurrency, ranges.length) }, () => runLane(queue)));
     const renderMs = Date.now() - t0;
 
     const t1 = Date.now();

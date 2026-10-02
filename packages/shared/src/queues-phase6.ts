@@ -15,6 +15,10 @@ export const PHASE6_QUEUE_NAMES = {
   rerunFromStage: "rerun-from-stage",
 } as const;
 
+/** Phase 7: scheduled housekeeping (artifact retention, ops alert checks). One queue, job name = task. */
+export const MAINTENANCE_QUEUE_NAME = "maintenance";
+export const MAINTENANCE_TASKS = { retention: "retention", opsCheck: "ops-check" } as const;
+
 /** Pipeline stages an admin may re-run from (POST /api/admin/jobs/:id/rerun). */
 export const RerunStage = z.enum(["crawl", "plan", "voice", "build", "qa", "render"]);
 export type RerunStage = z.infer<typeof RerunStage>;

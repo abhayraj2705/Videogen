@@ -121,4 +121,36 @@ describe("renderChunked", () => {
     // Frame 1 (t=1/30, logo barely visible) must look very different from the baked frame 0.
     expect(framesDiffer(posterBuf, frame1Buf, { channelTolerance: 24, maxDiffPixels: 200 }).differ).toBe(true);
   }, 180_000);
+
+  it("chaos: a render that dies mid-job resumes from the chunks it had finished", async () => {
+    // Stand-in for a render container being killed: the store accepts the first two
+    // finished chunks, then the 'machine' dies while saving the third.
+    const saved = new Map<string, Buffer>();
+    let alive = true;
+    const store = {
+      get: async (name: string) => saved.get(name) ?? null,
+      put: async (name: string, data: Buffer) => {
+        if (alive && saved.size >= 2) {
+          alive = false;
+          throw new Error("container killed");
+        }
+        if (!alive) throw new Error("container killed");
+        saved.set(name, data);
+      },
+    };
+    const opts = { manifest, filmHost: server.url, manifestUrl: `${server.url}/m.json`, chunks: 4, concurrency: 1, chunkStore: store, preset: "veryfast" };
+
+    await expect(renderChunked({ ...opts, outPath: path.join(dir, "killed.mp4") })).rejects.toThrow(/container killed/);
+    expect(saved.size).toBe(2);
+
+    // The retry (BullMQ attempt 2, possibly another container) only renders what is missing.
+    alive = true;
+    const retryStore = { get: store.get, put: async (name: string, data: Buffer) => void saved.set(name, data) };
+    const out = path.join(dir, "resumed.mp4");
+    const r = await renderChunked({ ...opts, chunkStore: retryStore, outPath: out });
+    expect(r.chunksReused).toBe(2);
+    expect(r.chunks).toBe(4);
+    expect(saved.size).toBe(4);
+    expect(Number((await ffprobe(out)).streams.find((s) => s.codec_type === "video")!.nb_frames)).toBe(60);
+  }, 180_000);
 });

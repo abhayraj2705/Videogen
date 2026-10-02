@@ -225,25 +225,35 @@ export async function deleteStoragePrefix(
 ): Promise<number> {
   // jobs/{jobId}/ (pipeline artifacts, uploads) or users/{userId}/ (brand-kit logos).
   if (!/^(jobs|users)\/[0-9a-f-]{36}\/$/i.test(prefix)) throw new Error(`refusing to delete unexpected prefix: ${prefix}`);
-  const s = storage as StorageWithDelete;
   let deleted = 0;
-  for (const bucket of ["assets", "renders"] as const) {
-    if (typeof s.deletePrefix === "function") {
-      deleted += await s.deletePrefix(bucket, prefix);
-      continue;
-    }
-    if (env.STORAGE_DRIVER === "local") {
-      const root = path.resolve(env.STORAGE_LOCAL_DIR);
-      const dir = path.resolve(root, bucket, prefix);
-      if (!dir.startsWith(root)) throw new Error("refusing to delete outside storage root");
-      const existed = await fs.stat(dir).then(() => true, () => false);
-      await fs.rm(dir, { recursive: true, force: true });
-      if (existed) deleted++;
-      continue;
-    }
-    deleted += await deleteS3Prefix(env, bucket, prefix);
-  }
+  for (const bucket of ["assets", "renders"] as const) deleted += await deletePrefixInBucket(env, storage, bucket, prefix);
   return deleted;
+}
+
+type StorageDeleteEnv = Parameters<typeof deleteStoragePrefix>[0];
+
+async function deletePrefixInBucket(env: StorageDeleteEnv, storage: StorageClient, bucket: "assets" | "renders", prefix: string): Promise<number> {
+  const s = storage as StorageWithDelete;
+  if (typeof s.deletePrefix === "function") return s.deletePrefix(bucket, prefix);
+  if (env.STORAGE_DRIVER === "local") {
+    const root = path.resolve(env.STORAGE_LOCAL_DIR);
+    const dir = path.resolve(root, bucket, prefix);
+    if (!dir.startsWith(root)) throw new Error("refusing to delete outside storage root");
+    const existed = await fs.stat(dir).then(() => true, () => false);
+    await fs.rm(dir, { recursive: true, force: true });
+    return existed ? 1 : 0;
+  }
+  return deleteS3Prefix(env, bucket, prefix);
+}
+
+/** Per-job folders in the assets bucket that retention may remove on their own (Phase 7). */
+export type JobArtifactPart = "crawl" | "uploads" | "render";
+const JOB_ARTIFACT_PARTS: readonly string[] = ["crawl", "uploads", "render"];
+
+/** Deletes one artifact folder of one job (assets/jobs/{jobId}/{part}/). The job's other folders and its finished renders are untouched. */
+export async function deleteJobArtifacts(env: StorageDeleteEnv, storage: StorageClient, jobId: string, part: JobArtifactPart): Promise<number> {
+  if (!/^[0-9a-f-]{36}$/i.test(jobId) || !JOB_ARTIFACT_PARTS.includes(part)) throw new Error(`refusing to delete unexpected job artifacts: ${jobId}/${part}`);
+  return deletePrefixInBucket(env, storage, "assets", `jobs/${jobId}/${part}/`);
 }
 
 /**

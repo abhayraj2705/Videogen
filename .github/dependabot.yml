@@ -1,0 +1,30 @@
+# §8.1: dependency audit. Weekly PRs, grouped so they stay reviewable.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # Chromium must match infra/docker/worker.Dockerfile's base image; bump both together by hand.
+      - dependency-name: playwright
+      - dependency-name: "@playwright/test"
+
+  - package-ecosystem: pip
+    directory: /services/audio-sidecar
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directory: /infra/docker
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

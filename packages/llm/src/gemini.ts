@@ -27,6 +27,7 @@ export function createGeminiProvider(opts: GeminiProviderOptions): LlmProvider {
 
   return {
     id,
+    supportsImages: true,
     async generateJson<T>(callOpts: GenerateJsonOptions<T>): Promise<LlmCallResult<T>> {
       const jsonSchema = zodToJsonSchemaObject(callOpts.schema);
       const schema = schemaField === "responseSchema" ? toGeminiSchema(jsonSchema) : jsonSchema;
@@ -44,7 +45,7 @@ export function createGeminiProvider(opts: GeminiProviderOptions): LlmProvider {
             signal,
             body: JSON.stringify({
               systemInstruction: { parts: [{ text: system }] },
-              contents: [{ role: "user", parts: [{ text: prompt }] }],
+              contents: [{ role: "user", parts: [...(callOpts.images ?? []).map((img) => ({ inlineData: { mimeType: img.mimeType, data: img.base64 } })), { text: prompt }] }],
               generationConfig: {
                 responseMimeType: "application/json",
                 [schemaField]: schema,

@@ -46,7 +46,13 @@ export function phraseCues(words: TimedWord[], opts: PhraseOptions = {}): Captio
   let cur: TimedWord[] = [];
   const flush = () => {
     if (cur.length === 0) return;
-    cues.push({ t0: cur[0]!.startSec, t1: cur[cur.length - 1]!.endSec, text: cur.map((w) => w.word).join(" ") });
+    cues.push({
+      t0: cur[0]!.startSec,
+      t1: cur[cur.length - 1]!.endSec,
+      text: cur.map((w) => w.word).join(" "),
+      // Word timings ride along for burned-in captions (the .vtt ignores them).
+      words: cur.map((w) => ({ t0: w.startSec, t1: w.endSec, text: w.word })),
+    });
     cur = [];
   };
 

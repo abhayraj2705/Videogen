@@ -3,8 +3,22 @@ import path from "node:path";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { and, asc, desc, eq, ilike, inArray, lt, or, type SQL } from "drizzle-orm";
 import { z } from "zod";
-import { jobs, renders, stageRuns, storyboards, users, type Db } from "@sitereel/db";
-import { JobStatus, PHASE6_QUEUE_NAMES, RerunStage, parseFormatSlug, type AspectFormat, type JobEvent, type RerunFromStageJobData } from "@sitereel/shared";
+import { jobs, loadOpsDbMetrics, renders, stageRuns, storyboards, users, type Db } from "@sitereel/db";
+import {
+  DEFAULT_ALERT_THRESHOLDS,
+  JobStatus,
+  PHASE6_QUEUE_NAMES,
+  RerunStage,
+  collectQueueMetrics,
+  evaluateAlerts,
+  parseFormatSlug,
+  type AlertThresholds,
+  type AspectFormat,
+  type JobEvent,
+  type OpsMetrics,
+  type QueueProbe,
+  type RerunFromStageJobData,
+} from "@sitereel/shared";
 import type { StorageClient } from "@sitereel/storage";
 import type { AuthVerifier, AuthedUser } from "../lib/auth.js";
 import { uniqueJobId, type Queues } from "../lib/queue.js";
@@ -24,6 +38,8 @@ export interface AdminRouteDeps {
   logger: Logger;
   /** Replay buffer reader (JobEventBus.readReplay); optional so tests can omit Redis. */
   readReplay?: (jobId: string) => Promise<{ event: JobEvent }[]>;
+  /** Alert thresholds shown alongside the ops metrics (the worker's alert check uses the same env). */
+  alertThresholds?: Partial<AlertThresholds>;
 }
 
 const ListQuery = z.object({
@@ -53,6 +69,7 @@ function decodeCursor(cursor: string): { createdAt: Date; id: string } | undefin
  *   GET  /api/admin/jobs/:id                    → inspector payload
  *   POST /api/admin/jobs/:id/rerun              { fromStage } → 202
  *   GET  /api/admin/benchmark                   → { runs }
+ *   GET  /api/admin/ops                         → { metrics, alerts } (Phase 7: success rate, queue wait, cost)
  *   GET  /api/admin/jobs/:id/assets?key=        crawl screenshots etc. (media; accepts ?token=)
  *   GET  /api/admin/jobs/:id/renders/:format/{video|poster|captions}
  */
@@ -247,6 +264,22 @@ export function registerAdminRoutes(app: FastifyInstance, deps: AdminRouteDeps):
       return serveMedia(reply, { storage: deps.storage, storageDriver: deps.storageDriver, storageKey: row[column], kind, rangeHeader: req.headers.range, cacheControl: "private, max-age=60" });
     });
   }
+
+  /**
+   * Phase 7 ops view: the same metrics and alert rules the worker's scheduled
+   * check uses, computed on demand — the first thing the runbooks say to open.
+   */
+  app.get("/api/admin/ops", async (req, reply) => {
+    if (!(await requireAdmin(req, reply))) return;
+    const q = deps.queues;
+    // Test fakes don't implement the BullMQ read methods; real queues do.
+    const probes = [q.crawl, q.plan, q.voice, q.build, q.qa, q.render].filter(
+      (queue): queue is typeof queue & QueueProbe => typeof (queue as Partial<QueueProbe>).getWaitingCount === "function",
+    );
+    const [dbMetrics, queueMetrics] = await Promise.all([loadOpsDbMetrics(db), collectQueueMetrics(probes)]);
+    const metrics: OpsMetrics = { ...dbMetrics, ...queueMetrics };
+    return reply.send({ metrics, alerts: evaluateAlerts(metrics, { ...DEFAULT_ALERT_THRESHOLDS, ...deps.alertThresholds }) });
+  });
 
   /**
    * Benchmark reports are uploaded to the assets bucket under benchmark/latest/.

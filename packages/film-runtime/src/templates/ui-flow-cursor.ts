@@ -1,23 +1,26 @@
 import type { FilmContext, Mark, SceneTemplate } from "../contract.js";
-import { easeInOutCubic, easeOutCubic, lerp, progress } from "../util/easing.js";
-import { applyReveal, el, setStyle } from "../util/dom.js";
-import { wrapText } from "../util/text-fit.js";
-import { WRAP_SAFE, charsPerLine, fitFontSize, layoutFor } from "../util/layout.js";
+import { clamp01, easeInOutCubic, easeOutCubic, lerp, progress } from "../util/easing.js";
+import { el, setStyle } from "../util/dom.js";
+import { layoutFor } from "../util/layout.js";
+import { browserFrame, type BrowserFrame } from "../util/browser-frame.js";
+import { sceneRoot, textBlock, wordsIn, wordsSettle } from "../util/ui.js";
 
 export interface UIFlowCursorProps {
   screenshotUrl: string;
   caption: string;
-  /** Normalized (0-1) waypoints the cursor glides through, e.g. [[0.3,0.4],[0.7,0.6]]. Defaults to a gentle diagonal sweep. */
+  /** Normalized (0-1) waypoints the cursor visits and clicks, e.g. [[0.3,0.4],[0.7,0.6]]. Defaults to a gentle diagonal sweep. */
   cursorPath?: [number, number][];
+  /** Short display address for the browser toolbar. Added by Build. */
+  pageLabel?: string;
 }
 
 interface Instance {
-  imageWrap: HTMLElement;
+  frame: BrowserFrame;
   cursor: HTMLElement;
-  captionWrap: HTMLElement;
+  ripples: HTMLElement[];
+  words: HTMLElement[];
   path: [number, number][];
-  width: number;
-  height: number;
+  durationSec: number;
 }
 
 const DEFAULT_PATH: [number, number][] = [
@@ -26,10 +29,24 @@ const DEFAULT_PATH: [number, number][] = [
   [0.45, 0.7],
 ];
 
+const FRAME_ENTER = 0.8;
+const CAPTION_START = 0.35;
+const WORD_EACH = 0.05;
+const WORD_DUR = 0.5;
+const CURSOR_START = 0.7;
+/** Seconds to travel to each waypoint; the click lands on arrival. */
+const LEG_SEC = 0.85;
+
+const countWords = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
+
+const CURSOR_SVG =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%"><path d="M4 2.5l15.5 9.2-6.6 1.5 3.9 7.2-2.9 1.6-3.9-7.3-4.9 4.7z" fill="#111" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+
 /**
- * A real screenshot with an animated cursor gliding across it.
- * Layouts: 16:9 wide frame + caption below; 9:16 caption *above* a tall
- * crop (reads first on phones, keeps the bottom UI zone clear); 1:1 square-ish crop.
+ * The real site in a browser window with a pointer that travels to each
+ * waypoint and clicks (press + ripple), while the page scrolls beneath it.
+ * Layouts: 16:9 wide window + caption below; 9:16 caption *above* a tall
+ * window (reads first on phones, keeps the bottom UI zone clear); 1:1 square-ish.
  */
 export function createUIFlowCursor(): SceneTemplate<UIFlowCursorProps> {
   let instance: Instance | undefined;
@@ -40,95 +57,92 @@ export function createUIFlowCursor(): SceneTemplate<UIFlowCursorProps> {
     mount(root, props, ctx: FilmContext) {
       const L = layoutFor(ctx);
       const u = L.u;
-      const gap = L.pick({ landscape: 30, portrait: 44, square: 28 }) * u;
-      setStyle(root, {
-        position: "absolute",
-        inset: "0",
-        boxSizing: "border-box",
-        padding: L.safePadding,
-        display: "flex",
-        flexDirection: L.orientation === "portrait" ? "column-reverse" : "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: `${gap}px`,
-        background: ctx.palette.bg,
-        fontFamily: ctx.fonts.body,
+      const gap = L.pick({ landscape: 34, portrait: 48, square: 30 }) * u;
+      sceneRoot(root, L, { flexDirection: L.orientation === "portrait" ? "column-reverse" : "column", gap: `${gap}px`, fontFamily: ctx.fonts.body });
+
+      const caption = textBlock(props.caption, {
+        className: "uf-caption",
+        width: L.safe.width * L.pick({ landscape: 0.84, portrait: 1, square: 0.96 }),
+        maxSize: L.pick({ landscape: 52, portrait: 62, square: 46 }) * u,
+        minSize: 22 * u,
+        maxLines: L.pick({ landscape: 2, portrait: 3, square: 2 }),
+        color: ctx.palette.fg,
+        family: ctx.fonts.display,
+        weight: "700",
+        lineHeight: 1.2,
       });
 
-      const captionWidth = L.safe.width * L.pick({ landscape: 0.8, portrait: 1, square: 0.95 });
-      const maxLines = L.pick({ landscape: 2, portrait: 3, square: 2 });
-      const fontSize = fitFontSize(props.caption, captionWidth, L.pick({ landscape: 42, portrait: 56, square: 42 }) * u, maxLines, 22 * u);
-      const lines = wrapText(props.caption, charsPerLine(captionWidth, fontSize), maxLines);
-      const captionHeight = lines.length * fontSize * 1.25;
+      const width = L.safe.width * L.pick({ landscape: 0.84, portrait: 1, square: 0.98 });
+      const height = Math.min(L.safe.height - gap - caption.height - 8 * u, L.pick({ landscape: 0.66, portrait: 0.58, square: 0.62 }) * ctx.height);
+      const frame = browserFrame({ className: "uf-frame", width, height, screenshotUrl: props.screenshotUrl, pageLabel: props.pageLabel, ctx, u });
 
-      const width = L.safe.width * L.pick({ landscape: 0.82, portrait: 1, square: 0.96 });
-      const height = Math.min(L.safe.height - gap - captionHeight - 8 * u, L.pick({ landscape: 0.6 * ctx.height, portrait: 0.56 * ctx.height, square: 0.6 * ctx.height }));
-      const imageWrap = el("div", "uf-image-wrap");
-      setStyle(imageWrap, {
-        boxSizing: "border-box",
-        position: "relative",
-        width: `${width}px`,
-        height: `${height}px`,
-        flexShrink: "0",
-        borderRadius: `${16 * u}px`,
-        overflow: "hidden",
-        boxShadow: "0 30px 60px -20px rgba(0,0,0,0.5)",
-        border: `1px solid ${ctx.palette.accent}`,
+      const path = props.cursorPath && props.cursorPath.length > 0 ? props.cursorPath : DEFAULT_PATH;
+      const rippleSize = 96 * u;
+      const ripples = path.map(() => {
+        const ripple = el("div", "uf-ripple");
+        setStyle(ripple, {
+          position: "absolute",
+          left: `${-rippleSize / 2}px`,
+          top: `${-rippleSize / 2}px`,
+          width: `${rippleSize}px`,
+          height: `${rippleSize}px`,
+          borderRadius: "50%",
+          border: `${5 * u}px solid ${ctx.palette.accent}`,
+          background: ctx.palette.accentSoft,
+          boxSizing: "border-box",
+          opacity: "0",
+        });
+        frame.viewport.appendChild(ripple);
+        return ripple;
       });
-      const img = el("img");
-      img.src = props.screenshotUrl;
-      setStyle(img, { width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" });
-      imageWrap.appendChild(img);
 
+      const cursorSize = 46 * u;
       const cursor = el("div", "uf-cursor");
-      const cursorSize = 26 * u;
-      setStyle(cursor, {
-        position: "absolute",
-        width: `${cursorSize}px`,
-        height: `${cursorSize}px`,
-        borderRadius: "50%",
-        background: ctx.palette.accent,
-        boxShadow: `0 0 0 ${7 * u}px rgba(127,127,127,0.25)`,
-        transform: "translate(-50%, -50%)",
-      });
-      imageWrap.appendChild(cursor);
-      root.appendChild(imageWrap);
+      setStyle(cursor, { position: "absolute", left: "0", top: "0", width: `${cursorSize}px`, height: `${cursorSize}px`, transformOrigin: "15% 10%", filter: `drop-shadow(0 ${4 * u}px ${6 * u}px rgba(0,0,0,0.35))` });
+      cursor.innerHTML = CURSOR_SVG;
+      frame.viewport.appendChild(cursor);
 
-      const captionWrap = el("div", "uf-caption");
-      setStyle(captionWrap, { display: "flex", flexDirection: "column", alignItems: "center", maxWidth: `${captionWidth}px` });
-      for (const line of lines) {
-        const node = el("div", "uf-caption-line", line);
-        setStyle(node, { ...WRAP_SAFE, fontSize: `${fontSize}px`, fontWeight: "600", color: ctx.palette.fg, textAlign: "center", lineHeight: "1.25" });
-        captionWrap.appendChild(node);
-      }
-      root.appendChild(captionWrap);
-
-      instance = { imageWrap, cursor, captionWrap, path: props.cursorPath ?? DEFAULT_PATH, width, height };
+      root.appendChild(frame.wrap);
+      root.appendChild(caption.wrap);
+      instance = { frame, cursor, ripples, words: caption.words, path, durationSec: ctx.durationSec };
     },
 
     seek(localT) {
       if (!instance) return;
-      applyReveal(instance.imageWrap, progress(localT, 0, 0.3, easeOutCubic), 12);
-      applyReveal(instance.captionWrap, progress(localT, 0.15, 0.45, easeOutCubic), 10);
+      const { frame, cursor, ripples, path } = instance;
+      frame.enter(localT, 0, FRAME_ENTER);
+      wordsIn(instance.words, localT, CAPTION_START, WORD_EACH, WORD_DUR);
+      frame.scroll(progress(localT, CURSOR_START + LEG_SEC + 0.3, Math.max(2.4, instance.durationSec - 0.6)), 0.45);
 
-      // Glide the cursor through each waypoint across [0.3s, 3s] of the scene.
-      const path = instance.path;
-      const segments = Math.max(1, path.length - 1);
-      const t = progress(localT, 0.3, 3);
-      const segF = t * segments;
-      const segIdx = Math.min(segments - 1, Math.floor(segF));
-      const localSegT = easeInOutCubic(segF - segIdx);
-      const [x0, y0] = path[segIdx]!;
-      const [x1, y1] = path[segIdx + 1] ?? path[segIdx]!;
-      instance.cursor.style.opacity = t > 0 ? "1" : "0";
-      instance.cursor.style.left = `${lerp(x0, x1, localSegT) * instance.width}px`;
-      instance.cursor.style.top = `${lerp(y0, y1, localSegT) * instance.height}px`;
+      // The pointer starts off the bottom-right corner and visits each waypoint in turn.
+      const w = frame.viewportWidth;
+      const h = frame.viewportHeight;
+      const leg = Math.max(0, (localT - CURSOR_START) / LEG_SEC);
+      const idx = Math.min(path.length - 1, Math.floor(leg));
+      const from: [number, number] = idx === 0 ? [0.92, 1.05] : path[idx - 1]!;
+      const to = path[idx]!;
+      const f = easeInOutCubic(clamp01(leg - idx));
+      const x = lerp(from[0], to[0], f) * w;
+      const y = lerp(from[1], to[1], f) * h;
+
+      // Press: a quick dip in scale right as each leg completes.
+      let press = 0;
+      path.forEach((point, i) => {
+        const since = localT - (CURSOR_START + (i + 1) * LEG_SEC);
+        press = Math.max(press, clamp01(1 - Math.abs(since - 0.06) / 0.12));
+        const ripple = ripples[i]!;
+        const rp = clamp01(since / 0.55);
+        ripple.style.opacity = since <= 0 ? "0" : String((1 - rp) * 0.9);
+        ripple.style.transform = `translate(${(point[0] * w).toFixed(2)}px, ${(point[1] * h).toFixed(2)}px) scale(${(0.3 + 1.1 * easeOutCubic(rp)).toFixed(4)})`;
+      });
+      cursor.style.opacity = String(clamp01((localT - CURSOR_START) / 0.2));
+      cursor.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${(1 - 0.18 * press).toFixed(4)})`;
     },
 
-    marks(): Mark[] {
+    marks(props): Mark[] {
       return [
         { t: 0, type: "start" },
-        { t: 0.45, type: "settle" },
+        { t: Math.max(FRAME_ENTER, wordsSettle(countWords(props.caption), CAPTION_START, WORD_EACH, WORD_DUR)), type: "settle" },
       ];
     },
 

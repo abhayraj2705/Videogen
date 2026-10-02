@@ -51,10 +51,37 @@ export interface Layout {
   pick<T>(v: { landscape: T; portrait: T; square: T }): T;
 }
 
-export function layoutFor(ctx: Pick<FilmContext, "width" | "height">): Layout {
+export interface CaptionBand {
+  fontSize: number;
+  maxLines: number;
+  /** Height of the band itself. */
+  height: number;
+  /** Total space templates must leave free above the safe-area bottom (band + gap). */
+  reserve: number;
+  width: number;
+}
+
+/**
+ * Geometry of the burned-in caption band, which sits on the bottom edge of
+ * the title-safe area. Shared by the player (draws it) and layoutFor (keeps
+ * template content out of it).
+ */
+export function captionBand(width: number, height: number): CaptionBand {
+  const orientation = orientationOf(width, height);
+  const u = Math.min(width, height) / 1080;
+  const safe = safeRect(width, height);
+  const fontSize = { landscape: 38, portrait: 50, square: 40 }[orientation] * u;
+  const maxLines = orientation === "landscape" ? 1 : 2;
+  const bandHeight = maxLines * fontSize * 1.25 + 28 * u;
+  return { fontSize, maxLines, height: bandHeight, reserve: bandHeight + 24 * u, width: safe.width * (orientation === "landscape" ? 0.8 : 1) };
+}
+
+export function layoutFor(ctx: Pick<FilmContext, "width" | "height"> & { insetBottom?: number }): Layout {
   const orientation = orientationOf(ctx.width, ctx.height);
   const u = Math.min(ctx.width, ctx.height) / 1080;
-  const safe = safeRect(ctx.width, ctx.height);
+  const full = safeRect(ctx.width, ctx.height);
+  const inset = Math.max(0, ctx.insetBottom ?? 0);
+  const safe: SafeRect = { ...full, bottom: full.bottom - inset, height: full.height - inset };
   return {
     orientation,
     u,

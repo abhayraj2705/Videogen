@@ -13,6 +13,19 @@ export interface OpenAiCompatProviderOptions extends Omit<ProviderBaseOptions, "
    * then put in the system prompt and enforced by the zod re-prompt loop.
    */
   nativeJsonSchema?: boolean;
+  /**
+   * Send `response_format: { type: "json_object" }` — for first-party APIs that
+   * support JSON mode but not json_schema (DeepSeek). The schema still goes in
+   * the system prompt. Ignored when `nativeJsonSchema` is set.
+   */
+  jsonObjectMode?: boolean;
+  /** Provider id prefix, e.g. "deepseek" -> "deepseek:deepseek-chat". Defaults to "openai-compat". */
+  label?: string;
+  /**
+   * Send images as `image_url` content parts. Off by default: text-only models
+   * (DeepSeek) and most browser-session gateways reject multi-part content.
+   */
+  vision?: boolean;
 }
 
 interface ChatCompletionResponse {
@@ -52,7 +65,7 @@ export function createOpenAiCompatProvider(opts: OpenAiCompatProviderOptions): L
   const model = opts.model ?? "gemini-3-flash";
   const fetchImpl = opts.fetch ?? fetch;
   const baseUrl = opts.baseUrl.replace(/\/+$/, "");
-  const id = `openai-compat:${model}`;
+  const id = `${opts.label ?? "openai-compat"}:${model}`;
   const config: ProviderBaseOptions = {
     ...opts,
     apiKey: opts.apiKey ?? "not-needed",
@@ -61,6 +74,7 @@ export function createOpenAiCompatProvider(opts: OpenAiCompatProviderOptions): L
 
   return {
     id,
+    supportsImages: Boolean(opts.vision),
     async generateJson<T>(callOpts: GenerateJsonOptions<T>): Promise<LlmCallResult<T>> {
       const jsonSchema = zodToJsonSchemaObject(callOpts.schema);
       const system = opts.nativeJsonSchema
@@ -83,11 +97,19 @@ export function createOpenAiCompatProvider(opts: OpenAiCompatProviderOptions): L
               model,
               messages: [
                 { role: "system", content: sys },
-                { role: "user", content: prompt },
+                {
+                  role: "user",
+                  content:
+                    opts.vision && callOpts.images?.length
+                      ? [{ type: "text", text: prompt }, ...callOpts.images.map((img) => ({ type: "image_url", image_url: { url: `data:${img.mimeType};base64,${img.base64}` } }))]
+                      : prompt,
+                },
               ],
               ...(opts.nativeJsonSchema
                 ? { response_format: { type: "json_schema", json_schema: { name: callOpts.schemaName ?? "output", schema: jsonSchema } } }
-                : {}),
+                : opts.jsonObjectMode
+                  ? { response_format: { type: "json_object" } }
+                  : {}),
               ...(callOpts.maxOutputTokens ? { max_tokens: callOpts.maxOutputTokens } : {}),
             }),
           });

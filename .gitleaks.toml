@@ -1,0 +1,20 @@
+# gitleaks config (run by .github/workflows/security.yml).
+title = "SiteReel"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Published local-development credentials and test fixtures"
+paths = [
+  # Crawled page text and third-party page content — not our secrets.
+  '''benchmark/fixtures/.*''',
+  '''pnpm-lock\.yaml''',
+]
+regexes = [
+  # Supabase CLI's well-known local demo keys (issuer "supabase-demo"), identical on every machine.
+  '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIi[A-Za-z0-9_\-\.]+''',
+  '''super-secret-jwt-token-with-at-least-32-characters-long''',
+  # MinIO dev credentials from infra/docker/compose.yml.
+  '''sitereel-dev-secret''',
+]

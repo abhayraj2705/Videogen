@@ -31,6 +31,7 @@ export function createAnthropicProvider(opts: AnthropicProviderOptions): LlmProv
 
   return {
     id,
+    supportsImages: true,
     async generateJson<T>(callOpts: GenerateJsonOptions<T>): Promise<LlmCallResult<T>> {
       const toolName = toolNameFor(callOpts.schemaName);
       const jsonSchema = zodToJsonSchemaObject(callOpts.schema);
@@ -57,7 +58,14 @@ export function createAnthropicProvider(opts: AnthropicProviderOptions): LlmProv
               model,
               max_tokens: callOpts.maxOutputTokens ?? 4096,
               system,
-              messages: [{ role: "user", content: prompt }],
+              messages: [
+                {
+                  role: "user",
+                  content: callOpts.images?.length
+                    ? [...callOpts.images.map((img) => ({ type: "image", source: { type: "base64", media_type: img.mimeType, data: img.base64 } })), { type: "text", text: prompt }]
+                    : prompt,
+                },
+              ],
               tools: [{ name: toolName, description: "Return the result. Call this exactly once with the complete output.", input_schema: inputSchema }],
               tool_choice: { type: "tool", name: toolName },
             }),

@@ -1,8 +1,8 @@
 import type { FilmContext, Mark, SceneTemplate } from "../contract.js";
-import { easeOutBack, easeOutCubic, progress } from "../util/easing.js";
-import { applyReveal, el, setStyle } from "../util/dom.js";
-import { wrapText } from "../util/text-fit.js";
-import { WRAP_SAFE, charsPerLine, fitFontSize, layoutFor } from "../util/layout.js";
+import { easeOutCubic, easeSpring, progress } from "../util/easing.js";
+import { el, setStyle } from "../util/dom.js";
+import { layoutFor } from "../util/layout.js";
+import { addMarker, enter, logoMark, scaleXTo, sceneRoot, textBlock, wordsIn, wordsSettle } from "../util/ui.js";
 
 export interface KineticHookProps {
   /** Grounded product name, from the FactLedger. */
@@ -14,12 +14,23 @@ export interface KineticHookProps {
 }
 
 interface Instance {
-  logoWrap: HTMLElement;
-  lineNodes: HTMLElement[];
+  stack: HTMLElement;
+  logo: HTMLElement;
+  words: HTMLElement[];
+  marker: HTMLElement | null;
+  durationSec: number;
 }
 
+const WORDS_START = 0.3;
+const WORD_EACH = 0.06;
+const WORD_DUR = 0.55;
+
+const wordCountOf = (headline: string) => headline.trim().split(/\s+/).filter(Boolean).length;
+
 /**
- * Opening scene (2-3s per the planner rubric): logo pops in, headline wipes in.
+ * Opening scene (2-3s per the planner rubric): the logo springs in, the
+ * headline lands word by word, a marker swipes under its last word, and the
+ * whole composition pushes in slowly for the rest of the scene.
  * Layouts: 16:9 two-line headline; 9:16 bigger logo + up to four stacked
  * lines filling the tall frame; 1:1 three lines at a slightly smaller size.
  */
@@ -32,105 +43,53 @@ export function createKineticHook(): SceneTemplate<KineticHookProps> {
     mount(root, props, ctx: FilmContext) {
       const L = layoutFor(ctx);
       const u = L.u;
-      setStyle(root, {
-        position: "absolute",
-        inset: "0",
-        boxSizing: "border-box",
-        padding: L.safePadding,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        background: ctx.palette.bg,
-        fontFamily: ctx.fonts.display,
-      });
+      sceneRoot(root, L, { fontFamily: ctx.fonts.display });
 
-      const logoSize = L.pick({ landscape: 150, portrait: 220, square: 150 }) * u;
-      const logoWrap = el("div", "kh-logo");
-      setStyle(logoWrap, {
-        width: `${logoSize}px`,
-        height: `${logoSize}px`,
-        marginBottom: `${L.pick({ landscape: 44, portrait: 72, square: 40 }) * u}px`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexShrink: "0",
-      });
-      if (props.logoUrl) {
-        const img = el("img");
-        img.src = props.logoUrl;
-        setStyle(img, { width: "100%", height: "100%", objectFit: "contain" });
-        logoWrap.appendChild(img);
-      } else {
-        const fallback = el("div", "kh-logo-fallback", props.productName.slice(0, 1).toUpperCase());
-        setStyle(fallback, {
-          width: "100%",
-          height: "100%",
-          borderRadius: "20%",
-          background: ctx.palette.accent,
-          color: ctx.palette.onAccent,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: `${logoSize * 0.55}px`,
-          fontWeight: "700",
-        });
-        logoWrap.appendChild(fallback);
-      }
-      root.appendChild(logoWrap);
+      const stack = el("div", "kh-stack");
+      setStyle(stack, { display: "flex", flexDirection: "column", alignItems: "center", gap: `${L.pick({ landscape: 48, portrait: 76, square: 44 }) * u}px` });
+      root.appendChild(stack);
 
-      const textWidth = Math.min(L.safe.width, L.pick({ landscape: 1500, portrait: 1000, square: 960 }) * u);
-      const maxLines = L.pick({ landscape: 2, portrait: 4, square: 3 });
-      const fontSize = fitFontSize(props.headline, textWidth, L.pick({ landscape: 84, portrait: 104, square: 80 }) * u, maxLines, 28 * u);
+      const logo = logoMark({ className: "kh-logo", size: L.pick({ landscape: 132, portrait: 200, square: 132 }) * u, logoUrl: props.logoUrl, productName: props.productName, ctx });
+      stack.appendChild(logo);
 
-      const headlineWrap = el("div", "kh-headline");
-      setStyle(headlineWrap, {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "0.12em",
-        maxWidth: `${textWidth}px`,
+      const headline = textBlock(props.headline, {
+        className: "kh-headline",
+        width: Math.min(L.safe.width, L.pick({ landscape: 1560, portrait: 1000, square: 960 }) * u),
+        maxSize: L.pick({ landscape: 112, portrait: 124, square: 96 }) * u,
+        minSize: 28 * u,
+        maxLines: L.pick({ landscape: 2, portrait: 4, square: 3 }),
+        color: ctx.palette.fg,
+        family: ctx.fonts.display,
+        weight: "800",
+        lineHeight: 1.08,
+        tracking: "-0.03em",
       });
-      const lines = wrapText(props.headline, charsPerLine(textWidth, fontSize), maxLines);
-      const lineNodes = lines.map((line) => {
-        const p = el("div", "kh-line", line);
-        setStyle(p, {
-          ...WRAP_SAFE,
-          fontSize: `${fontSize}px`,
-          fontWeight: "700",
-          color: ctx.palette.fg,
-          textAlign: "center",
-          letterSpacing: "-0.01em",
-          lineHeight: "1.15",
-          maxWidth: `${textWidth}px`,
-        });
-        headlineWrap.appendChild(p);
-        return p;
-      });
-      root.appendChild(headlineWrap);
+      stack.appendChild(headline.wrap);
 
-      instance = { logoWrap, lineNodes };
+      const last = headline.words[headline.words.length - 1];
+      const marker = last && headline.words.length >= 3 ? addMarker(last, ctx.palette.accentSoft) : null;
+
+      instance = { stack, logo, words: headline.words, marker, durationSec: ctx.durationSec };
     },
 
     seek(localT) {
       if (!instance) return;
-      const logoP = progress(localT, 0, 0.5, easeOutBack);
-      instance.logoWrap.style.opacity = String(Math.min(1, logoP));
-      instance.logoWrap.style.transform = `scale(${0.6 + 0.4 * logoP})`;
-
-      instance.lineNodes.forEach((node, i) => {
-        const start = 0.35 + i * 0.18;
-        const p = progress(localT, start, start + 0.35, easeOutCubic);
-        applyReveal(node, p, 16);
-      });
+      enter(instance.logo, localT, 0, 0.65, { scale: 0.35, rotate: -14, ease: easeSpring });
+      wordsIn(instance.words, localT, WORDS_START, WORD_EACH, WORD_DUR);
+      if (instance.marker) {
+        const landed = wordsSettle(instance.words.length, WORDS_START, WORD_EACH, WORD_DUR);
+        instance.marker.style.transform = scaleXTo(progress(localT, landed - 0.3, landed + 0.1, easeOutCubic));
+      }
+      // Slow push-in that stops just short of 1x: text never grows past the safe area, and the
+      // transform never becomes an identity (see util/ui.ts).
+      instance.stack.style.transform = `scale(${(0.955 + 0.04 * progress(localT, 0, instance.durationSec, easeOutCubic)).toFixed(4)})`;
     },
 
     marks(props): Mark[] {
-      const words = props.headline.trim().split(/\s+/).length;
       return [
         { t: 0, type: "start" },
-        { t: 0.35, type: "headline-begin" },
-        { t: Math.max(1.25, 0.35 + words * 0.05 + 0.4), type: "settle" },
+        { t: WORDS_START, type: "headline-begin" },
+        { t: Math.max(1.25, wordsSettle(wordCountOf(props.headline), WORDS_START, WORD_EACH, WORD_DUR) + 0.1), type: "settle" },
       ];
     },
 

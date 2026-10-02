@@ -18,5 +18,6 @@ export function setStyle(node: HTMLElement, style: Partial<CSSStyleDeclaration>)
 /** Applies an opacity + translateY reveal at a given eased progress (0..1). No CSS transitions involved — caller drives it per-frame via seek(). */
 export function applyReveal(node: HTMLElement, p: number, riseDistancePx = 24): void {
   node.style.opacity = String(p);
-  node.style.transform = `translateY(${(1 - p) * riseDistancePx}px)`;
+  // Land on `none`, not an identity transform: Chromium pixel-snaps the two differently (see util/ui.ts).
+  node.style.transform = p >= 1 ? "none" : `translateY(${(1 - p) * riseDistancePx}px)`;
 }

@@ -1,27 +1,37 @@
 import type { FilmContext, Mark, SceneTemplate } from "../contract.js";
-import { easeOutCubic, progress } from "../util/easing.js";
-import { applyReveal, el, setStyle } from "../util/dom.js";
-import { wrapText } from "../util/text-fit.js";
-import { WRAP_SAFE, charsPerLine, fitFontSize, layoutFor } from "../util/layout.js";
+import { progress } from "../util/easing.js";
+import { layoutFor } from "../util/layout.js";
+import { browserFrame, type BrowserFrame } from "../util/browser-frame.js";
+import { sceneRoot, textBlock, wordsIn, wordsSettle } from "../util/ui.js";
 
 export interface SectionShowcaseProps {
   /** Screenshot captured during crawl, stored in R2; a public/signed URL by render time. */
   screenshotUrl: string;
   /** Grounded caption tied to a fact id, e.g. the section heading. */
   caption: string;
+  /** Short display address for the browser toolbar, e.g. "acme.com/pricing". Added by Build. */
+  pageLabel?: string;
 }
 
 interface Instance {
-  imageWrap: HTMLElement;
-  image: HTMLImageElement;
-  captionWrap: HTMLElement;
+  frame: BrowserFrame;
+  words: HTMLElement[];
+  durationSec: number;
 }
 
+const FRAME_ENTER = 0.9;
+const CAPTION_START = 0.4;
+const WORD_EACH = 0.05;
+const WORD_DUR = 0.5;
+
+const countWords = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
+
 /**
- * Shows a real screenshot of the site with a slow kenburns scale and a caption.
- * Layouts: 16:9 wide browser frame with a one/two-line caption beneath;
- * 9:16 a tall crop of the page (top-anchored, so the hero stays in view)
- * with a caption of up to three lines; 1:1 a near-square crop.
+ * The real site in a browser window: the window tilts up into place, then the
+ * captured page scrolls inside it for the rest of the scene while the caption
+ * lands word by word.
+ * Layouts: 16:9 wide window with a one/two-line caption beneath; 9:16 a tall
+ * window with a caption of up to three lines; 1:1 a near-square window.
  */
 export function createSectionShowcase(): SceneTemplate<SectionShowcaseProps> {
   let instance: Instance | undefined;
@@ -32,89 +42,41 @@ export function createSectionShowcase(): SceneTemplate<SectionShowcaseProps> {
     mount(root, props, ctx: FilmContext) {
       const L = layoutFor(ctx);
       const u = L.u;
-      const gap = L.pick({ landscape: 30, portrait: 48, square: 28 }) * u;
-      setStyle(root, {
-        position: "absolute",
-        inset: "0",
-        boxSizing: "border-box",
-        padding: L.safePadding,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: `${gap}px`,
-        background: ctx.palette.bg,
-        fontFamily: ctx.fonts.body,
+      const gap = L.pick({ landscape: 34, portrait: 52, square: 30 }) * u;
+      sceneRoot(root, L, { gap: `${gap}px`, fontFamily: ctx.fonts.body });
+
+      const caption = textBlock(props.caption, {
+        className: "ss-caption",
+        width: L.safe.width * L.pick({ landscape: 0.84, portrait: 1, square: 0.96 }),
+        maxSize: L.pick({ landscape: 54, portrait: 64, square: 48 }) * u,
+        minSize: 22 * u,
+        maxLines: L.pick({ landscape: 2, portrait: 3, square: 2 }),
+        color: ctx.palette.fg,
+        family: ctx.fonts.display,
+        weight: "700",
+        lineHeight: 1.2,
       });
 
-      const captionWidth = L.safe.width * L.pick({ landscape: 0.8, portrait: 1, square: 0.95 });
-      const maxLines = L.pick({ landscape: 2, portrait: 3, square: 2 });
-      const fontSize = fitFontSize(props.caption, captionWidth, L.pick({ landscape: 46, portrait: 58, square: 44 }) * u, maxLines, 22 * u);
-      const lines = wrapText(props.caption, charsPerLine(captionWidth, fontSize), maxLines);
-      const captionHeight = lines.length * fontSize * 1.25;
+      const frameWidth = L.safe.width * L.pick({ landscape: 0.86, portrait: 1, square: 0.98 });
+      const frameHeight = Math.min(L.safe.height - gap - caption.height - 8 * u, L.pick({ landscape: 0.68, portrait: 0.6, square: 0.64 }) * ctx.height);
+      const frame = browserFrame({ className: "ss-frame", width: frameWidth, height: frameHeight, screenshotUrl: props.screenshotUrl, pageLabel: props.pageLabel, ctx, u });
 
-      const imgW = L.safe.width * L.pick({ landscape: 0.84, portrait: 1, square: 0.96 });
-      const imgH = Math.min(L.safe.height - gap - captionHeight - 8 * u, L.pick({ landscape: 0.62 * ctx.height, portrait: 0.58 * ctx.height, square: 0.6 * ctx.height }));
-
-      const imageWrap = el("div", "ss-image-wrap");
-      setStyle(imageWrap, {
-        boxSizing: "border-box",
-        width: `${imgW}px`,
-        height: `${imgH}px`,
-        flexShrink: "0",
-        borderRadius: `${16 * u}px`,
-        overflow: "hidden",
-        boxShadow: "0 30px 60px -20px rgba(0,0,0,0.5)",
-        border: `1px solid ${ctx.palette.accent}`,
-      });
-      const image = el("img");
-      image.src = props.screenshotUrl;
-      setStyle(image, {
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-        objectPosition: "top",
-        transformOrigin: "center top",
-      });
-      imageWrap.appendChild(image);
-      root.appendChild(imageWrap);
-
-      const captionWrap = el("div", "ss-caption");
-      setStyle(captionWrap, { display: "flex", flexDirection: "column", alignItems: "center", maxWidth: `${captionWidth}px` });
-      for (const line of lines) {
-        const node = el("div", "ss-caption-line", line);
-        setStyle(node, {
-          ...WRAP_SAFE,
-          fontSize: `${fontSize}px`,
-          fontWeight: "600",
-          color: ctx.palette.fg,
-          textAlign: "center",
-          lineHeight: "1.25",
-        });
-        captionWrap.appendChild(node);
-      }
-      root.appendChild(captionWrap);
-
-      instance = { imageWrap, image, captionWrap };
+      root.appendChild(frame.wrap);
+      root.appendChild(caption.wrap);
+      instance = { frame, words: caption.words, durationSec: ctx.durationSec };
     },
 
     seek(localT) {
       if (!instance) return;
-      const revealP = progress(localT, 0, 0.35, easeOutCubic);
-      applyReveal(instance.imageWrap, revealP, 12);
-
-      // Slow continuous kenburns scale, pure in localT.
-      const kenburnsP = progress(localT, 0, 6);
-      instance.image.style.transform = `scale(${1.0 + kenburnsP * 0.06})`;
-
-      const capP = progress(localT, 0.15, 0.5, easeOutCubic);
-      applyReveal(instance.captionWrap, capP, 10);
+      instance.frame.enter(localT, 0, FRAME_ENTER);
+      instance.frame.scroll(progress(localT, 1.0, Math.max(1.8, instance.durationSec - 0.5)));
+      wordsIn(instance.words, localT, CAPTION_START, WORD_EACH, WORD_DUR);
     },
 
-    marks(): Mark[] {
+    marks(props): Mark[] {
       return [
         { t: 0, type: "start" },
-        { t: 0.5, type: "settle" },
+        { t: Math.max(FRAME_ENTER, wordsSettle(countWords(props.caption), CAPTION_START, WORD_EACH, WORD_DUR)), type: "settle" },
       ];
     },
 
