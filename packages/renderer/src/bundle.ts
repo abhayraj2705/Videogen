@@ -21,6 +21,9 @@ export async function bundleFilmEntry(opts: { entry?: string; outfile?: string }
     platform: "browser",
     target: "chrome120",
     sourcemap: true,
+    // Pin the base for source-path comments so a rebuild from the worker's cwd
+    // produces the same committed bundle as one from the renderer package.
+    absWorkingDir: path.join(__dirname, ".."),
     logLevel: "warning",
   });
   return outfile;
