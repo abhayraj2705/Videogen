@@ -12,6 +12,7 @@
     "test": "turbo run test",
     "lint": "eslint apps/backend apps/worker packages && pnpm --filter @sitereel/web exec eslint .",
     "lint:node": "eslint apps/backend apps/worker packages",
+    "dev": "pnpm --parallel --filter @sitereel/web --filter @sitereel/backend --filter @sitereel/worker run dev",
     "dev:web": "pnpm --filter @sitereel/web run dev",
     "dev:backend": "pnpm --filter @sitereel/backend run dev",
     "dev:worker": "pnpm --filter @sitereel/worker run dev",

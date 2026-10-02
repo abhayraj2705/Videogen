@@ -3,6 +3,7 @@ import { eq, desc } from "drizzle-orm";
 import { jobs, crawls } from "@sitereel/db";
 import { QUEUE_NAMES, type CrawlOutput, type JobOptions, type JobStatus } from "@sitereel/shared";
 import { runPlanStage } from "../stages/plan.js";
+import { buildSiteProfile } from "../lib/site-profile.js";
 import { chainJobId } from "./voice-processor.js";
 import type { WorkerDeps } from "./types.js";
 import { PlanJobDataP6, type PlanOverrides } from "../lib/phase6-contracts.js";
@@ -47,6 +48,7 @@ export function createPlanProcessor(deps: WorkerDeps) {
     const inputsHash = sha16(["plan-v1", crawlRow.id, options.videoType ?? "launch", options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, data.reason ?? null]);
     const runId = await startStageRun(deps.db, { jobId, stage: "plan", inputsHash });
 
+    const profile = buildSiteProfile(crawlOutput, options.videoType);
     const result = await runPlanStage(crawlOutput, options, { primaryProvider: deps.llm.primary, escalationProvider: deps.llm.escalation });
     await assertNotCancelled(deps, jobId);
 
@@ -102,7 +104,21 @@ export function createPlanProcessor(deps: WorkerDeps) {
       status: nextStatus,
       pct: 100,
       message: `Storyboard v${storyboardRow.version} ready (${result.storyboard.source}, ${result.storyboard.scenes.length} scenes)`,
-      payload: { storyboardId: storyboardRow.id, version: storyboardRow.version, source: storyboardRowSource(result.storyboard.source), valid: result.validation.valid, autoApproved: autoApprove },
+      payload: {
+        storyboardId: storyboardRow.id,
+        version: storyboardRow.version,
+        source: storyboardRowSource(result.storyboard.source),
+        valid: result.validation.valid,
+        autoApproved: autoApprove,
+        // The storyboard as the live view lists it: each scene, and why that template was open to this site.
+        scenes: result.storyboard.scenes.map((s) => ({
+          template: s.templateId,
+          title: s.onScreenText[0] ?? s.templateId,
+          narration: s.narration,
+          durationMs: Math.round(s.durationSec * 1000),
+          why: profile.templates.find((t) => t.id === s.templateId)?.reason,
+        })),
+      },
       at: new Date().toISOString(),
     });
   };

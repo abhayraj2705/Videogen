@@ -21,6 +21,7 @@ import { buildVtt } from "../lib/vtt.js";
 import { getAudioSidecarFromEnv } from "../lib/audio-sidecar.js";
 import { selectMusicTrack } from "../lib/music.js";
 import { ingestUserMedia } from "../lib/media-intake.js";
+import { buildSiteProfile, profileSummary } from "../lib/site-profile.js";
 import { screenshotPageUrls } from "../lib/storyboard-fallback.js";
 import { buildStageHash, decideVoiceScenes, manifestHash, qaStageHash, renderStageHash, sha16, voiceSceneHashes } from "../lib/input-hash.js";
 
@@ -218,6 +219,11 @@ async function main() {
     process.stdout.write("\n");
     return r.crawlOutput;
   });
+
+  const profile = profileSummary(buildSiteProfile(crawl, options.videoType));
+  console.log(`  site profile: ${profile.category}${profile.signals.length ? ` (${profile.signals.join(", ")})` : ""} — ${profile.found.join(", ")}`);
+  console.log(`  best-fit scenes: ${profile.fits.map((f) => f.template).join(", ") || "(none stand out)"}`);
+  console.log(`  ruled out: ${profile.ruledOut.map((f) => f.template).join(", ") || "(nothing)"}`);
 
   // 2. Plan — or the edited storyboard (W6 editor save), which replaces it.
   const planHash = sha16(["plan-v2", crawl, options.videoType, options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, gemini?.id ?? null, anthropic?.id ?? null]);

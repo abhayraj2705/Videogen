@@ -31,7 +31,8 @@ export async function openFilmPage(browser: Browser, manifest: FilmManifest, fil
   page.on("console", (msg) => {
     if (msg.type() === "error") console.error("[page]", msg.text());
   });
-  await page.goto(`${filmHost}/film.html?manifest=${encodeURIComponent(manifestUrl)}`);
+  // Generous: several lanes open at once, and on a busy machine the default 30s is not enough for all of them.
+  await page.goto(`${filmHost}/film.html?manifest=${encodeURIComponent(manifestUrl)}`, { timeout: 120_000 });
   await page.waitForFunction(() => window.__film?.ready === true, undefined, { timeout: 60_000 });
   await warmUpScenes(page, manifest);
   return page;
@@ -272,16 +273,32 @@ export async function renderChunked(opts: ChunkedRenderOptions): Promise<Chunked
    * lane down; launching + loading + warming the film per chunk (as this used
    * to) cost seconds each. A lane that only meets cached chunks never launches.
    */
+  /** Lanes that could not even open the film (browser launch or page load timed out). The render survives these as long as one lane works. */
+  const laneOpenFailures: unknown[] = [];
   const runLane = async (queue: FrameRange[]) => {
     let browser: Browser | undefined;
     let page: Promise<Page> | undefined;
+    let opened = false;
     const getPage = () =>
       (page ??= (async () => {
         browser = await chromium.launch({ args: BROWSER_ARGS });
-        return openFilmPage(browser, manifest, opts.filmHost, opts.manifestUrl);
+        const p = await openFilmPage(browser, manifest, opts.filmHost, opts.manifestUrl);
+        opened = true;
+        return p;
       })());
     try {
-      for (let r = queue.shift(); r; r = queue.shift()) await renderOne(r, getPage);
+      for (let r = queue.shift(); r; r = queue.shift()) {
+        try {
+          await renderOne(r, getPage);
+        } catch (err) {
+          if (opened) throw err;
+          // This lane never got started (an overloaded machine): hand its chunk back for the lanes that did, and bow out.
+          queue.unshift(r);
+          laneOpenFailures.push(err);
+          opts.log?.(`a render lane failed to open and was dropped: ${(err as Error)?.message?.split("\n")[0]}`);
+          return;
+        }
+      }
     } finally {
       await (browser as Browser | undefined)?.close();
     }
@@ -290,6 +307,9 @@ export async function renderChunked(opts: ChunkedRenderOptions): Promise<Chunked
   try {
     const queue = [...ranges];
     await Promise.all(Array.from({ length: Math.min(concurrency, ranges.length) }, () => runLane(queue)));
+    // Chunks handed back by a dropped lane after the others had finished: render them one lane at a time.
+    for (let attempt = 0; queue.length > 0 && attempt < 2; attempt++) await runLane(queue);
+    if (queue.length > 0) throw laneOpenFailures[laneOpenFailures.length - 1] ?? new Error("render: no lane could open the film");
     const renderMs = Date.now() - t0;
 
     const t1 = Date.now();

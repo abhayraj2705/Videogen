@@ -1,6 +1,7 @@
 import { BANNED_PHRASES, FULLPAGE_CAPTURE_DEPTH, type CrawlOutput, type FactLedgerEntry, type JobOptions } from "@sitereel/shared";
 import { ICON_NAMES } from "@sitereel/film-runtime";
 import { recipeFor, targetSceneCount } from "./recipes.js";
+import { buildSiteProfile, categoryLabel, type SiteProfile } from "./site-profile.js";
 
 const TEMPLATE_CATALOG = `- KineticHook: opening hook (2-3s). props: { productName, headline }. Use once, first scene.
 - LogoReveal: short reveal bumper (1-2s), logo only (asset "logo"). props: { productName }. Optional, at most once.
@@ -73,6 +74,24 @@ export function buildBrandBlock(crawlOutput: CrawlOutput): string {
   return [`background: ${b.bg}`, `text: ${b.fg}`, `accent: ${b.accent}`, `display font: ${b.fontDisplay}`, `body font: ${b.fontBody}`, `logo: ${b.logoUrl ? "yes" : "none"}`].join("\n");
 }
 
+/** The catalogue without the templates this site has no material for — the planner can't pick what it can't fill. */
+function catalogFor(profile: SiteProfile): string {
+  const unavailable = new Set<string>(profile.templates.filter((t) => t.fit === "unavailable").map((t) => t.id));
+  return TEMPLATE_CATALOG.split("\n")
+    .filter((line) => !unavailable.has(line.slice(2, line.indexOf(":"))))
+    .join("\n");
+}
+
+/** The site profile as the planner reads it: what kind of site, and which templates fit it and why. */
+function profileBlock(profile: SiteProfile): string {
+  const fits = profile.templates.filter((t) => t.fit === "strong" && t.id !== "KineticHook" && t.id !== "CTAEndCard");
+  return [
+    `kind of site: ${categoryLabel(profile.category)}${profile.categorySignals.length ? ` (it says: ${profile.categorySignals.join(", ")})` : ""}`,
+    "best-fit templates for THIS site (build the middle of the film mainly from these; each is here because the site has the material for it):",
+    ...fits.map((t) => `- ${t.id}: ${t.reason}`),
+  ].join("\n");
+}
+
 /** Appendix C skeleton, filled in with this job's real crawl material. */
 export function buildPlannerPrompt(opts: { crawlOutput: CrawlOutput; options: JobOptions }): { system: string; prompt: string } {
   const { crawlOutput, options } = opts;
@@ -90,6 +109,7 @@ export function buildPlannerPrompt(opts: { crawlOutput: CrawlOutput; options: Jo
     .join("\n");
 
   const recipe = recipeFor(options.videoType);
+  const profile = buildSiteProfile(crawlOutput, options.videoType);
   const sceneCount = targetSceneCount(recipe, options.lengthSec);
 
   const prompt = `RULES
@@ -111,8 +131,9 @@ ${recipe.rules.map((r) => `- ${r}`).join("\n")}
 - Each scene after the first may set "transition" (how it cuts in): "zoom" for a reveal or a big number, "push" between parallel points, "wipe" into a screenshot scene, "cut" (hard cut, lands on the beat) for a punchy change, "whip" for a fast energetic jump, "fade" for a calm change of topic, "slide-left"/"slide-up" as gentler alternatives. Vary them; leave it out to let the renderer choose from the tone's own set.
 - Screenshot scenes scroll the real page inside a browser window — give them at least 4s, and point two screenshot scenes at two different pages when more than one screenshot asset exists.
 - Images marked UPLOADED BY THE USER are what the user most wants shown: give every one of them its own product scene, in the order listed, before reusing a crawled screenshot.
-- Use only these templates:
-${TEMPLATE_CATALOG}
+- Template choice follows the SITE PROFILE below: prefer its best-fit templates, and tell this kind of site the way its kind is best told.
+- Use only these templates (ones this site has no material for have been left out):
+${catalogFor(profile)}
 - Banned phrases (never use, in any form): ${BANNED_PHRASES.map((p) => `"${p}"`).join(", ")}.
 - Tone: ${options.tone}. Language: ${options.voiceLanguage}.
 ${options.noVoiceover ? "- No voiceover: omit narration, rely on on-screen text and captions only.\n" : ""}
@@ -123,6 +144,9 @@ summary: ${siteBrief.summary}
 audience: ${siteBrief.audience}
 differentiator: ${siteBrief.differentiator}
 ${siteBrief.strongestClaimFactId ? `strongest claim fact: ${siteBrief.strongestClaimFactId}` : ""}
+
+SITE PROFILE
+${profileBlock(profile)}
 
 FACT LEDGER
 ${factList}

@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { jobs, crawls } from "@sitereel/db";
 import { QUEUE_NAMES, userUploadPrefix, type CrawlOutput } from "@sitereel/shared";
 import { ingestUserMedia } from "../lib/media-intake.js";
+import { buildSiteProfile, profileSummary } from "../lib/site-profile.js";
 import { runCrawlStage } from "../stages/crawl.js";
 import { chainJobId } from "./voice-processor.js";
 import type { WorkerDeps } from "./types.js";
@@ -150,7 +151,16 @@ export function createCrawlProcessor(deps: WorkerDeps) {
       status: "extracting",
       pct: 100,
       message: `Found ${crawlOutput.facts.length} facts across ${crawlOutput.pages.length} page(s)`,
-      payload: { factCount: crawlOutput.facts.length, briefSource: crawlOutput.siteBrief.source, manual: !!manual, ...(brandKitId ? { brandKitId } : {}) },
+      payload: {
+        factCount: crawlOutput.facts.length,
+        briefSource: crawlOutput.siteBrief.source,
+        manual: !!manual,
+        ...(brandKitId ? { brandKitId } : {}),
+        // What the app shows under "Understanding it": the kind of site, what was found, and which scenes fit.
+        profile: profileSummary(buildSiteProfile(crawlOutput, jobRow.options.videoType)),
+        productName: crawlOutput.siteBrief.productName,
+        summary: crawlOutput.siteBrief.summary,
+      },
       at: new Date().toISOString(),
     });
   };

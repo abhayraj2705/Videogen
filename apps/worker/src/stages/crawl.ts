@@ -40,6 +40,8 @@ const NETWORK_IDLE_CAP_MS = 3_000;
 const FONTS_CAP_MS = 3_000;
 const HOME_SECTIONS = 4;
 const EXTRA_SECTIONS = 3;
+/** Below this much of the crawl budget left, full-page shots drop to 1x. */
+const SHARP_CAPTURE_MIN_REMAINING_MS = 30_000;
 /** Keep in step with FULLPAGE_CAPTURE_DEPTH in @sitereel/shared (this height over the 1280px viewport width). */
 const FULLPAGE_MAX_CSS_HEIGHT = 4_000;
 /** Time held back from the browser phase so the plain-fetch fallback can still run inside the overall budget. */
@@ -126,7 +128,10 @@ async function capturePage(
 ): Promise<void> {
   // Fills `entry` in place as each capture lands, so a budget cut-off keeps whatever finished.
   const fullKey = screenshotKey(jobId, label);
-  const full = await captureCappedFullPage(page, FULLPAGE_MAX_CSS_HEIGHT, process.env.SITEREEL_FULLPAGE_SCALE === "css" ? "css" : "device");
+  // The 2x capture keeps close-ups sharp but costs seconds to encode. When the crawl is already short on
+  // time (a slow site or a busy machine), a soft close-up beats losing the screenshots altogether.
+  const sharp = process.env.SITEREEL_FULLPAGE_SCALE !== "css" && budget.remaining() > SHARP_CAPTURE_MIN_REMAINING_MS;
+  const full = await captureCappedFullPage(page, FULLPAGE_MAX_CSS_HEIGHT, sharp ? "device" : "css");
   await storage.putObject("assets", fullKey, full, "image/png");
   entry.screenshotKey = fullKey;
   if (DEBUG) console.error(`[crawl] ${label} full-page shot ${full.byteLength} bytes`);
