@@ -8,7 +8,7 @@ import type { StorageClient } from "@sitereel/storage";
 import type { VoiceSceneResult } from "../stages/voice.js";
 import type { AudioSidecarClient } from "./audio-sidecar.js";
 import type { MusicTrack } from "./music.js";
-import { SFX_GAIN, sfxEvents, synthSfx, type SfxKind } from "./sfx.js";
+import { SFX_GAIN, sfxEvents, sfxSound, type SfxKind } from "./sfx.js";
 
 const SAMPLE_RATE = 48000;
 
@@ -52,7 +52,7 @@ export async function assembleNarrationTrack(opts: {
     const kinds = [...new Set(events.map((e) => e.kind))] as SfxKind[];
     for (const [k, kind] of kinds.entries()) {
       const p = path.join(tmpDir, `sfx-${kind}.wav`);
-      await fs.writeFile(p, synthSfx(kind));
+      await fs.writeFile(p, sfxSound(kind, repoRoot));
       inputs.push("-i", p);
       const at = events.filter((e) => e.kind === kind);
       const input = voiced.length + 1 + k;
@@ -86,14 +86,16 @@ export interface MixParams {
  * sidechain key that ducks the music (to roughly 0.12-0.15 linear under
  * speech, §4.6), the other is mixed on top.
  */
-export function mixFilterGraph(hasMusic: boolean, durationSec: number, p: Required<MixParams>): string {
+export function mixFilterGraph(hasMusic: boolean, durationSec: number, p: Required<MixParams>, musicOffsetSec = 0): string {
   const d = durationSec.toFixed(3);
+  // The (looped) track is entered `musicOffsetSec` in, so its drop lands where the film wants it.
+  const lead = musicOffsetSec > 0 ? `atrim=start=${musicOffsetSec.toFixed(3)},asetpts=PTS-STARTPTS,` : "";
   const voice = `[0:a]aformat=sample_rates=${SAMPLE_RATE}:channel_layouts=stereo,apad,atrim=0:${d}`;
   if (!hasMusic) return `${voice}[mix]`;
   const fadeSt = Math.max(0, durationSec - 1.5).toFixed(3);
   return [
     `${voice},asplit=2[v][sc]`,
-    `[1:a]aformat=sample_rates=${SAMPLE_RATE}:channel_layouts=stereo,atrim=0:${d},volume=${p.musicGain},afade=t=in:d=0.4,afade=t=out:st=${fadeSt}:d=1.5[m]`,
+    `[1:a]${lead}aformat=sample_rates=${SAMPLE_RATE}:channel_layouts=stereo,atrim=0:${d},volume=${p.musicGain},afade=t=in:d=0.4,afade=t=out:st=${fadeSt}:d=1.5[m]`,
     `[m][sc]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=400:makeup=1[duck]`,
     `[v][duck]amix=inputs=2:normalize=0:duration=first[mix]`,
   ].join(";");
@@ -122,11 +124,15 @@ export async function mixFinalAudio(opts: {
   sidecar?: AudioSidecarClient | null;
   params?: MixParams;
   repoRoot?: string;
+  /** Seconds into the track to start the music bed at (manifest.musicOffsetSec). */
+  musicOffsetSec?: number;
 }): Promise<MixResult> {
   const p: Required<MixParams> = { targetLufs: -14, truePeak: -1.5, musicGain: 0.32, ...opts.params };
   const musicBuf = opts.music ? await fs.readFile(opts.music.path) : null;
 
-  if (opts.sidecar) {
+  const musicOffsetSec = opts.music ? Math.max(0, opts.musicOffsetSec ?? 0) : 0;
+  // The sidecar's /mix always starts the track at its beginning; an offset mix runs locally.
+  if (opts.sidecar && musicOffsetSec === 0) {
     const r = await opts.sidecar.mix({ voice: opts.narration, music: musicBuf, durationSec: opts.durationSec, targetLufs: p.targetLufs, musicGain: p.musicGain });
     if (r) return { audio: r.audio, path: "sidecar", hasMusic: Boolean(musicBuf), lufs: r.report.lufs ?? null, truePeakDbtp: r.report.truePeakDbtp ?? null, normalized: r.report.normalized ?? false };
   }
@@ -140,7 +146,7 @@ export async function mixFinalAudio(opts: {
     if (opts.music) inputs.push("-stream_loop", "-1", "-i", opts.music.path);
     const mixed = path.join(tmpDir, "mixed.wav");
     await runFfmpegQuiet(
-      ["-y", ...inputs, "-filter_complex", mixFilterGraph(Boolean(opts.music), opts.durationSec, p), "-map", "[mix]", "-t", opts.durationSec.toFixed(3), "-ar", String(SAMPLE_RATE), mixed],
+      ["-y", ...inputs, "-filter_complex", mixFilterGraph(Boolean(opts.music), opts.durationSec, p, musicOffsetSec), "-map", "[mix]", "-t", opts.durationSec.toFixed(3), "-ar", String(SAMPLE_RATE), mixed],
       opts.repoRoot,
     );
 

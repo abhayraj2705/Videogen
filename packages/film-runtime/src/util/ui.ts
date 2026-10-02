@@ -122,6 +122,14 @@ function sceneOf(node: HTMLElement): SceneInfo {
   return info;
 }
 
+/**
+ * True when the scene this node belongs to is cut into with a match cut: its window is carried in from
+ * the previous scene's by the player, so the scene's own entrance (tilting up, swinging in) must not play too.
+ */
+export function entersMatched(node: HTMLElement): boolean {
+  return node.closest<HTMLElement>("[data-style]")?.dataset.matchIn === "1";
+}
+
 /** The style pack of the film a mounted node belongs to. */
 export function styleOf(node: HTMLElement): StylePack {
   return sceneOf(node).pack;
@@ -279,6 +287,8 @@ export function logoMark(opts: { className: string; size: number; logoUrl?: stri
     const img = el("img");
     img.src = opts.logoUrl;
     setStyle(img, { width: "100%", height: "100%", objectFit: "contain" });
+    // Redrawn onto a canvas at this size once loaded (player.ts stabilizeImage): see there for why.
+    img.dataset.stable = `${size}x${size}`;
     wrap.appendChild(img);
   } else {
     const tile = el("div", `${opts.className}-fallback`, opts.productName.slice(0, 1).toUpperCase());

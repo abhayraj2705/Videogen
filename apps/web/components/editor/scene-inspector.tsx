@@ -11,7 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { FactBadge, FactChip } from "@/components/editor/fact-badge";
 import { PropsEditor } from "@/components/editor/props-editor";
 import { citedFacts, groundNarration, groundText, sourceLabel } from "@/lib/editor/grounding";
-import { NARRATION_SOFT_LIMIT, TEMPLATE_IDS, templateLabel } from "@/lib/editor/templates";
+import { NARRATION_SOFT_LIMIT, SCENE_TRANSITIONS, TEMPLATE_IDS, templateLabel } from "@/lib/editor/templates";
 import type { EditOptions } from "@/lib/editor/history-store";
 import type { ValidationError } from "@/lib/api/phase6";
 import { cn } from "@/lib/utils";
@@ -100,6 +100,24 @@ export function SceneInspector({
           ))}
         </ul>
       )}
+
+      <div className="flex flex-col gap-1">
+        <label htmlFor={`${idp}-transition`} className="text-xs text-muted-foreground">
+          Cut into this scene
+        </label>
+        <Select
+          id={`${idp}-transition`}
+          value={scene.transition ?? ""}
+          onChange={(e) => onPatch({ transition: (e.target.value || undefined) as typeof scene.transition })}
+        >
+          <option value="">Automatic (from the tone)</option>
+          {SCENE_TRANSITIONS.map((t) => (
+            <option key={t.value} value={t.value}>
+              {t.label}
+            </option>
+          ))}
+        </Select>
+      </div>
 
       <div className="grid grid-cols-[1fr_6rem] gap-2">
         <div className="flex flex-col gap-1">

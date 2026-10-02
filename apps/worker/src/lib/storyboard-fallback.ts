@@ -10,8 +10,10 @@ import {
   TEMPLATE_PROP_SCHEMAS,
 } from "@sitereel/shared";
 
+import { nameFromDomain } from "./site-brief.js";
+
 /** Prop keys that are locators, not claims — never rewritten (mirrors the validator's list). */
-const NON_CLAIM_PROP_KEYS = new Set(["sourcePageUrl", "domain", "icon", "logoUrl", "assetId", "screenshotKey"]);
+const NON_CLAIM_PROP_KEYS = new Set(["sourcePageUrl", "domain", "icon", "logoUrl", "assetId", "screenshotKey", "kind", "align", "panel"]);
 
 /** Pages a screenshot scene may point at: crawled AND actually screenshotted (plain-fetch pages have no image). */
 export function screenshotPageUrls(crawlOutput: CrawlOutput): string[] {
@@ -137,7 +139,7 @@ export function isQuoteShaped(text: string): boolean {
 function deriveProductName(crawl: CrawlOutput): string {
   const fromBrief = sanitizeClaimText(crawl.siteBrief.productName ?? "", "");
   if (fromBrief.length > 0) return truncateWords(fromBrief, 4);
-  const fromDomain = sanitizeClaimText(crawl.domain.replace(/^www\./, "").split(".")[0] ?? "", "");
+  const fromDomain = sanitizeClaimText(nameFromDomain(crawl.domain), "");
   return fromDomain.length > 0 ? fromDomain : "This site";
 }
 
@@ -293,9 +295,48 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
     props: { productName, headline },
   });
 
+  const videoType = options.videoType ?? "launch";
+  if (videoType !== "launch") {
+    // Walkthrough / feature / teaser: the middle of the film is product scenes built from what each page says about itself.
+    const shotPages = pages.filter((p) => p.screenshotKey && p.origin !== "image");
+    const stepFacts: FactLedgerEntry[] = [];
+    const productScene = (id: string, templateId: StoryboardScene["templateId"], page: (typeof pages)[number], line: string, floorSec: number): string | null => {
+      const fact = take(facts.find((f) => !used.has(f.id) && f.sourceUrl === page.url && ["hero", "heading", "feature"].includes(f.kind) && wordCount(f.text) >= 2));
+      if (!fact) return null;
+      const caption = truncateWords(fact.text);
+      stepFacts.push(fact);
+      scenes.push({ id, templateId, durationSec: durationFor([caption], floorSec), narration: frame(line, caption), onScreenText: [caption], factIds: [fact.id], props: { sourcePageUrl: page.url, caption } });
+      return caption;
+    };
+    const home = shotPages[0];
+    if (videoType === "walkthrough") {
+      const maxSteps = Math.max(2, Math.min(shotPages.length, Math.round(options.lengthSec / 8)));
+      const stepTemplates: StoryboardScene["templateId"][] = ["StepByStep"];
+      const stepLines = [`Here is ${productName}.`, "Next, take a closer look.", "Then, see what comes after.", "And there is more."];
+      const steps: string[] = [];
+      shotPages.slice(0, maxSteps).forEach((page, i) => {
+        const template = stepTemplates[i % stepTemplates.length]!;
+        const caption = productScene(`step-${i + 1}`, template, page, stepLines[i % stepLines.length]!, 4);
+        if (caption) {
+          steps.push(truncateWords(caption, 5));
+          // Steps are numbered by the order they made it into the film.
+          (scenes[scenes.length - 1]!.props as Record<string, unknown>).step = steps.length;
+        }
+      });
+      if (steps.length >= 2) {
+        const items = steps.slice(0, 4);
+        scenes.push({ id: "recap", templateId: "ChecklistReveal", durationSec: durationFor(items, 3), narration: frame("That is the whole flow.", spokenList(items)), onScreenText: items, factIds: stepFacts.slice(0, 4).map((f) => f.id), props: { items } });
+      }
+    } else if (home && videoType === "feature") {
+      productScene("closeup", "ZoomDetail", home, "Here is how it works.", 4);
+      productScene("more", (home.sectionScreenshotKeys?.length ?? 0) >= 2 ? "ScreenCollage" : "SectionShowcase", home, "And it goes further.", 3.5);
+    } else if (home) {
+      productScene("look", (home.sectionScreenshotKeys?.length ?? 0) >= 2 ? "ScreenCollage" : "DeviceMockup", home, `Meet ${productName}.`, 2.5);
+    }
+  } else {
   // Reveal — a real screenshot of the product, captioned by a second hero/heading fact.
   // (Plain-fetch crawls have no screenshots, so they skip both screenshot scenes.)
-  const revealPage = pages.find((p) => p.screenshotKey);
+  const revealPage = pages.find((p) => p.screenshotKey && p.origin !== "image");
   const revealFact = take(facts.find((f) => !used.has(f.id) && (f.kind === "hero" || f.kind === "heading")));
   if (revealPage && revealFact) {
     const caption = truncateWords(revealFact.text);
@@ -383,7 +424,7 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
   }
 
   // Product showcase on a second page, if we have one and nothing showed it yet.
-  const showcasePage = pages.filter((p) => p.screenshotKey).find((p) => p.url !== revealPage?.url);
+  const showcasePage = pages.filter((p) => p.screenshotKey && p.origin !== "image").find((p) => p.url !== revealPage?.url);
   const showcaseFact = take(facts.find((f) => !used.has(f.id) && f.kind !== "cta" && f.kind !== "testimonial"));
   if (showcasePage && showcaseFact) {
     const caption = truncateWords(showcaseFact.text);
@@ -399,8 +440,11 @@ export function buildFallbackStoryboard(crawlOutput: CrawlOutput, options: JobOp
     });
   }
 
+  }
+
   // CTA
-  const cta = facts.find((f) => f.kind === "cta" && wordCount(f.text) <= 5);
+  // A button that carries a price ("Buy now $79 $99") is a checkout line, not a call to action to end a film on.
+  const cta = facts.find((f) => f.kind === "cta" && wordCount(f.text) <= 5 && numbersIn(f.text).length === 0 && !/[$€£₹¥]/.test(f.text));
   const ctaText = truncateWords(cta?.text ?? "Learn more", 4);
   scenes.push({
     id: "cta",

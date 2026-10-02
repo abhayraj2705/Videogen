@@ -8,6 +8,10 @@ export const BrandTokens = z.object({
   fontDisplay: z.string(),
   fontBody: z.string(),
   logoUrl: z.string().url().nullable(),
+  /** Additive, optional: the corner radius (CSS px) the site's buttons typically have; pills come out large. */
+  radius: z.number().nonnegative().optional(),
+  /** Additive, optional: how colourful the homepage's first screen is, 0-1 (mean saturation of its pixels). */
+  colorfulness: z.number().min(0).max(1).optional(),
 });
 export type BrandTokens = z.infer<typeof BrandTokens>;
 
@@ -18,6 +22,13 @@ export type FactKind = z.infer<typeof FactKind>;
 /** Where an element sat on its page, in fractions of the page WIDTH (so it maps onto the full-page screenshot at any size). */
 export const FactRect = z.object({ x: z.number(), y: z.number(), w: z.number(), h: z.number() });
 export type FactRect = z.infer<typeof FactRect>;
+
+/**
+ * How far down a page the full-page screenshot reaches, in page widths (the
+ * crawl caps it at 4000 CSS px on a 1280px-wide viewport). A fact below this
+ * line has a position but no pixels — it can be cited, not shown.
+ */
+export const FULLPAGE_CAPTURE_DEPTH = 4000 / 1280;
 
 export const FactLedgerEntry = z.object({
   id: z.string(),
@@ -45,13 +56,44 @@ export const SiteBrief = z.object({
 });
 export type SiteBrief = z.infer<typeof SiteBrief>;
 
+/**
+ * A short recording of the live page: frames captured while the crawler really scrolled it, so the
+ * site's own scroll effects and animations are in the picture. Frames are evenly spaced at `fps`;
+ * a key may repeat where the page did not change between two of them.
+ */
+export const PageClip = z.object({
+  frameKeys: z.array(z.string()).min(2),
+  fps: z.number().positive(),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+});
+export type PageClip = z.infer<typeof PageClip>;
+
+/** A logo found in a "trusted by" / integrations strip on the site, captured as an image. */
+export const SiteLogo = z.object({ name: z.string().min(1), key: z.string().min(1) });
+export type SiteLogo = z.infer<typeof SiteLogo>;
+
 export const CrawledPage = z.object({
   url: z.string().url(),
   /** Full-page (or first-viewport) screenshot. Empty string when the page came from the plain-fetch fallback. */
   screenshotKey: z.string(),
   /** Per-section screenshots (one per viewport-height slice, top to bottom). Additive, optional. */
   sectionScreenshotKeys: z.array(z.string()).optional(),
+  /** Additive, optional: "upload" marks an image the user supplied (the url is then a #upload-N fragment of the job URL). */
+  /** "image" (also additive) is a picture lifted from the site itself: a product photo or an embedded product screenshot. */
+  origin: z.enum(["crawl", "upload", "image"]).optional(),
+  /** Additive, optional: a human name for the page ("Dashboard overview"), shown to the planner. */
+  label: z.string().optional(),
+  /** Additive, optional: the page recorded while scrolling (homepage only, when the crawl had time for it). */
+  clip: PageClip.optional(),
+  /** Additive, optional: logos captured from this page's customer / integration strip. */
+  logos: z.array(SiteLogo).optional(),
 });
+
+/** True for a page entry that is one picture (an upload or a site image), not a scrollable page. */
+export function isSingleImagePage(page: { origin?: string | undefined }): boolean {
+  return page.origin === "upload" || page.origin === "image";
+}
 export type CrawledPage = z.infer<typeof CrawledPage>;
 
 /** How the crawl material was obtained: a real browser, or the plain-HTTP fallback (no screenshots, no computed styles). */

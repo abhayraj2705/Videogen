@@ -43,18 +43,20 @@ export function createChecklistReveal(): SceneTemplate<ChecklistRevealProps> {
       const u = L.u;
       sceneRoot(root, L);
 
-      const listWidth = Math.min(L.safe.width, L.pick({ landscape: 1240, portrait: 1000, square: 960 }) * u);
+      // Two rows alone leave most of the frame empty: a short list is set larger, so it still carries the scene.
+      const few = props.items.length <= 2 ? 1.4 : props.items.length === 3 ? 1.15 : 1;
+      const listWidth = Math.min(L.safe.width, L.pick({ landscape: 1240, portrait: 1000, square: 960 }) * u * Math.min(few, 1.2));
       const list = el("div", "cl-list");
       setStyle(list, { display: "flex", flexDirection: "column", alignItems: "stretch", gap: `${L.pick({ landscape: 22, portrait: 30, square: 18 }) * u}px`, width: `${listWidth}px` });
       root.appendChild(list);
 
-      const checkSize = L.pick({ landscape: 60, portrait: 70, square: 52 }) * u;
-      const rowGap = 26 * u;
-      const padX = L.pick({ landscape: 34, portrait: 34, square: 26 }) * u;
-      const padY = L.pick({ landscape: 24, portrait: 30, square: 20 }) * u;
+      const checkSize = L.pick({ landscape: 60, portrait: 70, square: 52 }) * u * few;
+      const rowGap = 26 * u * few;
+      const padX = L.pick({ landscape: 34, portrait: 34, square: 26 }) * u * few;
+      const padY = L.pick({ landscape: 24, portrait: 30, square: 20 }) * u * few;
       const labelWidth = listWidth - 2 * padX - checkSize - rowGap;
       const longest = props.items.reduce((a, s) => (s.length > a.length ? s : a), "");
-      const labelSize = fitFontSize(longest, labelWidth, L.pick({ landscape: 46, portrait: 54, square: 40 }) * u, 2, 22 * u);
+      const labelSize = fitFontSize(longest, labelWidth, L.pick({ landscape: 46, portrait: 54, square: 40 }) * u * few, 2, 22 * u);
 
       const rows = props.items.map((item): Row => {
         const node = el("div", "cl-row");

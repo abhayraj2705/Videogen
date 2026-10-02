@@ -15,7 +15,7 @@ const manifest = (scenes: FilmManifest["scenes"]): FilmManifest => ({
 });
 
 describe("sound effects", () => {
-  it("places a whoosh on moving cuts, a hit on hard cuts, pops on list cues and a riser into a stat", () => {
+  it("places a whoosh on moving cuts, a hit on hard cuts, pops on list cues, a riser into a stat and a closing sting", () => {
     const events = sfxEvents(
       manifest([
         { id: "a", templateId: "KineticHook", start: 0, end: 3, props: {} },
@@ -30,11 +30,13 @@ describe("sound effects", () => {
       { kind: "pop", t: 4.25 },
       { kind: "hit", t: 6 },
       { kind: "rise", t: 6.1 },
+      // the closing sting lands just after the last scene has cut in
+      { kind: "sting", t: 9.35 },
     ]);
   });
 
   it("synthesizes each sound as an audible, unclipped, deterministic WAV", () => {
-    for (const kind of ["whoosh", "hit", "pop", "rise"] as SfxKind[]) {
+    for (const kind of ["whoosh", "hit", "pop", "rise", "sting"] as SfxKind[]) {
       const wav = synthSfx(kind);
       expect(wav.toString("ascii", 0, 4)).toBe("RIFF");
       expect(wav.readUInt32LE(40)).toBe(wav.length - 44);

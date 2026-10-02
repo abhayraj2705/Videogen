@@ -4,10 +4,9 @@ import fsp from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
-import { CrawlOutput, JobOptions, Storyboard, ffprobe, formatSlug, runFfmpegQuiet, validateStoryboard, type AspectFormat } from "@sitereel/shared";
+import { CrawlOutput, JobOptions, Storyboard, resolveMusicMood, ffprobe, formatSlug, runFfmpegQuiet, userUploadPrefix, validateStoryboard, type AspectFormat, type JobMedia } from "@sitereel/shared";
 import { createLocalStorageClient, type StorageClient } from "@sitereel/storage";
-import { selectLlmProviders, type LlmEnv } from "../lib/llm-providers.js";
-import { createGeminiTtsProvider } from "@sitereel/tts";
+import { scriptProviders, selectLlmProviders, selectTtsProvider, type LlmEnv } from "../lib/llm-providers.js";
 import { parseColor, type FilmManifest } from "@sitereel/film-runtime";
 import { bundleFilmEntry, startFilmServer } from "@sitereel/renderer";
 import { runCrawlStage } from "../stages/crawl.js";
@@ -20,6 +19,9 @@ import { assembleNarrationTrack, mixFinalAudio } from "../lib/audio-mix.js";
 import { buildVtt } from "../lib/vtt.js";
 import { getAudioSidecarFromEnv } from "../lib/audio-sidecar.js";
 import { selectMusicTrack } from "../lib/music.js";
+import { ensureGeneratedTrack } from "../lib/music-gen.js";
+import { ingestUserMedia } from "../lib/media-intake.js";
+import { buildSiteProfile, profileSummary } from "../lib/site-profile.js";
 import { screenshotPageUrls } from "../lib/storyboard-fallback.js";
 import { buildStageHash, decideVoiceScenes, manifestHash, qaStageHash, renderStageHash, sha16, voiceSceneHashes } from "../lib/input-hash.js";
 
@@ -31,7 +33,7 @@ import { buildStageHash, decideVoiceScenes, manifestHash, qaStageHash, renderSta
  * no TTS key = silent fallback voice, no sidecar = local ffmpeg mix.
  *
  *   pnpm pipeline run benchmark/fixtures/<id>.json [--out DIR] [--formats 16:9,9:16,1:1]
- *                     [--music upbeat|calm|energetic|cinematic|off] [--tone clean|playful|cinematic|app-store]
+ *                     [--music upbeat|calm|energetic|cinematic|off] [--tone auto|clean|playful|cinematic|app-store]
  *                     [--no-voice] [--plan free|pro]
  *                     [--concurrency N] [--chunks N] [--force] [--edit storyboard.json]
  *   pnpm pipeline run https://example.com            (live crawl; needs network)
@@ -109,7 +111,7 @@ async function main() {
   const [, , cmd, target, ...rest] = process.argv;
   if (cmd !== "run" || !target) {
     console.error(
-      "usage: pnpm pipeline run <url-or-crawl-fixture.json> [--out DIR] [--formats 16:9,9:16,1:1] [--music MOOD|off] [--tone clean|playful|cinematic|app-store] [--no-voice] [--plan free|pro] [--force] [--edit storyboard.json]",
+      "usage: pnpm pipeline run <url-or-crawl-fixture.json> [--out DIR] [--formats 16:9,9:16,1:1] [--music MOOD|off] [--tone clean|playful|cinematic|app-store] [--type launch|walkthrough|feature|teaser] [--length SEC] [--media DIR] [--no-voice] [--plan free|pro] [--force] [--edit storyboard.json]",
     );
     process.exit(2);
   }
@@ -123,18 +125,35 @@ async function main() {
   await fsp.mkdir(outDir, { recursive: true });
 
   const formats = (flag(rest, "formats") ?? "16:9,9:16,1:1").split(",") as AspectFormat[];
-  const music = flag(rest, "music") ?? "upbeat";
-  const options = JobOptions.parse({
+  const music = flag(rest, "music") ?? "auto";
+  const toneArg = flag(rest, "tone") ?? "auto";
+  let options = JobOptions.parse({
     formats,
-    lengthSec: 20,
-    tone: flag(rest, "tone") ?? "clean",
+    lengthSec: Number(flag(rest, "length") ?? 20),
+    videoType: flag(rest, "type") ?? "launch",
+    tone: toneArg === "auto" ? "clean" : toneArg,
+    ...(toneArg === "auto" ? { toneAuto: true } : {}),
     voiceLanguage: "en",
     voiceId: "default",
     noVoiceover: rest.includes("--no-voice"),
     musicOn: music !== "off",
-    musicMood: music === "off" ? "upbeat" : music,
+    musicMood: music === "off" ? "auto" : music,
     reviewBeforeRender: false,
+    ...(flag(rest, "fps") === "60" ? { fps: 60 } : {}),
   });
+  // --media DIR: every image in the folder (name order) becomes an upload; the file name is its caption.
+  const mediaDir = flag(rest, "media");
+  const mediaFiles = mediaDir
+    ? fs
+        .readdirSync(path.resolve(cwd, mediaDir))
+        .filter((f) => /\.(png|jpe?g|webp)$/i.test(f))
+        .sort()
+    : [];
+  const media: JobMedia[] = mediaFiles.map((f, i) => ({
+    key: `${userUploadPrefix("local")}${String(i + 1).padStart(2, "0")}${path.extname(f).toLowerCase()}`,
+    role: "screen",
+    caption: path.basename(f, path.extname(f)).replace(/^\d+[-_ ]*/, "").replace(/[-_]+/g, " ").trim() || undefined,
+  }));
   const plan = (flag(rest, "plan") ?? "free") as "free" | "creator" | "pro";
   const force = rest.includes("--force");
   const editArg = flag(rest, "edit");
@@ -152,10 +171,14 @@ async function main() {
   };
 
   const storage = createLocalStorageClient(storageDir);
+  for (const [i, file] of mediaFiles.entries()) {
+    const type = /\.png$/i.test(file) ? "image/png" : /\.webp$/i.test(file) ? "image/webp" : "image/jpeg";
+    await storage.putObject("assets", media[i]!.key, await fsp.readFile(path.join(path.resolve(cwd, mediaDir!), file)), type);
+  }
   const env = { STORAGE_DRIVER: "local" as const, STORAGE_LOCAL_DIR: storageDir };
   const { primary: gemini, escalation: anthropic } = selectLlmProviders(process.env as LlmEnv);
   if (gemini) console.log(`  LLM: ${gemini.id}${anthropic ? ` (escalation: ${anthropic.id})` : ""}`);
-  const tts = process.env.GEMINI_API_KEY ? createGeminiTtsProvider({ apiKey: process.env.GEMINI_API_KEY, model: process.env.GEMINI_TTS_MODEL || undefined }) : null;
+  const tts = selectTtsProvider(process.env);
   const sidecar = getAudioSidecarFromEnv((m) => console.warn(`  [sidecar] ${m}`));
   const jobId = cache.jobId;
   const timings: Record<string, number> = {};
@@ -174,7 +197,7 @@ async function main() {
   const started = Date.now();
 
   // 1. Crawl (or load fixture)
-  const crawl = await t("crawl", async () => {
+  const crawlOnly = await t("crawl", async () => {
     if (fixturePath) {
       const raw = JSON.parse(await fsp.readFile(fixturePath, "utf8")) as Record<string, unknown>;
       const parsed = CrawlOutput.parse({ domain: raw.domain, pages: raw.pages, brand: raw.brand, facts: raw.facts, siteBrief: raw.siteBrief });
@@ -191,8 +214,24 @@ async function main() {
   });
   note("crawl", fixturePath ? "skipped" : "ran", fixturePath ? "saved fixture" : undefined);
 
+  // 1b. The user's own images (--media DIR): filed as extra pages, read by the vision model when there is one.
+  const crawl = await t("media", async () => {
+    if (media.length === 0) return crawlOnly;
+    const r = await ingestUserMedia({ crawlOutput: crawlOnly, jobUrl: isUrl ? target : `https://${crawlOnly.domain}`, media, getObject: (key) => storage.getObject("assets", key), llm: gemini });
+    for (const n of r.notes) process.stdout.write(`\n  upload "${n.title}": ${n.facts} facts (vision ${n.vision})`);
+    process.stdout.write("\n");
+    return r.crawlOutput;
+  });
+
+  const profile = profileSummary(buildSiteProfile(crawl, options.videoType));
+  console.log(`  site look: ${profile.look} -> style "${profile.style.tone}" (${profile.style.reason})`);
+  if (options.toneAuto) options = { ...options, tone: profile.style.tone as typeof options.tone, toneAuto: false };
+  console.log(`  site profile: ${profile.category}${profile.signals.length ? ` (${profile.signals.join(", ")})` : ""} — ${profile.found.join(", ")}`);
+  console.log(`  best-fit scenes: ${profile.fits.map((f) => f.template).join(", ") || "(none stand out)"}`);
+  console.log(`  ruled out: ${profile.ruledOut.map((f) => f.template).join(", ") || "(nothing)"}`);
+
   // 2. Plan — or the edited storyboard (W6 editor save), which replaces it.
-  const planHash = sha16(["plan-v1", crawl, options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, gemini?.id ?? null, anthropic?.id ?? null]);
+  const planHash = sha16(["plan-v3", crawl, options.videoType, options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, gemini?.id ?? null, anthropic?.id ?? null]);
   const plannedPath = path.join(outDir, "storyboard.planned.json");
   let storyboard: Storyboard;
   if (editPath) {
@@ -205,8 +244,14 @@ async function main() {
     storyboard = Storyboard.parse(JSON.parse(await fsp.readFile(plannedPath, "utf8")));
     note("plan", "skipped", "inputs unchanged — reused storyboard.planned.json");
   } else {
-    const planned = await t("plan", () => runPlanStage(crawl, options, { primaryProvider: gemini, escalationProvider: anthropic }));
+    const planned = await t("plan", () => runPlanStage(crawl, options, { primaryProvider: gemini, escalationProvider: anthropic, ...scriptProviders({ primary: gemini, escalation: anthropic }), seed: jobId }));
     storyboard = planned.storyboard;
+    console.log(`  signature scenes: ${planned.featured.join(", ") || "(none)"}${planned.addedScenes.length ? ` — cut in by code: ${planned.addedScenes.join(", ")}` : ""}`);
+    if (planned.script) {
+      await fsp.writeFile(path.join(outDir, "script.json"), JSON.stringify({ ...planned.script, calls: planned.scriptCalls }, null, 2));
+      const c = planned.script.critique;
+      console.log(`  script: ${planned.script.lines.length} lines${planned.script.rewritten ? " (rewritten once)" : ""}${c ? `, editor scores hook ${c.hook} specificity ${c.specificity} arc ${c.arc} spoken ${c.spoken}` : ""}`);
+    }
     await fsp.writeFile(plannedPath, JSON.stringify(storyboard, null, 2));
     cache.plan = { hash: planHash };
     note("plan", "ran");
@@ -229,7 +274,7 @@ async function main() {
   await saveCache();
 
   // 4. Build — skip when storyboard content, audio, brand, music and formats are unchanged.
-  const track = selectMusicTrack(REPO_ROOT, { ...options, seed: flag(rest, "track") ?? jobId });
+  const track = (await ensureGeneratedTrack({ jobId, options, storage, sidecar, log: (m) => console.warn(`  [music] ${m}`) })) ?? selectMusicTrack(REPO_ROOT, { musicOn: options.musicOn, musicMood: resolveMusicMood(options), videoType: options.videoType, trackId: flag(rest, "track-id"), seed: flag(rest, "track") ?? jobId });
   const audioHashes = Object.fromEntries(voice.scenes.map((s) => [s.sceneId, `${sceneHashes.get(s.sceneId)}:${s.audioKey ?? ""}`]));
   const buildHash = buildStageHash({ storyboard, audioHashes, brand: crawl.brand, musicId: track?.id ?? null, formats });
   const manifests = new Map<AspectFormat, FilmManifest>();
@@ -240,7 +285,7 @@ async function main() {
   } else {
     await t("build", async () => {
       for (const f of formats) {
-        const m = buildFilmManifest({ storyboard, crawlOutput: crawl, voiceScenes: voice.scenes, format: f, music: track });
+        const m = buildFilmManifest({ storyboard, crawlOutput: crawl, voiceScenes: voice.scenes, format: f, music: track, fps: options.fps });
         manifests.set(f, m);
         await fsp.writeFile(path.join(outDir, `manifest-${formatSlug(f)}.json`), JSON.stringify(m, null, 2));
       }
@@ -263,7 +308,7 @@ async function main() {
     const mix = await t("mix", async () => {
       if (!voice.scenes.some((v) => v.audioKey) && !track) return null;
       const narration = await assembleNarrationTrack({ manifest: baseManifest, voiceScenes: voice.scenes, storage, repoRoot: REPO_ROOT, sfx: Boolean(track) });
-      return mixFinalAudio({ narration, music: track, durationSec: baseManifest.duration, sidecar, repoRoot: REPO_ROOT });
+      return mixFinalAudio({ narration, music: track, durationSec: baseManifest.duration, sidecar, repoRoot: REPO_ROOT, musicOffsetSec: baseManifest.musicOffsetSec });
     });
     if (mix) {
       await fsp.writeFile(audioPath, mix.audio);
@@ -298,7 +343,7 @@ async function main() {
         Promise.all(
           qaTodo.map(async (format) => {
             const { resolved, manifestUrl } = await publishManifest({ manifest: manifests.get(format)!, storage, env, serverUrl: server.url, key: `jobs/${jobId}/qa/manifest-${formatSlug(format)}.json` });
-            const llm = gemini ?? anthropic;
+            const llm = anthropic?.supportsImages ? anthropic : (gemini ?? anthropic);
             return runQaStage({
               manifest: resolved,
               filmHost: server.url,
@@ -390,7 +435,7 @@ async function main() {
     durationSec: baseManifest.duration,
     beatLocked: Boolean(track),
     music: track?.id ?? null,
-    voice: { providerIds: [...new Set(voice.scenes.map((s) => s.provider))], cacheHits: voice.cacheHits, aligned: voice.aligned, synthesized: voice.synthesized, reused: voice.reused },
+    voice: { oneTake: voice.oneTake, providerIds: [...new Set(voice.scenes.map((s) => s.provider))], cacheHits: voice.cacheHits, aligned: voice.aligned, synthesized: voice.synthesized, reused: voice.reused },
     audio: mixInfo,
     stageReuse: reuseLog,
     timingsMs: timings,

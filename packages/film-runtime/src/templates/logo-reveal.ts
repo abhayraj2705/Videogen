@@ -32,7 +32,7 @@ export function createLogoReveal(): SceneTemplate<LogoRevealProps> {
       const u = L.u;
       sceneRoot(root, L, { gap: `${L.pick({ landscape: 44, portrait: 64, square: 40 }) * u}px`, fontFamily: ctx.fonts.display });
 
-      const size = L.pick({ landscape: 250, portrait: 340, square: 260 }) * u;
+      const size = L.pick({ landscape: 420, portrait: 460, square: 380 }) * u;
       const holder = el("div", "lr-logo");
       setStyle(holder, { position: "relative", width: `${size}px`, height: `${size}px`, flexShrink: "0" });
 
@@ -52,7 +52,7 @@ export function createLogoReveal(): SceneTemplate<LogoRevealProps> {
       const wordmark = textBlock(props.productName, {
         className: "lr-wordmark",
         width: L.safe.width,
-        maxSize: L.pick({ landscape: 76, portrait: 92, square: 72 }) * u,
+        maxSize: L.pick({ landscape: 150, portrait: 140, square: 120 }) * u,
         minSize: 24 * u,
         maxLines: 2,
         color: ctx.palette.fg,

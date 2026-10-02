@@ -32,6 +32,11 @@ export interface StylePack {
   transitions: TransitionKind[];
   /** Slow push on every scene, as a fraction of scale across the scene. 0 = locked-off. */
   camera: number;
+  /**
+   * Film grain over the finished picture, 0-1. Off in every bundled pack: measured on a 13s film, 0.05 of grain
+   * doubled the file (5.5 MB -> 10.9 MB) because noise defeats the video encoder. Turn it on only where size is no concern.
+   */
+  grain: number;
 }
 
 const CLEAN: StylePack = {
@@ -43,6 +48,7 @@ const CLEAN: StylePack = {
   backdrop: { glow: 1, grid: true, vignette: 0 },
   transitions: ["push", "zoom", "wipe", "slide-up"],
   camera: 0.025,
+  grain: 0,
 };
 
 export const STYLE_PACKS: Record<string, StylePack> = {
@@ -56,6 +62,7 @@ export const STYLE_PACKS: Record<string, StylePack> = {
     backdrop: { glow: 1.7, grid: false, vignette: 0 },
     transitions: ["whip", "zoom", "push", "slide-up"],
     camera: 0.035,
+    grain: 0,
   },
   cinematic: {
     id: "cinematic",
@@ -66,6 +73,7 @@ export const STYLE_PACKS: Record<string, StylePack> = {
     backdrop: { glow: 1.3, grid: false, vignette: 0.55 },
     transitions: ["fade", "zoom", "cut", "fade"],
     camera: 0.05,
+    grain: 0,
   },
   "app-store": {
     id: "app-store",
@@ -76,6 +84,7 @@ export const STYLE_PACKS: Record<string, StylePack> = {
     backdrop: { glow: 0.8, grid: true, vignette: 0 },
     transitions: ["cut", "push", "wipe", "zoom"],
     camera: 0.02,
+    grain: 0,
   },
 };
 
@@ -98,4 +107,5 @@ export const TRANSITION_DURATION: Record<TransitionKind, number> = {
   "slide-left": 0.4,
   "slide-up": 0.4,
   fade: 0.5,
+  match: 0.6,
 };

@@ -103,8 +103,12 @@ export function createGeminiTtsProvider(opts: GeminiTtsOptions): TtsProvider {
   return {
     // The first model names the provider (and its cache entries); the others are stand-ins for the same voices.
     id: `gemini-tts:${models[0]}`,
-    async synthesize({ text, voiceId, language }: SynthesizeOptions): Promise<TtsResult> {
+    async synthesize({ text: line, voiceId, language, paragraphs }: SynthesizeOptions): Promise<TtsResult> {
       const voiceName = VOICE_MAP[voiceId] ?? VOICE_MAP.default!;
+      // A whole voiceover is read as one take: the direction before the colon is followed, not spoken.
+      const text = paragraphs
+        ? `Read this voiceover as one continuous take for a product film: natural, confident and brisk, with a short clear pause between paragraphs:\n\n${paragraphs.join("\n\n")}`
+        : line;
       const body = JSON.stringify({
         // Gemini TTS infers language from the text itself; the hint keeps
         // Hindi lines (often written in romanized Hinglish) from being read
@@ -153,7 +157,7 @@ export function createGeminiTtsProvider(opts: GeminiTtsOptions): TtsProvider {
         audio: wav,
         contentType: "audio/wav",
         durationSec,
-        words: estimateWordTimings(text, durationSec),
+        words: estimateWordTimings(paragraphs ? paragraphs.join(" ") : text, durationSec),
         wordsSource: "estimate",
         costUsd: (text.length / 1000) * USD_PER_1K_CHARS,
       };

@@ -6,7 +6,7 @@ import { Redis as IORedis } from "ioredis";
 import { pino } from "pino";
 import { createDb } from "@sitereel/db";
 import { createStorageClientFromEnv } from "@sitereel/storage";
-import { createGeminiTtsProvider, type TtsProvider } from "@sitereel/tts";
+import type { TtsProvider } from "@sitereel/tts";
 import { MAINTENANCE_QUEUE_NAME, QUEUE_NAMES, jobEventStreamKey, loadServerEnv, type JobEvent } from "@sitereel/shared";
 import { createCrawlProcessor } from "./processors/crawl-processor.js";
 import { createPlanProcessor } from "./processors/plan-processor.js";
@@ -19,7 +19,7 @@ import { createAccountDeleteProcessor } from "./processors/account-delete-proces
 import { createMaintenanceProcessor, scheduleMaintenance } from "./processors/maintenance-processor.js";
 import { getVirusScannerFromEnv } from "./lib/virus-scan.js";
 import { guardProcessor } from "./lib/job-lifecycle.js";
-import { selectLlmProviders } from "./lib/llm-providers.js";
+import { selectLlmProviders, selectTtsProvider } from "./lib/llm-providers.js";
 import { PHASE6_QUEUE_NAMES } from "./lib/phase6-contracts.js";
 import type { WorkerDeps } from "./processors/types.js";
 
@@ -43,7 +43,7 @@ if (!primaryProvider) {
 } else {
   logger.info({ provider: primaryProvider.id, escalation: escalationProvider?.id ?? null }, "primary LLM provider");
 }
-const ttsProvider: TtsProvider | null = env.GEMINI_API_KEY ? createGeminiTtsProvider({ apiKey: env.GEMINI_API_KEY, model: process.env.GEMINI_TTS_MODEL || undefined }) : null;
+const ttsProvider: TtsProvider | null = selectTtsProvider({ ...process.env, GEMINI_API_KEY: env.GEMINI_API_KEY });
 if (!ttsProvider) {
   logger.warn("GEMINI_API_KEY not set — voice lines will synthesize as silence with estimated word timings");
 }

@@ -1,7 +1,9 @@
 import type { Job as BullJob } from "bullmq";
 import { eq } from "drizzle-orm";
 import { jobs, crawls } from "@sitereel/db";
-import { QUEUE_NAMES, type CrawlOutput } from "@sitereel/shared";
+import { QUEUE_NAMES, userUploadPrefix, type CrawlOutput } from "@sitereel/shared";
+import { ingestUserMedia } from "../lib/media-intake.js";
+import { buildSiteProfile, profileSummary } from "../lib/site-profile.js";
 import { runCrawlStage } from "../stages/crawl.js";
 import { chainJobId } from "./voice-processor.js";
 import type { WorkerDeps } from "./types.js";
@@ -37,6 +39,7 @@ export function createCrawlProcessor(deps: WorkerDeps) {
     const { jobId, url, manual } = CrawlJobDataP6.parse(job.data);
     const log = deps.logger.child({ jobId, stage: "crawl", manual: !!manual });
     const inputsHash = sha16(manual ? ["crawl-manual-v1", url, manual] : url);
+    // (User media is read from the job row below; a job's media never changes after creation.)
 
     await setJobStatus(deps, jobId, "crawling");
     await deps.publish({ jobId, stage: "crawl", status: "crawling", pct: 5, message: manual ? "Reading your uploads" : "Starting crawl", at: new Date().toISOString() });
@@ -90,6 +93,22 @@ export function createCrawlProcessor(deps: WorkerDeps) {
       costUsd = result.costUsd;
     }
 
+    // The user's own screenshots (create form): scanned like any upload, then filed as pages + facts.
+    const prefix = userUploadPrefix(jobRow.userId);
+    let media = (jobRow.options.media ?? []).filter((m) => m.key.startsWith(prefix) && !m.key.includes(".."));
+    if (media.length > 0) {
+      if (deps.virusScanner) {
+        const scanned = await filterCleanUploads(media.map((m) => m.key), (key) => deps.storage.getObject("assets", key), deps.virusScanner);
+        if (scanned.infected.length > 0) log.warn({ infected: scanned.infected }, "infected media uploads dropped");
+        media = media.filter((m) => scanned.clean.includes(m.key));
+      }
+      await deps.publish({ jobId, stage: "crawl", status: "crawling", pct: 90, message: "Reading your uploads", at: new Date().toISOString() });
+      const intake = await ingestUserMedia({ crawlOutput, jobUrl: url, media, getObject: (key) => deps.storage.getObject("assets", key), llm: deps.llm.primary });
+      crawlOutput = intake.crawlOutput;
+      costUsd += intake.costUsd;
+      log.info({ uploads: intake.notes }, "user media ingested");
+    }
+
     await assertNotCancelled(deps, jobId);
     await finishStageRun(deps.db, runId, {
       status: "ok",
@@ -132,7 +151,16 @@ export function createCrawlProcessor(deps: WorkerDeps) {
       status: "extracting",
       pct: 100,
       message: `Found ${crawlOutput.facts.length} facts across ${crawlOutput.pages.length} page(s)`,
-      payload: { factCount: crawlOutput.facts.length, briefSource: crawlOutput.siteBrief.source, manual: !!manual, ...(brandKitId ? { brandKitId } : {}) },
+      payload: {
+        factCount: crawlOutput.facts.length,
+        briefSource: crawlOutput.siteBrief.source,
+        manual: !!manual,
+        ...(brandKitId ? { brandKitId } : {}),
+        // What the app shows under "Understanding it": the kind of site, what was found, and which scenes fit.
+        profile: profileSummary(buildSiteProfile(crawlOutput, jobRow.options.videoType)),
+        productName: crawlOutput.siteBrief.productName,
+        summary: crawlOutput.siteBrief.summary,
+      },
       at: new Date().toISOString(),
     });
   };

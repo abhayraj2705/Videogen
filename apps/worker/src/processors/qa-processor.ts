@@ -35,7 +35,7 @@ export function createQaProcessor(deps: WorkerDeps) {
     const slug = formatSlug(format);
 
     const inputs = await loadBuildInputs(deps, jobId, { storyboardVersion: data.storyboardVersion });
-    const manifest = buildFilmManifest({ storyboard: inputs.storyboard, crawlOutput: inputs.crawlOutput, voiceScenes: inputs.voiceScenes, format, music: inputs.music });
+    const manifest = buildFilmManifest({ storyboard: inputs.storyboard, crawlOutput: inputs.crawlOutput, voiceScenes: inputs.voiceScenes, format, music: inputs.music, fps: inputs.jobOptions.fps });
     const inputsHash = qaStageHash(manifestHash(manifest), format);
     const prior = await listPriorStageRuns(deps.db, jobId, "qa", `${format}:`);
 
@@ -56,7 +56,9 @@ export function createQaProcessor(deps: WorkerDeps) {
 
     try {
       const { resolved, manifestUrl } = await publishManifest({ manifest, storage: deps.storage, env: deps.env, serverUrl: server.url, key: `jobs/${jobId}/qa/manifest-${slug}.json` });
-      const vision = deps.llm.primary ? createLlmVisionReviewer(deps.llm.primary) : deps.llm.escalation ? createLlmVisionReviewer(deps.llm.escalation) : skippedVisionReviewer;
+      // The stronger model reviews when it can see images: a lenient reviewer passes everything.
+      const reviewer = deps.llm.escalation?.supportsImages ? deps.llm.escalation : (deps.llm.primary ?? deps.llm.escalation);
+      const vision = reviewer ? createLlmVisionReviewer(reviewer) : skippedVisionReviewer;
 
       const { report, contactSheet } = await runQaStage({ manifest: resolved, filmHost: server.url, manifestUrl, storyboard: inputs.storyboard, facts: inputs.crawlOutput.facts, vision, secondary: format !== inputs.jobOptions.formats[0] });
 

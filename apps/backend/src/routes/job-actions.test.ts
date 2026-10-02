@@ -186,3 +186,26 @@ describe("cancel", () => {
     expect(again.statusCode).toBe(409);
   });
 });
+
+describe("uploads for a video being created", () => {
+  const file = { name: "dashboard.png", type: "image/png", size: 1000 };
+
+  it("presigns under the caller's own prefix", async () => {
+    const user = await seedUser(db);
+    const res = await build().app.inject({ method: "POST", url: "/api/uploads/presign", headers: { "x-test-user": user.id }, payload: { files: [file, { ...file, name: "b.webp", type: "image/webp" }] } });
+    expect(res.statusCode).toBe(200);
+    const { uploads } = res.json();
+    expect(uploads).toHaveLength(2);
+    expect(uploads[0].key).toMatch(new RegExp(`^users/${user.id}/uploads/[A-Za-z0-9_-]+\\.png$`));
+    expect(uploads[1].key).toMatch(/\.webp$/);
+  });
+
+  it("rejects SVG (screenshots and photos only) and unauthenticated callers", async () => {
+    const user = await seedUser(db);
+    const svg = await build().app.inject({ method: "POST", url: "/api/uploads/presign", headers: { "x-test-user": user.id }, payload: { files: [{ ...file, type: "image/svg+xml" }] } });
+    expect(svg.statusCode).toBe(400);
+    expect(svg.json().error).toBe("unsupported_type");
+    const anon = await build().app.inject({ method: "POST", url: "/api/uploads/presign", payload: { files: [file] } });
+    expect(anon.statusCode).toBe(401);
+  });
+});

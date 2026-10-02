@@ -6,6 +6,7 @@ import { FileText, ImageIcon, Mic, ShieldCheck, Film } from "lucide-react";
 import type { JobEvent, JobStatus } from "@sitereel/shared";
 import { withAuthToken } from "@/lib/api/client";
 import { Progress } from "@/components/ui/progress";
+import { templateLabel } from "@/lib/editor/templates";
 
 // ---- payload readers (events carry loose `payload: Record<string, unknown>`) ----
 
@@ -35,6 +36,40 @@ interface SceneSummary {
   title: string;
   text?: string;
   durationMs?: number;
+  /** The template the scene uses, and why that template was open to this site. */
+  template?: string;
+  why?: string;
+}
+
+/** What the worker understood about the site (extract event payload.profile; see the worker's site-profile.ts). */
+interface SiteProfileSummary {
+  category: string;
+  found: string[];
+  fits: { template: string; reason: string }[];
+  ruledOut: { template: string; reason: string }[];
+}
+
+function profileFrom(events: JobEvent[]): SiteProfileSummary | null {
+  for (let i = events.length - 1; i >= 0; i--) {
+    const p = events[i]?.payload?.profile;
+    if (!p || typeof p !== "object") continue;
+    const r = p as Record<string, unknown>;
+    const pairs = (v: unknown) =>
+      Array.isArray(v)
+        ? v.flatMap((x) => {
+            const o = x as Record<string, unknown> | null;
+            const template = asString(o?.template);
+            return template ? [{ template, reason: asString(o?.reason) ?? "" }] : [];
+          })
+        : [];
+    return {
+      category: asString(r.category) ?? "website",
+      found: Array.isArray(r.found) ? r.found.flatMap((x) => (typeof x === "string" ? [x] : [])) : [],
+      fits: pairs(r.fits),
+      ruledOut: pairs(r.ruledOut),
+    };
+  }
+  return null;
 }
 
 /** Scene list from plan events: payload.scenes: {title|kind|template, narration|text, durationMs}[]. */
@@ -50,6 +85,8 @@ function scenesFrom(events: JobEvent[]): SceneSummary[] {
           title: asString(r.title) ?? asString(r.kind) ?? asString(r.template) ?? `Scene ${idx + 1}`,
           text: asString(r.narration) ?? asString(r.text) ?? asString(r.headline),
           durationMs: typeof r.durationMs === "number" ? r.durationMs : undefined,
+          template: asString(r.template),
+          why: asString(r.why),
         },
       ];
     });
@@ -118,6 +155,91 @@ function Placeholder({ icon: Icon, text }: { icon: typeof FileText; text: string
 }
 
 /**
+ * What the crawl taught us, in the open: the kind of site, the material
+ * found, the scene types that fit it and the ones ruled out — each with its
+ * reason. This is the template selection the planner was given, not a summary
+ * written afterwards.
+ */
+function SiteProfilePanel({ profile, compact }: { profile: SiteProfileSummary; compact?: boolean }) {
+  return (
+    <div className="flex flex-col gap-3 rounded-md border border-border bg-background/40 p-3 text-sm">
+      <p>
+        <span className="text-muted-foreground">Looks like a </span>
+        <span className="font-medium">{profile.category}</span>
+        <span className="text-muted-foreground">.</span>
+      </p>
+      {profile.found.length > 0 && (
+        <ul className="flex flex-wrap gap-1.5" aria-label="What we found on the site">
+          {profile.found.map((f) => (
+            <li key={f} className="rounded-full bg-secondary px-2 py-0.5 text-xs text-muted-foreground">
+              {f}
+            </li>
+          ))}
+        </ul>
+      )}
+      {!compact && profile.fits.length > 0 && (
+        <div className="flex flex-col gap-1">
+          <p className="text-xs font-medium text-muted-foreground">Scenes that fit this site</p>
+          <ul className="flex flex-col gap-1">
+            {profile.fits.map((f) => (
+              <li key={f.template} className="flex items-baseline gap-2 text-xs">
+                <span className="shrink-0 font-medium">{templateLabel(f.template)}</span>
+                <span className="text-muted-foreground">{f.reason}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {!compact && profile.ruledOut.length > 0 && (
+        <details className="text-xs text-muted-foreground">
+          <summary className="cursor-pointer">
+            {profile.ruledOut.length} scene {profile.ruledOut.length === 1 ? "type" : "types"} ruled out
+          </summary>
+          <ul className="mt-1 flex flex-col gap-1">
+            {profile.ruledOut.map((f) => (
+              <li key={f.template}>
+                <span className="font-medium">{templateLabel(f.template)}</span> — {f.reason}
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </div>
+  );
+}
+
+/** A job normally leaves the queue within a few seconds; past this, say so instead of spinning silently. */
+const QUEUED_TOO_LONG_SEC = 30;
+
+/**
+ * The queued state. A job that stays queued is almost never slow — nothing is
+ * picking it up — so after a short wait this says that plainly (and, in
+ * development, how to start the worker).
+ */
+function QueuedNotice() {
+  const [waitedSec, setWaitedSec] = useState(0);
+  useEffect(() => {
+    const started = Date.now();
+    const timer = setInterval(() => setWaitedSec(Math.round((Date.now() - started) / 1000)), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  if (waitedSec < QUEUED_TOO_LONG_SEC) return <Placeholder icon={FileText} text="Waiting for a free worker…" />;
+  return (
+    <div className="flex min-h-48 flex-col items-center justify-center gap-2 text-center text-sm text-muted-foreground" role="status">
+      <FileText className="size-6" aria-hidden />
+      <p className="font-medium text-foreground">Still in the queue after {waitedSec}s</p>
+      <p className="max-w-sm">Videos normally start within a few seconds. Nothing has picked this one up, which usually means the video worker isn&apos;t running. It will start as soon as one is.</p>
+      {process.env.NODE_ENV === "development" && (
+        <p className="font-mono text-xs">
+          Start it with <span className="rounded bg-secondary px-1.5 py-0.5">pnpm dev:worker</span> (or <span className="rounded bg-secondary px-1.5 py-0.5">pnpm dev</span> for everything).
+        </p>
+      )}
+    </div>
+  );
+}
+
+/**
  * §3.6 W5 live view: changes per stage — screenshots (crawl) → fact count
  * (extract) → scene list (plan/review) → voice → build → QA → render frame
  * counter. Every panel degrades to a calm placeholder when the event payload
@@ -127,12 +249,13 @@ export function LiveView({ status, events }: { status: JobStatus; events: JobEve
   const reduceMotion = useReducedMotion();
   const screenshots = useMemo(() => screenshotsFrom(events), [events]);
   const scenes = useMemo(() => scenesFrom(events), [events]);
+  const profile = useMemo(() => profileFrom(events), [events]);
   const factCount = numberFrom(events, "factCount");
   const render = renderProgress(events);
 
   let body: React.ReactNode;
   if (status === "queued") {
-    body = <Placeholder icon={FileText} text="Waiting for a free worker…" />;
+    body = <QueuedNotice />;
   } else if (status === "crawling" || status === "extracting") {
     body =
       screenshots.length > 0 ? (
@@ -151,6 +274,11 @@ export function LiveView({ status, events }: { status: JobStatus; events: JobEve
     body =
       scenes.length > 0 ? (
         <ol className="flex flex-col gap-2">
+          {profile && (
+            <li className="list-none">
+              <SiteProfilePanel profile={profile} compact />
+            </li>
+          )}
           <AnimatePresence initial={false}>
             {scenes.map((s, i) => (
               <motion.li
@@ -164,6 +292,12 @@ export function LiveView({ status, events }: { status: JobStatus; events: JobEve
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium">{s.title}</p>
                   {s.text && <p className="text-xs text-muted-foreground">&ldquo;{s.text}&rdquo;</p>}
+                  {s.template && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      <span className="rounded bg-secondary px-1.5 py-0.5 font-medium text-foreground">{templateLabel(s.template)}</span>
+                      {s.why && <span> {s.why}</span>}
+                    </p>
+                  )}
                 </div>
                 {s.durationMs !== undefined && (
                   <span className="shrink-0 font-mono text-xs text-muted-foreground">{(s.durationMs / 1000).toFixed(1)}s</span>
@@ -173,10 +307,13 @@ export function LiveView({ status, events }: { status: JobStatus; events: JobEve
           </AnimatePresence>
         </ol>
       ) : (
-        <Placeholder
-          icon={FileText}
-          text={status === "review" ? "Your script is ready for review." : `Writing a script from ${factCount ?? "the"} facts we found…`}
-        />
+        <div className="flex flex-col gap-3">
+          {profile && <SiteProfilePanel profile={profile} />}
+          <Placeholder
+            icon={FileText}
+            text={status === "review" ? "Your script is ready for review." : `Writing a script from ${factCount ?? "the"} facts we found…`}
+          />
+        </div>
       );
   } else if (status === "voicing") {
     body = <Placeholder icon={Mic} text="Recording the voiceover, line by line…" />;

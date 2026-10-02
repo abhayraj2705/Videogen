@@ -2,8 +2,8 @@ import type { FilmContext, FilmManifest, FontFaceSpec, Mark, Palette, ResolvedPa
 import { createSceneRng } from "./util/rng.js";
 import { createTemplate } from "./registry.js";
 import { bestContrast, contrastRatio, mixRgb, parseColor, relativeLuminance, rgbString, rgbaString, shiftHue, type Rgb } from "./util/color.js";
-import { clamp01, easeInCubic, easeInOutQuart, easeOutQuint } from "./util/easing.js";
-import { captionBand } from "./util/layout.js";
+import { clamp01, easeInCubic, easeInOutCubic, easeInOutQuart, easeOutQuint } from "./util/easing.js";
+import { captionBand, safeRect } from "./util/layout.js";
 import { createBackdrop } from "./backdrop.js";
 import { createCaptionLayer } from "./captions.js";
 import { resolveTransition, stylePackFor } from "./style.js";
@@ -94,6 +94,42 @@ async function loadFontStylesheets(urls: string[] | undefined): Promise<void> {
   await Promise.race([Promise.all(loads), new Promise((resolve) => setTimeout(resolve, 4000))]);
 }
 
+/**
+ * Replaces an <img> with a canvas holding the same picture, drawn once at its
+ * layout size. A site's logo is often a large file (1080px and up) shown small
+ * and moved by scale transforms; Chromium then draws it from whichever
+ * pre-shrunk copy it last decoded, so the same moment can come out a few
+ * hundred pixels different depending on what was on screen before — which
+ * fails the purity check and puts shimmer in the render. A canvas has one set
+ * of pixels, whatever the history.
+ * `img.dataset.stable` is "<width>x<height>" in film pixels (scenes are hidden
+ * while this runs, so the layout box cannot be measured here).
+ */
+function stabilizeImage(img: HTMLImageElement): HTMLElement {
+  const [w, h] = (img.dataset.stable ?? "").split("x").map(Number);
+  if (!w || !h || img.naturalWidth <= 0) return img;
+  const canvas = document.createElement("canvas");
+  // Twice the layout size: sharp when a scene scales the logo up a little.
+  canvas.width = Math.max(1, Math.round(w * 2));
+  canvas.height = Math.max(1, Math.round(h * 2));
+  const g = canvas.getContext("2d");
+  if (!g) return img;
+  g.imageSmoothingQuality = "high";
+  // object-fit: contain, done by hand.
+  const k = Math.min(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
+  const dw = img.naturalWidth * k;
+  const dh = img.naturalHeight * k;
+  try {
+    g.drawImage(img, (canvas.width - dw) / 2, (canvas.height - dh) / 2, dw, dh);
+  } catch {
+    return img;
+  }
+  canvas.className = img.className;
+  canvas.style.cssText = img.style.cssText;
+  img.replaceWith(canvas);
+  return canvas;
+}
+
 interface CutStyle {
   opacity: number;
   transform: string;
@@ -109,7 +145,47 @@ interface CutStyle {
  * "wipe" keep both at full strength and separate them in space instead;
  * "whip" smears both sideways; "cut" swaps them at the midpoint.
  */
-function cutStyle(kind: TransitionKind, role: "in" | "out", p: number, width: number, height: number, u: number): CutStyle {
+/** A rectangle in film pixels. */
+interface Box {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/**
+ * A match cut between two scenes that each show the product in a window: the
+ * outgoing scene is moved and scaled so its window travels onto the incoming
+ * one's, while the incoming scene starts with its window where the outgoing
+ * one was and settles into its own place. The eye follows one window through
+ * the cut instead of watching one layout replace another.
+ * Scene roots transform about the frame centre, so the move is solved for that origin.
+ */
+function matchStyle(role: "in" | "out", p: number, from: Box, to: Box, width: number, height: number): CutStyle {
+  const e = easeInOutCubic(p);
+  const cx = width / 2;
+  const cy = height / 2;
+  // The window this root draws, and where it should appear at this moment.
+  const own = role === "out" ? from : to;
+  const k = role === "out" ? e : 1 - e;
+  const other = role === "out" ? to : from;
+  const targetW = own.w + (other.w - own.w) * k;
+  const targetCx = own.x + own.w / 2 + (other.x + other.w / 2 - own.x - own.w / 2) * k;
+  const targetCy = own.y + own.h / 2 + (other.y + other.h / 2 - own.y - own.h / 2) * k;
+  const s = targetW / own.w;
+  const tx = targetCx - cx - s * (own.x + own.w / 2 - cx);
+  const ty = targetCy - cy - s * (own.y + own.h / 2 - cy);
+  const opacity = role === "out" ? 1 - clamp01((p - 0.35) / 0.4) : clamp01((p - 0.2) / 0.4);
+  const still = Math.abs(s - 1) < 0.0001 && Math.abs(tx) < 0.01 && Math.abs(ty) < 0.01;
+  return { opacity, transform: still ? "" : `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px) scale(${s.toFixed(5)})` };
+}
+
+function cutStyle(kind: TransitionKind, role: "in" | "out", p: number, width: number, height: number, u: number, match?: { from: Box; to: Box } | null): CutStyle {
+  if (kind === "match") {
+    if (match) return matchStyle(role, p, match.from, match.to, width, height);
+    // Nothing to match on (a scene without a window): it plays as a zoom.
+    kind = "zoom";
+  }
   if (kind === "cut") return { opacity: (role === "in") === p >= 0.5 ? 1 : 0, transform: "" };
   if (kind === "push") {
     const e = easeInOutQuart(p);
@@ -145,6 +221,9 @@ function cutStyle(kind: TransitionKind, role: "in" | "out", p: number, width: nu
   return { opacity, transform: `scale(${(1 + 0.03 * e).toFixed(4)})` };
 }
 
+/** Lowercased letters and digits only: "Revenue." and "revenue" are the same word. */
+const wordKey = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+
 interface MountedScene {
   id: string;
   start: number;
@@ -153,6 +232,10 @@ interface MountedScene {
   root: HTMLElement;
   transitionIn: number;
   transition: TransitionKind;
+  /** The word nodes to stress and when. */
+  emphasis: { nodes: HTMLElement[]; at: number } | null;
+  /** Where the scene's window (browser frame, device screen) rests, in film pixels; null when it has none. */
+  hero: Box | null;
 }
 
 export interface PlayerHandle {
@@ -186,6 +269,8 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
   const burnCaptions = manifest.captionStyle === "burned" && manifest.captions.some((c) => c.burn !== false);
   const insetBottom = burnCaptions ? captionBand(manifest.width, manifest.height).reserve : 0;
 
+  // Held in an object: it is set inside the mount callback, which TypeScript cannot see through for a plain variable.
+  const openingLogo: { rect: { src: string; x: number; y: number; w: number; h: number } | null } = { rect: null };
   const mounted: MountedScene[] = manifest.scenes.map((scene, sceneIndex) => {
     const root = document.createElement("div");
     const template = createTemplate(scene.templateId);
@@ -207,6 +292,9 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
       }
     }
     stage.appendChild(root);
+    const transitionIn = resolveTransition(style, sceneIndex, scene.transition);
+    // Read by browser frames and devices at seek time (util/ui.ts entersMatched): a matched scene skips its own entrance.
+    if (sceneIndex > 0 && transitionIn === "match" && (scene.transitionInSec ?? 0) > 0) root.dataset.matchIn = "1";
 
     const ctx: FilmContext = {
       palette,
@@ -220,6 +308,25 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
       rng: createSceneRng(scene.id),
     };
     template.mount(root, scene.props, ctx);
+    // Where the opening scene puts the logo (measured now, while the scene is laid out and before any entrance moves it):
+    // the brand mark that stays on screen for the rest of the film takes off from here.
+    if (sceneIndex === 0) {
+      const logo = root.querySelector<HTMLImageElement>('[class$="-logo"] img');
+      const frame = stage.getBoundingClientRect();
+      const box = logo?.getBoundingClientRect();
+      // The stage may be shown scaled (the web preview fits it to its panel); measure in film pixels.
+      const k = frame.width > 0 ? manifest.width / frame.width : 1;
+      if (logo && box && box.width > 0) openingLogo.rect = { src: logo.src, x: (box.left - frame.left) * k, y: (box.top - frame.top) * k, w: box.width * k, h: box.height * k };
+    }
+    // The scene's window, measured while it is laid out and before any entrance moves it: match cuts line these up.
+    let hero: Box | null = null;
+    const heroNode = root.querySelector<HTMLElement>("[data-hero]");
+    if (heroNode) {
+      const frame = stage.getBoundingClientRect();
+      const box = heroNode.getBoundingClientRect();
+      const k = frame.width > 0 ? manifest.width / frame.width : 1;
+      if (box.width > 0 && box.height > 0) hero = { x: (box.left - frame.left) * k, y: (box.top - frame.top) * k, w: box.width * k, h: box.height * k };
+    }
     // Remember the display mode the template chose (flex, grid, ...) so
     // showing the scene again restores it instead of falling back to block.
     const shownDisplay = root.style.display;
@@ -229,8 +336,73 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
     root.style.inset = "0";
 
     const transition = resolveTransition(style, sceneIndex, scene.transition);
-    return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0, transition };
+    // Every text block is built from "-word" spans (util/ui.ts textBlock); the ones matching the scene's emphasis words get stressed.
+    const stress = new Set((scene.emphasis?.words ?? []).flatMap((w) => w.split(/\s+/)).map(wordKey).filter(Boolean));
+    const nodes = stress.size > 0 ? Array.from(root.querySelectorAll<HTMLElement>('[class$="-word"]')).filter((n) => stress.has(wordKey(n.textContent ?? ""))) : [];
+    const emphasis = scene.emphasis && nodes.length > 0 ? { nodes, at: scene.emphasis.at } : null;
+    return { id: scene.id, start: scene.start, end: scene.end, template, root, transitionIn: scene.transitionInSec ?? 0, transition, emphasis, hero };
   });
+
+  // Continuity: once the opening scene ends, its logo doesn't vanish — it travels up into the top margin
+  // (outside the title-safe area, so it never sits on a scene's content) and stays there as a small brand
+  // mark until the closing scene, which shows the logo large again. Films of three scenes or more only.
+  let brand: { node: HTMLElement; from: { x: number; y: number; w: number; h: number }; to: { x: number; y: number; w: number; h: number }; t0: number; t1: number; out0: number; out1: number } | null = null;
+  const second = manifest.scenes[1];
+  const closing = manifest.scenes[manifest.scenes.length - 1];
+  const opening = openingLogo.rect;
+  if (opening && second && closing && manifest.scenes.length >= 3) {
+    const safe = safeRect(manifest.width, manifest.height);
+    const h = Math.min(44 * u, safe.top * 0.6);
+    const w = (h * opening.w) / Math.max(1, opening.h);
+    const node = document.createElement("img");
+    node.className = "brand-mark";
+    node.src = opening.src;
+    node.dataset.stable = `${opening.w}x${opening.h}`;
+    Object.assign(node.style, { position: "absolute", left: "0", top: "0", width: `${opening.w}px`, height: `${opening.h}px`, objectFit: "contain", transformOrigin: "0 0", opacity: "0", pointerEvents: "none" });
+    stage.appendChild(node);
+    const lift = Math.max(0.45, second.transitionInSec ?? 0);
+    brand = {
+      node,
+      from: opening,
+      to: { x: manifest.width / 2 - w / 2, y: safe.top / 2 - h / 2, w, h },
+      t0: second.start,
+      t1: second.start + lift,
+      out0: closing.start,
+      out1: closing.start + Math.max(0.25, (closing.transitionInSec ?? 0) / 2),
+    };
+  }
+
+  // Finish: film grain over the whole picture (under the captions). The noise tile is drawn once
+  // from a seeded generator and only shifted per frame, so it is the same on every render.
+  let grain: HTMLElement | null = null;
+  const GRAIN_TILE = 192;
+  if (style.grain > 0) {
+    const tile = document.createElement("canvas");
+    tile.width = tile.height = GRAIN_TILE;
+    const g = tile.getContext("2d");
+    if (g) {
+      const rng = createSceneRng("grain");
+      const px = g.createImageData(GRAIN_TILE, GRAIN_TILE);
+      for (let i = 0; i < px.data.length; i += 4) {
+        const v = Math.floor(rng(`n`) * 256);
+        px.data[i] = px.data[i + 1] = px.data[i + 2] = v;
+        px.data[i + 3] = 255;
+      }
+      g.putImageData(px, 0, 0);
+      grain = document.createElement("div");
+      grain.className = "film-grain";
+      Object.assign(grain.style, {
+        position: "absolute",
+        inset: `-${GRAIN_TILE}px`,
+        backgroundImage: `url(${tile.toDataURL("image/png")})`,
+        backgroundSize: `${GRAIN_TILE * u * 3}px ${GRAIN_TILE * u * 3}px`,
+        opacity: String(style.grain),
+        mixBlendMode: "overlay",
+        pointerEvents: "none",
+      });
+      stage.appendChild(grain);
+    }
+  }
 
   const captionLayer = burnCaptions ? createCaptionLayer(stage, manifest, palette) : null;
 
@@ -249,11 +421,31 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
     ),
   ]);
 
+  // Logos are redrawn at a fixed size now that they have loaded (see stabilizeImage).
+  for (const img of Array.from(stage.querySelectorAll<HTMLImageElement>("img[data-stable]"))) {
+    const drawn = stabilizeImage(img);
+    if (brand && brand.node === img) brand.node = drawn;
+  }
+
   let activeIds = new Set<string>();
 
   function seek(t: number): void {
     backdrop.seek(t);
     captionLayer?.seek(t);
+    if (brand) {
+      const { node, from, to } = brand;
+      const e = easeInOutCubic(clamp01((t - brand.t0) / (brand.t1 - brand.t0)));
+      const x = from.x + (to.x - from.x) * e;
+      const y = from.y + (to.y - from.y) * e;
+      const s = 1 + (to.w / from.w - 1) * e;
+      node.style.opacity = t < brand.t0 ? "0" : String(1 - clamp01((t - brand.out0) / (brand.out1 - brand.out0)));
+      node.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${s.toFixed(4)})`;
+    }
+    if (grain) {
+      // Grain moves every third frame (10 fps): still alive to the eye, far cheaper to encode. Pure in t.
+      const frame = Math.floor(Math.round(t * manifest.fps) / 3);
+      grain.style.transform = `translate(${(frame * 73) % GRAIN_TILE}px, ${(frame * 131) % GRAIN_TILE}px)`;
+    }
     const nextActive = new Set<string>();
     for (const [i, scene] of mounted.entries()) {
       const isActive = t >= scene.start && t < scene.end;
@@ -272,12 +464,15 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
           if (c.clipPath) clipPath = c.clipPath;
           if (c.filter) filter = c.filter;
         };
+        const prev = mounted[i - 1];
         if (scene.transitionIn > 0 && localT < scene.transitionIn) {
-          apply(cutStyle(scene.transition, "in", clamp01(localT / scene.transitionIn), manifest.width, manifest.height, u));
+          const match = prev?.hero && scene.hero ? { from: prev.hero, to: scene.hero } : null;
+          apply(cutStyle(scene.transition, "in", clamp01(localT / scene.transitionIn), manifest.width, manifest.height, u, match));
         }
         const next = mounted[i + 1];
         if (next && next.transitionIn > 0 && t >= next.start) {
-          apply(cutStyle(next.transition, "out", clamp01((t - next.start) / next.transitionIn), manifest.width, manifest.height, u));
+          const match = scene.hero && next.hero ? { from: scene.hero, to: next.hero } : null;
+          apply(cutStyle(next.transition, "out", clamp01((t - next.start) / next.transitionIn), manifest.width, manifest.height, u, match));
         }
         // Camera: a slow push in (odd scenes pull out) across the whole scene. It only ever
         // shrinks the frame — never past 1x — so nothing drifts out of the title-safe area.
@@ -291,6 +486,17 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
         scene.root.style.filter = filter;
         scene.root.style.transform = transforms.length > 0 ? transforms.join(" ") : "none";
         scene.template.seek(localT);
+        if (scene.emphasis) {
+          // After the template has placed its words: the stressed ones take the accent from their moment on, and pop as it hits.
+          const since = localT - scene.emphasis.at;
+          const pulse = since < 0 ? 0 : since < 0.1 ? since / 0.1 : Math.max(0, 1 - (since - 0.1) / 0.4);
+          for (const node of scene.emphasis.nodes) {
+            node.style.color = since >= 0 ? palette.accentText : "";
+            // A lift, not a scale: Chromium picks the resolution it draws scaled text at from what it drew before,
+            // so the same moment could come out differently on a re-seek (a purity failure, and shimmer in the render).
+            if (pulse > 0.001) node.style.transform = `translateY(${(-0.12 * pulse).toFixed(4)}em)`;
+          }
+        }
       } else if (activeIds.has(scene.id) && scene.root.style.display !== "none") {
         scene.root.style.display = "none";
       }

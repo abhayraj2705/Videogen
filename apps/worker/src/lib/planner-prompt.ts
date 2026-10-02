@@ -1,9 +1,14 @@
-import { BANNED_PHRASES, type CrawlOutput, type FactLedgerEntry, type JobOptions } from "@sitereel/shared";
+import { BANNED_PHRASES, CLICHE_PHRASES, FULLPAGE_CAPTURE_DEPTH, type CrawlOutput, type FactLedgerEntry, type JobOptions } from "@sitereel/shared";
+import { ICON_NAMES } from "@sitereel/film-runtime";
+import { recipeFor, targetSceneCount } from "./recipes.js";
+import { buildSiteProfile, categoryLabel, featuredTemplates, type SiteProfile } from "./site-profile.js";
+import type { TemplateId } from "@sitereel/shared";
+import type { FilmScript } from "./script-writer.js";
 
 const TEMPLATE_CATALOG = `- KineticHook: opening hook (2-3s). props: { productName, headline }. Use once, first scene.
 - LogoReveal: short reveal bumper (1-2s), logo only (asset "logo"). props: { productName }. Optional, at most once.
 - HeroRebuild: the reveal — rebuilds the site's hero headline big (2-4s). props: { headline, subheadline }. Optional.
-- FeatureTriplet: three grounded facts as cards that take turns in the spotlight (4-5s). props: { features: [{label, icon?}, {label, icon?}, {label, icon?}] } — exactly 3 entries; icon is one emoji, optional.
+- FeatureTriplet: three grounded facts as cards that take turns in the spotlight (4-5s). props: { features: [{label, icon?}, {label, icon?}, {label, icon?}] } — exactly 3 entries; icon is optional and must be one of these names (pick the one that fits the label): ${ICON_NAMES.join(", ")}.
 - SectionShowcase: the real page in a browser window, with a caption (4-6s). When the scene's first cited fact comes from that same page, the camera zooms to that fact on the page and outlines it — so cite the fact the caption is about first. props: { sourcePageUrl (must be the url of one of the ASSETS of type "screenshot"), caption, section? }. Omit section to scroll the page from the top; set section (1 = top of the page, 2 = one screen down, ...) to hold on that part of the page — use it to show the section the caption is about.
 - UIFlowCursor: the real page in a browser window with a pointer that moves and clicks (4-6s). props: { sourcePageUrl, caption, section? }. Use instead of SectionShowcase when the facts suggest a workflow/UI.
 - StatCounter: one grounded number, counted up big (2-3s). props: { value (the exact number text from a cited "stat" fact, e.g. "10,000+"), label }. Must cite a "stat" fact. Only use if one exists.
@@ -16,6 +21,14 @@ const TEMPLATE_CATALOG = `- KineticHook: opening hook (2-3s). props: { productNa
 - ZoomDetail: a close-up of one element of the page as a big floating card with an outline around it (3-5s). props: { sourcePageUrl, caption }. The close-up is of the scene's first cited fact, so cite the fact the caption is about first, and point sourcePageUrl at the page that fact came from. Use for a specific feature, price or number that is visible on the page.
 - SplitCompare: before and after, side by side — the old way in muted ink, then the product's way in the accent (4-5s). props: { left (the problem or old way, 2-7 words), right (the product's answer, 2-7 words), leftLabel?, rightLabel? } (labels default to "Before" / "After"; 1-2 words each). Both sides must come from cited facts; don't invent a "before".
 - LogoWall: a wall of name chips — customers, integrations or supported platforms (3-4s). props: { title (2-6 words, e.g. the fact's own heading), names: string[] } (3-10 names, 1-3 words each, every one copied from a cited fact). Only use when the ledger actually lists such names.
+- StepByStep: one step of a walkthrough — a big step number and title beside the screen it happens on, with progress dots (4-6s). props: { sourcePageUrl, caption (what the user does or sees, 2-6 words), step (1, 2, 3 ... in order) }. Walkthrough films only; number the steps consecutively.
+- KineticType: one strong line set as a full-frame typographic poster, building row by row (2-3s). props: { text (3-7 words) }. Use for the boldest claim, as a hook alternative or a punchline between product scenes. At most once.
+- Montage: a fast cut through the product's screens, several per second, with a flash on each cut (2-4s). props: { caption (2-6 words) }. Needs at least three screenshot assets. Use for energy: teasers, or "everything in one place".
+- FeatureCallouts: the page with two or three things pointed out on it — labelled outlines appearing one by one on the real elements (4-6s). props: { sourcePageUrl, caption, items: string[] } (2-3 labels, 1-4 words each). items[i] labels the scene's i-th cited fact, so cite one on-page fact per item, in the same order, all from the page shown.
+- MetricsRow: two or three numbers counting up side by side (3-4s). props: { metrics: [{ value, label }] } (value is the exact number text from a cited fact, e.g. "40,000+"; label 1-4 words). Use instead of StatCounter when the ledger has several good numbers.
+- PhotoShowcase: one image filling the whole frame with the caption on a plate over it (3-5s). props: { sourcePageUrl, caption }. Best for an uploaded photo or a striking screen.
+- IsoStack: three parts of a page as layers stacked in 3D, seen at an angle and drifting apart (3-5s). props: { sourcePageUrl, caption }. A showier alternative to ScreenCollage; use one or the other.
+- Composed: a scene you design yourself from blocks, for a moment no other template fits (3-5s). props: { blocks: [...], align?: "center" | "left", panel?: "none" | "card" | "accent" }. 2-5 blocks, top to bottom, each one of: { kind: "eyebrow", text } (a 1-3 word label above), { kind: "headline", text } (the main line, 2-7 words), { kind: "body", text } (one supporting line, up to 8 words), { kind: "pills", items } (2-5 chips, 1-3 words each), { kind: "stat", value, label? } (a figure copied exactly from a cited fact; two or three in a row sit side by side), { kind: "rule" } (an accent line between groups). Must include a headline or a stat. Everything in it comes from cited facts. At most twice per film, and never where a product scene would show the same thing better.
 - CTAEndCard: closing scene (2-4s). props: { productName, ctaText, domain }. Use once, last scene.`;
 
 const KIND_PRIORITY: Record<string, number> = { hero: 0, feature: 1, stat: 2, testimonial: 3, cta: 4, heading: 5, other: 6 };
@@ -47,11 +60,21 @@ export function buildAssetList(crawlOutput: CrawlOutput): string {
   const lines: string[] = [];
   crawlOutput.pages.forEach((p, i) => {
     if (!p.screenshotKey) return;
-    lines.push(`- [screenshot-${i}] type=screenshot url=${p.url} — full screenshot of the ${pageLabel(p.url, i)}`);
+    if (p.origin === "upload") {
+      // One image, not a scrollable page: no sections, and the user chose it — it should be used.
+      lines.push(`- [upload-${i}] type=screenshot url=${p.url} — UPLOADED BY THE USER: ${p.label ?? "product image"}. Use it; facts about it cite this url.`);
+      return;
+    }
+    if (p.origin === "image") {
+      // A picture lifted from the site: one image, so no sections and nothing to scroll.
+      lines.push(`- [image-${i}] type=screenshot url=${p.url} — a picture from the site itself${p.label ? `: "${p.label}"` : ""}. One image, not a page: suits PhotoShowcase, ScreenCollage or Montage, not a scrolling scene.`);
+      return;
+    }
+    lines.push(`- [screenshot-${i}] type=screenshot url=${p.url} — full screenshot of the ${pageLabel(p.url, i)}${p.clip ? " (also recorded while scrolling: the first DeviceMockup of it plays that recording)" : ""}`);
     p.sectionScreenshotKeys?.forEach((_, s) => lines.push(`  - [screenshot-${i}-section-${s}] section ${s + 1} of the ${pageLabel(p.url, i)} (scrolled ${s} viewport(s) down)`));
   });
   if (crawlOutput.brand.logoUrl) lines.push(`- [logo] type=logo — the site's logo (${crawlOutput.brand.logoUrl.startsWith("data:") ? "inline SVG" : crawlOutput.brand.logoUrl})`);
-  return lines.length > 0 ? lines.join("\n") : "- (no screenshots available — do not use SectionShowcase, UIFlowCursor, ScreenCollage, DeviceMockup or ZoomDetail)";
+  return lines.length > 0 ? lines.join("\n") : "- (no screenshots available — do not use SectionShowcase, UIFlowCursor, ScreenCollage, DeviceMockup, ZoomDetail, StepByStep, Montage, FeatureCallouts, PhotoShowcase or IsoStack)";
 }
 
 export function buildBrandBlock(crawlOutput: CrawlOutput): string {
@@ -59,9 +82,54 @@ export function buildBrandBlock(crawlOutput: CrawlOutput): string {
   return [`background: ${b.bg}`, `text: ${b.fg}`, `accent: ${b.accent}`, `display font: ${b.fontDisplay}`, `body font: ${b.fontBody}`, `logo: ${b.logoUrl ? "yes" : "none"}`].join("\n");
 }
 
+/** The catalogue without the templates this site has no material for — the planner can't pick what it can't fill. */
+function catalogFor(profile: SiteProfile): string {
+  const unavailable = new Set<string>(profile.templates.filter((t) => t.fit === "unavailable").map((t) => t.id));
+  return TEMPLATE_CATALOG.split("\n")
+    .filter((line) => !unavailable.has(line.slice(2, line.indexOf(":"))))
+    .join("\n");
+}
+
+/** The site profile as the planner reads it: what kind of site, and which templates fit it and why. */
+function profileBlock(profile: SiteProfile, featured: TemplateId[]): string {
+  const fits = profile.templates.filter((t) => t.fit === "strong" && t.id !== "KineticHook" && t.id !== "CTAEndCard");
+  return [
+    `kind of site: ${categoryLabel(profile.category)}${profile.categorySignals.length ? ` (it says: ${profile.categorySignals.join(", ")})` : ""}`,
+    `how the site looks: ${profile.look.summary}. The film should look like it came from the same place.`,
+    ...(featured.length > 0 ? [`THIS film's signature scenes — chosen for this site's look and material; use at least ${Math.min(2, featured.length)} of them in the middle of the film: ${featured.join(", ")}`] : []),
+    "best-fit templates for THIS site (build the middle of the film mainly from these; each is here because the site has the material for it):",
+    ...fits.map((t) => `- ${t.id}: ${t.reason}`),
+  ].join("\n");
+}
+
+/** The approved voiceover as the planner reads it: the storyboard is cut to these lines, it does not rewrite them. */
+function scriptBlock(script: FilmScript): string {
+  return `SCRIPT (the film's voiceover, already written and edited — cut the picture to it)
+audience: ${script.strategy.audience}
+their problem: ${script.strategy.pain}
+the promise: ${script.strategy.promise}
+${script.lines.map((l, i) => `${i + 1}. ${l.factIds.length ? `[${l.factIds.join(", ")}] ` : ""}"${l.line}"`).join("\n")}
+- The scenes follow the script in order. A short line is one scene, with the line as its narration, word for word.
+- To reach the scene count, split the longest lines across TWO consecutive scenes at a natural break (a comma, an "and", the turn of the sentence): each scene's narration is its part of the line, every word kept, none added. Two pictures for one sentence is how an editor keeps a film moving.
+- A scene cites its line's fact ids (shown in brackets) and may add others its on-screen text needs.
+- A scene's on-screen text is a 2-6 word title for its line — the idea, not the sentence. The voice says the line; the screen must not repeat it.
+- Pick each scene's template for what its line is about: a line about something on a page gets a product scene pointed at that page; a number gets StatCounter or MetricsRow; a quote gets QuoteCard.
+- You may leave out one middle line if no template can show it. Never leave out the first or the last.
+`;
+}
+
 /** Appendix C skeleton, filled in with this job's real crawl material. */
-export function buildPlannerPrompt(opts: { crawlOutput: CrawlOutput; options: JobOptions }): { system: string; prompt: string } {
+/**
+ * How many scenes a film cut to a script has: one per line, plus a few lines split in two, up to the
+ * recipe's pace. More scenes than lines is what gives a short film room for more than three kinds of shot.
+ */
+export function scriptedSceneCount(lines: number, recipeScenes: number): number {
+  return Math.max(lines, Math.min(recipeScenes, lines + Math.max(1, Math.round(lines * 0.3))));
+}
+
+export function buildPlannerPrompt(opts: { crawlOutput: CrawlOutput; options: JobOptions; script?: FilmScript | null; seed?: string }): { system: string; prompt: string; featured: TemplateId[] } {
   const { crawlOutput, options } = opts;
+  const script = options.noVoiceover ? null : (opts.script ?? null);
   const { siteBrief, facts, domain } = crawlOutput;
 
   const system =
@@ -71,15 +139,23 @@ export function buildPlannerPrompt(opts: { crawlOutput: CrawlOutput; options: Jo
     "appear verbatim in one of the facts that same scene cites. You may invent framing, hooks and transitions.";
 
   const factList = selectFactsForPrompt(facts)
-    .map((f) => `- [${f.id}] (${f.kind}) ${f.text}`)
+    // "on-page" = we know where this sits on a screenshot, so a close-up can point the camera at it.
+    .map((f) => `- [${f.id}] (${f.kind}${f.rect && f.rect.y + f.rect.h <= FULLPAGE_CAPTURE_DEPTH ? ", on-page" : ""}) ${f.text}`)
     .join("\n");
 
+  const recipe = recipeFor(options.videoType);
+  const profile = buildSiteProfile(crawlOutput, options.videoType);
+  // With a script the film has exactly as many scenes as the script has lines.
+  const sceneCount = script ? scriptedSceneCount(script.lines.length, targetSceneCount(recipe, options.lengthSec)) : targetSceneCount(recipe, options.lengthSec);
+  // Teasers are too short to be told what to include.
+  const featured = recipe.id === "teaser" ? [] : featuredTemplates(profile, opts.seed ?? `${crawlOutput.domain}|${options.tone}`);
+
   const prompt = `RULES
-- Total length: ${options.lengthSec}s; the scenes' durationSec must add up to within 20% of it. Shape: hook (2-3s) -> reveal (2-4s) -> 2-3 highlights -> proof (a stat or quote, if the ledger has one) -> CTA (2-4s).
-- The hook names the viewer's problem or the boldest grounded claim; it is not a greeting and not just the product name.
-- The reveal shows the product itself right after the hook: SectionShowcase/UIFlowCursor on the homepage screenshot, or HeroRebuild/LogoReveal when there is no screenshot.
+- ${recipe.purpose}
+- Total length: ${options.lengthSec}s; the scenes' durationSec must add up to within 20% of it. Shape: ${recipe.shape}.
+${recipe.rules.map((r) => `- ${r}`).join("\n")}
 - Max 8 words in any one on-screen line — that means every headline, caption, label, item, quote and text prop. Count before you write; a 9-word line is rejected. Reading floor: 0.3s per word of on-screen text, per scene (durationSec >= 0.3 x words).
-- Write about one scene per 3 seconds of film (${Math.round(options.lengthSec / 3)} scenes here, never fewer than ${Math.max(4, Math.round(options.lengthSec / 4))}). Each narration line is at most 10 words — it must be speakable in under 3 seconds, or the scene sits frozen while the voice finishes.
+- Write ${sceneCount} scenes (never fewer than ${Math.max(recipe.minScenes, sceneCount - 1)}). ${script ? "The narration is given in SCRIPT below." : "Each narration line is at most 10 words — it must be speakable in under 3 seconds, or the scene sits frozen while the voice finishes."}
 - One idea per scene. Model the viewer: list what they must understand, one read at a time.
 - Narration and on-screen text do different jobs. Narration is one conversational sentence a person would say aloud; on-screen text is the 2-6 word title of that sentence. Never make the narration a read-out of the on-screen text, and never repeat a full sentence in both.
 - Narration flows across scenes like one script: each line picks up from the last. No scene is longer than 6s; split a long thought into two scenes with different templates.
@@ -87,21 +163,31 @@ export function buildPlannerPrompt(opts: { crawlOutput: CrawlOutput; options: Jo
 - Prefer showing the product in use (UIFlowCursor, SectionShowcase) over describing it.
 - Every on-screen line is a complete phrase that reads on its own: never end on a comma or on a word like "and", "to", "of", "with", "on". Shorten by rewriting, not by cutting off.
 - Text animates in word by word, so short punchy lines land best: hook headline 3-7 words, feature labels 2-5 words, captions 3-8 words.
-- Pacing: never use the same template for two scenes in a row; alternate text scenes with product (screenshot) scenes. There are five ways to show the product (SectionShowcase, UIFlowCursor, ScreenCollage, DeviceMockup, ZoomDetail) — use a different one each time.
-- Each scene after the first may set "transition" (how it cuts in): "zoom" for a reveal or a big number, "push" between parallel points, "wipe" into a screenshot scene, "cut" (hard cut, lands on the beat) for a punchy change, "whip" for a fast energetic jump, "fade" for a calm change of topic, "slide-left"/"slide-up" as gentler alternatives. Vary them; leave it out to let the renderer choose from the tone's own set.
+- Pacing: never use the same template for two scenes in a row; alternate text scenes with product (screenshot) scenes. There are many ways to show the product (SectionShowcase, UIFlowCursor, ScreenCollage, IsoStack, DeviceMockup, ZoomDetail, FeatureCallouts, PhotoShowcase, Montage) — use a different one each time.
+- Each scene may set "emphasis": one or two words copied exactly from that scene's on-screen text — the words that carry its point. They light up in the accent colour as the voice says them, so choose words the narration also says.
+- Facts marked "on-page" have a known position on a screenshot. A product scene whose FIRST cited fact is on-page (and from the page it shows) gets a camera move onto that fact; SectionShowcase visits up to three on-page facts in turn. Prefer them for product scenes.
+- Each scene after the first may set "transition" (how it cuts in): "zoom" for a reveal or a big number, "push" between parallel points, "wipe" into a screenshot scene, "cut" (hard cut, lands on the beat) for a punchy change, "whip" for a fast energetic jump, "fade" for a calm change of topic, "slide-left"/"slide-up" as gentler alternatives, "match" between two scenes that both show a page in a window (the window travels from one into the other). Vary them; leave it out to let the renderer choose from the tone's own set.
 - Screenshot scenes scroll the real page inside a browser window — give them at least 4s, and point two screenshot scenes at two different pages when more than one screenshot asset exists.
-- Use only these templates:
-${TEMPLATE_CATALOG}
+- Images marked UPLOADED BY THE USER are what the user most wants shown: give every one of them its own product scene, in the order listed, before reusing a crawled screenshot.
+- Template choice follows the SITE PROFILE below: prefer its best-fit templates, and tell this kind of site the way its kind is best told.
+- Use only these templates (ones this site has no material for have been left out):
+${catalogFor(profile)}
 - Banned phrases (never use, in any form): ${BANNED_PHRASES.map((p) => `"${p}"`).join(", ")}.
+- Stock ad phrases are rejected too — say the specific thing this product does instead of: ${CLICHE_PHRASES.map((p) => `"${p}"`).join(", ")}.
+- When the ledger has a "Logos shown on the site: ..." fact, a LogoWall that cites it and uses those names shows the real logos.
+- LogoWall names are proper names (customers, integrations, platforms) copied exactly as a cited fact writes them. Ordinary words like "developers" or "teams" are not names.
 - Tone: ${options.tone}. Language: ${options.voiceLanguage}.
 ${options.noVoiceover ? "- No voiceover: omit narration, rely on on-screen text and captions only.\n" : ""}
-INPUT
+${script ? scriptBlock(script) : ""}INPUT
 SITE BRIEF
 productName: ${siteBrief.productName}
 summary: ${siteBrief.summary}
 audience: ${siteBrief.audience}
 differentiator: ${siteBrief.differentiator}
 ${siteBrief.strongestClaimFactId ? `strongest claim fact: ${siteBrief.strongestClaimFactId}` : ""}
+
+SITE PROFILE
+${profileBlock(profile, featured)}
 
 FACT LEDGER
 ${factList}
@@ -116,8 +202,8 @@ DOMAIN: ${domain}
 
 OUTPUT
 First fill "rubric" (what, who, differentiator, strongest grounded claim, visual hook, user flow, caption),
-then "scenes" (each: id, templateId, durationSec, narration?, onScreenText[], factIds[], props, transition?), then "shareCaption".
+then "scenes" (each: id, templateId, durationSec, narration?, onScreenText[], factIds[], props, transition?, emphasis?), then "shareCaption".
 Set targetDurationSec=${options.lengthSec}, tone="${options.tone}", language="${options.voiceLanguage}". JSON only.`;
 
-  return { system, prompt };
+  return { system, prompt, featured };
 }

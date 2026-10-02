@@ -29,10 +29,12 @@ import {
   waitForNetworkIdleCapped,
 } from "../lib/page-prep.js";
 import { buildSiteBrief } from "../lib/site-brief.js";
+import { BLANK_INK, captureContentImages, captureLogoStrip, captureTiledPage, looksEmptyState, recordScrollClip } from "../lib/page-capture.js";
+import { nanoid } from "nanoid";
 
 /** §4.6 "Crawl": up to 4 extra same-origin pages, 60 s budget, deviceScaleFactor 2, capped network idle. */
 export const EXTRA_PAGES_LIMIT = 4;
-export const CRAWL_BUDGET_MS = 60_000;
+export const CRAWL_BUDGET_MS = 80_000;
 const NAV_TIMEOUT_MS = 25_000;
 const EXTRA_NAV_TIMEOUT_MS = 12_000;
 const LOAD_CAP_MS = 5_000;
@@ -40,6 +42,9 @@ const NETWORK_IDLE_CAP_MS = 3_000;
 const FONTS_CAP_MS = 3_000;
 const HOME_SECTIONS = 4;
 const EXTRA_SECTIONS = 3;
+/** Below this much of the crawl budget left, full-page shots drop to 1x. */
+const SHARP_CAPTURE_MIN_REMAINING_MS = 30_000;
+/** Keep in step with FULLPAGE_CAPTURE_DEPTH in @sitereel/shared (this height over the 1280px viewport width). */
 const FULLPAGE_MAX_CSS_HEIGHT = 4_000;
 /** Time held back from the browser phase so the plain-fetch fallback can still run inside the overall budget. */
 const PLAIN_FETCH_RESERVE_MS = 8_000;
@@ -47,6 +52,10 @@ const PLAIN_FETCH_RESERVE_MS = 8_000;
 const EXTRA_PAGE_MIN_REMAINING_MS = 14_000;
 const PLAIN_FETCH_MAX_BYTES = 3 * 1024 * 1024;
 const SITE_BRIEF_TIMEOUT_MS = 15_000;
+/** The scroll recording and the logo / image captures are extras: each only starts with this much of the budget left. */
+const CLIP_MIN_REMAINING_MS = 34_000;
+const ASSETS_MIN_REMAINING_MS = PLAIN_FETCH_RESERVE_MS + 7_000;
+const MAX_SITE_IMAGES = 4;
 
 /** Below these, a page is an empty SPA shell / interstitial, not usable crawl material. */
 export const MIN_VISIBLE_WORDS = 40;
@@ -109,6 +118,8 @@ export function isSufficient(facts: FactLedger, words: number): boolean {
 interface BrowserState {
   browser?: Browser;
   pages: CrawledPage[];
+  /** Pictures lifted from the site's content, filed as single-image pages. */
+  images: CrawledPage[];
   facts: FactLedger[];
   brand?: BrandTokens;
   words: number;
@@ -116,16 +127,44 @@ interface BrowserState {
 
 async function capturePage(
   page: Page,
+  helper: Page | null,
   jobId: string,
   label: string,
   maxSections: number,
   storage: StorageClient,
   budget: Budget,
   entry: CrawledPage,
-): Promise<void> {
+): Promise<{ colorfulness?: number }> {
   // Fills `entry` in place as each capture lands, so a budget cut-off keeps whatever finished.
   const fullKey = screenshotKey(jobId, label);
-  const full = await captureCappedFullPage(page, FULLPAGE_MAX_CSS_HEIGHT, process.env.SITEREEL_FULLPAGE_SCALE === "css" ? "css" : "device");
+  // The 2x capture keeps close-ups sharp but costs seconds to encode. When the crawl is already short on
+  // time (a slow site or a busy machine), a soft close-up beats losing the screenshots altogether.
+  const sharp = process.env.SITEREEL_FULLPAGE_SCALE !== "css" && budget.remaining() > SHARP_CAPTURE_MIN_REMAINING_MS;
+
+  // Preferred: photograph the page while really scrolled, so content that appears on scroll is in the picture
+  // (see page-capture.ts). The tiles double as the section shots; empty stretches are left out of them.
+  if (helper && process.env.SITEREEL_CAPTURE !== "fullpage") {
+    const tiled = await captureTiledPage(page, helper, { maxHeightCss: FULLPAGE_MAX_CSS_HEIGHT, scale: sharp ? "device" : "css", shouldStop: () => budget.remaining() < PLAIN_FETCH_RESERVE_MS + 3_000 }).catch((err: unknown) => {
+      if (DEBUG) console.error(`[crawl] ${label} tiled capture failed: ${(err as Error).message.split("\n")[0]}`);
+      return null;
+    });
+    if (tiled) {
+      await storage.putObject("assets", fullKey, tiled.full, "image/png");
+      entry.screenshotKey = fullKey;
+      entry.sectionScreenshotKeys = [];
+      const sections = tiled.tiles.filter((t) => t.ink >= BLANK_INK).slice(0, maxSections);
+      for (const [i, tile] of sections.entries()) {
+        const key = screenshotKey(jobId, `${label}-section-${i}`);
+        await storage.putObject("assets", key, tile.png, "image/png");
+        entry.sectionScreenshotKeys.push(key);
+      }
+      const result = { colorfulness: Math.round(tiled.colorfulness * 1000) / 1000 };
+      if (DEBUG) console.error(`[crawl] ${label} tiled capture: ${tiled.tiles.length} tiles (${tiled.tiles.length - tiled.tiles.filter((t) => t.ink >= BLANK_INK).length} empty), ${tiled.heightCss}px, ${tiled.full.byteLength} bytes`);
+      return result;
+    }
+  }
+
+  const full = await captureCappedFullPage(page, FULLPAGE_MAX_CSS_HEIGHT, sharp ? "device" : "css");
   await storage.putObject("assets", fullKey, full, "image/png");
   entry.screenshotKey = fullKey;
   if (DEBUG) console.error(`[crawl] ${label} full-page shot ${full.byteLength} bytes`);
@@ -137,6 +176,7 @@ async function capturePage(
     await storage.putObject("assets", key, shot.png, "image/png");
     entry.sectionScreenshotKeys.push(key);
   }
+  return {};
 }
 
 const DEBUG = !!process.env.SITEREEL_CRAWL_DEBUG;
@@ -173,6 +213,8 @@ async function crawlWithBrowser(jobId: string, targetUrl: string, deps: CrawlSta
   });
   const context = await newHardenedContext(state.browser, pinned.keys());
   const page = await context.newPage();
+  // A blank page used as a canvas for joining captures; without it the crawl falls back to Chromium's own full-page shot.
+  const helper = await context.newPage().catch(() => null);
 
   let response;
   try {
@@ -210,10 +252,35 @@ async function crawlWithBrowser(jobId: string, targetUrl: string, deps: CrawlSta
   const extraUrls = await discoverSameOriginPages(page, page.url() || targetUrl, EXTRA_PAGES_LIMIT).catch(() => []);
   const homeEntry: CrawledPage = { url: targetUrl, screenshotKey: "" };
   state.pages.push(homeEntry);
-  await capturePage(page, jobId, "home", HOME_SECTIONS, deps.storage, budget, homeEntry);
+  const homeShot = await capturePage(page, helper, jobId, "home", HOME_SECTIONS, deps.storage, budget, homeEntry);
+  if (homeShot.colorfulness !== undefined && state.brand) state.brand = { ...state.brand, colorfulness: homeShot.colorfulness };
   mark("home screenshots");
+
+  // The homepage in motion: recorded while really scrolling, so the film can play the site instead of panning a still.
+  if (process.env.SITEREEL_CLIP !== "off" && budget.remaining() > CLIP_MIN_REMAINING_MS) {
+    try {
+      const clip = await recordScrollClip(page);
+      if (clip) {
+        const keyOf = new Map<Buffer, string>();
+        const frameKeys: string[] = [];
+        for (const frame of clip.frames) {
+          let key = keyOf.get(frame);
+          if (!key) {
+            key = `jobs/${jobId}/crawl/clip-home/${String(keyOf.size).padStart(3, "0")}.jpg`;
+            keyOf.set(frame, key);
+            await deps.storage.putObject("assets", key, frame, "image/jpeg");
+          }
+          frameKeys.push(key);
+        }
+        // A page that never changed while scrolling (one short screen) has nothing to play.
+        if (keyOf.size >= 6) homeEntry.clip = { frameKeys, fps: clip.fps, width: clip.width, height: clip.height };
+      }
+    } catch (err) {
+      if (DEBUG) console.error(`[crawl] scroll recording failed: ${(err as Error).message.split("\n")[0]}`);
+    }
+    mark("scroll recording");
+  }
   deps.onProgress?.(40, "Finding more pages");
-  await page.close().catch(() => undefined);
 
   for (const [i, extraUrl] of extraUrls.entries()) {
     if (budget.remaining() < EXTRA_PAGE_MIN_REMAINING_MS + PLAIN_FETCH_RESERVE_MS) break;
@@ -225,9 +292,15 @@ async function crawlWithBrowser(jobId: string, targetUrl: string, deps: CrawlSta
       await waitForNetworkIdleCapped(extraPage, budget.cap(2_500, PLAIN_FETCH_RESERVE_MS));
       await dismissConsentBanner(extraPage, budget.cap(1_500, PLAIN_FETCH_RESERVE_MS));
       await scrollThroughPage(extraPage, budget.cap(3_000, PLAIN_FETCH_RESERVE_MS));
+      // An empty list, a 404 or a login wall is a real page but nothing to put in a product film.
+      const text = await extraPage.evaluate(() => document.body?.innerText ?? "").catch(() => "");
+      if (looksEmptyState(text)) {
+        mark(`extra page ${i + 1} skipped (empty state)`);
+        continue;
+      }
       state.facts.push(await extractFacts(extraPage, extraUrl));
       const entry: CrawledPage = { url: extraUrl, screenshotKey: "" };
-      await capturePage(extraPage, jobId, `page-${i + 1}`, EXTRA_SECTIONS, deps.storage, budget, entry);
+      await capturePage(extraPage, helper, jobId, `page-${i + 1}`, EXTRA_SECTIONS, deps.storage, budget, entry);
       if (entry.screenshotKey) state.pages.push(entry);
       mark(`extra page ${i + 1}`);
     } catch {
@@ -237,12 +310,49 @@ async function crawlWithBrowser(jobId: string, targetUrl: string, deps: CrawlSta
     }
   }
 
+  // Last, with whatever time is left: the logos in the site's customer strip and the large pictures in its content.
+  if (process.env.SITEREEL_SITE_ASSETS !== "off" && budget.remaining() > ASSETS_MIN_REMAINING_MS) {
+    try {
+      const logos = await captureLogoStrip(page);
+      if (logos.length >= 3) {
+        homeEntry.logos = [];
+        for (const [i, logo] of logos.entries()) {
+          const key = `jobs/${jobId}/crawl/logo-${i}.png`;
+          await deps.storage.putObject("assets", key, logo.png, "image/png");
+          homeEntry.logos.push({ name: logo.name, key });
+        }
+        // A fact, so a LogoWall can cite the names like any other claim on the site.
+        state.facts.push([{ id: nanoid(10), kind: "other", text: `Logos shown on the site: ${logos.map((l) => l.name).join(", ")}`, sourceUrl: targetUrl, selector: "logo-strip" }]);
+      }
+      if (budget.remaining() > ASSETS_MIN_REMAINING_MS) {
+        const images = await captureContentImages(page, MAX_SITE_IMAGES);
+        for (const [i, image] of images.entries()) {
+          const key = `jobs/${jobId}/crawl/image-${i}.png`;
+          await deps.storage.putObject("assets", key, image.png, "image/png");
+          state.images.push({ url: siteImageUrl(targetUrl, i), screenshotKey: key, sectionScreenshotKeys: [key], origin: "image", ...(image.name ? { label: image.name } : {}) });
+        }
+      }
+    } catch (err) {
+      if (DEBUG) console.error(`[crawl] site assets failed: ${(err as Error).message.split("\n")[0]}`);
+    }
+    mark("site assets");
+  }
+  await page.close().catch(() => undefined);
+
   return { kind: "ok", material: materialFromState(state)! };
+}
+
+/** A site image is filed as a page of its own, addressed by a fragment of the site's URL (like uploads are). */
+export function siteImageUrl(siteUrl: string, index: number): string {
+  const u = new URL(siteUrl);
+  u.hash = `image-${index + 1}`;
+  return u.toString();
 }
 
 function materialFromState(state: BrowserState): CrawlMaterial | null {
   if (!state.brand || state.pages.length === 0) return null;
-  return { pages: state.pages, brand: state.brand, facts: mergeFacts(state.facts), words: state.words, mode: "browser" };
+  // Site images go last: the pages themselves lead, and code that walks "the next page" never lands on a lone picture first.
+  return { pages: [...state.pages, ...state.images], brand: state.brand, facts: mergeFacts(state.facts), words: state.words, mode: "browser" };
 }
 
 /**
@@ -318,7 +428,7 @@ export async function runCrawlStage(jobId: string, targetUrl: string, deps: Craw
   }
 
   // ---- Phase 1: real browser, raced against the budget ----
-  const state: BrowserState = { pages: [], facts: [], words: 0 };
+  const state: BrowserState = { pages: [], images: [], facts: [], words: 0 };
   let browserResult: PhaseResult;
   let watchdog: NodeJS.Timeout | undefined;
   try {

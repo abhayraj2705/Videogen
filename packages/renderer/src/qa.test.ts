@@ -119,6 +119,67 @@ describe("QA seeded defects", () => {
     }
   }, 180_000);
 
+  it("passes the walkthrough step, type poster, montage and icon cards in all three formats", async () => {
+    const page = `data:image/svg+xml;charset=utf-8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="2400"><rect width="1280" height="2400" fill="#f4f4f8"/><rect x="80" y="160" width="620" height="70" fill="#222"/><rect x="80" y="900" width="1120" height="500" fill="#c9c2ff"/></svg>')}`;
+    for (const [w, h] of [
+      [640, 360],
+      [360, 640],
+      [480, 480],
+    ] as const) {
+      const m = manifestWith(
+        [
+          { id: "type", templateId: "KineticType", props: { text: "Ship your whole roadmap twice as fast" } },
+          { id: "step", templateId: "StepByStep", props: { screenshotUrl: page, caption: "Create your first project", step: 2, total: 4, focus: { x: 0.0625, y: 0.125, w: 0.4844, h: 0.0547 }, pageLabel: "acme.com/app" } },
+          { id: "montage", templateId: "Montage", props: { screenshotUrls: [page, page, page, page], caption: "Everything in one place" } },
+          { id: "cards", templateId: "FeatureTriplet", props: { features: [{ label: "Fast setup", icon: "bolt" }, { label: "Secure by default", icon: "shield" }, { label: "Live reports", icon: "chart" }], cues: [0.3, 0.9, 1.5] } },
+        ],
+        w,
+        h,
+      );
+      // Stress a word in the poster: the emphasis pass must not break determinism or hide the text.
+      m.scenes[0]!.emphasis = { words: ["roadmap"], at: 0.9 };
+      const r = await qa(`r5-${w}x${h}`, m, {
+        type: ["Ship your whole roadmap twice as fast"],
+        step: ["Create your first project", "02"],
+        montage: ["Everything in one place"],
+        cards: ["Fast setup", "Secure by default", "Live reports"],
+      });
+      expect(r.issues.filter((i) => i.severity === "error").map((i) => `${w}x${h} ${i.message}`)).toEqual([]);
+    }
+  }, 180_000);
+
+  it("passes callouts, metrics, the full-frame image and the 3D stack in all three formats, with the brand mark riding along", async () => {
+    const page = `data:image/svg+xml;charset=utf-8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="2400"><rect width="1280" height="2400" fill="#f4f4f8"/><rect x="80" y="160" width="620" height="70" fill="#222"/><rect x="80" y="900" width="1120" height="500" fill="#c9c2ff"/></svg>')}`;
+    const logo = `data:image/svg+xml;charset=utf-8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><circle cx="32" cy="32" r="30" fill="#5b3df5"/></svg>')}`;
+    for (const [w, h] of [
+      [640, 360],
+      [360, 640],
+      [480, 480],
+    ] as const) {
+      const m = manifestWith(
+        [
+          { id: "hook", templateId: "KineticHook", props: { productName: "Acme", headline: "Ship faster with less code", logoUrl: logo } },
+          { id: "callouts", templateId: "FeatureCallouts", props: { screenshotUrl: page, caption: "Everything on one page", callouts: [{ label: "Headline", rect: { x: 0.0625, y: 0.125, w: 0.4844, h: 0.0547 } }, { label: "Live chart", rect: { x: 0.0625, y: 0.7031, w: 0.875, h: 0.3906 } }, { label: "Far below" }] } },
+          { id: "metrics", templateId: "MetricsRow", props: { metrics: [{ value: "40,000+", label: "Teams" }, { value: "99.9%", label: "Uptime" }, { value: "24/7", label: "Support" }] } },
+          { id: "photo", templateId: "PhotoShowcase", props: { screenshotUrl: page, caption: "Built for the whole team" } },
+          { id: "stack", templateId: "IsoStack", props: { screenshotUrls: [page, page, page], caption: "Layers of the product" } },
+          { id: "cta", templateId: "CTAEndCard", props: { productName: "Acme", ctaText: "Try it free", domain: "acme.com", logoUrl: logo } },
+        ],
+        w,
+        h,
+      );
+      const r = await qa(`r6-${w}x${h}`, m, {
+        hook: ["Ship faster with less code"],
+        callouts: ["Everything on one page", "Headline", "Live chart", "Far below"],
+        metrics: ["Teams", "Uptime", "Support"],
+        photo: ["Built for the whole team"],
+        stack: ["Layers of the product"],
+        cta: ["Try it free"],
+      });
+      expect(r.issues.filter((i) => i.severity === "error").map((i) => `${w}x${h} ${i.message}`)).toEqual([]);
+    }
+  }, 240_000);
+
   it("catches Math.random in seek() (100% of runs)", async () => {
     for (let run = 0; run < 3; run++) {
       const r = await qa(`rand-seek-${run}`, manifestWith([{ id: "bad", templateId: "__SeededRandomSeek", props: { text: "Jitter" } }]));

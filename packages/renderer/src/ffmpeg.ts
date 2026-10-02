@@ -48,9 +48,13 @@ export function spawnFfmpegEncoder(opts: FfmpegEncodeOptions) {
  * what makes the later concat a lossless `-c copy`. The optional watermark
  * is overlaid here, per chunk, so the free-plan path costs no extra encode.
  */
-export function spawnSegmentEncoder(opts: { fps: number; outPath: string; watermarkPng?: string; preset: string; crf: number; capture?: "jpeg" | "png" }) {
+export function spawnSegmentEncoder(opts: { fps: number; outPath: string; watermarkPng?: string; preset: string; crf: number; capture?: "jpeg" | "png"; blurSamples?: number }) {
   const ffmpegBin = resolveFfmpegPath();
   const jpeg = opts.capture === "jpeg";
+  // Motion blur: the renderer pipes `n` captures per output frame, taken across the frame's shutter; each
+  // group is averaged into one frame (tmix), and only the frame that closes a group is kept.
+  const n = Math.max(1, Math.round(opts.blurSamples ?? 1));
+  const blur = n > 1 ? `tmix=frames=${n},select='eq(mod(n+1\\,${n})\\,0)',setpts=N/(${opts.fps}*TB),` : "";
   // Chromium's JPEGs are full-range BT.601 YCbCr; go back through RGB before the
   // overlay so the watermark and the BT.709 conversion see the same thing as with PNG.
   const toRgb = jpeg ? "scale=in_color_matrix=bt601:in_range=pc,format=gbrp," : "";
@@ -60,11 +64,12 @@ export function spawnSegmentEncoder(opts: { fps: number; outPath: string; waterm
     "-loglevel", "error",
     "-f", "image2pipe",
     ...(jpeg ? ["-c:v", "mjpeg"] : []),
-    "-framerate", String(opts.fps),
+    "-framerate", String(opts.fps * n),
     "-i", "-",
     ...(opts.watermarkPng
-      ? ["-i", opts.watermarkPng, "-filter_complex", `[0:v]${toRgb}null[base];[base][1:v]overlay=x=main_w-overlay_w-main_w*0.03:y=main_h-overlay_h-main_h*0.03,${TO_BT709}[v]`, "-map", "[v]"]
-      : ["-vf", `${toRgb}${TO_BT709}`]),
+      ? ["-i", opts.watermarkPng, "-filter_complex", `[0:v]${toRgb}${blur}null[base];[base][1:v]overlay=x=main_w-overlay_w-main_w*0.03:y=main_h-overlay_h-main_h*0.03,${TO_BT709}[v]`, "-map", "[v]"]
+      : ["-vf", `${toRgb}${blur}${TO_BT709}`]),
+    ...(n > 1 ? ["-r", String(opts.fps)] : []),
     "-c:v", "libx264",
     "-preset", opts.preset,
     "-crf", String(opts.crf),

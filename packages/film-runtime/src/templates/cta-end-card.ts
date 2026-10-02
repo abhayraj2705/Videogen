@@ -50,13 +50,13 @@ export function createCTAEndCard(): SceneTemplate<CTAEndCardProps> {
       const u = L.u;
       sceneRoot(root, L, { gap: `${L.pick({ landscape: 36, portrait: 52, square: 32 }) * u}px`, fontFamily: ctx.fonts.display });
 
-      const logo = logoMark({ className: "cta-logo", size: L.pick({ landscape: 112, portrait: 168, square: 112 }) * u, logoUrl: props.logoUrl, productName: props.productName, ctx });
+      const logo = logoMark({ className: "cta-logo", size: L.pick({ landscape: 150, portrait: 190, square: 130 }) * u, logoUrl: props.logoUrl, productName: props.productName, ctx });
       root.appendChild(logo);
 
       const cta = textBlock(props.ctaText, {
         className: "cta-text",
         width: Math.min(L.safe.width, 1440 * u),
-        maxSize: L.pick({ landscape: 120, portrait: 128, square: 100 }) * u,
+        maxSize: L.pick({ landscape: 176, portrait: 160, square: 128 }) * u,
         minSize: 28 * u,
         maxLines: L.pick({ landscape: 2, portrait: 3, square: 2 }),
         color: ctx.palette.fg,
@@ -71,7 +71,7 @@ export function createCTAEndCard(): SceneTemplate<CTAEndCardProps> {
       const padX = L.pick({ landscape: 44, portrait: 52, square: 40 }) * u;
       const arrowSpace = 60 * u;
       const maxButton = L.safe.width * 0.8;
-      const domainSize = fitFontSize(props.domain, maxButton - 2 * padX - arrowSpace, L.pick({ landscape: 42, portrait: 50, square: 40 }) * u, 1, 18 * u);
+      const domainSize = fitFontSize(props.domain, maxButton - 2 * padX - arrowSpace, L.pick({ landscape: 56, portrait: 58, square: 46 }) * u, 1, 18 * u);
       const button = el("div", "cta-button");
       setStyle(button, {
         position: "relative",
@@ -81,7 +81,7 @@ export function createCTAEndCard(): SceneTemplate<CTAEndCardProps> {
         alignItems: "center",
         gap: `${18 * u}px`,
         maxWidth: `${maxButton}px`,
-        padding: `${L.pick({ landscape: 22, portrait: 28, square: 20 }) * u}px ${padX}px`,
+        padding: `${L.pick({ landscape: 28, portrait: 32, square: 24 }) * u}px ${padX}px`,
         borderRadius: `${60 * u}px`,
         background: `${ctx.palette.accent} linear-gradient(120deg, ${ctx.palette.accent}, ${ctx.palette.accentAlt})`,
         flexShrink: "0",

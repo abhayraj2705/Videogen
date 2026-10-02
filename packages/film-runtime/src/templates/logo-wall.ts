@@ -8,6 +8,8 @@ export interface LogoWallProps {
   title: string;
   /** 3-10 short grounded names: customers, integrations, platforms. */
   names: string[];
+  /** Logo images for some of the names, as captured from the site. Added by Build; a name without one is set as type. */
+  logos?: { name: string; url: string }[];
 }
 
 interface Instance {
@@ -25,7 +27,7 @@ const settleFor = (count: number) => CHIPS_START + Math.max(0, count - 1) * CHIP
 /**
  * Social proof as a wall of names: the title lands word by word, then the
  * name chips pop in one after another, alternately tilted, into a centred
- * wrapping wall. (Names are set as type — the crawl doesn't collect logo files.)
+ * wrapping wall. A name the crawl captured a logo for is shown as that logo; the rest are set as type.
  * Layouts: 16:9 up to five chips per row; 9:16 two per row at a larger size;
  * 1:1 three per row.
  */
@@ -59,11 +61,21 @@ export function createLogoWall(): SceneTemplate<LogoWallProps> {
       setStyle(wall, { display: "flex", flexWrap: "wrap", justifyContent: "center", gap: `${chipGap}px`, maxWidth: `${L.safe.width * L.pick({ landscape: 0.9, portrait: 1, square: 1 })}px` });
       // Fewer names get bigger chips, so the wall always carries weight in the frame.
       const size = L.pick({ landscape: 58, portrait: 56, square: 44 }) * u * (names.length <= 4 ? 1.45 : names.length <= 6 ? 1.2 : 1);
+      const logoFor = new Map((props.logos ?? []).map((l) => [l.name.toLowerCase(), l.url]));
       const chips = names.map((name) => {
-        const chip = el("div", "lw-chip", name);
+        const logoUrl = logoFor.get(name.toLowerCase());
+        const chip = el("div", "lw-chip", logoUrl ? undefined : name);
+        if (logoUrl) {
+          // The logo as the site shows it, at the height the name would have had; its own background comes with it.
+          const img = el("img");
+          img.src = logoUrl;
+          img.alt = name;
+          setStyle(img, { display: "block", height: `${size * 1.25}px`, width: "auto", maxWidth: `${size * 5.2}px`, objectFit: "contain", borderRadius: `${8 * u}px` });
+          chip.appendChild(img);
+        }
         setStyle(chip, {
           ...cardStyle(ctx, u, 22),
-          padding: `${size * 0.42}px ${size * 0.8}px`,
+          padding: logoUrl ? `${size * 0.36}px ${size * 0.6}px` : `${size * 0.42}px ${size * 0.8}px`,
           fontFamily: ctx.fonts.display,
           fontSize: `${size}px`,
           fontWeight: "700",

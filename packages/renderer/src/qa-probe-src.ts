@@ -56,12 +56,23 @@ export const SCENE_PROBE_JS = String.raw`function (args) {
   }
   var overflowEls = [];
   var textItems = [];
+  // Bounding box of everything the scene actually draws (text, images, filled or outlined boxes).
+  var content = null;
+  function grow(r) {
+    content = content ? [Math.min(content[0], r[0]), Math.min(content[1], r[1]), Math.max(content[2], r[2]), Math.max(content[3], r[3])] : r.slice();
+  }
   var all = root.querySelectorAll("*");
   for (var i = 0; i < all.length; i++) {
     var el = all[i];
     var vr = visibleRect(el);
     if (vr && (vr[0] < -2 || vr[1] < -2 || vr[2] > vw + 2 || vr[3] > vh + 2)) {
       overflowEls.push({ tag: el.tagName.toLowerCase(), cls: String(el.className), rect: vr });
+    }
+    if (vr && effectiveOpacity(el) > 0.5) {
+      var st = getComputedStyle(el);
+      var drawn = el.tagName === "IMG" || toRgba(st.backgroundColor)[3] > 0.5 || st.backgroundImage !== "none" || (parseFloat(st.borderTopWidth) > 0 && st.borderTopStyle !== "none");
+      // A box that covers the whole frame is a backdrop, not content.
+      if (drawn && !(vr[2] - vr[0] > vw * 0.98 && vr[3] - vr[1] > vh * 0.98)) grow(vr);
     }
     var ownText = "";
     for (var k = 0; k < el.childNodes.length; k++) {
@@ -76,6 +87,7 @@ export const SCENE_PROBE_JS = String.raw`function (args) {
     range.selectNodeContents(el);
     var tr = range.getBoundingClientRect();
     var rect = vr ? [Math.min(vr[0], tr.left), Math.min(vr[1], tr.top), Math.max(vr[2], tr.right), Math.max(vr[3], tr.bottom)] : [0, 0, 0, 0];
+    if (effectiveOpacity(el) > 0.5 && rect[2] - rect[0] > 0) grow(rect);
     textItems.push({
       text: ownText,
       opacity: effectiveOpacity(el),
@@ -87,5 +99,5 @@ export const SCENE_PROBE_JS = String.raw`function (args) {
       clipped: clipped
     });
   }
-  return { found: true, textItems: textItems, overflowEls: overflowEls };
+  return { found: true, textItems: textItems, overflowEls: overflowEls, content: content };
 }`;

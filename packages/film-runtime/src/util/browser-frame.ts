@@ -1,6 +1,8 @@
 import type { FilmContext } from "../contract.js";
 import { clamp01, easeInOutCubic, easeInOutQuart, spring } from "./easing.js";
 import { el, setStyle } from "./dom.js";
+import { entersMatched } from "./ui.js";
+import { clipLayer, type ClipLayer, type ClipSource } from "./clip.js";
 
 /** A region of the captured page, in fractions of the page width (see FactRect in @sitereel/shared). */
 export interface PageRect {
@@ -33,6 +35,18 @@ export interface BrowserFrame {
    * nothing) when the region lies outside the captured image — fall back to scroll().
    */
   focus(rect: PageRect, p: number, ring: number): boolean;
+  /**
+   * A camera tour: several shots inside one scene. Holds the top of the page
+   * for a beat, then pushes in on each region in turn, ringing it while the
+   * camera rests there. Pure in t. Returns false when none of the regions lie
+   * on the captured image — fall back to scroll().
+   */
+  tour(rects: PageRect[], t: number, durationSec: number): boolean;
+  /**
+   * Plays the page's recording in the window (p in [0, 1] of the recording) in place of the still
+   * screenshot. Returns false (and does nothing) when the frame was built without a clip.
+   */
+  play(p: number): boolean;
 }
 
 /**
@@ -41,7 +55,7 @@ export interface BrowserFrame {
  * screenshot is laid out at full width and natural height, so scrolling
  * reveals the real page below the fold instead of a static crop.
  */
-export function browserFrame(opts: { className: string; width: number; height: number; screenshotUrl: string; pageLabel?: string; ctx: FilmContext; u: number }): BrowserFrame {
+export function browserFrame(opts: { className: string; width: number; height: number; screenshotUrl: string; pageLabel?: string; clip?: ClipSource; ctx: FilmContext; u: number }): BrowserFrame {
   const { ctx, u, width, height } = opts;
   const barHeight = Math.round(46 * u);
   const viewportHeight = height - barHeight;
@@ -105,27 +119,49 @@ export function browserFrame(opts: { className: string; width: number; height: n
   const pageLayer = el("div", `${opts.className}-page`);
   setStyle(pageLayer, { position: "relative", width: "100%", minHeight: "100%" });
   pageLayer.appendChild(image);
-  const highlight = el("div", `${opts.className}-highlight`);
-  setStyle(highlight, { position: "absolute", boxSizing: "border-box", opacity: "0", pointerEvents: "none" });
-  pageLayer.appendChild(highlight);
   viewport.appendChild(pageLayer);
+  // The recording, when there is one, plays over the still page (which stays underneath as its first frame's stand-in).
+  let recording: ClipLayer | null = null;
+  if (opts.clip && opts.clip.frames.length > 1) {
+    recording = clipLayer(opts.clip, `${opts.className}-clip`, { width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" });
+    viewport.appendChild(recording.node);
+  }
   wrap.appendChild(viewport);
+  // The window is the scene's "hero": a match cut lines it up with the next scene's (see player.ts).
+  wrap.dataset.hero = "1";
 
-  /** Resolved once the image has decoded: the end pose of a focus move, or null when the region is off the image. */
-  let focusPose: { rectKey: string; scale: number; tx: number; ty: number } | null | undefined;
-  const poseFor = (rect: PageRect) => {
+  interface Pose {
+    scale: number;
+    tx: number;
+    ty: number;
+    highlight: HTMLElement;
+  }
+  /** Resolved once the image has decoded: where the camera rests for a region (null = the region is off the image), with its own highlight. */
+  const poses = new Map<string, Pose | null>();
+  const poseFor = (rect: PageRect): Pose | null => {
     const key = `${rect.x},${rect.y},${rect.w},${rect.h}`;
-    if (focusPose !== undefined && (focusPose === null || focusPose.rectKey === key)) return focusPose;
+    const known = poses.get(key);
+    if (known !== undefined) return known;
     if (image.naturalWidth <= 0) return null;
+    const store = (pose: Pose | null) => {
+      poses.set(key, pose);
+      return pose;
+    };
     const pageHeight = (width * image.naturalHeight) / image.naturalWidth;
     const r = { x: rect.x * width, y: rect.y * width, w: rect.w * width, h: rect.h * width };
-    if (r.w < 4 || r.h < 4 || r.y + r.h > pageHeight || r.x + r.w > width + 1) return (focusPose = null);
+    if (r.w < 4 || r.h < 4 || r.y + r.h > pageHeight || r.x + r.w > width + 1) return store(null);
     // Enlarge until the region fills ~70% of the window, without magnifying the capture past 2x its pixels.
     const scale = Math.max(1, Math.min(2.6, (2 * image.naturalWidth) / width, (width * 0.7) / r.w, (viewportHeight * 0.7) / r.h));
     const tx = Math.min(0, Math.max(width - scale * width, width / 2 - scale * (r.x + r.w / 2)));
     const ty = Math.min(0, Math.max(viewportHeight - scale * pageHeight, viewportHeight / 2 - scale * (r.y + r.h / 2)));
     const pad = 10 * u;
+    const highlight = el("div", `${opts.className}-highlight`);
+    pageLayer.appendChild(highlight);
     setStyle(highlight, {
+      position: "absolute",
+      boxSizing: "border-box",
+      opacity: "0",
+      pointerEvents: "none",
       left: `${r.x - pad}px`,
       top: `${r.y - pad}px`,
       width: `${r.w + 2 * pad}px`,
@@ -135,7 +171,7 @@ export function browserFrame(opts: { className: string; width: number; height: n
       borderRadius: `${(14 * u) / scale}px`,
       boxShadow: `0 0 0 ${(6 * u) / scale}px ${ctx.palette.accentSoft}, 0 0 ${(40 * u) / scale}px ${ctx.palette.glow}`,
     });
-    return (focusPose = { rectKey: key, scale, tx, ty });
+    return store({ scale, tx, ty, highlight });
   };
 
   return {
@@ -145,7 +181,8 @@ export function browserFrame(opts: { className: string; width: number; height: n
     viewportWidth: width,
     viewportHeight,
     enter(t, start, dur) {
-      const lin = clamp01((t - start) / dur);
+      // Carried in by a match cut: the window is already in place.
+      const lin = entersMatched(wrap) ? 1 : clamp01((t - start) / dur);
       const inv = 1 - spring(lin, 0.8, 1);
       wrap.style.opacity = String(clamp01(lin * 2.4));
       wrap.style.transform = lin >= 1 ? "none" : `perspective(${1800 * u}px) translateY(${(60 * u * inv).toFixed(2)}px) rotateX(${(16 * inv).toFixed(3)}deg) scale(${(1 - 0.1 * inv).toFixed(4)})`;
@@ -172,7 +209,36 @@ export function browserFrame(opts: { className: string; width: number; height: n
       const scale = 1 + (pose.scale - 1) * e;
       pageLayer.style.transformOrigin = "0 0";
       pageLayer.style.transform = e < 0.0001 ? "none" : `translate(${(pose.tx * e).toFixed(2)}px, ${(pose.ty * e).toFixed(2)}px) scale(${scale.toFixed(4)})`;
-      highlight.style.opacity = String(clamp01(ring));
+      pose.highlight.style.opacity = String(clamp01(ring));
+      return true;
+    },
+    play(p) {
+      if (!recording) return false;
+      recording.play(clamp01(p));
+      return true;
+    },
+    tour(rects, t, durationSec) {
+      const stops = rects.map(poseFor).filter((p): p is Pose => p !== null);
+      if (stops.length === 0) return false;
+      // The window has landed by HOLD; the rest of the scene is shared between the stops, each a move then a hold.
+      const HOLD = 0.9;
+      const per = Math.max(0.8, (durationSec - HOLD - 0.4) / stops.length);
+      const move = Math.min(0.9, per * 0.45);
+      const k = Math.min(stops.length - 1, Math.max(0, Math.floor((t - HOLD) / per)));
+      const from = k === 0 ? { scale: 1, tx: 0, ty: 0 } : stops[k - 1]!;
+      const to = stops[k]!;
+      const e = easeInOutQuart(clamp01((t - HOLD - k * per) / move));
+      const scale = from.scale + (to.scale - from.scale) * e;
+      const tx = from.tx + (to.tx - from.tx) * e;
+      const ty = from.ty + (to.ty - from.ty) * e;
+      pageLayer.style.transformOrigin = "0 0";
+      pageLayer.style.transform = scale < 1.0001 && Math.abs(tx) < 0.01 && Math.abs(ty) < 0.01 ? "none" : `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px) scale(${scale.toFixed(4)})`;
+      stops.forEach((stop, i) => {
+        // Ring the region as the camera settles on it; let it go as the camera leaves for the next one.
+        const arrive = HOLD + i * per + move;
+        const leave = i < stops.length - 1 ? HOLD + (i + 1) * per : Infinity;
+        stop.highlight.style.opacity = String(clamp01((t - arrive + 0.2) / 0.3) * clamp01((leave + 0.15 - t) / 0.2));
+      });
       return true;
     },
   };

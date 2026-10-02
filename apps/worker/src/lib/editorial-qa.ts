@@ -8,7 +8,8 @@ export interface EditorialIssue {
   message: string;
 }
 
-const PRODUCT_TEMPLATES = SCREENSHOT_TEMPLATES;
+/** Scenes that put the product itself on screen. */
+const PRODUCT_TEMPLATES = new Set([...SCREENSHOT_TEMPLATES, "Montage"]);
 /** Past this a scene has outlived its one idea, unless it reveals a list on voice cues. */
 const MAX_SCENE_SEC = 6;
 

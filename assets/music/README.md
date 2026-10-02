@@ -16,7 +16,7 @@ longer than the track.
 
 ## Bundled tracks are placeholders
 
-The eight `sitereel-*.mp3` files (two per mood) are **procedurally synthesized** by
+The twelve `sitereel-*.mp3` files (three per mood) are **procedurally synthesized** by
 `build_library.py generate` (numpy oscillators + noise drums), so they carry no
 third-party rights. They exist so the pipeline has real music with real beat
 grids offline; they are not production-quality music.
@@ -31,10 +31,32 @@ grids offline; they are not production-quality music.
 | sitereel-energetic-02 | energetic | 136 |
 | sitereel-calm-02 | calm | 76 |
 | sitereel-cinematic-02 | cinematic | 100 |
+| sitereel-upbeat-03 | upbeat | 126 |
+| sitereel-energetic-03 | energetic | 120 |
+| sitereel-calm-03 | calm | 92 |
+| sitereel-cinematic-03 | cinematic | 80 |
 
 Their beat grids are exact (we wrote the notes); `detectedBpm` is what
 librosa's tracker hears, recorded as a sanity check (it locks onto a metrical
 multiple for the 16th-note-heavy energetic track — the grid is still exact).
+
+## How a track is chosen
+
+The job's own `musicTrackId` wins when it names a track. Otherwise: the mood
+(`options.musicMood`, or the one the tone implies when it is `auto`), then
+licensed tracks ahead of the procedural placeholders, then the tracks whose
+tempo suits the film's type (a teaser is cut faster than a walkthrough), and
+the job id chooses between the best two.
+
+## Generated music
+
+With `MUSIC_SOURCE=generated` and `ELEVENLABS_API_KEY` set, each job gets a
+track composed for it (`apps/worker/src/lib/music-gen.ts`): instrumental, in
+the job's mood, at the tempo of its type, a few seconds longer than the film.
+It is stored with the job, so Build, QA and Render all use the same one. Any
+failure falls back to the library. This path has not been run against the
+live API yet — try one film before turning it on, and check the provider's
+terms for the uses your plan covers.
 
 ## Replacing them with licensed music
 
@@ -48,6 +70,13 @@ multiple for the 16th-note-heavy energetic track — the grid is still exact).
    python assets/music/build_library.py ingest path/to/track.mp3 \
      --id artist-title --mood upbeat --license "Artlist license #1234, sync, worldwide"
    ```
+
+   Ingest also tags the track: `energy` (0-1, how driving it is), an optional
+   `--genre`, and `dropSec` — the moment the full arrangement comes in after
+   the intro, found as the largest sustained jump in loudness. Listen and
+   correct it with `--drop SECONDS` if it is off. The film starts the track
+   part-way in so that the drop lands on the cut from the hook into the
+   product reveal (`musicStartOffset` in `apps/worker/src/lib/music.ts`).
 
 3. Spot-check the beat grid (`beatGrid` should land on audible beats; trim the
    track so it starts on a downbeat if it doesn't), then delete the procedural

@@ -79,9 +79,55 @@ export const TEMPLATE_PROP_SCHEMAS: Record<TemplateId, z.ZodType> = {
     leftLabel: z.string().optional(),
     rightLabel: z.string().optional(),
   }),
+  StepByStep: z.object({
+    sourcePageUrl: z.string().url(),
+    caption: z.string().min(1),
+    step: z.number().int().min(1).max(12),
+  }),
+  KineticType: z.object({
+    text: z.string().min(1),
+  }),
+  Montage: z.object({
+    caption: z.string().min(1),
+  }),
+  FeatureCallouts: z.object({
+    sourcePageUrl: z.string().url(),
+    caption: z.string().min(1),
+    items: z.array(z.string().min(1)).min(2).max(3),
+  }),
+  MetricsRow: z.object({
+    metrics: z.array(z.object({ value: z.string().min(1), label: z.string().min(1) })).min(2).max(3),
+  }),
+  PhotoShowcase: z.object({
+    sourcePageUrl: z.string().url(),
+    caption: z.string().min(1),
+  }),
+  IsoStack: z.object({
+    sourcePageUrl: z.string().url(),
+    caption: z.string().min(1),
+  }),
   LogoWall: z.object({
     title: z.string().min(1),
     names: z.array(z.string().min(1)).min(3).max(10),
+  }),
+  Composed: z.object({
+    blocks: z
+      .array(
+        z.discriminatedUnion("kind", [
+          z.object({ kind: z.literal("eyebrow"), text: z.string().min(1) }),
+          z.object({ kind: z.literal("headline"), text: z.string().min(1) }),
+          z.object({ kind: z.literal("body"), text: z.string().min(1) }),
+          z.object({ kind: z.literal("pills"), items: z.array(z.string().min(1)).min(2).max(5) }),
+          z.object({ kind: z.literal("stat"), value: z.string().min(1), label: z.string().optional() }),
+          z.object({ kind: z.literal("rule") }),
+        ]),
+      )
+      .min(2)
+      .max(5)
+      // A scene needs something to read: a headline, or figures to look at.
+      .refine((blocks) => blocks.some((b) => b.kind === "headline" || b.kind === "stat"), "needs a headline or a stat block"),
+    align: z.enum(["center", "left"]).optional(),
+    panel: z.enum(["none", "card", "accent"]).optional(),
   }),
 };
 
@@ -107,7 +153,18 @@ export function visibleTextFor(templateId: TemplateId, props: unknown): string[]
     case "ScreenCollage":
     case "DeviceMockup":
     case "ZoomDetail":
+    case "StepByStep":
+    case "Montage":
+    case "PhotoShowcase":
+    case "IsoStack":
       return [p.caption as string];
+    case "FeatureCallouts":
+      return [p.caption as string, ...(p.items as string[])];
+    case "MetricsRow":
+      // Like StatCounter, the figures count up and are re-formatted; the labels are what must be readable.
+      return (p.metrics as { label: string }[]).map((m) => m.label);
+    case "KineticType":
+      return [p.text as string];
     case "SplitCompare":
       return [p.left as string, p.right as string];
     case "LogoWall":
@@ -129,6 +186,11 @@ export function visibleTextFor(templateId: TemplateId, props: unknown): string[]
       return [p.text as string];
     case "BentoGrid":
       return [p.title as string, ...(p.items as string[])];
+    case "Composed":
+      // What must be readable: its lines and chips, and each figure's label (eyebrows are set in capitals; figures are checked as numbers).
+      return (p.blocks as { kind: string; text?: string; items?: string[]; label?: string }[]).flatMap((b) =>
+        b.kind === "headline" || b.kind === "body" ? [b.text!] : b.kind === "pills" ? b.items! : b.kind === "stat" && b.label ? [b.label] : [],
+      );
     default:
       return null;
   }
@@ -147,13 +209,68 @@ export function syncOnScreenText<S extends { templateId: TemplateId; props: unkn
 }
 
 /** Templates that show a crawled page and so must point at one (`sourcePageUrl`). */
-export const SCREENSHOT_TEMPLATES: ReadonlySet<string> = new Set(["SectionShowcase", "UIFlowCursor", "ScreenCollage", "DeviceMockup", "ZoomDetail"]);
+export const SCREENSHOT_TEMPLATES: ReadonlySet<string> = new Set(["SectionShowcase", "UIFlowCursor", "ScreenCollage", "DeviceMockup", "ZoomDetail", "StepByStep", "FeatureCallouts", "PhotoShowcase", "IsoStack"]);
 
 /** Appendix C — phrases the planner must never use, enforced in code, not just asked for in the prompt. */
 export const BANNED_PHRASES = ["streamline your workflow", "supercharge", "unlock", "elevate"] as const;
 
+/**
+ * Stock ad copy. Unlike BANNED_PHRASES these may legitimately appear on a site (and so in facts and in
+ * the deterministic fallback), so they are only held against text a model wrote: the planner asks for
+ * them with `clichés: true` and sends a draft that uses one back once.
+ */
+export const CLICHE_PHRASES = [
+  "lightning speed",
+  "lightning fast",
+  "with ease",
+  "made simple",
+  "made easy",
+  "seamless",
+  "seamlessly",
+  "game-changing",
+  "game changer",
+  "next level",
+  "cutting-edge",
+  "revolutionary",
+  "revolutionize",
+  "effortless",
+  "effortlessly",
+  "take it to the next",
+  "like never before",
+  "look no further",
+  "say goodbye to",
+  "in today's world",
+  "one-stop",
+  "all your needs",
+] as const;
+
+export function findCliches(text: string): string[] {
+  const lower = text.toLowerCase();
+  return CLICHE_PHRASES.filter((p) => new RegExp(`(^|[^\\p{L}])${p.replace(/[-\s]+/g, "[-\\s]+")}(?![\\p{L}])`, "u").test(lower));
+}
+
+const spokenWordsOf = (text: string): string[] => text.toLowerCase().replace(/[^\p{L}\p{N}\s]+/gu, "").split(/\s+/).filter(Boolean);
+
+function stringsIn(value: unknown): string[] {
+  if (typeof value === "string") return [value];
+  if (Array.isArray(value)) return value.flatMap(stringsIn);
+  if (value && typeof value === "object") return Object.values(value).flatMap(stringsIn);
+  return [];
+}
+
+/**
+ * True when every word of the scene's narration is already drawn by the scene itself (titles, labels,
+ * product name): the voice is reading the screen aloud instead of adding to it.
+ */
+export function narrationEchoesScreen(scene: { narration?: string | undefined; onScreenText: string[]; props: unknown }): boolean {
+  const spoken = spokenWordsOf(scene.narration ?? "");
+  if (spoken.length === 0) return false;
+  const shown = new Set([...scene.onScreenText, ...stringsIn(scene.props)].flatMap(spokenWordsOf));
+  return spoken.every((w) => shown.has(w));
+}
+
 /** Prop keys that carry locators/identifiers rather than claims — excluded from number grounding. */
-const NON_CLAIM_PROP_KEYS = new Set(["sourcePageUrl", "domain", "icon", "logoUrl", "assetId", "screenshotKey"]);
+const NON_CLAIM_PROP_KEYS = new Set(["sourcePageUrl", "domain", "icon", "logoUrl", "assetId", "screenshotKey", "kind", "align", "panel"]);
 
 export interface NumberToken {
   /** As written, e.g. "10,000+" */
@@ -310,7 +427,24 @@ function normalizeUrl(u: string): string {
 export interface ValidateStoryboardOptions {
   /** URLs actually crawled; SectionShowcase/UIFlowCursor must point at one of them. Omit to skip that check. */
   pageUrls?: string[];
+  /** Fewest scenes this film should have (its recipe's pacing). Fewer is a `too_few_scenes` error. Omit to skip. */
+  minScenes?: number;
+  /**
+   * Largest share (0-1) of narrated scenes whose voice may simply read the screen aloud. Above it the
+   * storyboard gets a `narration_reads_titles` error. Omit to skip (edited and fallback storyboards).
+   */
+  maxNarrationEcho?: number;
+  /** Hold CLICHE_PHRASES against the text (a `cliche` error per scene). For model-written drafts only. */
+  cliches?: boolean;
+  /**
+   * The scenes chosen for this site's look and material. A draft that uses fewer than `min` of them gets a
+   * `missing_featured` error: it fell back on the same few safe templates every film uses.
+   */
+  featured?: { templates: string[]; min: number };
 }
+
+/** Errors that ask for better writing rather than report something wrong: a film that only has these is still safe to show. */
+export const STYLE_ISSUE_CODES: ReadonlySet<string> = new Set(["too_few_scenes", "narration_reads_titles", "cliche", "missing_featured"]);
 
 /**
  * Validates a storyboard against its FactLedger. Runs the zod schema first
@@ -400,6 +534,12 @@ export function validateStoryboard(input: unknown, facts: FactLedger, opts: Vali
       }
     }
 
+    if (opts.cliches) {
+      for (const phrase of new Set(sceneStrings.flatMap(findCliches))) {
+        issues.push({ code: "cliche", message: `Scene ${scene.id} uses the stock phrase "${phrase}" — say the specific thing this product does instead`, sceneId: scene.id, severity: "error" });
+      }
+    }
+
     // Reading floor: 0.3s/word, measured against everything shown, not just narration.
     const words = scene.onScreenText.reduce((sum, t) => sum + wordCount(t), 0);
     const minSeconds = words * READING_SECONDS_PER_WORD;
@@ -483,6 +623,25 @@ export function validateStoryboard(input: unknown, facts: FactLedger, opts: Vali
       }
     }
 
+    if (scene.templateId === "LogoWall") {
+      // A wall of names is for names: each must be written as one (capital or digit first) in a fact this scene cites.
+      // "people", "developers" lifted out of a sentence are not customers or integrations.
+      const bad = (props.names as string[]).filter((name) => {
+        const n = name.trim();
+        if (!/^[\p{Lu}\p{N}]/u.test(n)) return true;
+        const at = citedTexts.indexOf(n);
+        return at < 0 || /[\p{L}\p{N}]/u.test(citedTexts[at - 1] ?? " ") || /[\p{L}\p{N}]/u.test(citedTexts[at + n.length] ?? " ");
+      });
+      if (bad.length > 0) {
+        issues.push({
+          code: "logo_wall_names",
+          message: `Scene ${scene.id} (LogoWall) names must be proper names copied exactly from a cited fact; not names: ${bad.map((b) => `"${b}"`).join(", ")}`,
+          sceneId: scene.id,
+          severity: "error",
+        });
+      }
+    }
+
     if (SCREENSHOT_TEMPLATES.has(scene.templateId) && pageUrls) {
       const src = String(props.sourcePageUrl);
       if (!pageUrls.has(normalizeUrl(src))) {
@@ -505,6 +664,38 @@ export function validateStoryboard(input: unknown, facts: FactLedger, opts: Vali
   }
   for (const phrase of findBannedPhrases(storyboard.shareCaption)) {
     issues.push({ code: "banned_phrase", message: `shareCaption uses banned phrase "${phrase}"`, severity: "error" });
+  }
+
+  if (opts.minScenes && storyboard.scenes.length < opts.minScenes) {
+    issues.push({
+      code: "too_few_scenes",
+      message: `Only ${storyboard.scenes.length} scenes; this film needs at least ${opts.minScenes}. Split long scenes: one idea, one short narration line and a different template for each.`,
+      severity: "error",
+    });
+  }
+
+  if (opts.featured && opts.featured.min > 0) {
+    const used = new Set(storyboard.scenes.map((sc) => sc.templateId as string));
+    const hits = opts.featured.templates.filter((t) => used.has(t));
+    if (hits.length < Math.min(opts.featured.min, opts.featured.templates.length)) {
+      issues.push({
+        code: "missing_featured",
+        message: `This film must use at least ${opts.featured.min} of the scenes chosen for this site (${opts.featured.templates.join(", ")}); it uses ${hits.length === 0 ? "none" : hits.join(", ")}. Replace the plainest middle scenes with them.`,
+        severity: "error",
+      });
+    }
+  }
+
+  if (opts.maxNarrationEcho !== undefined) {
+    const narrated = storyboard.scenes.filter((sc) => (sc.narration ?? "").trim().length > 0);
+    const echoes = narrated.filter(narrationEchoesScreen);
+    if (narrated.length >= 3 && echoes.length / narrated.length > opts.maxNarrationEcho) {
+      issues.push({
+        code: "narration_reads_titles",
+        message: `${echoes.length} of ${narrated.length} narration lines only read the on-screen text aloud (scenes ${echoes.map((sc) => sc.id).join(", ")}). Rewrite those lines so the voice says what the screen does not: the reason, the result or the next step.`,
+        severity: "error",
+      });
+    }
   }
 
   const totalDuration = storyboard.scenes.reduce((s, sc) => s + sc.durationSec, 0);

@@ -58,7 +58,7 @@ export function createRenderProcessor(deps: WorkerDeps) {
     await deps.publish({ jobId, stage: "render", status: "rendering", pct: 5, message: `Rendering ${format}`, payload: { format }, at: new Date().toISOString() });
 
     const inputs = await loadBuildInputs(deps, jobId, { storyboardVersion: data.storyboardVersion });
-    const manifest = buildFilmManifest({ storyboard: inputs.storyboard, crawlOutput: inputs.crawlOutput, voiceScenes: inputs.voiceScenes, format, music: inputs.music });
+    const manifest = buildFilmManifest({ storyboard: inputs.storyboard, crawlOutput: inputs.crawlOutput, voiceScenes: inputs.voiceScenes, format, music: inputs.music, fps: inputs.jobOptions.fps });
     // Watermark: decided from the plan (job-creation snapshot / current plan), not trusted from the payload alone.
     const watermark = inputs.watermark;
     const inputsHash = renderStageHash({ manifestHash: manifestHash(manifest), format, watermark, audioHash: sha16([inputs.audioHashes, inputs.music?.id ?? null]) });
@@ -101,7 +101,7 @@ export function createRenderProcessor(deps: WorkerDeps) {
       mix = await loadCachedMix(deps, mixKey);
       if (!mix) {
         const narration = await assembleNarrationTrack({ manifest, voiceScenes: inputs.voiceScenes, storage: deps.storage, repoRoot: deps.repoRoot, sfx: Boolean(inputs.music) });
-        mix = await mixFinalAudio({ narration, music: inputs.music, durationSec: manifest.duration, sidecar: sidecarFor(deps), repoRoot: deps.repoRoot });
+        mix = await mixFinalAudio({ narration, music: inputs.music, durationSec: manifest.duration, sidecar: sidecarFor(deps), repoRoot: deps.repoRoot, musicOffsetSec: manifest.musicOffsetSec });
         const { audio, ...meta } = mix;
         await Promise.all([
           deps.storage.putObject("assets", `${mixKey}.wav`, audio, "audio/wav"),

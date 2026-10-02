@@ -89,6 +89,7 @@ interface RawBrand {
   fontBodyRaw: string;
   loadedFamilies: string[];
   logoUrl: string | null;
+  radius: number | null;
 }
 
 function resolveUrl(raw: string | null | undefined, pageUrl: string): string | null {
@@ -177,6 +178,19 @@ export async function extractBrandTokens(page: Page, pageUrl: string): Promise<B
         if (isUsableSolidColor(c)) colorCounts.set(c, (colorCounts.get(c) ?? 0) + 1);
       });
     }
+    // How round the site's buttons are: the median corner radius of its visible actions (a pill counts as its half-height).
+    const radii: number[] = [];
+    for (const sel of candidateSelectors) {
+      document.querySelectorAll(sel).forEach((el) => {
+        const box = el.getBoundingClientRect();
+        if (box.width < 40 || box.height < 20 || radii.length >= 40) return;
+        const r = parseFloat(getComputedStyle(el).borderTopLeftRadius);
+        if (Number.isFinite(r)) radii.push(Math.min(r, box.height / 2));
+      });
+    }
+    radii.sort((a, b) => a - b);
+    const radius = radii.length >= 2 ? radii[Math.floor(radii.length / 2)]! : null;
+
     let accent = "rgb(0, 0, 0)";
     let bestCount = 0;
     for (const [color, count] of colorCounts) {
@@ -256,7 +270,7 @@ export async function extractBrandTokens(page: Page, pageUrl: string): Promise<B
       document.querySelector<HTMLMetaElement>('meta[property="og:image"], meta[name="og:image"]')?.content ??
       null;
 
-    return { bg, fg, accent, fontDisplayRaw, fontBodyRaw, loadedFamilies, logoUrl } satisfies RawBrand;
+    return { bg, fg, accent, fontDisplayRaw, fontBodyRaw, loadedFamilies, logoUrl, radius } satisfies RawBrand;
   });
 
   return {
@@ -266,6 +280,7 @@ export async function extractBrandTokens(page: Page, pageUrl: string): Promise<B
     fontDisplay: mapToKnownFont(raw.fontDisplayRaw, raw.loadedFamilies),
     fontBody: mapToKnownFont(raw.fontBodyRaw, raw.loadedFamilies),
     logoUrl: resolveUrl(raw.logoUrl, pageUrl),
+    ...(raw.radius !== null ? { radius: Math.round(raw.radius) } : {}),
   };
 }
 

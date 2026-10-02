@@ -123,6 +123,10 @@ TRACKS = [
     ("02", "energetic", dict(bpm=136, key="A", prog="drive", drums="backbeat", bass="eighths", lead="arp16", pad=0.07), 13),
     ("02", "calm", dict(bpm=76, bars=12, key="C", prog="lift", drums="soft", bass="whole", lead="arp8", pad=0.18), 17),
     ("02", "cinematic", dict(bpm=100, bars=12, key="D", prog="drive", drums="toms", bass="drone", lead="arp4", pad=0.18), 19),
+    ("03", "upbeat", dict(bpm=126, key="A", prog="pop", drums="four", bass="eighths", lead="arp16", pad=0.09), 23),
+    ("03", "energetic", dict(bpm=120, key="C", prog="lift", drums="four", bass="offbeat", lead="arp8", pad=0.1), 29),
+    ("03", "calm", dict(bpm=92, bars=12, key="G", prog="minor", drums="soft", bass="whole", lead="arp4", pad=0.2), 31),
+    ("03", "cinematic", dict(bpm=80, bars=12, key="E", prog="lift", drums="toms", bass="whole", lead="none", pad=0.24), 37),
 ]
 
 
@@ -222,6 +226,38 @@ def detect_bpm(path: Path) -> tuple[float | None, list[float]]:
     return round(float(np.atleast_1d(tempo)[0]), 2), [round(float(b), 4) for b in beats]
 
 
+def detect_drop(path: Path, beats: list[float]) -> tuple[float | None, float | None]:
+    """Where the full arrangement comes in, and how driving the track is overall.
+
+    The drop is the beat (in the first half of the track, past its first bar)
+    with the largest sustained jump in loudness: the two seconds after it
+    against the two seconds before. A track that starts at full strength has
+    no such jump and gets no drop. Energy is the track's mean loudness scaled
+    to 0-1, as a rough tag for selection.
+    """
+    try:
+        import librosa
+    except ImportError:
+        return None, None
+    y, sr = librosa.load(str(path), sr=22050, mono=True)
+    rms = librosa.feature.rms(y=y, frame_length=2048, hop_length=512)[0]
+    times = librosa.frames_to_time(np.arange(len(rms)), sr=sr, hop_length=512)
+    energy = round(float(min(1.0, np.mean(rms) / 0.25)), 2)
+    best, best_jump = None, 0.0
+    for b in beats:
+        if b < 2.0 or b > times[-1] * 0.5:
+            continue
+        before = rms[(times >= b - 2.0) & (times < b)]
+        after = rms[(times >= b) & (times < b + 2.0)]
+        if len(before) == 0 or len(after) == 0:
+            continue
+        jump = float(np.mean(after) / (np.mean(before) + 1e-6))
+        if jump > best_jump:
+            best, best_jump = b, jump
+    # Under 1.5x it is the track breathing, not an arrangement coming in.
+    return (round(best, 4) if best is not None and best_jump >= 1.5 else None), energy
+
+
 def load_manifest() -> dict:
     if MANIFEST.exists():
         return json.loads(MANIFEST.read_text(encoding="utf8"))
@@ -279,6 +315,9 @@ def cmd_ingest(args: argparse.Namespace) -> None:
 
     info = _sf.info(str(dest)) if dest.suffix.lower() in (".wav", ".flac", ".ogg") else None
     duration = info.duration if info else float(beats[-1] + 60 / bpm)
+    drop, energy = detect_drop(dest, beats)
+    if args.drop is not None:
+        drop = args.drop
     m = load_manifest()
     m["tracks"] = [t for t in m["tracks"] if t["id"] != args.id]
     m["tracks"].append(
@@ -294,10 +333,13 @@ def cmd_ingest(args: argparse.Namespace) -> None:
             "beatGrid": beats,
             "license": args.license,
             "source": "licensed",
+            **({"genre": args.genre} if args.genre else {}),
+            **({"energy": energy} if energy is not None else {}),
+            **({"dropSec": drop} if drop is not None else {}),
         }
     )
     save_manifest(m)
-    print(f"ingested {args.id}: {bpm} bpm, {len(beats)} beats")
+    print(f"ingested {args.id}: {bpm} bpm, {len(beats)} beats, drop at {drop if drop is not None else 'none found'}, energy {energy}")
 
 
 def main() -> None:
@@ -311,6 +353,8 @@ def main() -> None:
     ing.add_argument("--mood", required=True)
     ing.add_argument("--license", required=True)
     ing.add_argument("--title")
+    ing.add_argument("--genre", help="free-text tag, e.g. 'future bass' or 'lo-fi'")
+    ing.add_argument("--drop", type=float, help="seconds into the track where the full arrangement comes in (overrides detection)")
     a = p.parse_args()
     cmd_generate(a.all) if a.cmd == "generate" else cmd_ingest(a)
 

@@ -112,6 +112,8 @@ export async function runRenderStage(opts: {
 
     const envConcurrency = Number(process.env.RENDER_CONCURRENCY) || undefined;
     const envChunks = Number(process.env.RENDER_CHUNKS) || undefined;
+    // RENDER_MOTION_BLUR=3 (or 4): captures per frame, averaged. Off by default: it multiplies render time.
+    const motionBlurSamples = Number(process.env.RENDER_MOTION_BLUR) || undefined;
     const outPath = path.join(tmp, `${slug}.mp4`);
     const chunked = await renderChunked({
       manifest: resolved,
@@ -121,6 +123,7 @@ export async function runRenderStage(opts: {
       audioPath,
       concurrency: opts.concurrency ?? envConcurrency,
       chunks: opts.chunks ?? envChunks,
+      ...(motionBlurSamples ? { motionBlurSamples } : {}),
       chunkStore: storageChunkStore(storage, `jobs/${jobId}/render/segments-${slug}`),
       // Pre-resolution manifest: stable across attempts. Font count is included because a retry that
       // loads the brand fonts must not reuse segments an earlier attempt rendered with fallback fonts.

@@ -3,11 +3,12 @@ import { clamp01, easeOutCubic, progress } from "../util/easing.js";
 import { el, setStyle } from "../util/dom.js";
 import { WRAP_SAFE, fitFontSize, layoutFor } from "../util/layout.js";
 import { cardStyle, cueStart, enter, scaleXTo, sceneRoot } from "../util/ui.js";
+import { iconSvg } from "../util/icons.js";
 
 export interface Feature {
   /** Grounded fact: short label, e.g. "Sync across 4 devices". Must cite a factId upstream. */
   label: string;
-  /** Optional icon glyph (emoji/text); cards without one show their position number. */
+  /** Optional icon: one of the names in util/icons.ts (drawn as a line icon), or any glyph/emoji (shown as text); cards without one show their position number. */
   icon?: string;
 }
 
@@ -92,7 +93,11 @@ export function createFeatureTriplet(): SceneTemplate<FeatureTripletProps> {
         });
         node.appendChild(bar);
 
-        const badgeNode = el("div", "ft-icon", feature.icon ?? String(i + 1).padStart(2, "0"));
+        const drawn = iconSvg(feature.icon);
+        // A plain word that isn't one of our icon names ("tag") is a wrong guess, not a glyph: show the number instead of printing it.
+        const glyph = feature.icon && !/^[a-z][a-z -]*$/i.test(feature.icon.trim()) ? feature.icon : undefined;
+        const badgeNode = el("div", "ft-icon", drawn ? undefined : (glyph ?? String(i + 1).padStart(2, "0")));
+        if (drawn) badgeNode.innerHTML = `<div style="width:56%;height:56%;display:flex">${drawn}</div>`;
         setStyle(badgeNode, {
           width: `${badge}px`,
           height: `${badge}px`,
@@ -104,7 +109,7 @@ export function createFeatureTriplet(): SceneTemplate<FeatureTripletProps> {
           background: ctx.palette.accentSoft,
           color: ctx.palette.accentText,
           fontFamily: ctx.fonts.display,
-          fontSize: `${badge * (feature.icon ? 0.56 : 0.4)}px`,
+          fontSize: `${badge * (glyph ? 0.56 : 0.4)}px`,
           fontWeight: "800",
           lineHeight: "1",
           letterSpacing: "-0.02em",
