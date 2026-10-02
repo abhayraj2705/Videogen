@@ -15,6 +15,8 @@ export interface WorkerDeps {
   repoRoot: string;
   publish: (event: JobEvent) => Promise<void>;
   queues: {
+    /** Optional so Phase 2-5 call sites/tests keep compiling; index.ts always provides it (admin re-run from crawl). */
+    crawl?: Queue;
     plan: Queue;
     voice: Queue;
     build: Queue;
@@ -32,4 +34,10 @@ export interface WorkerDeps {
    * that's unset or down they fall back to local ffmpeg / estimated timings.
    */
   sidecar?: AudioSidecarClient | null;
+  /** Phase 6: worker -> web email + Supabase admin. All optional; unset = feature skipped. */
+  phase6?: {
+    webUrl?: string | null;
+    internalSecret?: string | null;
+    fetch?: typeof fetch;
+  };
 }
