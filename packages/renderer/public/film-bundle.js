@@ -1,6 +1,6 @@
 "use strict";
 (() => {
-  // ../../packages/film-runtime/src/util/easing.ts
+  // ../film-runtime/src/util/easing.ts
   var clamp01 = (t) => Math.min(1, Math.max(0, t));
   var linear = (t) => clamp01(t);
   var easeOutCubic = (t) => {
@@ -29,7 +29,7 @@
     return a + (b - a) * t;
   }
 
-  // ../../packages/film-runtime/src/util/dom.ts
+  // ../film-runtime/src/util/dom.ts
   function el(tag, className, text) {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -44,7 +44,7 @@
     node.style.transform = `translateY(${(1 - p) * riseDistancePx}px)`;
   }
 
-  // ../../packages/film-runtime/src/util/text-fit.ts
+  // ../film-runtime/src/util/text-fit.ts
   function wrapText(text, maxCharsPerLine, maxLines = 3) {
     const words = text.trim().split(/\s+/).filter(Boolean);
     const lines = [];
@@ -67,7 +67,7 @@
     return lines;
   }
 
-  // ../../packages/film-runtime/src/util/layout.ts
+  // ../film-runtime/src/util/layout.ts
   var SAFE_AREA = {
     landscape: { left: 0.05, right: 0.05, top: 0.06, bottom: 0.06 },
     portrait: { left: 0.07, right: 0.07, top: 0.1, bottom: 0.14 },
@@ -131,7 +131,7 @@
     minWidth: "0"
   };
 
-  // ../../packages/film-runtime/src/templates/kinetic-hook.ts
+  // ../film-runtime/src/templates/kinetic-hook.ts
   function createKineticHook() {
     let instance;
     return {
@@ -239,7 +239,7 @@
     };
   }
 
-  // ../../packages/film-runtime/src/templates/feature-triplet.ts
+  // ../film-runtime/src/templates/feature-triplet.ts
   var CARD_STAGGER = 0.2;
   var CARD_RISE_DURATION = 0.4;
   function createFeatureTriplet() {
@@ -333,7 +333,7 @@
     };
   }
 
-  // ../../packages/film-runtime/src/templates/section-showcase.ts
+  // ../film-runtime/src/templates/section-showcase.ts
   function createSectionShowcase() {
     let instance;
     return {
@@ -422,7 +422,7 @@
     };
   }
 
-  // ../../packages/film-runtime/src/templates/cta-end-card.ts
+  // ../film-runtime/src/templates/cta-end-card.ts
   function createCTAEndCard() {
     let instance;
     return {
@@ -535,7 +535,7 @@
     };
   }
 
-  // ../../packages/film-runtime/src/templates/logo-reveal.ts
+  // ../film-runtime/src/templates/logo-reveal.ts
   function createLogoReveal() {
     let instance;
     return {
@@ -621,7 +621,7 @@
     };
   }
 
-  // ../../packages/film-runtime/src/templates/hero-rebuild.ts
+  // ../film-runtime/src/templates/hero-rebuild.ts
   function createHeroRebuild() {
     let instance;
     return {
@@ -704,7 +704,7 @@
     };
   }
 
-  // ../../packages/film-runtime/src/templates/ui-flow-cursor.ts
+  // ../film-runtime/src/templates/ui-flow-cursor.ts
   var DEFAULT_PATH = [
     [0.25, 0.35],
     [0.6, 0.5],
@@ -805,7 +805,7 @@
     };
   }
 
-  // ../../packages/film-runtime/src/templates/stat-counter.ts
+  // ../film-runtime/src/templates/stat-counter.ts
   function parseStatValue(value) {
     const match = /^([^\d]*)([\d,]+(?:\.\d+)?)([^\d]*)$/.exec(value.trim());
     if (!match) return { numeric: null, prefix: "", suffix: "", decimals: 0 };
@@ -892,7 +892,7 @@
     };
   }
 
-  // ../../packages/film-runtime/src/templates/quote-card.ts
+  // ../film-runtime/src/templates/quote-card.ts
   function createQuoteCard() {
     let instance;
     return {
@@ -972,7 +972,7 @@
     };
   }
 
-  // ../../packages/film-runtime/src/templates/checklist-reveal.ts
+  // ../film-runtime/src/templates/checklist-reveal.ts
   var ROW_STAGGER = 0.22;
   var ROW_DURATION = 0.4;
   function createChecklistReveal() {
@@ -1065,7 +1065,7 @@
     };
   }
 
-  // ../../packages/film-runtime/src/registry.ts
+  // ../film-runtime/src/registry.ts
   var TEMPLATE_REGISTRY = {
     KineticHook: createKineticHook,
     FeatureTriplet: createFeatureTriplet,
@@ -1086,7 +1086,7 @@
     return factory();
   }
 
-  // ../../packages/film-runtime/src/util/rng.ts
+  // ../film-runtime/src/util/rng.ts
   function hashString(input) {
     let h = 2166136261;
     for (let i = 0; i < input.length; i++) {
@@ -1118,7 +1118,7 @@
     };
   }
 
-  // ../../packages/film-runtime/src/util/color.ts
+  // ../film-runtime/src/util/color.ts
   function parseColor(input) {
     const s = input.trim().toLowerCase();
     const hex = /^#([0-9a-f]{3,8})$/.exec(s);
@@ -1164,7 +1164,7 @@
     return best;
   }
 
-  // ../../packages/film-runtime/src/player.ts
+  // ../film-runtime/src/player.ts
   function toRgbString(color) {
     if (typeof document === "undefined") return color;
     const c = document.createElement("canvas");
@@ -1250,7 +1250,7 @@
     return { seek, duration: manifest.duration, marks };
   }
 
-  // ../../packages/renderer/src/film-entry.ts
+  // src/film-entry.ts
   async function boot() {
     const params = new URLSearchParams(window.location.search);
     const manifestUrl = params.get("manifest");

@@ -24,3 +24,6 @@ packages/renderer/out/
 *.mp4
 __pycache__/
 .pytest_cache/
+
+# Claude Code agent worktrees
+.claude/worktrees/
