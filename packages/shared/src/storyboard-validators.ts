@@ -2,6 +2,8 @@ import { z } from "zod";
 import type { FactLedger, FactLedgerEntry } from "./site.js";
 import { Storyboard as StoryboardSchema, TemplateId, type Storyboard, type ValidationIssue, type ValidationReport } from "./storyboard.js";
 import { MAX_WORDS_ON_SCREEN, READING_SECONDS_PER_WORD, exceedsWordLimit, wordCount } from "./reading.js";
+import { HtmlSceneProps } from "./scene-doc.js";
+import { checkSceneDoc, claimStrings, readableTexts, type SceneDoc } from "./scene-core.js";
 
 /**
  * Per-template prop requirements (§4.6 "Plan": "template requirements (StatCounter
@@ -129,6 +131,7 @@ export const TEMPLATE_PROP_SCHEMAS: Record<TemplateId, z.ZodType> = {
     align: z.enum(["center", "left"]).optional(),
     panel: z.enum(["none", "card", "accent"]).optional(),
   }),
+  HtmlScene: HtmlSceneProps,
 };
 
 /**
@@ -191,6 +194,9 @@ export function visibleTextFor(templateId: TemplateId, props: unknown): string[]
       return (p.blocks as { kind: string; text?: string; items?: string[]; label?: string }[]).flatMap((b) =>
         b.kind === "headline" || b.kind === "body" ? [b.text!] : b.kind === "pills" ? b.items! : b.kind === "stat" && b.label ? [b.label] : [],
       );
+    case "HtmlScene":
+      // Its readable lines; figures count up and are checked as numbers, decorative type is texture.
+      return readableTexts(p.doc as SceneDoc);
     default:
       return null;
   }
@@ -441,6 +447,8 @@ export interface ValidateStoryboardOptions {
    * `missing_featured` error: it fell back on the same few safe templates every film uses.
    */
   featured?: { templates: string[]; min: number };
+  /** Icon names the film runtime draws; an HTML scene's icon nodes must use one. Omit to skip that check. */
+  iconNames?: readonly string[];
 }
 
 /** Errors that ask for better writing rather than report something wrong: a film that only has these is still safe to show. */
@@ -489,7 +497,9 @@ export function validateStoryboard(input: unknown, facts: FactLedger, opts: Vali
     // number in narration, on-screen text or template props must appear in
     // the text of one of THIS scene's cited facts (not just anywhere in the
     // ledger) — citing an unrelated fact to justify a number doesn't count.
-    const propStrings = claimStringsInProps(scene.props);
+    // An HTML scene's claims are its words and figures — not its CSS (where "24px" is no claim) or the template it replaced.
+    const htmlDoc = scene.templateId === "HtmlScene" ? (scene.props as { doc?: SceneDoc }).doc : undefined;
+    const propStrings = htmlDoc?.nodes ? claimStrings(htmlDoc) : scene.templateId === "HtmlScene" ? [] : claimStringsInProps(scene.props);
     const sceneStrings = [scene.narration ?? "", ...scene.onScreenText, ...propStrings];
     const reported = new Set<string>();
     for (const text of sceneStrings) {
@@ -639,6 +649,12 @@ export function validateStoryboard(input: unknown, facts: FactLedger, opts: Vali
           sceneId: scene.id,
           severity: "error",
         });
+      }
+    }
+
+    if (scene.templateId === "HtmlScene") {
+      for (const issue of checkSceneDoc((props as HtmlSceneProps).doc, { durationSec: scene.durationSec, factIds: scene.factIds, ...(opts.pageUrls ? { pageUrls: opts.pageUrls } : {}), ...(opts.iconNames ? { iconNames: opts.iconNames } : {}) })) {
+        issues.push({ code: issue.code, message: `Scene ${scene.id} (designed scene): ${issue.message}`, sceneId: scene.id, severity: "error" });
       }
     }
 

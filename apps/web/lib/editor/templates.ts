@@ -27,6 +27,7 @@ export const TEMPLATE_IDS: TemplateId[] = [
   "PhotoShowcase",
   "IsoStack",
   "Composed",
+  "HtmlScene",
 ];
 
 const LABELS: Record<string, string> = {
@@ -55,6 +56,7 @@ const LABELS: Record<string, string> = {
   PhotoShowcase: "Full-frame image",
   IsoStack: "3D stack",
   Composed: "Composed scene",
+  HtmlScene: "Designed scene",
 };
 
 /** Mirror of shared's SceneTransition enum, with the words an editor would use. */

@@ -7,9 +7,10 @@ import {
   TRANSITION_DURATION,
   type Caption,
   type FilmManifest,
+  type HtmlNodeAsset,
   type ResolvedScene,
 } from "@sitereel/film-runtime";
-import { FORMAT_DIMENSIONS, FULLPAGE_CAPTURE_DEPTH, isSingleImagePage, narrationEchoesScreen, type AspectFormat, type CrawlOutput, type FactRect, type Storyboard } from "@sitereel/shared";
+import { FORMAT_DIMENSIONS, FULLPAGE_CAPTURE_DEPTH, isSingleImagePage, narrationEchoesScreen, resolveAnchors, type AspectFormat, type CrawlOutput, type FactRect, type SceneDoc, type Storyboard } from "@sitereel/shared";
 import { assetRef } from "../lib/asset-ref.js";
 import { phraseCues } from "../lib/vtt.js";
 import { musicStartOffset, shiftBeatGrid, type MusicTrack } from "../lib/music.js";
@@ -19,6 +20,14 @@ const SAFE_FONT_STACK = "system-ui, -apple-system, Segoe UI, sans-serif";
 
 /** Templates that show the site inside a window (a browser frame or a device screen): the "hero" a match cut follows. */
 const WINDOW_TEMPLATES: ReadonlySet<string> = new Set(["SectionShowcase", "UIFlowCursor", "DeviceMockup", "StepByStep"]);
+
+/** A designed scene's doc, when it is one. */
+const htmlDocOf = (scene: { templateId: string; props: unknown }): SceneDoc | null => (scene.templateId === "HtmlScene" ? ((scene.props as { doc?: SceneDoc }).doc ?? null) : null);
+
+/** Whether a scene shows the site in a window — a template that does, or a designed scene with a browser frame in it. */
+const showsWindow = (scene: { templateId: string; props: unknown }) => WINDOW_TEMPLATES.has(scene.templateId) || !!htmlDocOf(scene)?.nodes.some((n) => n.kind === "frame");
+
+const sameUrl = (a: string, b: string) => a.replace(/#.*$/, "").replace(/\/$/, "") === b.replace(/#.*$/, "").replace(/\/$/, "");
 
 /** Crossfade between scenes when a caller forces one length for every cut; by default each cut takes its kind's own length (TRANSITION_DURATION). */
 export const TRANSITION_SEC = 0.4;
@@ -169,6 +178,27 @@ function resolveProps(templateId: string, props: Record<string, unknown>, crawlO
     log.clipUsed = true;
     return { frames: page.clip.frameKeys.map((k) => assetRef("assets", k)), fps: page.clip.fps };
   };
+  if (templateId === "HtmlScene") {
+    // A designed scene names pages and facts per node; each gets its picture, address and camera target here.
+    const doc = (props as { doc: SceneDoc }).doc;
+    const moves = (id: string, preset: string, v: string) => doc.timeline.some((t) => t.target === id && (t.preset === preset || new RegExp(`(^|;)\\s*${v}\\s*:`).test(`${t.from ?? ""};${t.to ?? ""}`)));
+    const assets: Record<string, HtmlNodeAsset> = {};
+    for (const node of doc.nodes) {
+      if (!node.page || (node.kind !== "frame" && node.kind !== "shot" && node.kind !== "image")) continue;
+      const page = crawlOutput.pages.find((p) => sameUrl(p.url, node.page!));
+      if (!page?.screenshotKey) continue;
+      // A picture shows a page by its first screenful (or the single image); a window holds the whole page to scroll and zoom.
+      const key = node.kind === "image" ? (isSingleImagePage(page) ? page.screenshotKey : (page.sectionScreenshotKeys?.[0] ?? page.screenshotKey)) : page.screenshotKey;
+      const wantsFocus = node.kind !== "image" && (moves(node.id, "focus", "focus") || moves(node.id, "focus", "ring"));
+      const own = node.fact ? focusRectFor([node.fact], { ...crawlOutput, pages: [] }, page.url) : undefined;
+      const focus = wantsFocus ? (own ?? focusRectFor(factIds, crawlOutput, page.url) ?? autoStopsFor(crawlOutput, page.url, sceneText, log, 1)[0]) : undefined;
+      if (focus) remember(log, page.url, [focus]);
+      const clip = node.kind !== "image" && moves(node.id, "play", "play") ? clipFor(page) : null;
+      assets[node.id] = { src: assetRef("assets", key), ...(node.kind === "frame" ? { pageLabel: pageLabel(page.url) } : {}), ...(focus ? { focus } : {}), ...(clip ? { clip } : {}) };
+    }
+    const { fallback: _fallback, ...rest } = props;
+    return { ...rest, assets, productName: crawlOutput.siteBrief.productName, ...(crawlOutput.brand.logoUrl ? { logoUrl: crawlOutput.brand.logoUrl } : {}) };
+  }
   if (templateId === "FeatureCallouts") {
     const page = crawlOutput.pages.find((p) => p.url === props.sourcePageUrl) ?? crawlOutput.pages[0];
     const { sourcePageUrl: _drop, items, ...rest } = props;
@@ -321,7 +351,7 @@ export function buildFilmManifest(opts: {
   // travels from one into the other) unless the storyboard chose the cut itself.
   const transitions = storyboard.scenes.map((scene, i) => {
     const prev = storyboard.scenes[i - 1];
-    if (!scene.transition && prev && WINDOW_TEMPLATES.has(scene.templateId) && WINDOW_TEMPLATES.has(prev.templateId)) return "match" as const;
+    if (!scene.transition && prev && showsWindow(scene) && showsWindow(prev)) return "match" as const;
     return resolveTransition(style, i, scene.transition);
   });
 
@@ -359,6 +389,17 @@ export function buildFilmManifest(opts: {
     const voice = voiceBySceneId.get(scene.id);
     const cues = items && voice?.audioKey ? listCues(items, voice.words, slot.audioStart - slot.start, slot.end - slot.start) : null;
     const emphasis = scene.emphasis?.length ? { words: scene.emphasis, at: emphasisMoment(scene, voice, slot.audioStart - slot.start, slot.end - slot.start) } : null;
+    const resolved = resolveProps(scene.templateId, scene.props, crawlOutput, scene.factIds, cameraLog, `${scene.onScreenText.join(" ")} ${scene.narration ?? ""}`);
+    const doc = htmlDocOf(scene);
+    if (doc) {
+      // Pin the designed scene's anchors to this film's real voice timing, beats and scene length.
+      const offset = slot.audioStart - slot.start;
+      resolved.doc = resolveAnchors(doc, {
+        sceneDuration: slot.end - slot.start,
+        words: voice?.audioKey ? voice.words.map((w) => ({ word: w.word, t: offset + w.startSec })) : [],
+        beats: (beatGrid?.length ? expandBeatGrid(beatGrid, opts.music!.loopSec, timeline.duration) : []).map((b) => b - slot.start).filter((b) => b >= 0 && b <= slot.end - slot.start),
+      });
+    }
     return {
       id: scene.id,
       templateId: scene.templateId,
@@ -369,7 +410,7 @@ export function buildFilmManifest(opts: {
       audioStart: slot.audioStart,
       ...(emphasis ? { emphasis } : {}),
       props: {
-        ...resolveProps(scene.templateId, scene.props, crawlOutput, scene.factIds, cameraLog, `${scene.onScreenText.join(" ")} ${scene.narration ?? ""}`),
+        ...resolved,
         ...(cues ? { cues } : {}),
         // Every walkthrough step shows how many steps there are.
         ...(scene.templateId === "StepByStep" ? { total: storyboard.scenes.filter((s) => s.templateId === "StepByStep").length } : {}),
@@ -387,8 +428,10 @@ export function buildFilmManifest(opts: {
       // A line that only reads the scene's own titles aloud would put the same words on screen twice.
       return narrationEchoesScreen(scene) ? cues.map((c) => ({ ...c, burn: false })) : cues;
     }
+    // No voice: the cue is the scene's own on-screen text (or an unvoiced line), for the .vtt — burning it in would
+    // print the title a second time under itself.
     const text = scene.narration ?? scene.onScreenText.join(" ");
-    return text ? [{ t0: slot.slotStart, t1: slot.slotEnd, text }] : [];
+    return text ? [{ t0: slot.slotStart, t1: slot.slotEnd, text, ...(scene.narration ? {} : { burn: false }) }] : [];
   });
 
   // Real speech only: the silent TTS fallback still produces a clip + estimated words, but there is nothing to read along to.

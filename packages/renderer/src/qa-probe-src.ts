@@ -96,7 +96,9 @@ export const SCENE_PROBE_JS = String.raw`function (args) {
       bg: rgb(effectiveBg(el)),
       fontSize: parseFloat(cs.fontSize),
       fontWeight: Number(cs.fontWeight) || 400,
-      clipped: clipped
+      clipped: clipped,
+      // A letter of a word typed out letter by letter (HTML scenes) belongs to the letter before it, with no space.
+      glue: el.classList.contains("hs-ch") && !!el.previousElementSibling
     });
   }
   return { found: true, textItems: textItems, overflowEls: overflowEls, content: content };

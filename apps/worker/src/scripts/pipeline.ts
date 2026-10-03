@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
 import { CrawlOutput, JobOptions, Storyboard, resolveMusicMood, ffprobe, formatSlug, runFfmpegQuiet, userUploadPrefix, validateStoryboard, type AspectFormat, type JobMedia } from "@sitereel/shared";
 import { createLocalStorageClient, type StorageClient } from "@sitereel/storage";
-import { scriptProviders, selectLlmProviders, selectTtsProvider, type LlmEnv } from "../lib/llm-providers.js";
+import { composeProvider, scriptProviders, selectLlmProviders, selectTtsProvider, type LlmEnv } from "../lib/llm-providers.js";
 import { parseColor, type FilmManifest } from "@sitereel/film-runtime";
 import { bundleFilmEntry, startFilmServer } from "@sitereel/renderer";
 import { runCrawlStage } from "../stages/crawl.js";
@@ -231,7 +231,8 @@ async function main() {
   console.log(`  ruled out: ${profile.ruledOut.map((f) => f.template).join(", ") || "(nothing)"}`);
 
   // 2. Plan — or the edited storyboard (W6 editor save), which replaces it.
-  const planHash = sha16(["plan-v3", crawl, options.videoType, options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, gemini?.id ?? null, anthropic?.id ?? null]);
+  const storyboardSceneCount = (sb: Storyboard) => sb.scenes.length;
+  const planHash = sha16(["plan-v4", (process.env.SITEREEL_HTML_SCENES ?? "").toLowerCase() === "off" ? "templates" : "designed", crawl, options.videoType, options.tone, options.lengthSec, options.voiceLanguage, options.noVoiceover, gemini?.id ?? null, anthropic?.id ?? null]);
   const plannedPath = path.join(outDir, "storyboard.planned.json");
   let storyboard: Storyboard;
   if (editPath) {
@@ -244,7 +245,15 @@ async function main() {
     storyboard = Storyboard.parse(JSON.parse(await fsp.readFile(plannedPath, "utf8")));
     note("plan", "skipped", "inputs unchanged — reused storyboard.planned.json");
   } else {
-    const planned = await t("plan", () => runPlanStage(crawl, options, { primaryProvider: gemini, escalationProvider: anthropic, ...scriptProviders({ primary: gemini, escalation: anthropic }), seed: jobId }));
+    const designer = composeProvider({ primary: gemini, escalation: anthropic });
+    const planned = await t("plan", () =>
+      runPlanStage(crawl, options, { primaryProvider: gemini, escalationProvider: anthropic, ...scriptProviders({ primary: gemini, escalation: anthropic }), composeProvider: designer, seed: jobId, log: (m) => console.log(`
+  [compose] ${m}`) }),
+    );
+    if (planned.compose) {
+      console.log(`  designed scenes: ${planned.compose.composed.length}/${storyboardSceneCount(planned.storyboard)}${planned.compose.kept.length ? ` — kept templates: ${planned.compose.kept.map((k) => `${k.sceneId} (${k.reason.slice(0, 90)})`).join("; ")}` : ""}`);
+      await fsp.writeFile(path.join(outDir, "compose.json"), JSON.stringify(planned.compose, null, 2));
+    }
     storyboard = planned.storyboard;
     console.log(`  signature scenes: ${planned.featured.join(", ") || "(none)"}${planned.addedScenes.length ? ` — cut in by code: ${planned.addedScenes.join(", ")}` : ""}`);
     if (planned.script) {

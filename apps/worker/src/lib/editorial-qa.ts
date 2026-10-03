@@ -1,5 +1,5 @@
 import type { FilmManifest } from "@sitereel/film-runtime";
-import { SCREENSHOT_TEMPLATES } from "@sitereel/shared";
+import { SCREENSHOT_TEMPLATES, type SceneDoc } from "@sitereel/shared";
 
 export interface EditorialIssue {
   code: "long_scene" | "repetitive_edit" | "low_product_share" | "narration_reads_titles";
@@ -10,6 +10,13 @@ export interface EditorialIssue {
 
 /** Scenes that put the product itself on screen. */
 const PRODUCT_TEMPLATES = new Set([...SCREENSHOT_TEMPLATES, "Montage"]);
+
+/** A template that shows the product, or a designed scene with a page or picture of it in it. */
+function showsProduct(scene: { templateId: string; props: unknown }): boolean {
+  if (PRODUCT_TEMPLATES.has(scene.templateId)) return true;
+  const doc = scene.templateId === "HtmlScene" ? (scene.props as { doc?: SceneDoc }).doc : undefined;
+  return !!doc?.nodes.some((n) => n.kind === "frame" || n.kind === "shot" || n.kind === "image");
+}
 /** Past this a scene has outlived its one idea, unless it reveals a list on voice cues. */
 const MAX_SCENE_SEC = 6;
 
@@ -32,7 +39,8 @@ export function editorialIssues(manifest: FilmManifest): EditorialIssue[] {
   }
 
   for (let i = 1; i < scenes.length; i++) {
-    if (scenes[i]!.templateId === scenes[i - 1]!.templateId) {
+    // Designed scenes are each made for their moment; two in a row are no more alike than any two shots.
+    if (scenes[i]!.templateId === scenes[i - 1]!.templateId && scenes[i]!.templateId !== "HtmlScene") {
       issues.push({ code: "repetitive_edit", severity: "warning", sceneId: scenes[i]!.id, message: `Scenes ${scenes[i - 1]!.id} and ${scenes[i]!.id} use the same template (${scenes[i]!.templateId}) back to back` });
     }
     if (i >= 3 && scenes[i]!.transition && scenes[i]!.transition === scenes[i - 1]!.transition && scenes[i]!.transition === scenes[i - 2]!.transition) {
@@ -40,7 +48,7 @@ export function editorialIssues(manifest: FilmManifest): EditorialIssue[] {
     }
   }
 
-  const productSec = scenes.filter((s) => PRODUCT_TEMPLATES.has(s.templateId)).reduce((sum, s) => sum + (s.end - s.start), 0);
+  const productSec = scenes.filter(showsProduct).reduce((sum, s) => sum + (s.end - s.start), 0);
   if (manifest.duration > 0 && productSec / manifest.duration < 0.3) {
     issues.push({ code: "low_product_share", severity: "warning", message: `The product is on screen for ${Math.round((productSec / manifest.duration) * 100)}% of the film (aim for 30%+)` });
   }

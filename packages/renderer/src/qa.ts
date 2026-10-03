@@ -121,7 +121,7 @@ export function settleTimes(manifest: FilmManifest): { sceneId: string; t: numbe
 
 interface ProbeOutput {
   found: boolean;
-  textItems: { text: string; opacity: number; rect: [number, number, number, number]; color: string; bg: string; fontSize: number; fontWeight: number; clipped: boolean }[];
+  textItems: { text: string; opacity: number; rect: [number, number, number, number]; color: string; bg: string; fontSize: number; fontWeight: number; clipped: boolean; glue?: boolean }[];
   overflowEls: { tag: string; cls: string; rect: [number, number, number, number] }[];
   /** Bounding box of everything the scene draws at its settle frame; null when it draws nothing. */
   content?: [number, number, number, number] | null;
@@ -213,7 +213,7 @@ export async function runFilmQa(opts: FilmQaOptions): Promise<FilmQaResult> {
       }
 
       const visible = probe.textItems.filter((i) => i.opacity > 0.5 && i.rect[2] - i.rect[0] > 0);
-      const visibleText = visible.map((i) => i.text).join(" ");
+      const visibleText = visible.map((i, n) => (n > 0 && !i.glue ? " " : "") + i.text).join("");
       textOut.push({ sceneId, t, visibleText });
 
       for (const expected of opts.expectedText?.[sceneId] ?? []) {

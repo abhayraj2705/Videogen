@@ -60,8 +60,10 @@ export type PlanOverrides = z.infer<typeof PlanOverrides>;
 export const PlanJobDataP6 = z
   .object({
     jobId: z.string().uuid(),
-    reason: z.string().optional(), // "quick-change" | "rerun" | undefined (initial plan)
+    reason: z.string().optional(), // "quick-change" | "rerun" | "redesign" | undefined (initial plan)
     overrides: PlanOverrides.optional(),
+    /** reason "redesign": re-design one scene of `baseVersion` as the editor asked; saved as the next version, nothing else changes. */
+    redesign: z.object({ sceneId: z.string().min(1).max(100), instruction: z.string().max(500), baseVersion: z.number().int().positive() }).optional(),
   })
   .passthrough();
 export type PlanJobDataP6 = z.infer<typeof PlanJobDataP6>;

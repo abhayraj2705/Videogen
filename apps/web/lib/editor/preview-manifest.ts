@@ -1,5 +1,6 @@
 import type { AspectFormat, Storyboard } from "@sitereel/shared";
 import { FORMAT_DIMENSIONS } from "@/lib/formats";
+import { previewHtmlProps } from "@/lib/editor/html-scene";
 
 /**
  * Client-side Storyboard → FilmManifest for the editor's live preview.
@@ -150,7 +151,10 @@ export function buildPreviewManifest(
       transitionInSec: i > 0 ? TRANSITION_SEC : 0,
       ...(i > 0 && scene.transition ? { transition: scene.transition } : {}),
       audioStart: round3(slot.start + AUDIO_LEAD_SEC),
-      props: previewProps(scene.templateId, scene.props, brand),
+      props:
+        scene.templateId === "HtmlScene"
+          ? previewHtmlProps(scene.props, { sceneDuration: slot.duration, narration: scene.narration, leadSec: AUDIO_LEAD_SEC, placeholder: (url) => screenshotPlaceholder(pageLabel(url), brand), logoUrl: brand.logoUrl })
+          : previewProps(scene.templateId, scene.props, brand),
     };
   });
 

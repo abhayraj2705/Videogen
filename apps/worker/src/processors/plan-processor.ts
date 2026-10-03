@@ -1,9 +1,12 @@
 import type { Job as BullJob } from "bullmq";
 import { eq, desc } from "drizzle-orm";
 import { jobs, crawls } from "@sitereel/db";
-import { QUEUE_NAMES, type CrawlOutput, type JobOptions, type JobStatus } from "@sitereel/shared";
+import { QUEUE_NAMES, validateStoryboard, type CrawlOutput, type JobOptions, type JobStatus, type Storyboard } from "@sitereel/shared";
+import { ICON_NAMES } from "@sitereel/film-runtime";
 import { runPlanStage } from "../stages/plan.js";
-import { scriptProviders } from "../lib/llm-providers.js";
+import { redesignScene } from "../lib/scene-composer.js";
+import { screenshotPageUrls } from "../lib/storyboard-fallback.js";
+import { composeProvider, scriptProviders } from "../lib/llm-providers.js";
 import { buildSiteProfile } from "../lib/site-profile.js";
 import { deriveSiteLook } from "../lib/site-look.js";
 import { chainJobId } from "./voice-processor.js";
@@ -11,7 +14,7 @@ import type { WorkerDeps } from "./types.js";
 import { PlanJobDataP6, type PlanOverrides } from "../lib/phase6-contracts.js";
 import { sha16 } from "../lib/input-hash.js";
 import { storyboardRowSource } from "../lib/job-policy.js";
-import { finishStageRun, insertStoryboardVersion, startStageRun } from "../lib/db-adapters.js";
+import { finishStageRun, insertStoryboardVersion, loadStoryboardVersion, startStageRun } from "../lib/db-adapters.js";
 import { assertNotCancelled, setJobStatus } from "../lib/job-lifecycle.js";
 
 /** Applies quick-change overrides (tone / length / voice) on top of the job's options. */
@@ -27,10 +30,49 @@ export function applyPlanOverrides(options: JobOptions, overrides: PlanOverrides
   };
 }
 
+/**
+ * The editor's "redesign this scene": one scene of one version re-composed as asked, saved as the next version.
+ * The job's status doesn't move (the user is still reviewing, or looking at a finished film); the editor learns
+ * the outcome from the published event and reloads.
+ */
+async function processRedesign(deps: WorkerDeps, jobId: string, ask: NonNullable<PlanJobDataP6["redesign"]>): Promise<void> {
+  const log = deps.logger.child({ jobId, stage: "plan", reason: "redesign", sceneId: ask.sceneId });
+  const [jobRow] = await deps.db.select().from(jobs).where(eq(jobs.id, jobId)).limit(1);
+  const [crawlRow] = await deps.db.select().from(crawls).where(eq(crawls.jobId, jobId)).orderBy(desc(crawls.createdAt)).limit(1);
+  const row = await loadStoryboardVersion(deps.db, jobId, ask.baseVersion);
+  if (!jobRow || !crawlRow || !row) throw new Error(`redesign: missing job, crawl or storyboard v${ask.baseVersion} for jobId=${jobId}`);
+  const crawl: CrawlOutput = { domain: crawlRow.domain, pages: crawlRow.pages, brand: crawlRow.brand, facts: crawlRow.facts, siteBrief: crawlRow.siteBrief };
+  const announce = (ok: boolean, message: string, extra: Record<string, unknown> = {}) =>
+    deps.publish({ jobId, stage: "plan", status: jobRow.status, pct: 100, message, payload: { redesign: { sceneId: ask.sceneId, ok, ...extra } }, at: new Date().toISOString() });
+
+  const provider = composeProvider(deps.llm);
+  if (!provider) {
+    await announce(false, "No design model is configured", { reason: "no_model" });
+    return;
+  }
+  const inputsHash = sha16(["redesign-v1", row.id, ask.sceneId, ask.instruction]);
+  const runId = await startStageRun(deps.db, { jobId, stage: "plan", inputsHash });
+  const result = await redesignScene(row.json as Storyboard, ask.sceneId, ask.instruction, crawl, jobRow.options, provider);
+  const costUsd = result.calls.reduce((n, c) => n + c.costUsd, 0);
+  const validation = result.storyboard ? validateStoryboard(result.storyboard, crawl.facts, { pageUrls: screenshotPageUrls(crawl), iconNames: ICON_NAMES }) : null;
+  if (!result.storyboard || !validation?.valid) {
+    const reason = result.storyboard ? (validation?.issues.find((i) => i.severity === "error")?.message ?? "invalid") : result.reason;
+    await finishStageRun(deps.db, runId, { status: "ok", inputsHash, costUsd, outputs: { redesign: { sceneId: ask.sceneId, ok: false, reason }, llmCalls: result.calls } });
+    log.warn({ reason }, "redesign produced no valid scene");
+    await announce(false, "Couldn't redesign that scene", { reason });
+    return;
+  }
+  const saved = await insertStoryboardVersion(deps.db, { jobId, storyboard: result.storyboard, validation, source: storyboardRowSource("llm") });
+  await finishStageRun(deps.db, runId, { status: "ok", inputsHash, costUsd, outputs: { redesign: { sceneId: ask.sceneId, ok: true, version: saved.version }, llmCalls: result.calls } });
+  log.info({ version: saved.version, costUsd }, "scene redesigned");
+  await announce(true, `Scene redesigned (v${saved.version})`, { version: saved.version });
+}
+
 export function createPlanProcessor(deps: WorkerDeps) {
   return async function processPlan(job: BullJob): Promise<void> {
     const data = PlanJobDataP6.parse(job.data);
     const { jobId } = data;
+    if (data.reason === "redesign" && data.redesign) return processRedesign(deps, jobId, data.redesign);
     const isQuickChange = data.reason === "quick-change";
     const log = deps.logger.child({ jobId, stage: "plan", reason: data.reason });
 
@@ -57,7 +99,14 @@ export function createPlanProcessor(deps: WorkerDeps) {
     const runId = await startStageRun(deps.db, { jobId, stage: "plan", inputsHash });
 
     const profile = buildSiteProfile(crawlOutput, options.videoType);
-    const result = await runPlanStage(crawlOutput, options, { primaryProvider: deps.llm.primary, escalationProvider: deps.llm.escalation, ...scriptProviders(deps.llm), seed: jobId });
+    const result = await runPlanStage(crawlOutput, options, {
+      primaryProvider: deps.llm.primary,
+      escalationProvider: deps.llm.escalation,
+      ...scriptProviders(deps.llm),
+      composeProvider: composeProvider(deps.llm),
+      seed: jobId,
+      log: (m) => log.info(m),
+    });
     await assertNotCancelled(deps, jobId);
 
     // Storyboard versioning (W6): every plan appends max(version)+1.
@@ -83,6 +132,8 @@ export function createPlanProcessor(deps: WorkerDeps) {
         llmCalls: result.calls,
         featured: result.featured,
         ...(result.addedScenes.length ? { addedScenes: result.addedScenes } : {}),
+        // Which scenes were designed for this film and which kept their template (and why), with the composer's calls.
+        ...(result.compose ? { compose: result.compose } : {}),
         // The script the storyboard was cut to, with the editor's scores, and what writing it cost.
         ...(result.script ? { script: { hook: result.script.hook, lines: result.script.lines.map((l) => l.line), critique: result.script.critique, rewritten: result.script.rewritten } } : {}),
         ...(result.scriptCalls?.length ? { scriptCalls: result.scriptCalls } : {}),

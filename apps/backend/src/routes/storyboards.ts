@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { and, asc, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 import { audioTakes, jobs, storyboards, type Db } from "@sitereel/db";
-import { QUEUE_NAMES, syncOnScreenText, type Storyboard, type VoiceJobDataP6 } from "@sitereel/shared";
+import { QUEUE_NAMES, syncOnScreenText, type PlanJobDataP6, type Storyboard, type VoiceJobDataP6 } from "@sitereel/shared";
 import type { StorageClient } from "@sitereel/storage";
 import type { AuthVerifier } from "../lib/auth.js";
 import type { Queues } from "../lib/queue.js";
@@ -37,6 +37,8 @@ const PutStoryboardBody = z.object({
 
 const RevoiceBody = z.object({ sceneId: z.string().min(1).max(100) });
 
+const RedesignBody = z.object({ sceneId: z.string().min(1).max(100), instruction: z.string().max(500).default("") });
+
 const ApproveBody = z.object({ version: z.number().int().positive().optional() }).optional();
 
 const VOICE_JOB_OPTS = { attempts: 2, backoff: { type: "fixed" as const, delay: 5_000 } };
@@ -48,6 +50,7 @@ const VOICE_JOB_OPTS = { attempts: 2, backoff: { type: "fixed" as const, delay: 
  *   GET  /api/jobs/:id/storyboard/versions
  *   PUT  /api/jobs/:id/storyboard            { baseVersion, storyboard } → { version, validation } (409 version_conflict)
  *   POST /api/jobs/:id/storyboard/revoice    { sceneId } → 202
+ *   POST /api/jobs/:id/storyboard/redesign   { sceneId, instruction } → 202 (the worker saves the next version and emits a plan event)
  *   POST /api/jobs/:id/approve               { version? } → { ok, version } (422 storyboard_invalid)
  *   GET  /api/jobs/:id/audio/:takeId         audio take (media; accepts ?token=)
  */
@@ -158,6 +161,33 @@ export function registerStoryboardRoutes(app: FastifyInstance, deps: StoryboardR
     } catch (err) {
       withJob(deps.logger, job.id, user.id).error({ err }, "revoice enqueue failed");
       return sendError(reply, 503, "queue_unavailable", "Couldn't queue the re-voice. Try again in a moment.");
+    }
+    return reply.code(202).send({ ok: true, version: latest.version, sceneId: parsed.data.sceneId });
+  });
+
+  app.post<{ Params: { id: string } }>("/api/jobs/:id/storyboard/redesign", async (req, reply) => {
+    const user = await deps.verifyAuth(req, reply);
+    if (!user) return;
+    const parsed = RedesignBody.safeParse(req.body);
+    if (!parsed.success) return sendInvalidBody(reply, parsed.error);
+    const job = await loadOwnedJob(db, reply, req.params.id, user.id);
+    if (!job) return;
+    if (!isEditableStatus(job.status)) {
+      return sendError(reply, 409, "not_editable", "Scenes can only be redesigned while reviewing or after the video finished.", { status: job.status });
+    }
+    const latest = await loadLatestStoryboard(db, job.id);
+    if (!latest) return sendError(reply, 404, "storyboard_not_found", "This video doesn't have a script yet.");
+    const scenes = (latest.json as { scenes?: { id?: unknown }[] }).scenes ?? [];
+    if (!scenes.some((s) => s?.id === parsed.data.sceneId)) {
+      return sendError(reply, 404, "scene_not_found", `Scene "${parsed.data.sceneId}" isn't in the latest script.`);
+    }
+    // Redesigns the latest saved version: the editor saves pending edits before asking.
+    const data: PlanJobDataP6 = { jobId: job.id, reason: "redesign", redesign: { sceneId: parsed.data.sceneId, instruction: parsed.data.instruction.trim(), baseVersion: latest.version } };
+    try {
+      await deps.queues.plan.add(QUEUE_NAMES.plan, data, { attempts: 1, jobId: uniqueJobId(job.id, "redesign", latest.version) });
+    } catch (err) {
+      withJob(deps.logger, job.id, user.id).error({ err }, "redesign enqueue failed");
+      return sendError(reply, 503, "queue_unavailable", "Couldn't queue the redesign. Try again in a moment.");
     }
     return reply.code(202).send({ ok: true, version: latest.version, sceneId: parsed.data.sceneId });
   });

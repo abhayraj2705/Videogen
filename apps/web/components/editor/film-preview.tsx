@@ -46,9 +46,13 @@ export const FilmPreview = forwardRef<
     sceneLabels: Record<string, string>;
     onTimeChange?: (t: number, sceneId: string | null) => void;
     onSceneClick?: (sceneId: string) => void;
+    /** A designed scene's element to outline in the picture. */
+    highlight?: { sceneId: string; el: string } | null;
+    /** A click on the picture: the scene and the designed-scene element under the pointer (null when none). */
+    onPick?: (sceneId: string | null, el: string | null) => void;
     className?: string;
   }
->(function FilmPreview({ manifest, audioUrls, sceneLabels, onTimeChange, onSceneClick, className }, ref) {
+>(function FilmPreview({ manifest, audioUrls, sceneLabels, onTimeChange, onSceneClick, highlight = null, onPick, className }, ref) {
   const [frames, setFrames] = useState<Frame[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [t, setT] = useState(POSTER_T);
@@ -59,6 +63,10 @@ export const FilmPreview = forwardRef<
   const tRef = useRef(POSTER_T);
   const audios = useRef(new Map<string, HTMLAudioElement>());
   const framesRef = useRef<Frame[]>([]);
+  const onPickRef = useRef(onPick);
+  useEffect(() => {
+    onPickRef.current = onPick;
+  }, [onPick]);
   useEffect(() => {
     framesRef.current = frames;
   }, [frames]);
@@ -94,7 +102,7 @@ export const FilmPreview = forwardRef<
       const entry = [...iframes.current.entries()].find(([, el]) => el.contentWindow === e.source);
       if (!entry) return;
       const [id, el] = entry;
-      const msg = e.data as { type: string; duration?: number; message?: string };
+      const msg = e.data as { type: string; duration?: number; message?: string; sceneId?: string | null; el?: string | null };
       if (msg.type === "host-ready") {
         const f = framesRef.current.find((x) => x.id === id);
         if (f) el.contentWindow?.postMessage({ type: "load", manifest: f.manifest }, window.location.origin);
@@ -106,6 +114,8 @@ export const FilmPreview = forwardRef<
           // Drop older frames once the newer one is live.
           return prev.slice(idx).map((x) => (x.id === id ? { ...x, ready: true } : x));
         });
+      } else if (msg.type === "pick") {
+        onPickRef.current?.(msg.sceneId ?? null, msg.el ?? null);
       } else if (msg.type === "error") {
         setError(msg.message ?? "The preview failed to load.");
       }
@@ -125,6 +135,15 @@ export const FilmPreview = forwardRef<
   );
 
   useImperativeHandle(ref, () => ({ seek, pause: () => setPlaying(false) }), [seek]);
+
+  // Outline the element being edited, in whichever frame is live (and again whenever a new one goes live).
+  const highlightKey = highlight ? `${highlight.sceneId}|${highlight.el}` : "";
+  useEffect(() => {
+    for (const el of iframes.current.values()) {
+      el.contentWindow?.postMessage({ type: "highlight", sceneId: highlight?.sceneId ?? null, el: highlight?.el ?? null }, window.location.origin);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- keyed on the highlight's value, not its object identity
+  }, [highlightKey, active?.id]);
 
   // Report playhead + current scene.
   useEffect(() => {

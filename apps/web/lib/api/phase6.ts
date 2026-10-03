@@ -100,6 +100,11 @@ export async function revoiceScene(jobId: string, sceneId: string): Promise<void
   await apiFetch(`/api/jobs/${jobId}/storyboard/revoice`, { method: "POST", ...json({ sceneId }) });
 }
 
+/** POST /api/jobs/:id/storyboard/redesign — the worker re-designs one scene of the latest saved version as asked and saves the next version (a `plan` event with payload.redesign says when). */
+export async function redesignScene(jobId: string, sceneId: string, instruction: string): Promise<void> {
+  await apiFetch(`/api/jobs/${jobId}/storyboard/redesign`, { method: "POST", ...json({ sceneId, instruction }) });
+}
+
 /** POST /api/jobs/:id/approve {version?} — 422 `storyboard_invalid` when that version fails validation. */
 export async function approveVersion(jobId: string, version?: number): Promise<void> {
   await apiFetch(`/api/jobs/${jobId}/approve`, { method: "POST", ...(version !== undefined ? json({ version }) : {}) });

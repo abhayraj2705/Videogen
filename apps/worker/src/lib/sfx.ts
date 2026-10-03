@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { cursorClickTimes, montageCuts, type FilmManifest } from "@sitereel/film-runtime";
+import { compileTimeline, type SceneDoc } from "@sitereel/shared";
 
 export type SfxKind = "whoosh" | "hit" | "pop" | "rise" | "sting" | "click";
 
@@ -18,6 +19,17 @@ const SAMPLE_RATE = 48000;
  * sit just above the music and clearly under the voice.
  */
 export const SFX_GAIN: Record<SfxKind, number> = { whoosh: 0.3, hit: 0.4, pop: 0.26, rise: 0.22, sting: 0.28, click: 0.3 };
+
+const SFX_KINDS: readonly string[] = ["whoosh", "hit", "pop", "rise", "sting", "click"];
+/** Motions that make their own sound when a designed scene doesn't name one: a click is heard, a figure rises. */
+const PRESET_SFX: Record<string, SfxKind> = { click: "click", "count-up": "rise" };
+
+/** A designed scene's sounds, from the start of the tween that makes them (brag's rule: sound on the start of the motion). */
+function htmlSceneSfx(doc: SceneDoc): { kind: SfxKind; t: number }[] {
+  const named = compileTimeline(doc).sfx.filter((e) => SFX_KINDS.includes(e.sfx)).map((e) => ({ kind: e.sfx as SfxKind, t: e.t }));
+  const implied = doc.timeline.filter((tw) => !tw.sfx && tw.preset && PRESET_SFX[tw.preset]).map((tw) => ({ kind: PRESET_SFX[tw.preset!]!, t: tw.at }));
+  return [...named, ...implied];
+}
 
 /**
  * Where the film wants a sound: a whoosh under every moving cut, a hit on a
@@ -38,6 +50,10 @@ export function sfxEvents(manifest: FilmManifest): SfxEvent[] {
     if (scene.templateId === "StatCounter") events.push({ kind: "rise", t: scene.start + 0.1 });
     if (scene.templateId === "UIFlowCursor") {
       for (const c of cursorClickTimes(scene.props as Parameters<typeof cursorClickTimes>[0])) events.push({ kind: "click", t: scene.start + c });
+    }
+    if (scene.templateId === "HtmlScene") {
+      const doc = (scene.props as { doc?: SceneDoc }).doc;
+      if (doc) for (const e of htmlSceneSfx(doc)) events.push({ kind: e.kind, t: scene.start + e.t });
     }
     if (scene.templateId === "Montage") {
       const shots = (scene.props as { screenshotUrls?: unknown[] }).screenshotUrls?.length ?? 0;

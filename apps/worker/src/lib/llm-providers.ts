@@ -1,5 +1,5 @@
 import { createElevenLabsTtsProvider, createGeminiTtsProvider, type TtsProvider } from "@sitereel/tts";
-import { createAnthropicProvider, createGeminiProvider, createOpenAiCompatProvider, type LlmProvider } from "@sitereel/llm";
+import { costOfError, createAnthropicProvider, createGeminiProvider, createOpenAiCompatProvider, type LlmProvider } from "@sitereel/llm";
 
 /** The LLM slice of ServerEnv; also satisfied by raw process.env (scripts). */
 export interface LlmEnv {
@@ -76,6 +76,38 @@ export function scriptProviders(
   const anthropic = llm.escalation?.id.startsWith("anthropic") ? llm.escalation : null;
   const writer = named ?? anthropic ?? llm.primary ?? llm.escalation;
   return { scriptProvider: writer, criticProvider: llm.primary && llm.primary !== writer ? llm.primary : writer };
+}
+
+/**
+ * Who designs the scenes (lib/scene-composer.ts): the same strongest-available model that writes the script
+ * (GEMINI_SCRIPT_MODEL, else Anthropic, else the primary). Designed scenes are the default way films are made;
+ * SITEREEL_HTML_SCENES=off cuts films from the template catalogue alone.
+ */
+export function composeProvider(llm: { primary: LlmProvider | null; escalation: LlmProvider | null }, env: Record<string, string | undefined> = process.env): LlmProvider | null {
+  if ((env.SITEREEL_HTML_SCENES ?? "").toLowerCase() === "off") return null;
+  const named = env.GEMINI_SCRIPT_MODEL && env.GEMINI_API_KEY ? createGeminiProvider({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_SCRIPT_MODEL }) : null;
+  const anthropic = llm.escalation?.id.startsWith("anthropic") ? llm.escalation : null;
+  const chosen = named ?? anthropic ?? llm.primary ?? llm.escalation;
+  // Out of quota on the chosen model: the primary designs instead of the film falling back to templates.
+  return chosen && llm.primary && chosen !== llm.primary ? onRateLimit(chosen, llm.primary) : chosen;
+}
+
+/** `first`, and `then` for any call `first` fails with a rate limit / exhausted quota (after its own retries). */
+export function onRateLimit(first: LlmProvider, then: LlmProvider): LlmProvider {
+  return {
+    id: first.id,
+    ...(first.supportsImages && then.supportsImages ? { supportsImages: true } : {}),
+    async generateJson(opts) {
+      try {
+        return await first.generateJson(opts);
+      } catch (err) {
+        if (!/\b429\b|quota|rate.?limit/i.test(String((err as Error)?.message))) throw err;
+        const res = await then.generateJson(opts);
+        // The failed call's cost still counts.
+        return { ...res, costUsd: res.costUsd + costOfError(err) };
+      }
+    },
+  };
 }
 
 /**

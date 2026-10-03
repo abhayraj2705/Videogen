@@ -106,8 +106,10 @@ async function loadFontStylesheets(urls: string[] | undefined): Promise<void> {
  * while this runs, so the layout box cannot be measured here).
  */
 function stabilizeImage(img: HTMLImageElement): HTMLElement {
+  if (img.dataset.stablePage) return stabilizePage(img, Number(img.dataset.stablePage));
   const [w, h] = (img.dataset.stable ?? "").split("x").map(Number);
   if (!w || !h || img.naturalWidth <= 0) return img;
+  const cover = img.dataset.stableFit === "cover";
   const canvas = document.createElement("canvas");
   // Twice the layout size: sharp when a scene scales the logo up a little.
   canvas.width = Math.max(1, Math.round(w * 2));
@@ -115,12 +117,41 @@ function stabilizeImage(img: HTMLImageElement): HTMLElement {
   const g = canvas.getContext("2d");
   if (!g) return img;
   g.imageSmoothingQuality = "high";
-  // object-fit: contain, done by hand.
-  const k = Math.min(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
+  // object-fit: contain (logos) or cover anchored at the top (pictures), done by hand.
+  const k = (cover ? Math.max : Math.min)(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
   const dw = img.naturalWidth * k;
   const dh = img.naturalHeight * k;
   try {
-    g.drawImage(img, (canvas.width - dw) / 2, (canvas.height - dh) / 2, dw, dh);
+    g.drawImage(img, (canvas.width - dw) / 2, cover ? 0 : (canvas.height - dh) / 2, dw, dh);
+  } catch {
+    return img;
+  }
+  canvas.className = img.className;
+  canvas.style.cssText = img.style.cssText;
+  img.replaceWith(canvas);
+  return canvas;
+}
+
+/** Tallest canvas Chromium will draw reliably. */
+const MAX_CANVAS_SIDE = 16384;
+
+/**
+ * The same, for a page screenshot shown full width and moved by camera zooms (a browser window in a designed
+ * scene): redrawn at `maxWidth` pixels wide (enough for the deepest zoom; never wider than the capture), keeping
+ * its proportions, so its layout box — width 100%, height from the aspect ratio — is unchanged.
+ */
+function stabilizePage(img: HTMLImageElement, maxWidth: number): HTMLElement {
+  if (!maxWidth || img.naturalWidth <= 0 || img.naturalHeight <= 0) return img;
+  const width = Math.max(1, Math.round(Math.min(img.naturalWidth, maxWidth, (MAX_CANVAS_SIDE * img.naturalWidth) / img.naturalHeight)));
+  const height = Math.max(1, Math.round((width * img.naturalHeight) / img.naturalWidth));
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const g = canvas.getContext("2d");
+  if (!g) return img;
+  g.imageSmoothingQuality = "high";
+  try {
+    g.drawImage(img, 0, 0, width, height);
   } catch {
     return img;
   }
@@ -422,7 +453,7 @@ export async function mountFilm(stage: HTMLElement, manifest: FilmManifest): Pro
   ]);
 
   // Logos are redrawn at a fixed size now that they have loaded (see stabilizeImage).
-  for (const img of Array.from(stage.querySelectorAll<HTMLImageElement>("img[data-stable]"))) {
+  for (const img of Array.from(stage.querySelectorAll<HTMLImageElement>("img[data-stable], img[data-stable-page]"))) {
     const drawn = stabilizeImage(img);
     if (brand && brand.node === img) brand.node = drawn;
   }

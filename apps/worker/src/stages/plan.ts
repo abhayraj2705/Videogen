@@ -14,6 +14,7 @@ import {
 } from "@sitereel/shared";
 import { costOfError, type LlmProvider } from "@sitereel/llm";
 import { ICON_NAMES } from "@sitereel/film-runtime";
+import { composeStoryboard, type ComposeCall } from "../lib/scene-composer.js";
 import { writeFilmScript, type FilmScript, type ScriptCall } from "../lib/script-writer.js";
 import { enrichStoryboard } from "../lib/storyboard-enrich.js";
 import { buildSiteProfile } from "../lib/site-profile.js";
@@ -34,6 +35,13 @@ export interface PlanStageDeps {
   criticProvider?: LlmProvider | null;
   /** Varies which of the site's best-fit scenes a film is built around (the job id): two films of one site then differ. */
   seed?: string;
+  /**
+   * Designs each scene as an HTML scene (lib/scene-composer.ts) once the storyboard is settled. Give it the
+   * strongest model available. Omitted/null = the film is cut from the template catalogue alone.
+   */
+  composeProvider?: LlmProvider | null;
+  /** Status lines from the composer. */
+  log?: (msg: string) => void;
 }
 
 /** No more than a third of the narrated scenes may have the voice read the screen aloud. */
@@ -67,6 +75,8 @@ export interface PlanStageResult {
   featured: string[];
   /** Scenes cut in by code because the plan left the featured ones out (lib/storyboard-enrich.ts). */
   addedScenes: string[];
+  /** What the composer did: scenes designed, scenes that kept their template (and why), and its calls (their cost is in costUsd). */
+  compose?: { composed: string[]; kept: { sceneId: string; reason: string }[]; calls: ComposeCall[] };
 }
 
 interface Attempt {
@@ -173,17 +183,32 @@ export async function runPlanStage(crawlOutput: CrawlOutput, options: JobOptions
   /** Parsed-but-invalid attempts, kept so one bad scene doesn't cost the whole plan. */
   const rejected: { storyboard: Storyboard; report: ValidationReport }[] = [];
 
-  const finish = (planned: Storyboard, plannedValidation: ValidationReport): PlanStageResult => {
+  const finish = async (planned: Storyboard, plannedValidation: ValidationReport): Promise<PlanStageResult> => {
     // The scenes chosen for this site are not left to the planner's goodwill: missing ones are built from the crawl and cut in.
     const enriched = plannedValidation.valid ? enrichStoryboard(planned, crawlOutput, { featured, alsoConsider: otherFits, targetScenes: wanted, maxAdded: options.lengthSec >= 45 ? 3 : 2 }) : { storyboard: planned, added: [] };
-    const storyboard = enriched.storyboard;
-    const validation = enriched.added.length > 0 ? validateStoryboard(storyboard, crawlOutput.facts, { pageUrls }) : plannedValidation;
+    let storyboard = enriched.storyboard;
+    let validation = enriched.added.length > 0 ? validateStoryboard(storyboard, crawlOutput.facts, { pageUrls }) : plannedValidation;
+    // Then every scene is designed for this film. Each design passed the validators on its own; the film is checked again as a whole.
+    let compose: PlanStageResult["compose"];
+    if (deps.composeProvider && validation.valid) {
+      const composed = await composeStoryboard(storyboard, crawlOutput, options, deps.composeProvider, deps.log ? { log: deps.log } : {});
+      const report = validateStoryboard(composed.storyboard, crawlOutput.facts, { pageUrls, iconNames: ICON_NAMES });
+      compose = { composed: composed.composed, kept: composed.kept, calls: composed.calls };
+      if (report.valid) {
+        storyboard = composed.storyboard;
+        validation = report;
+      } else {
+        compose.kept = storyboard.scenes.map((s) => ({ sceneId: s.id, reason: `film failed validation after composing: ${report.issues.find((i) => i.severity === "error")?.message ?? "?"}` }));
+        compose.composed = [];
+      }
+    }
     return {
     storyboard,
     validation,
     featured,
     addedScenes: enriched.added,
-    costUsd: calls.reduce((s, c) => s + c.costUsd, 0) + scriptCalls.reduce((s, c) => s + c.costUsd, 0),
+    ...(compose ? { compose } : {}),
+    costUsd: calls.reduce((s, c) => s + c.costUsd, 0) + scriptCalls.reduce((s, c) => s + c.costUsd, 0) + (compose?.calls.reduce((s, c) => s + c.costUsd, 0) ?? 0),
     attempts: calls.length,
     latencyMs: Date.now() - started,
     calls,

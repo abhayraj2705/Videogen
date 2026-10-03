@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AlertTriangle, Loader2, Mic, Pause, Play } from "lucide-react";
+import { AlertTriangle, Loader2, Mic, Pause, Play, Sparkles } from "lucide-react";
 import type { FactLedger, StoryboardScene, TemplateId } from "@sitereel/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,8 @@ import { Select } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { FactBadge, FactChip } from "@/components/editor/fact-badge";
 import { PropsEditor } from "@/components/editor/props-editor";
+import { HtmlSceneEditor } from "@/components/editor/html-scene-editor";
+import { starterDoc } from "@/lib/editor/html-scene";
 import { citedFacts, groundNarration, groundText, sourceLabel } from "@/lib/editor/grounding";
 import { NARRATION_SOFT_LIMIT, SCENE_TRANSITIONS, TEMPLATE_IDS, templateLabel } from "@/lib/editor/templates";
 import type { EditOptions } from "@/lib/editor/history-store";
@@ -64,6 +66,11 @@ export function SceneInspector({
   canRevoice,
   onPatch,
   onRevoice,
+  selectedEl = null,
+  onSelectEl = () => undefined,
+  onRedesign,
+  redesigning = false,
+  canRedesign = { ok: true },
 }: {
   scene: StoryboardScene;
   index: number;
@@ -76,7 +83,16 @@ export function SceneInspector({
   canRevoice: { ok: boolean; reason?: string };
   onPatch: (patch: Partial<StoryboardScene>, opts?: EditOptions) => void;
   onRevoice: () => void;
+  /** The designed scene's selected element (shared with the preview, which outlines it). */
+  selectedEl?: string | null;
+  onSelectEl?: (id: string | null) => void;
+  /** Ask the design model to (re)design this scene, as instructed. Absent = not offered. */
+  onRedesign?: (instruction: string) => void;
+  redesigning?: boolean;
+  canRedesign?: { ok: boolean; reason?: string };
 }) {
+  const [instruction, setInstruction] = useState("");
+  const designed = scene.templateId === "HtmlScene";
   const key = (field: string) => ({ coalesceKey: `${scene.id}:${field}` });
   const sourcePages = Array.from(new Set(facts.map((f) => f.sourceUrl)));
   const cited = citedFacts(scene.factIds, facts);
@@ -124,7 +140,18 @@ export function SceneInspector({
           <label htmlFor={`${idp}-template`} className="text-xs text-muted-foreground">
             Template
           </label>
-          <Select id={`${idp}-template`} value={scene.templateId} onChange={(e) => onPatch({ templateId: e.target.value as TemplateId })}>
+          <Select
+            id={`${idp}-template`}
+            value={scene.templateId}
+            disabled={designed}
+            title={designed ? "A designed scene goes back to its template with the button below" : undefined}
+            onChange={(e) => {
+              const next = e.target.value as TemplateId;
+              // Designing from a template: start from its lines, and keep the template to switch back to.
+              if (next === "HtmlScene") onPatch({ templateId: next, props: { doc: starterDoc(scene.onScreenText), concept: "Designed by hand.", fallback: { templateId: scene.templateId, props: scene.props } } });
+              else onPatch({ templateId: next });
+            }}
+          >
             {TEMPLATE_IDS.map((t) => (
               <option key={t} value={t}>
                 {templateLabel(t)} ({t})
@@ -150,6 +177,29 @@ export function SceneInspector({
           />
         </div>
       </div>
+
+      {onRedesign && (
+        <div className="flex flex-col gap-1.5 rounded-md border border-primary/30 bg-primary/5 p-2.5">
+          <label htmlFor={`${idp}-ask`} className="text-xs font-medium">
+            {designed ? "Ask AI to change this design" : "Ask AI to design this scene"}
+          </label>
+          <Textarea
+            id={`${idp}-ask`}
+            rows={2}
+            maxLength={500}
+            value={instruction}
+            placeholder={designed ? "e.g. Bigger type, show the pricing page, have the cursor click Start" : "e.g. Show the dashboard with the camera on the revenue chart"}
+            onChange={(e) => setInstruction(e.target.value)}
+          />
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[11px] text-muted-foreground">{canRedesign.ok ? "Saved as a new version of the script; earlier versions are kept." : canRedesign.reason}</span>
+            <Button type="button" size="sm" variant="secondary" disabled={redesigning || !canRedesign.ok} onClick={() => onRedesign(instruction)}>
+              {redesigning ? <Loader2 className="animate-spin motion-reduce:animate-none" /> : <Sparkles />}
+              {redesigning ? "Designing…" : designed ? "Redesign" : "Design it"}
+            </Button>
+          </div>
+        </div>
+      )}
 
       <Separator />
 
@@ -203,7 +253,7 @@ export function SceneInspector({
             {text.trim() && <FactBadge grounding={groundText(text, scene.factIds, facts)} />}
           </div>
         ))}
-        <p className="text-[11px] text-muted-foreground">Edit this under Template text below. It updates when you save.</p>
+        <p className="text-[11px] text-muted-foreground">Edit this under {designed ? "Elements" : "Template text"} below. It updates when you save.</p>
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -234,17 +284,21 @@ export function SceneInspector({
 
       <Separator />
 
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium">Template text</span>
-        <PropsEditor
-          props={scene.props}
-          factIds={scene.factIds}
-          facts={facts}
-          sourcePages={sourcePages}
-          idPrefix={idp}
-          onChange={(next, path) => onPatch({ props: next }, key(`props.${path}`))}
-        />
-      </div>
+      {designed ? (
+        <HtmlSceneEditor scene={scene} facts={facts} sourcePages={sourcePages} selectedEl={selectedEl} onSelectEl={onSelectEl} onPatch={onPatch} idPrefix={idp} />
+      ) : (
+        <div className="flex flex-col gap-2">
+          <span className="text-xs font-medium">Template text</span>
+          <PropsEditor
+            props={scene.props}
+            factIds={scene.factIds}
+            facts={facts}
+            sourcePages={sourcePages}
+            idPrefix={idp}
+            onChange={(next, path) => onPatch({ props: next }, key(`props.${path}`))}
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -25,7 +25,9 @@
        * Protocol (same-origin only):
        *   parent -> host  { type: "load", manifest }   (once per iframe instance)
        *   parent -> host  { type: "seek", t }
+       *   parent -> host  { type: "highlight", sceneId, el }   (outline a designed scene's element; el null = none)
        *   host -> parent  { type: "host-ready" } | { type: "ready", duration } | { type: "error", message }
+       *   host -> parent  { type: "pick", sceneId, el }        (a click on the picture: the element under it)
        */
       (function () {
         var SENTINEL = "sitereel-inline-manifest.json";
@@ -45,6 +47,43 @@
           var dy = (window.innerHeight - manifest.height * s) / 2;
           frame.style.transform = "translate(" + dx + "px," + dy + "px) scale(" + s + ")";
         }
+
+        // The outline around the element being edited, kept in film pixels inside the scaled frame.
+        var highlight = null;
+        var outline = null;
+        function placeOutline() {
+          if (!outline) {
+            outline = document.createElement("div");
+            outline.style.cssText = "position:absolute;pointer-events:none;z-index:2147483647;display:none;border-radius:4px;box-sizing:border-box";
+            document.getElementById("frame").appendChild(outline);
+          }
+          var target = null;
+          if (highlight && highlight.el && window.CSS && CSS.escape) {
+            var scene = document.querySelector('[data-scene-id="' + CSS.escape(highlight.sceneId) + '"]');
+            if (scene && scene.style.display !== "none") target = scene.querySelector('[data-el="' + CSS.escape(highlight.el) + '"]');
+          }
+          if (!target || !manifest) {
+            outline.style.display = "none";
+            return;
+          }
+          var frame = document.getElementById("frame").getBoundingClientRect();
+          var k = frame.width / manifest.width || 1;
+          var r = target.getBoundingClientRect();
+          var pad = 4 / k;
+          outline.style.display = "block";
+          outline.style.left = (r.left - frame.left) / k - pad + "px";
+          outline.style.top = (r.top - frame.top) / k - pad + "px";
+          outline.style.width = r.width / k + 2 * pad + "px";
+          outline.style.height = r.height / k + 2 * pad + "px";
+          outline.style.border = 2 / k + "px solid #38bdf8";
+          outline.style.boxShadow = "0 0 0 " + 1 / k + "px rgba(0,0,0,.6)";
+        }
+
+        document.addEventListener("click", function (e) {
+          var el = e.target && e.target.closest ? e.target.closest("[data-el]") : null;
+          var scene = (el || e.target).closest ? (el || e.target).closest("[data-scene-id]") : null;
+          post({ type: "pick", sceneId: scene ? scene.dataset.sceneId : null, el: el ? el.dataset.el : null });
+        });
 
         var realFetch = window.fetch.bind(window);
         window.fetch = function (input, init) {
@@ -83,6 +122,10 @@
             document.body.appendChild(s);
           } else if (msg.type === "seek" && window.__film && window.__film.ready) {
             window.__film.seek(Math.max(0, Math.min(window.__film.duration, Number(msg.t) || 0)));
+            placeOutline();
+          } else if (msg.type === "highlight") {
+            highlight = msg.sceneId ? { sceneId: String(msg.sceneId), el: msg.el ? String(msg.el) : null } : null;
+            placeOutline();
           }
         });
 

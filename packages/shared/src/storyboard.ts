@@ -43,6 +43,8 @@ export const TemplateId = z.enum([
   "PhotoShowcase",
   "IsoStack",
   "Composed",
+  // A scene the model designs itself: HTML nodes + a declarative timeline (scene-core.ts). Additive.
+  "HtmlScene",
 ]);
 export type TemplateId = z.infer<typeof TemplateId>;
 

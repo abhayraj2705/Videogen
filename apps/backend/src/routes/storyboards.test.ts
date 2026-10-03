@@ -125,4 +125,17 @@ describe("storyboard editing", () => {
     const missing = await app.inject({ method: "POST", url: `/api/jobs/${job.id}/storyboard/revoice`, headers: { "x-test-user": user.id }, payload: { sceneId: "nope" } });
     expect(missing.statusCode).toBe(404);
   });
+
+  it("redesign enqueues a one-scene redesign of the latest version", async () => {
+    const user = await seedUser(db);
+    const job = await seedJob(db, user.id);
+    const { app, queues } = build();
+    const res = await app.inject({ method: "POST", url: `/api/jobs/${job.id}/storyboard/redesign`, headers: { "x-test-user": user.id }, payload: { sceneId: "hook", instruction: "  bigger, bolder type  " } });
+    expect(res.statusCode).toBe(202);
+    expect(queues.plan.added[0]!.data).toEqual({ jobId: job.id, reason: "redesign", redesign: { sceneId: "hook", instruction: "bigger, bolder type", baseVersion: 1 } });
+    const missing = await app.inject({ method: "POST", url: `/api/jobs/${job.id}/storyboard/redesign`, headers: { "x-test-user": user.id }, payload: { sceneId: "nope", instruction: "x" } });
+    expect(missing.statusCode).toBe(404);
+    const tooLong = await app.inject({ method: "POST", url: `/api/jobs/${job.id}/storyboard/redesign`, headers: { "x-test-user": user.id }, payload: { sceneId: "hook", instruction: "x".repeat(501) } });
+    expect(tooLong.statusCode).toBe(400);
+  });
 });

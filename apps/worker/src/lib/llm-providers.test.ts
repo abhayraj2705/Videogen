@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { selectLlmProviders } from "./llm-providers.js";
+import { onRateLimit, selectLlmProviders } from "./llm-providers.js";
+import { z } from "zod";
+import type { LlmProvider } from "@sitereel/llm";
 
 describe("selectLlmProviders", () => {
   it("returns nulls when nothing is configured", () => {
@@ -22,5 +24,30 @@ describe("selectLlmProviders", () => {
     const { primary, escalation } = selectLlmProviders({ LLM_PRIMARY: "deepseek", GEMINI_API_KEY: "g", ANTHROPIC_API_KEY: "a" });
     expect(primary?.id).toContain("gemini");
     expect(escalation?.id).toContain("claude");
+  });
+});
+
+describe("onRateLimit", () => {
+  const ok = (id: string): LlmProvider => ({ id, generateJson: async (o) => ({ data: o.schema.parse({}), provider: id, latencyMs: 1, inputTokens: 1, outputTokens: 1, costUsd: 0.01, attempts: 1 }) });
+  const failing = (message: string): LlmProvider => ({
+    id: "first",
+    generateJson: async () => {
+      throw new Error(message);
+    },
+  });
+  const opts = { system: "", prompt: "", schema: z.object({}).passthrough() };
+
+  it("hands a rate-limited call to the second provider", async () => {
+    const r = await onRateLimit(failing("gemini API error 429: You exceeded your current quota"), ok("second")).generateJson(opts);
+    expect(r.provider).toBe("second");
+  });
+
+  it("recognises a bare 429 too", async () => {
+    const r = await onRateLimit(failing("openai-compat API error 429: Too Many Requests"), ok("second")).generateJson(opts);
+    expect(r.provider).toBe("second");
+  });
+
+  it("lets any other failure through", async () => {
+    await expect(onRateLimit(failing("gemini API error 400: invalid argument"), ok("second")).generateJson(opts)).rejects.toThrow(/400/);
   });
 });

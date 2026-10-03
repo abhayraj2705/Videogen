@@ -3,6 +3,19 @@
 What is still weak in the pipeline as of this branch, most important first.
 Each entry says what you will see, why, and what would fix it.
 
+## Designed scenes (HTML scenes)
+
+- **Design quality follows the model.** `gemini-3.5-flash` designed every scene of a cal.com film well (vision
+  4.5/5); `flash-lite` was not tried for design. Set `GEMINI_SCRIPT_MODEL` or `ANTHROPIC_API_KEY`.
+- **Free-tier rate limits.** Script + design is about 10-16 calls per film. On a free Gemini key the design model
+  runs out within a few films; the composer then uses the primary model, and a scene whose every try fails keeps
+  its template.
+- **Scenes are designed in parallel** from their neighbours' drafts, not their designs: coherence comes from the
+  shared tokens, tone and look, and two neighbours can still choose similar layouts.
+- **The preview shows placeholder pages** and estimated voice timing in designed scenes, as for templates.
+- **AI redesign starts from the saved version**, and the editor reloads it when it lands; there is no diff view and
+  no version-restore UI yet.
+
 ## Script
 
 - **The script is generic with the default model.** On `gemini-3.5-flash-lite`
@@ -24,6 +37,7 @@ Each entry says what you will see, why, and what would fix it.
 
 ## Site material
 
+- **Logos named only by a hashed file name are dropped** (they used to appear as gibberish names on the wall).
 - **Captured logos are often not shown.** If the model makes its own name wall
   (from language names, say), the real customer logos captured from the site
   are left out, because the film already has a wall.

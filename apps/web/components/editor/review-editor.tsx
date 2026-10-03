@@ -15,6 +15,7 @@ import {
   isStoryboardInvalid,
   isVersionConflict,
   listBrandKits,
+  redesignScene,
   revoiceScene,
   saveStoryboard,
   type StoryboardValidation,
@@ -41,6 +42,7 @@ import { cn } from "@/lib/utils";
 const EDITABLE = new Set(["review", "done", "failed"]);
 const PREVIEW_DEBOUNCE_MS = 350;
 const REVOICE_TIMEOUT_MS = 90_000;
+const REDESIGN_TIMEOUT_MS = 120_000;
 
 function useDebouncedValue<T>(value: T, ms: number): T {
   const [v, setV] = useState(value);
@@ -101,7 +103,11 @@ export function ReviewEditor({ jobId }: { jobId: string }) {
   const [mobileTab, setMobileTab] = useState<"scenes" | "preview" | "edit">("preview");
   const [format, setFormat] = useState<AspectFormat | null>(null);
   const [playingSceneId, setPlayingSceneId] = useState<string | null>(null);
+  /** The designed scene element being edited (outlined in the preview). */
+  const [selectedEl, setSelectedEl] = useState<string | null>(null);
   const [revoicing, setRevoicing] = useState<Record<string, { since: number; baseline: string }>>({});
+  /** A scene the worker is redesigning, and when it was asked (older events for the same scene are ignored). */
+  const [redesigning, setRedesigning] = useState<{ sceneId: string; since: number } | null>(null);
   const previewRef = useRef<FilmPreviewHandle>(null);
   const loadedRef = useRef(false);
 
@@ -131,11 +137,34 @@ export function ReviewEditor({ jobId }: { jobId: string }) {
 
   // Re-voice completion: the worker emits a `voice` event carrying the sceneId.
   const job = jobQuery.data;
-  const { events } = useJobEvents(Object.keys(revoicing).length > 0 ? jobId : undefined);
+  const { events } = useJobEvents(Object.keys(revoicing).length > 0 || redesigning ? jobId : undefined);
   const lastEvent = events.at(-1);
   useEffect(() => {
     if (lastEvent?.stage === "voice") void queryClient.invalidateQueries({ queryKey: ["storyboard", jobId] });
   }, [lastEvent, queryClient, jobId]);
+
+  // Redesign completion: the worker saved the next version (or couldn't); load it into the editor.
+  useEffect(() => {
+    if (!redesigning) return;
+    const done = events.findLast((e) => {
+      const r = (e.payload as { redesign?: { sceneId?: string } } | undefined)?.redesign;
+      return e.stage === "plan" && r?.sceneId === redesigning.sceneId && Date.parse(e.at) >= redesigning.since - 2000;
+    });
+    if (done) {
+      const r = (done.payload as { redesign: { ok: boolean; reason?: string } }).redesign;
+      setRedesigning(null);
+      if (r.ok) {
+        toast.success("Scene redesigned — saved as a new version");
+        void reloadLatest();
+      } else toast.error(`Couldn't redesign that scene${r.reason ? `: ${r.reason.slice(0, 160)}` : ""}`);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setRedesigning(null);
+      toast.error("The redesign is taking longer than expected — reload to see it when it's ready.");
+    }, Math.max(0, redesigning.since + REDESIGN_TIMEOUT_MS - Date.now()));
+    return () => clearTimeout(timer);
+  }, [events, redesigning, reloadLatest]);
 
   const audio = useMemo(() => sbQuery.data?.audio ?? [], [sbQuery.data]);
   useEffect(() => {
@@ -288,6 +317,7 @@ export function ReviewEditor({ jobId }: { jobId: string }) {
 
   const selectScene = useCallback(
     (id: string, opts: { seek?: boolean; tab?: boolean } = {}) => {
+      if (store.getState().selectedSceneId !== id) setSelectedEl(null);
       store.getState().select(id);
       if (opts.seek !== false && manifest) {
         const s = manifest.scenes.find((x) => x.id === id);
@@ -299,6 +329,16 @@ export function ReviewEditor({ jobId }: { jobId: string }) {
   );
 
   const onTimeChange = useCallback((_t: number, sceneId: string | null) => setPlayingSceneId(sceneId), []);
+
+  async function onRedesign(sceneId: string, instruction: string) {
+    try {
+      await redesignScene(jobId, sceneId, instruction);
+      setRedesigning({ sceneId, since: Date.now() });
+      toast("Designing this scene…");
+    } catch (err) {
+      toast.error(`Couldn't start the redesign: ${err instanceof Error ? err.message : "unknown error"}`);
+    }
+  }
 
   async function onRevoice(sceneId: string) {
     const a = audio.find((x) => x.sceneId === sceneId);
@@ -415,6 +455,12 @@ export function ReviewEditor({ jobId }: { jobId: string }) {
         sceneLabels={sceneLabels}
         onTimeChange={onTimeChange}
         onSceneClick={(id) => selectScene(id)}
+        highlight={selected && selectedEl ? { sceneId: selected.id, el: selectedEl } : null}
+        onPick={(sceneId, el) => {
+          if (!sceneId) return;
+          selectScene(sceneId, { seek: false, tab: true });
+          setSelectedEl(el);
+        }}
         className="min-h-0 flex-1"
       />
       <ValidationBanner validation={validation} dirty={dirty} sceneIndex={sceneIndex} onSelectScene={(id) => selectScene(id, { tab: true })} />
@@ -438,6 +484,11 @@ export function ReviewEditor({ jobId }: { jobId: string }) {
         canRevoice={canRevoice}
         onPatch={patchSelected}
         onRevoice={() => onRevoice(selected.id)}
+        selectedEl={selectedEl}
+        onSelectEl={setSelectedEl}
+        redesigning={redesigning?.sceneId === selected.id}
+        canRedesign={dirty ? { ok: false, reason: "Save your edits first — the redesign starts from the saved version." } : redesigning ? { ok: false, reason: "Another scene is being designed." } : { ok: true }}
+        onRedesign={(instruction) => onRedesign(selected.id, instruction)}
       />
     </fieldset>
   ) : (

@@ -283,12 +283,14 @@ export async function captureLogoStrip(page: Page, max = 8): Promise<CapturedAss
     .evaluate((limit: number) => {
       const NOISE = /\b(logo|logos|icon|image|img|brand|svg|png|wordmark|dark|light|white|black|color|colour)\b/gi;
       const GENERIC = /^(image|photo|picture|avatar|user|profile|star|arrow|check|icon|placeholder|untitled|\d+)$/i;
+      // A file name that is a content hash or an id ("RVyoqYwsqTt0INojTnaVYsvWcA", "3f9a1c0e"), not a company's name.
+      const HASHY = /^(?=[A-Za-z0-9]*\d)(?=[A-Za-z0-9]*[a-z])(?=[A-Za-z0-9]*[A-Z])[A-Za-z0-9]{12,}$|^[a-fA-F0-9]{8,}$|^[A-Za-z0-9]{20,}$/;
       const nameOf = (el: Element): string => {
         const img = el as HTMLImageElement;
         const fromFile = (img.currentSrc || img.src || "").split(/[?#]/)[0]!.split("/").pop()?.replace(/\.[a-z0-9]+$/i, "") ?? "";
         const raw = el.getAttribute("alt") || el.getAttribute("aria-label") || el.getAttribute("title") || el.querySelector?.("title")?.textContent || fromFile.replace(/[-_]+/g, " ");
         const name = raw.replace(NOISE, " ").replace(/\s+/g, " ").trim();
-        if (!name || name.length > 28 || name.split(" ").length > 3 || GENERIC.test(name) || !/\p{L}/u.test(name)) return "";
+        if (!name || name.length > 28 || name.split(" ").length > 3 || GENERIC.test(name) || name.split(" ").some((w) => HASHY.test(w)) || !/\p{L}/u.test(name)) return "";
         return /^\p{Ll}/u.test(name) ? name[0]!.toUpperCase() + name.slice(1) : name;
       };
       const candidates = Array.from(document.querySelectorAll("img, svg[aria-label], [role='img'][aria-label]")).filter((el) => {

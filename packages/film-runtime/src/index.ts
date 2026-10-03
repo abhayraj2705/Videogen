@@ -36,5 +36,6 @@ export type { Metric, MetricsRowProps } from "./templates/metrics-row.js";
 export type { PhotoShowcaseProps } from "./templates/photo-showcase.js";
 export type { IsoStackProps } from "./templates/iso-stack.js";
 export type { ComposedBlock, ComposedProps } from "./templates/composed.js";
+export type { HtmlNodeAsset, HtmlSceneProps } from "./templates/html-scene.js";
 export { cursorClickTimes } from "./templates/ui-flow-cursor.js";
 export { ICON_NAMES } from "./util/icons.js";

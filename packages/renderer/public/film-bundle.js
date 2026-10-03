@@ -3015,6 +3015,981 @@
     };
   }
 
+  // ../shared/src/scene-core.ts
+  var SAFE_LAYER = "";
+  var FULL_LAYER = "@full";
+  var SCENE_LIMITS = {
+    maxNodes: 40,
+    maxTweens: 60,
+    maxTextChars: 120,
+    maxStyleChars: 900,
+    maxRepeat: 12,
+    maxTweenSec: 12
+  };
+  function parseDeclarations(input) {
+    if (!input) return [];
+    const out = [];
+    let depth = 0;
+    let start = 0;
+    const push = (chunk) => {
+      const i = chunk.indexOf(":");
+      if (i <= 0) return;
+      const prop = chunk.slice(0, i).trim().toLowerCase();
+      const value = chunk.slice(i + 1).trim();
+      if (prop && value) out.push([prop, value]);
+    };
+    for (let i = 0; i < input.length; i++) {
+      const c = input[i];
+      if (c === "(") depth++;
+      else if (c === ")") depth = Math.max(0, depth - 1);
+      else if (c === ";" && depth === 0) {
+        push(input.slice(start, i));
+        start = i + 1;
+      }
+    }
+    push(input.slice(start));
+    return out;
+  }
+  var ALLOWED_CSS = /* @__PURE__ */ new Set([
+    "display",
+    "flex",
+    "flex-direction",
+    "flex-wrap",
+    "flex-grow",
+    "flex-shrink",
+    "flex-basis",
+    "order",
+    "grid-template-columns",
+    "grid-template-rows",
+    "grid-column",
+    "grid-row",
+    "grid-area",
+    "grid-auto-flow",
+    "gap",
+    "row-gap",
+    "column-gap",
+    "align-items",
+    "align-content",
+    "align-self",
+    "justify-content",
+    "justify-items",
+    "justify-self",
+    "place-items",
+    "place-content",
+    "place-self",
+    "position",
+    "top",
+    "right",
+    "bottom",
+    "left",
+    "inset",
+    "z-index",
+    "width",
+    "height",
+    "min-width",
+    "min-height",
+    "max-width",
+    "max-height",
+    "aspect-ratio",
+    "box-sizing",
+    "margin",
+    "margin-top",
+    "margin-right",
+    "margin-bottom",
+    "margin-left",
+    "padding",
+    "padding-top",
+    "padding-right",
+    "padding-bottom",
+    "padding-left",
+    "overflow",
+    "overflow-x",
+    "overflow-y",
+    "background",
+    "background-color",
+    "background-image",
+    "background-size",
+    "background-position",
+    "background-repeat",
+    "background-clip",
+    "-webkit-background-clip",
+    "-webkit-text-fill-color",
+    "-webkit-text-stroke",
+    "color",
+    "opacity",
+    "visibility",
+    "border",
+    "border-top",
+    "border-right",
+    "border-bottom",
+    "border-left",
+    "border-width",
+    "border-style",
+    "border-color",
+    "border-radius",
+    "border-top-left-radius",
+    "border-top-right-radius",
+    "border-bottom-left-radius",
+    "border-bottom-right-radius",
+    "outline",
+    "outline-offset",
+    "box-shadow",
+    "text-shadow",
+    "font-family",
+    "font-size",
+    "font-weight",
+    "font-style",
+    "font-variant-numeric",
+    "font-feature-settings",
+    "line-height",
+    "letter-spacing",
+    "word-spacing",
+    "text-align",
+    "text-transform",
+    "text-decoration",
+    "text-decoration-color",
+    "text-decoration-thickness",
+    "text-underline-offset",
+    "text-wrap",
+    "white-space",
+    "word-break",
+    "overflow-wrap",
+    "vertical-align",
+    "transform",
+    "transform-origin",
+    "perspective",
+    "filter",
+    "backdrop-filter",
+    "mix-blend-mode",
+    "isolation",
+    "clip-path",
+    "object-fit",
+    "object-position",
+    "pointer-events",
+    "will-change",
+    "user-select"
+  ]);
+  var FORBIDDEN_VALUE = /url\s*\(|expression\s*\(|javascript:|@import|image-set\s*\(|element\s*\(|attr\s*\(|[<>\\{}]|\/\*/i;
+  function sanitizeDeclarations(input) {
+    const decls = [];
+    const dropped = [];
+    for (const [prop, rawValue] of parseDeclarations(input)) {
+      const value = rawValue.replace(/\s*!important\s*$/i, "");
+      if (!ALLOWED_CSS.has(prop)) {
+        dropped.push(`${prop}: not an allowed property`);
+        continue;
+      }
+      if (FORBIDDEN_VALUE.test(value) || value.length > 400) {
+        dropped.push(`${prop}: value not allowed`);
+        continue;
+      }
+      if (prop === "position" && !/^(static|relative|absolute)$/i.test(value)) {
+        decls.push([prop, "absolute"]);
+        dropped.push(`${prop}: ${value} replaced by absolute`);
+        continue;
+      }
+      decls.push([prop, value]);
+    }
+    return { decls, dropped };
+  }
+  function scalePx(value, u) {
+    if (u === 1) return value;
+    return value.replace(/(-?\d*\.?\d+)px\b/g, (_, n) => `${+(Number(n) * u).toFixed(3)}px`);
+  }
+  var COLOR_VARS = ["color", "backgroundColor", "borderColor"];
+  var REST = {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    scale: 1,
+    scaleX: 1,
+    scaleY: 1,
+    rotate: 0,
+    rotateX: 0,
+    rotateY: 0,
+    skewX: 0,
+    skewY: 0,
+    blur: 0,
+    brightness: 1,
+    letterSpacing: 0,
+    clipTop: 0,
+    clipRight: 0,
+    clipBottom: 0,
+    clipLeft: 0,
+    // Untouched components sit at rest: the page at its top, the camera wide, the figure and strokes complete.
+    scroll: 0,
+    focus: 0,
+    ring: 0,
+    play: 0,
+    count: 1,
+    draw: 1
+  };
+  var VAR_ALIASES = {
+    opacity: "opacity",
+    alpha: "opacity",
+    autoalpha: "opacity",
+    x: "x",
+    y: "y",
+    scale: "scale",
+    scalex: "scaleX",
+    scaley: "scaleY",
+    rotate: "rotate",
+    rotation: "rotate",
+    rotatex: "rotateX",
+    rotationx: "rotateX",
+    rotatey: "rotateY",
+    rotationy: "rotateY",
+    skewx: "skewX",
+    skewy: "skewY",
+    blur: "blur",
+    brightness: "brightness",
+    letterspacing: "letterSpacing",
+    "letter-spacing": "letterSpacing",
+    cliptop: "clipTop",
+    clipright: "clipRight",
+    clipbottom: "clipBottom",
+    clipleft: "clipLeft",
+    scroll: "scroll",
+    focus: "focus",
+    ring: "ring",
+    play: "play",
+    count: "count",
+    draw: "draw",
+    color: "color",
+    backgroundcolor: "backgroundColor",
+    "background-color": "backgroundColor",
+    background: "backgroundColor",
+    bordercolor: "borderColor",
+    "border-color": "borderColor",
+    el: "el"
+  };
+  function parseVars(input) {
+    const vars = {};
+    const errors = [];
+    for (const [rawProp, value] of parseDeclarations(input)) {
+      if (rawProp === "clip") {
+        const nums = value.replace(/^inset\(|\)$/gi, "").split(/[\s,]+/).filter(Boolean).map((s) => Number(s.replace(/%$/, "")));
+        if (nums.length !== 4 || nums.some((n) => !Number.isFinite(n))) {
+          errors.push(`clip: expected four numbers (top right bottom left), got "${value}"`);
+          continue;
+        }
+        ["clipTop", "clipRight", "clipBottom", "clipLeft"].forEach((k, i) => vars[k] = { n: nums[i], unit: "" });
+        continue;
+      }
+      const prop = VAR_ALIASES[rawProp.replace(/[\s_]/g, "")];
+      if (!prop) {
+        errors.push(`"${rawProp}" is not an animatable var`);
+        continue;
+      }
+      if (prop === "el") {
+        vars.el = { el: value.replace(/^@?el:?/i, "").trim() };
+        continue;
+      }
+      if (COLOR_VARS.includes(prop)) {
+        if (FORBIDDEN_VALUE.test(value)) {
+          errors.push(`${rawProp}: value not allowed`);
+          continue;
+        }
+        vars[prop] = { color: value };
+        continue;
+      }
+      const m = /^(-?\d*\.?\d+)\s*(px|%|deg|em)?$/i.exec(value);
+      if (!m) {
+        errors.push(`${rawProp}: "${value}" is not a number`);
+        continue;
+      }
+      vars[prop] = { n: Number(m[1]), unit: m[2] === "%" ? "%" : "" };
+    }
+    return { vars, errors };
+  }
+  var clamp012 = (t) => t <= 0 ? 0 : t >= 1 ? 1 : t;
+  var powIn = (p) => (t) => Math.pow(t, p);
+  var outOf = (f) => (t) => 1 - f(1 - t);
+  var inOutOf = (f) => (t) => t < 0.5 ? f(t * 2) / 2 : 1 - f((1 - t) * 2) / 2;
+  var backIn = (s) => (t) => t * t * ((s + 1) * t - s);
+  var bounceOut = (t) => {
+    const n = 7.5625;
+    const d = 2.75;
+    if (t < 1 / d) return n * t * t;
+    if (t < 2 / d) return n * (t -= 1.5 / d) * t + 0.75;
+    if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + 0.9375;
+    return n * (t -= 2.625 / d) * t + 0.984375;
+  };
+  var elasticOut = (amp, period) => (t) => {
+    if (t === 0 || t === 1) return t;
+    const a = Math.max(1, amp);
+    const s = period / (2 * Math.PI) * Math.asin(1 / a);
+    return a * Math.pow(2, -10 * t) * Math.sin((t - s) * 2 * Math.PI / period) + 1;
+  };
+  var EASE_IN = {
+    power1: powIn(2),
+    quad: powIn(2),
+    power2: powIn(3),
+    cubic: powIn(3),
+    power3: powIn(4),
+    quart: powIn(4),
+    power4: powIn(5),
+    quint: powIn(5),
+    strong: powIn(5),
+    sine: (t) => 1 - Math.cos(t * Math.PI / 2),
+    expo: (t) => t === 0 ? 0 : Math.pow(2, 10 * (t - 1)),
+    circ: (t) => 1 - Math.sqrt(1 - t * t)
+  };
+  function easeByName(name) {
+    const raw = (name ?? "power2.out").trim();
+    if (raw === "none" || raw === "linear") return (t) => t;
+    const m = /^([a-z]+\d?)(?:\.(in|out|inOut))?(?:\(([\d.,\s]*)\))?$/.exec(raw);
+    if (!m) return null;
+    const family = m[1];
+    const dir = m[2] ?? "out";
+    const params = (m[3] ?? "").split(",").map((v) => Number(v.trim())).filter((n) => Number.isFinite(n) && n > 0 && n < 20);
+    let base = EASE_IN[family];
+    if (family === "back") base = backIn(params[0] ?? 1.70158);
+    if (family === "bounce") base = outOf(bounceOut);
+    if (family === "elastic") base = outOf(elasticOut(params[0] ?? 1, params[1] ?? 0.3));
+    if (!base) return null;
+    const f = base;
+    if (dir === "in") return (t) => f(clamp012(t));
+    if (dir === "out") return (t) => outOf(f)(clamp012(t));
+    return (t) => inOutOf(f)(clamp012(t));
+  }
+  var PRESETS = {
+    "fade-in": { from: "opacity:0", duration: 0.5, ease: "power2.out", about: "fades in" },
+    "fade-out": { to: "opacity:0", duration: 0.4, ease: "power2.in", about: "fades out (an exit)" },
+    rise: { from: "opacity:0; y:48", duration: 0.7, ease: "expo.out", about: "rises into place" },
+    drop: { from: "opacity:0; y:-48", duration: 0.7, ease: "expo.out", about: "drops into place" },
+    "slide-left": { from: "opacity:0; x:120", duration: 0.75, ease: "expo.out", about: "slides in from the right, moving left" },
+    "slide-right": { from: "opacity:0; x:-120", duration: 0.75, ease: "expo.out", about: "slides in from the left, moving right" },
+    "scale-in": { from: "opacity:0; scale:0.86", duration: 0.7, ease: "expo.out", about: "grows into place" },
+    pop: { from: "opacity:0; scale:0.5", duration: 0.6, ease: "back.out(1.8)", about: "pops in with overshoot" },
+    "blur-in": { from: "opacity:0; blur:18; scale:1.04", duration: 0.8, ease: "power3.out", about: "comes into focus" },
+    "mask-up": { from: "y:110%", duration: 0.8, ease: "expo.out", part: "words", stagger: 0.07, mask: true, about: "each word rises out of a mask" },
+    words: { from: "opacity:0; y:28", duration: 0.55, ease: "power3.out", part: "words", stagger: 0.07, about: "words arrive one after another" },
+    type: { from: "opacity:0", duration: 0.01, ease: "none", part: "chars", stagger: 0.04, about: "typed out letter by letter" },
+    wipe: { from: "clip: 0 100 0 0", duration: 0.8, ease: "power3.inOut", about: "revealed left to right" },
+    "wipe-up": { from: "clip: 100 0 0 0", duration: 0.8, ease: "power3.inOut", about: "revealed bottom to top" },
+    cascade: { from: "opacity:0; y:60; scale:0.94", duration: 0.7, ease: "expo.out", part: "children", stagger: 0.12, about: "children arrive one by one" },
+    "count-up": { from: "count:0", to: "count:1", duration: 1.3, ease: "power2.out", about: "the figure counts up" },
+    draw: { from: "draw:0", to: "draw:1", duration: 1, ease: "power2.inOut", about: "the icon draws itself" },
+    scroll: { to: "scroll:1", duration: 3, ease: "power1.inOut", about: "the page scrolls down" },
+    focus: { to: "focus:1; ring:1", duration: 1.2, ease: "power3.inOut", about: "the camera moves onto the node's fact and outlines it" },
+    play: { from: "play:0", to: "play:1", duration: 3, ease: "none", about: "plays the page recording" },
+    float: { to: "y:-14", duration: 1.4, ease: "sine.inOut", repeat: 3, yoyo: true, about: "drifts gently up and down" },
+    pulse: { to: "scale:1.06", duration: 0.25, ease: "power2.out", repeat: 1, yoyo: true, about: "a quick pulse" },
+    "push-in": { from: "scale:1", to: "scale:1.08", duration: 3, ease: "power1.inOut", about: "a slow camera push in" },
+    move: { duration: 0.8, ease: "power3.inOut", about: 'cursor travels to the node named in to: "el: <id>"' },
+    click: { to: "scale:0.82", duration: 0.12, ease: "power2.out", repeat: 1, yoyo: true, about: "cursor clicks" },
+    "exit-up": { to: "opacity:0; y:-36", duration: 0.45, ease: "power2.in", about: "leaves upward (an exit)" },
+    "exit-down": { to: "opacity:0; y:36", duration: 0.45, ease: "power2.in", about: "leaves downward (an exit)" }
+  };
+  var splitWords2 = (text) => text.split(/\s+/).filter(Boolean);
+  function childrenOf(doc, id) {
+    return doc.nodes.filter((n) => (n.parent ?? SAFE_LAYER) === id);
+  }
+  function ancestry(doc, id) {
+    const byId = new Map(doc.nodes.map((n) => [n.id, n]));
+    const chain = [];
+    let cur = byId.get(id);
+    const seen = /* @__PURE__ */ new Set();
+    while (cur && !seen.has(cur.id)) {
+      seen.add(cur.id);
+      chain.push(cur);
+      cur = cur.parent ? byId.get(cur.parent) : void 0;
+    }
+    return chain;
+  }
+  function withPreset(tween) {
+    const p = tween.preset ? PRESETS[tween.preset] : void 0;
+    return {
+      ...tween,
+      part: tween.part ?? p?.part ?? "self",
+      from: tween.from ?? p?.from,
+      to: tween.to ?? p?.to,
+      duration: tween.duration ?? p?.duration ?? 0.6,
+      ease: tween.ease ?? p?.ease ?? "power2.out",
+      stagger: tween.stagger ?? p?.stagger,
+      repeat: tween.repeat ?? p?.repeat,
+      yoyo: tween.yoyo ?? p?.yoyo,
+      mask: !!p?.mask
+    };
+  }
+  function unitsFor(doc, tween, mask) {
+    const node = doc.nodes.find((n) => n.id === tween.target);
+    if (!node) return [];
+    const part = tween.part ?? "self";
+    if (part === "children") return childrenOf(doc, node.id).map((c) => c.id);
+    if (part === "words") return splitWords2(node.text ?? "").map((_, i) => `${node.id}/${mask ? "m" : "w"}${i}`);
+    if (part === "chars") {
+      const count = splitWords2(node.text ?? "").join("").length;
+      return Array.from({ length: count }, (_, i) => `${node.id}/c${i}`);
+    }
+    return [node.id];
+  }
+  function staggerOffsets(count, each, from) {
+    return Array.from({ length: count }, (_, i) => {
+      if (from === "end") return (count - 1 - i) * each;
+      if (from === "center") return Math.abs(i - (count - 1) / 2) * each;
+      return i * each;
+    });
+  }
+  var restValue = (prop) => prop === "el" || COLOR_VARS.includes(prop) ? null : { n: REST[prop], unit: "" };
+  function compileTimeline(doc, opts = {}) {
+    const errors = [];
+    const masked = /* @__PURE__ */ new Set();
+    const charNodes = /* @__PURE__ */ new Set();
+    const sfx = [];
+    const raws = [];
+    doc.timeline.forEach((original, index) => {
+      const tw = withPreset(original);
+      const label = `tween ${index + 1} (${tw.target}${tw.preset ? `, ${tw.preset}` : ""})`;
+      const ease = easeByName(tw.ease);
+      if (!ease) errors.push(`${label}: unknown ease "${tw.ease}"`);
+      const from = parseVars(tw.from);
+      const to = parseVars(tw.to);
+      for (const e of [...from.errors, ...to.errors]) errors.push(`${label}: ${e}`);
+      const props = /* @__PURE__ */ new Set([...Object.keys(from.vars), ...Object.keys(to.vars)]);
+      if (props.size === 0) {
+        errors.push(`${label}: moves nothing (no from/to values and no preset that sets them)`);
+        return;
+      }
+      const units = unitsFor(doc, tw, tw.mask);
+      if (units.length === 0) {
+        errors.push(`${label}: target "${tw.target}" ${doc.nodes.some((n) => n.id === tw.target) ? `has no ${tw.part}` : "is not a node"}`);
+        return;
+      }
+      if (tw.part === "chars") charNodes.add(tw.target);
+      if (tw.mask) masked.add(tw.target);
+      const start = opts.startOf ? opts.startOf(original, index) : tw.at;
+      const duration = Math.max(0, Math.min(SCENE_LIMITS.maxTweenSec, tw.duration));
+      const repeat = Math.max(0, Math.min(SCENE_LIMITS.maxRepeat, Math.floor(tw.repeat ?? 0)));
+      const offsets = staggerOffsets(units.length, Math.max(0, tw.stagger ?? 0), tw.staggerFrom);
+      if (tw.sfx) sfx.push({ t: start, sfx: tw.sfx });
+      units.forEach((unit, i) => {
+        for (const prop of props) {
+          raws.push({ unit, prop, start: start + offsets[i], duration, from: from.vars[prop], to: to.vars[prop], ease: ease ?? ((t) => t), repeat, yoyo: !!tw.yoyo, tween: index });
+        }
+      });
+    });
+    const byTrack = /* @__PURE__ */ new Map();
+    for (const r of raws) {
+      const key = `${r.unit}|${r.prop}`;
+      const list = byTrack.get(key) ?? [];
+      list.push(r);
+      byTrack.set(key, list);
+    }
+    const tracks = [];
+    for (const list of byTrack.values()) {
+      const sorted = list.map((r, i) => ({ r, i })).sort((a, b) => a.r.start - b.r.start || a.i - b.i).map((x) => x.r);
+      const { unit, prop } = sorted[0];
+      let prevEnd = restValue(prop);
+      const segments = [];
+      for (const r of sorted) {
+        const from = r.from ?? prevEnd;
+        const to = r.to ?? prevEnd;
+        if (!from || !to) {
+          if (r.to && !r.from) segments.push({ start: r.start, duration: r.duration, from: r.to, to: r.to, ease: r.ease, repeat: 0, yoyo: false, tween: r.tween });
+          prevEnd = r.to ?? r.from ?? prevEnd;
+          continue;
+        }
+        segments.push({ start: r.start, duration: r.duration, from, to, ease: r.ease, repeat: r.repeat, yoyo: r.yoyo, tween: r.tween });
+        prevEnd = r.yoyo && r.repeat % 2 === 1 ? from : to;
+      }
+      if (segments.length > 0) tracks.push({ unit, prop, segments });
+    }
+    return { tracks, masked, charNodes, sfx, errors };
+  }
+  function segmentProgress(seg, t) {
+    if (t < seg.start) return null;
+    const cycles = seg.repeat + 1;
+    const total = seg.duration * cycles;
+    if (seg.duration <= 0 || t >= seg.start + total) {
+      const lastReversed = seg.yoyo && (cycles - 1) % 2 === 1;
+      return lastReversed ? 0 : 1;
+    }
+    const local = (t - seg.start) / seg.duration;
+    const cycle = Math.floor(local);
+    let p = local - cycle;
+    if (seg.yoyo && cycle % 2 === 1) p = 1 - p;
+    return seg.ease(p);
+  }
+  function trackAt(track, t) {
+    let active = null;
+    for (const seg of track.segments) {
+      if (seg.start <= t) active = seg;
+      else break;
+    }
+    if (!active) return { seg: track.segments[0], p: 0 };
+    return { seg: active, p: segmentProgress(active, t) ?? 0 };
+  }
+  function lerpNumber(a, b, p) {
+    const an = "n" in a ? a : { n: 0, unit: "" };
+    const bn = "n" in b ? b : { n: 0, unit: "" };
+    const unit = an.unit === bn.unit ? an.unit : an.n === 0 ? bn.unit : an.unit;
+    return { n: an.n + (bn.n - an.n) * p, unit };
+  }
+  function isExit(track, seg) {
+    const end = seg.yoyo && seg.repeat % 2 === 1 ? seg.from : seg.to;
+    if (!("n" in end)) return false;
+    if (track.prop === "opacity") return end.n <= 0.01;
+    if (track.prop === "clipTop" || track.prop === "clipBottom" || track.prop === "clipLeft" || track.prop === "clipRight") return end.n >= 99;
+    return false;
+  }
+  var VISUAL_PROPS = /* @__PURE__ */ new Set(["opacity", "x", "y", "scale", "scaleX", "scaleY", "rotate", "rotateX", "rotateY", "skewX", "skewY", "blur", "clipTop", "clipRight", "clipBottom", "clipLeft", "letterSpacing"]);
+  function textWindows(doc, compiled, sceneDuration) {
+    const out = [];
+    for (const node of doc.nodes) {
+      if (node.kind !== "text" || node.role === "decor" || !node.text?.trim()) continue;
+      const owners = new Set(ancestry(doc, node.id).map((n) => n.id));
+      const tracks = compiled.tracks.filter((tr) => {
+        if (!VISUAL_PROPS.has(tr.prop)) return false;
+        const base = tr.unit.split("/")[0];
+        return base === node.id || owners.has(base) && !tr.unit.includes("/");
+      });
+      let settled = 0;
+      let leaves = sceneDuration;
+      for (const tr of tracks) {
+        for (const seg of tr.segments) {
+          if (isExit(tr, seg)) leaves = Math.min(leaves, seg.start);
+        }
+      }
+      for (const tr of tracks) {
+        for (const seg of tr.segments) {
+          if (isExit(tr, seg) || seg.start >= leaves) continue;
+          const ambient = seg.repeat > 0 || seg.duration > 2;
+          if (!ambient) settled = Math.max(settled, seg.start + seg.duration * (seg.repeat + 1));
+        }
+      }
+      out.push({ nodeId: node.id, text: node.text.trim(), words: splitWords2(node.text).length, settled, leaves });
+    }
+    return out;
+  }
+  function settleTime(windows, compiled) {
+    let t = windows.length > 0 ? Math.max(...windows.map((w) => w.settled)) : 0;
+    for (const track of compiled?.tracks ?? []) {
+      for (const seg of track.segments) {
+        if (seg.repeat > 0 || seg.duration > 2 || isExit(track, seg)) continue;
+        t = Math.max(t, seg.start + seg.duration);
+      }
+    }
+    return t > 0 ? t : 0.6;
+  }
+
+  // ../film-runtime/src/templates/html-scene.ts
+  var CURSOR_TIP = { x: 0.18, y: 0.1 };
+  var MIN_FIT = 0.55;
+  function tokens(ctx, u) {
+    const p = ctx.palette;
+    const card = cardStyle(ctx, u);
+    return {
+      "--bg": p.bg,
+      "--fg": p.fg,
+      "--accent": p.accent,
+      "--accent-text": p.accentText,
+      "--on-accent": p.onAccent,
+      "--accent-alt": p.accentAlt,
+      "--accent-soft": p.accentSoft,
+      "--surface": p.surface,
+      "--border": p.border,
+      "--muted": p.muted,
+      "--glow": p.glow,
+      "--font-display": ctx.fonts.display,
+      "--font-body": ctx.fonts.body,
+      "--radius": `${(24 * ctx.style.radius * u).toFixed(2)}px`,
+      "--card-bg": String(card.background ?? p.surface),
+      "--card-border": String(card.border ?? "none"),
+      "--card-shadow": String(card.boxShadow ?? "none"),
+      "--shadow": `0 ${30 * u}px ${80 * u}px -${36 * u}px ${p.glow}, 0 ${2 * u}px ${8 * u}px rgba(0,0,0,${p.isDark ? 0.4 : 0.08})`
+    };
+  }
+  function defaults(kind, landscape) {
+    switch (kind) {
+      case "box":
+        return "display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px; box-sizing:border-box";
+      case "text":
+        return "font-family:var(--font-display); font-weight:700; font-size:64px; line-height:1.12; letter-spacing:-0.015em; color:var(--fg); text-align:center; text-wrap:balance; max-width:100%; overflow-wrap:break-word";
+      case "count":
+        return "font-family:var(--font-display); font-weight:800; font-size:160px; line-height:1; letter-spacing:-0.03em; color:var(--accent-text); font-variant-numeric:tabular-nums; white-space:nowrap";
+      case "image":
+        return `width:100%; ${landscape ? "aspect-ratio:16/10" : "aspect-ratio:4/5"}; border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow)`;
+      case "frame":
+      case "shot":
+        return landscape ? "width:78%; aspect-ratio:16/10; flex-shrink:0" : "width:100%; aspect-ratio:4/5; flex-shrink:0";
+      case "logo":
+        return "width:140px; height:140px; flex-shrink:0";
+      case "icon":
+        return "width:72px; height:72px; color:var(--accent-text); flex-shrink:0";
+      case "cursor":
+        return "position:absolute; left:50%; top:60%; width:56px; height:56px; z-index:5";
+    }
+  }
+  function applyDecls(node, decls, u) {
+    for (const [prop, value] of sanitizeDeclarations(decls).decls) node.style.setProperty(prop, scalePx(value, u));
+  }
+  function colorOf(value, scope, cache) {
+    const hit = cache.get(value);
+    if (hit) return hit;
+    let css = value.trim();
+    const v = /^var\((--[\w-]+)\)$/.exec(css);
+    if (v) css = getComputedStyle(scope).getPropertyValue(v[1]).trim() || "#000";
+    const c = document.createElement("canvas");
+    c.width = c.height = 1;
+    const g = c.getContext("2d");
+    let out = [0, 0, 0, 1];
+    if (g) {
+      g.fillStyle = "#000";
+      g.fillStyle = css;
+      g.fillRect(0, 0, 1, 1);
+      const [r, gg, b, a] = g.getImageData(0, 0, 1, 1).data;
+      out = [r, gg, b, (a ?? 255) / 255];
+    }
+    cache.set(value, out);
+    return out;
+  }
+  var CURSOR_SVG2 = `<svg viewBox="0 0 32 32" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><path d="M6 3 L6 26 L12.5 19.5 L17 29 L21 27.2 L16.6 18 L25.5 18 Z" fill="#fff" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg>`;
+  function buildWords(node, text, masked, chars) {
+    const words = [];
+    const inners = [];
+    const letters = [];
+    splitWords2(text).forEach((word, i) => {
+      if (i > 0) node.appendChild(document.createTextNode(" "));
+      const outer = el("span", "hs-word");
+      setStyle(outer, { display: "inline-block", whiteSpace: "nowrap" });
+      if (masked) setStyle(outer, { overflow: "hidden", verticalAlign: "top", padding: "0.08em 0.04em 0.16em", margin: "-0.08em -0.04em -0.16em" });
+      const inner = el("span", "hs-wi");
+      setStyle(inner, { display: "inline-block" });
+      if (chars) {
+        for (const ch of Array.from(word)) {
+          const letter = el("span", "hs-ch", ch);
+          setStyle(letter, { display: "inline-block", whiteSpace: "pre" });
+          inner.appendChild(letter);
+          letters.push(letter);
+        }
+      } else {
+        inner.textContent = word;
+      }
+      outer.appendChild(inner);
+      node.appendChild(outer);
+      words.push(outer);
+      inners.push(inner);
+    });
+    return { words, inners, letters };
+  }
+  function fitText(node) {
+    const size = parseFloat(getComputedStyle(node).fontSize);
+    if (!size) return;
+    for (let k = 1, i = 0; i < 12 && k > MIN_FIT; i++) {
+      const slack = 1 + parseFloat(node.style.fontSize || String(size)) * 0.1;
+      const overflowing = node.scrollWidth > node.clientWidth + slack || node.scrollHeight > node.clientHeight + slack;
+      const tooWide = node.scrollWidth > node.clientWidth + slack;
+      if (!(node.style.height ? overflowing : tooWide)) return;
+      k *= 0.92;
+      node.style.fontSize = `${(size * k).toFixed(2)}px`;
+    }
+  }
+  var sizeOf = (node) => ({ w: node.offsetWidth, h: node.offsetHeight });
+  function createHtmlScene() {
+    let instance;
+    return {
+      id: "HtmlScene",
+      mount(root, props, ctx) {
+        const L = layoutFor(ctx);
+        const u = L.u;
+        const landscape = L.orientation === "landscape";
+        const doc = props.doc;
+        const assets = props.assets ?? {};
+        setStyle(root, { position: "relative", width: `${ctx.width}px`, height: `${ctx.height}px`, overflow: "hidden", fontFamily: ctx.fonts.body, color: ctx.palette.fg });
+        for (const [k2, v] of Object.entries(tokens(ctx, u))) root.style.setProperty(k2, v);
+        const full = el("div", "hs-full");
+        setStyle(full, { position: "absolute", inset: "0", overflow: "hidden" });
+        const safe = el("div", "hs-safe");
+        setStyle(safe, {
+          position: "absolute",
+          left: `${L.safe.left}px`,
+          top: `${L.safe.top}px`,
+          width: `${L.safe.width}px`,
+          height: `${L.safe.height}px`,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: `${28 * u}px`,
+          boxSizing: "border-box"
+        });
+        const fit = el("div", "hs-fit");
+        setStyle(fit, { position: "relative", width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: `${28 * u}px`, flexShrink: "0", transformOrigin: "50% 50%" });
+        safe.appendChild(fit);
+        root.appendChild(full);
+        root.appendChild(safe);
+        const compiledOnce = compileTimeline(doc);
+        const nodes = /* @__PURE__ */ new Map();
+        const wordsOf = /* @__PURE__ */ new Map();
+        const components = [];
+        const counts = /* @__PURE__ */ new Map();
+        const drawPaths = /* @__PURE__ */ new Map();
+        for (const n of doc.nodes) {
+          const parentId = n.parent ?? SAFE_LAYER;
+          const parent = parentId === SAFE_LAYER ? fit : parentId === FULL_LAYER ? full : nodes.get(parentId);
+          if (!parent) continue;
+          const node = el("div", `hs-${n.kind}`);
+          node.dataset.el = n.id;
+          applyDecls(node, defaults(n.kind, landscape), u);
+          applyDecls(node, n.style, u);
+          if (!landscape) applyDecls(node, n.narrow, u);
+          parent.appendChild(node);
+          nodes.set(n.id, node);
+          if (n.kind === "text") {
+            wordsOf.set(n.id, buildWords(node, n.text ?? "", compiledOnce.masked.has(n.id), compiledOnce.charNodes.has(n.id)));
+          } else if (n.kind === "count") {
+            const raw = (n.value ?? "").trim();
+            node.textContent = raw;
+            counts.set(n.id, { parsed: parseStatValue(raw), raw });
+          } else if (n.kind === "image") {
+            const src = assets[n.id]?.src;
+            if (src) {
+              const img = el("img");
+              img.src = src;
+              setStyle(img, { display: "block", width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" });
+              node.appendChild(img);
+            }
+          } else if (n.kind === "icon") {
+            const svg = iconSvg(n.icon);
+            if (svg) {
+              node.innerHTML = svg;
+              const paths = Array.from(node.querySelectorAll("path"));
+              for (const p of paths) p.setAttribute("pathLength", "1");
+              drawPaths.set(n.id, paths);
+            }
+          } else if (n.kind === "cursor") {
+            node.innerHTML = CURSOR_SVG2;
+            node.style.pointerEvents = "none";
+          } else if (n.kind === "frame" || n.kind === "shot" || n.kind === "logo") {
+            components.push({ id: n.id, node: n, slot: node });
+          }
+        }
+        for (const n of doc.nodes) {
+          const node = nodes.get(n.id);
+          if (n.kind === "text" && node) fitText(node);
+          const img = n.kind === "image" ? node?.querySelector("img") : null;
+          if (img && node && node.offsetWidth > 0 && node.offsetHeight > 0) {
+            img.dataset.stable = `${node.offsetWidth}x${node.offsetHeight}`;
+            img.dataset.stableFit = "cover";
+          }
+        }
+        const frames = /* @__PURE__ */ new Map();
+        for (const { id, node: n, slot } of components) {
+          let { w, h } = sizeOf(slot);
+          if (w < 8 || h < 8) {
+            w = L.safe.width * 0.7;
+            h = w * 0.62;
+            setStyle(slot, { width: `${w}px`, height: `${h}px` });
+          }
+          if (n.kind === "logo") {
+            const size = Math.min(w, h);
+            slot.appendChild(logoMark({ className: "hs-logo", size, ...props.logoUrl ? { logoUrl: props.logoUrl } : {}, productName: props.productName ?? "", ctx }));
+            continue;
+          }
+          const asset = assets[id] ?? {};
+          const shot = n.kind === "shot";
+          const bar = Math.round(46 * u);
+          const api = browserFrame({ className: "hs-browser", width: w, height: shot ? h + bar : h, screenshotUrl: asset.src ?? "", ...asset.pageLabel && !shot ? { pageLabel: asset.pageLabel } : {}, ...asset.clip ? { clip: asset.clip } : {}, ctx, u });
+          if (shot) {
+            api.wrap.firstElementChild.style.display = "none";
+            api.wrap.style.height = `${h}px`;
+          }
+          slot.appendChild(api.wrap);
+          api.image.dataset.stablePage = String(Math.round(w * 2.6));
+          frames.set(id, { api, ...asset.focus ? { focus: asset.focus } : {} });
+        }
+        const stageScale = root.getBoundingClientRect().width / Math.max(1, root.offsetWidth) || 1;
+        const safeBox = safe.getBoundingClientRect();
+        const cx = safeBox.left + safeBox.width / 2;
+        const cy = safeBox.top + safeBox.height / 2;
+        let fitScale = Math.min(1, L.safe.height / Math.max(1, fit.offsetHeight), L.safe.width / Math.max(1, fit.scrollWidth));
+        const biggest = /* @__PURE__ */ new Map();
+        for (const track of compiledOnce.tracks) {
+          if (track.unit.includes("/") || !["scale", "scaleX", "scaleY"].includes(track.prop)) continue;
+          const most = Math.max(...track.segments.flatMap((s) => [s.from, s.to]).map((v) => "n" in v ? v.n : 1));
+          biggest.set(track.unit, Math.max(biggest.get(track.unit) ?? 1, most));
+        }
+        for (const [id, s] of biggest) {
+          const node = nodes.get(id);
+          if (s <= 1 || !node || !safe.contains(node)) continue;
+          const r = node.getBoundingClientRect();
+          const ex = (Math.abs(r.left + r.width / 2 - cx) + r.width / 2 * s) / stageScale;
+          const ey = (Math.abs(r.top + r.height / 2 - cy) + r.height / 2 * s) / stageScale;
+          fitScale = Math.min(fitScale, L.safe.width / 2 / Math.max(1, ex), L.safe.height / 2 / Math.max(1, ey));
+        }
+        if (fitScale < 0.999) fit.style.transform = `scale(${fitScale.toFixed(4)})`;
+        const k = stageScale * fitScale;
+        const resolved = doc.timeline.map((tw) => {
+          const toEl = parseVars(tw.to).vars.el;
+          const cursor = nodes.get(tw.target);
+          if (!toEl || !("el" in toEl) || !cursor) return tw;
+          const target = nodes.get(toEl.el);
+          if (!target) return tw;
+          const c = cursor.getBoundingClientRect();
+          const t = target.getBoundingClientRect();
+          const dx = (t.left + t.width / 2 - (c.left + c.width * CURSOR_TIP.x)) / k / u;
+          const dy = (t.top + t.height / 2 - (c.top + c.height * CURSOR_TIP.y)) / k / u;
+          const rest = (tw.to ?? "").replace(/(^|;)\s*el\s*:[^;]*/i, "$1");
+          return { ...tw, to: `${rest}; x:${dx.toFixed(2)}; y:${dy.toFixed(2)}` };
+        });
+        const compiled = compileTimeline({ ...doc, timeline: resolved });
+        const elementFor = (key) => {
+          const [id, part] = key.split("/");
+          if (!part) return nodes.get(id);
+          const w = wordsOf.get(id);
+          const i = Number(part.slice(1));
+          if (part[0] === "w") return w?.words[i];
+          if (part[0] === "m") return w?.inners[i];
+          if (part[0] === "c") return w?.letters[i];
+          return void 0;
+        };
+        const unitsByNode = /* @__PURE__ */ new Map();
+        for (const track of compiled.tracks) {
+          const node = elementFor(track.unit);
+          if (!node) continue;
+          let unit = unitsByNode.get(node);
+          if (!unit) {
+            const id = track.unit.includes("/") ? void 0 : track.unit;
+            unit = {
+              node,
+              tracks: {},
+              baseTransform: node.style.transform && node.style.transform !== "none" ? node.style.transform : "",
+              ...id && frames.get(id) ? { frame: frames.get(id) } : {},
+              ...id && counts.get(id) ? { count: counts.get(id) } : {},
+              ...id && drawPaths.get(id) ? { draw: drawPaths.get(id) } : {}
+            };
+            unitsByNode.set(node, unit);
+          }
+          unit.tracks[track.prop] = track;
+        }
+        instance = {
+          units: [...unitsByNode.values()],
+          words: [...wordsOf.values()].flatMap((w) => w.words),
+          u,
+          colors: /* @__PURE__ */ new Map(),
+          layers: [full, safe],
+          exitAt: Number(root.dataset.exitAt ?? "NaN"),
+          exitSec: Number(root.dataset.exitSec ?? "0")
+        };
+        for (const unit of instance.units) {
+          for (const prop of ["color", "backgroundColor", "borderColor"]) {
+            for (const seg of unit.tracks[prop]?.segments ?? []) {
+              for (const v of [seg.from, seg.to]) if ("color" in v) colorOf(v.color, root, instance.colors);
+            }
+          }
+        }
+      },
+      seek(localT) {
+        if (!instance) return;
+        const { u, colors } = instance;
+        for (const word of instance.words) word.style.transform = "";
+        const num = (unit, prop) => {
+          const track = unit.tracks[prop];
+          if (!track) return null;
+          const { seg, p } = trackAt(track, localT);
+          return lerpNumber(seg.from, seg.to, p);
+        };
+        const colorAt = (unit, prop) => {
+          const track = unit.tracks[prop];
+          if (!track) return null;
+          const { seg, p } = trackAt(track, localT);
+          const a = "color" in seg.from ? colors.get(seg.from.color) : void 0;
+          const b = "color" in seg.to ? colors.get(seg.to.color) : void 0;
+          if (!a || !b) return null;
+          const m = (i) => a[i] + (b[i] - a[i]) * p;
+          return `rgba(${Math.round(m(0))}, ${Math.round(m(1))}, ${Math.round(m(2))}, ${m(3).toFixed(3)})`;
+        };
+        const len = (v) => v.unit === "%" ? `${v.n.toFixed(3)}%` : `${(v.n * u).toFixed(2)}px`;
+        for (const unit of instance.units) {
+          const s = unit.node.style;
+          const x = num(unit, "x");
+          const y = num(unit, "y");
+          const scale = num(unit, "scale")?.n ?? 1;
+          const sx = (num(unit, "scaleX")?.n ?? 1) * scale;
+          const sy = (num(unit, "scaleY")?.n ?? 1) * scale;
+          const rot = num(unit, "rotate")?.n ?? 0;
+          const rx = num(unit, "rotateX")?.n ?? 0;
+          const ry = num(unit, "rotateY")?.n ?? 0;
+          const kx = num(unit, "skewX")?.n ?? 0;
+          const ky = num(unit, "skewY")?.n ?? 0;
+          const moves = unit.tracks.x || unit.tracks.y || unit.tracks.scale || unit.tracks.scaleX || unit.tracks.scaleY || unit.tracks.rotate || unit.tracks.rotateX || unit.tracks.rotateY || unit.tracks.skewX || unit.tracks.skewY;
+          if (moves) {
+            const parts = [];
+            if (rx !== 0 || ry !== 0) parts.push(`perspective(${(1400 * u).toFixed(1)}px)`);
+            if (x && x.n !== 0 || y && y.n !== 0) parts.push(`translate(${x ? len(x) : "0px"}, ${y ? len(y) : "0px"})`);
+            if (rot !== 0) parts.push(`rotate(${rot.toFixed(3)}deg)`);
+            if (rx !== 0) parts.push(`rotateX(${rx.toFixed(3)}deg)`);
+            if (ry !== 0) parts.push(`rotateY(${ry.toFixed(3)}deg)`);
+            if (kx !== 0 || ky !== 0) parts.push(`skew(${kx.toFixed(3)}deg, ${ky.toFixed(3)}deg)`);
+            if (sx !== 1 || sy !== 1) parts.push(`scale(${sx.toFixed(5)}, ${sy.toFixed(5)})`);
+            if (unit.baseTransform) parts.push(unit.baseTransform);
+            s.transform = parts.length > 0 ? parts.join(" ") : "none";
+          }
+          const opacity = num(unit, "opacity");
+          if (opacity) s.opacity = String(clamp01(opacity.n));
+          if (unit.tracks.blur || unit.tracks.brightness) {
+            const blur = num(unit, "blur")?.n ?? 0;
+            const bright = num(unit, "brightness")?.n ?? 1;
+            const f = [blur > 0.01 ? `blur(${(blur * u).toFixed(2)}px)` : "", bright !== 1 ? `brightness(${bright.toFixed(3)})` : ""].filter(Boolean).join(" ");
+            s.filter = f || "none";
+          }
+          if (unit.tracks.clipTop || unit.tracks.clipRight || unit.tracks.clipBottom || unit.tracks.clipLeft) {
+            const c = (p) => Math.min(100, Math.max(0, num(unit, p)?.n ?? 0)).toFixed(3);
+            const [t, r, b, l] = [c("clipTop"), c("clipRight"), c("clipBottom"), c("clipLeft")];
+            s.clipPath = t === "0.000" && r === "0.000" && b === "0.000" && l === "0.000" ? "none" : `inset(${t}% ${r}% ${b}% ${l}%)`;
+          }
+          const ls = num(unit, "letterSpacing");
+          if (ls) s.letterSpacing = `${ls.n.toFixed(4)}em`;
+          for (const [prop, css] of [["color", "color"], ["backgroundColor", "backgroundColor"], ["borderColor", "borderColor"]]) {
+            const c = colorAt(unit, prop);
+            if (c) s[css] = c;
+          }
+          if (unit.frame) {
+            const { api, focus } = unit.frame;
+            const f = num(unit, "focus")?.n ?? 0;
+            const ring = num(unit, "ring")?.n ?? 0;
+            const play = num(unit, "play")?.n ?? 0;
+            const playing = !!unit.tracks.play && api.play(play);
+            const focused = !playing && !!focus && (f > 0 || ring > 0) && api.focus(focus, f, ring);
+            if (!playing && !focused) api.scroll(num(unit, "scroll")?.n ?? 0);
+          }
+          if (unit.count) {
+            const p = clamp01(num(unit, "count")?.n ?? 1);
+            const { parsed, raw } = unit.count;
+            unit.node.textContent = p >= 1 || parsed.numeric === null ? raw : `${parsed.prefix}${formatCounted(parsed.numeric * p, parsed.decimals)}${parsed.suffix}`;
+          }
+          if (unit.draw) {
+            const d = clamp01(num(unit, "draw")?.n ?? 1);
+            for (const path of unit.draw) {
+              path.style.strokeDasharray = "1";
+              path.style.strokeDashoffset = (1 - d).toFixed(4);
+            }
+          }
+        }
+        if (Number.isFinite(instance.exitAt) && instance.exitSec > 0) {
+          const e = easeInCubic(clamp01((localT - instance.exitAt) / instance.exitSec));
+          for (const layer of instance.layers) {
+            layer.style.opacity = e > 0 ? String(1 - e) : "";
+            layer.style.transform = e > 0 ? `translateY(${(-18 * u * e).toFixed(2)}px)` : "";
+          }
+        }
+      },
+      marks(props) {
+        const compiled = compileTimeline(props.doc);
+        const end = Math.max(1, ...compiled.tracks.flatMap((t) => t.segments.map((s) => s.start + s.duration * (s.repeat + 1))));
+        return [
+          { t: 0, type: "start" },
+          { t: settleTime(textWindows(props.doc, compiled, end), compiled), type: "settle" }
+        ];
+      },
+      unmount() {
+        instance = void 0;
+      }
+    };
+  }
+
   // ../film-runtime/src/registry.ts
   var TEMPLATE_REGISTRY = {
     KineticHook: createKineticHook,
@@ -3041,7 +4016,8 @@
     MetricsRow: createMetricsRow,
     PhotoShowcase: createPhotoShowcase,
     IsoStack: createIsoStack,
-    Composed: createComposed
+    Composed: createComposed,
+    HtmlScene: createHtmlScene
   };
   function createTemplate(templateId) {
     const factory = TEMPLATE_REGISTRY[templateId];
@@ -3394,19 +4370,42 @@
     await Promise.race([Promise.all(loads), new Promise((resolve) => setTimeout(resolve, 4e3))]);
   }
   function stabilizeImage(img) {
+    if (img.dataset.stablePage) return stabilizePage(img, Number(img.dataset.stablePage));
     const [w, h] = (img.dataset.stable ?? "").split("x").map(Number);
     if (!w || !h || img.naturalWidth <= 0) return img;
+    const cover = img.dataset.stableFit === "cover";
     const canvas = document.createElement("canvas");
     canvas.width = Math.max(1, Math.round(w * 2));
     canvas.height = Math.max(1, Math.round(h * 2));
     const g = canvas.getContext("2d");
     if (!g) return img;
     g.imageSmoothingQuality = "high";
-    const k = Math.min(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
+    const k = (cover ? Math.max : Math.min)(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
     const dw = img.naturalWidth * k;
     const dh = img.naturalHeight * k;
     try {
-      g.drawImage(img, (canvas.width - dw) / 2, (canvas.height - dh) / 2, dw, dh);
+      g.drawImage(img, (canvas.width - dw) / 2, cover ? 0 : (canvas.height - dh) / 2, dw, dh);
+    } catch {
+      return img;
+    }
+    canvas.className = img.className;
+    canvas.style.cssText = img.style.cssText;
+    img.replaceWith(canvas);
+    return canvas;
+  }
+  var MAX_CANVAS_SIDE = 16384;
+  function stabilizePage(img, maxWidth) {
+    if (!maxWidth || img.naturalWidth <= 0 || img.naturalHeight <= 0) return img;
+    const width = Math.max(1, Math.round(Math.min(img.naturalWidth, maxWidth, MAX_CANVAS_SIDE * img.naturalWidth / img.naturalHeight)));
+    const height = Math.max(1, Math.round(width * img.naturalHeight / img.naturalWidth));
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const g = canvas.getContext("2d");
+    if (!g) return img;
+    g.imageSmoothingQuality = "high";
+    try {
+      g.drawImage(img, 0, 0, width, height);
     } catch {
       return img;
     }
@@ -3611,7 +4610,7 @@
         })
       )
     ]);
-    for (const img of Array.from(stage.querySelectorAll("img[data-stable]"))) {
+    for (const img of Array.from(stage.querySelectorAll("img[data-stable], img[data-stable-page]"))) {
       const drawn = stabilizeImage(img);
       if (brand && brand.node === img) brand.node = drawn;
     }
