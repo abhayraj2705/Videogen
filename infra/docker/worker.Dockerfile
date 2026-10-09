@@ -3,7 +3,7 @@
 #
 # The Playwright image pins Chromium to the same version the lockfile's
 # `playwright` package drives, so keep this tag in step with it.
-FROM mcr.microsoft.com/playwright:v1.63.0-noble
+FROM mcr.microsoft.com/playwright:v1.64.0-noble
 
 # ffmpeg for encode/mix; Noto for scripts the brand fonts don't cover (Devanagari, CJK, emoji).
 RUN apt-get update \
