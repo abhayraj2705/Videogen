@@ -21,8 +21,8 @@
   "devDependencies": {
     "@types/node": "22.10.5",
     "@types/pngjs": "^6.0.5",
-    "esbuild": "0.24.2",
-    "tsx": "4.19.2",
+    "esbuild": "0.28.2",
+    "tsx": "4.23.15",
     "typescript": "5.7.3",
     "vitest": "2.1.8"
   }
