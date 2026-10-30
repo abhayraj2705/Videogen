@@ -9,8 +9,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@electric-sql/pglite": "0.5.8",
-    "drizzle-orm": "0.38.3"
+    "@electric-sql/pglite": "0.5.12",
+    "drizzle-orm": "0.45.4"
   },
   "devDependencies": {
     "@types/node": "22.10.5",
